@@ -7,8 +7,8 @@
 //
 
 protocol OnboardingSkipButtonHandlerDelegate: class {
-    // Called when skipButton should appear on centrain situations
+    // Called when skipButton should appear on certain situations
     func shouldSkipButtonAppear()
-    // Called when skipButton should disappear on centrain situations
+    // Called when skipButton should disappear on certain situations
     func shouldSkipButtonDisappear()
 }
