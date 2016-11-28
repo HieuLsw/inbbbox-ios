@@ -32,7 +32,7 @@ target 'Inbbbox' do
   pod 'PureLayout', '~> 3.0'
   pod 'SwiftyUserDefaults', '~> 3.0'
   #for older swift version 
-  pod 'DeviceKit', :git => 'https://github.com/dennisweissmann/DeviceKit.git', :branch => 'swift-2.3-unsupported'
+  pod 'DeviceKit', '~> 1.0'
   pod 'GPUImage', '~> 0.1'
   pod 'EasyAnimation', '~> 1.1'
   pod 'FLAnimatedImage', '~> 1.0'

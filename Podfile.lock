@@ -1,7 +1,7 @@
 PODS:
   - AOAlertController (1.2.1)
   - AsyncSwift (2.0.0)
-  - DeviceKit (0.3.5)
+  - DeviceKit (1.0.0)
   - Dobby (0.7.0)
   - DZNEmptyDataSet (1.8.1)
   - EasyAnimation (1.1.1)
@@ -45,7 +45,7 @@ PODS:
 DEPENDENCIES:
   - AOAlertController (from `https://github.com/0legAdamov/AOAlertController`, tag `v1.2.1`)
   - AsyncSwift (~> 2.0)
-  - DeviceKit (from `https://github.com/dennisweissmann/DeviceKit.git`, branch `swift-2.3-unsupported`)
+  - DeviceKit (~> 1.0)
   - Dobby (from `https://github.com/trivago/Dobby.git`, tag `0.7.0`)
   - DZNEmptyDataSet (~> 1.7)
   - EasyAnimation (~> 1.1)
@@ -71,9 +71,6 @@ EXTERNAL SOURCES:
   AOAlertController:
     :git: https://github.com/0legAdamov/AOAlertController
     :tag: v1.2.1
-  DeviceKit:
-    :branch: swift-2.3-unsupported
-    :git: https://github.com/dennisweissmann/DeviceKit.git
   Dobby:
     :git: https://github.com/trivago/Dobby.git
     :tag: 0.7.0
@@ -89,9 +86,6 @@ CHECKOUT OPTIONS:
   AOAlertController:
     :git: https://github.com/0legAdamov/AOAlertController
     :tag: v1.2.1
-  DeviceKit:
-    :commit: ce47728d13129d0a126901a589c12ddfdfcb3d32
-    :git: https://github.com/dennisweissmann/DeviceKit.git
   Dobby:
     :git: https://github.com/trivago/Dobby.git
     :tag: 0.7.0
@@ -105,7 +99,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AOAlertController: 937352719e3e9df03f0b6b9903665e1eaa76a558
   AsyncSwift: 6ba6ed9ecb51344458063f7c86fe447ab824e313
-  DeviceKit: c6946cf7abb41940214aa4618e6191ff865568c0
+  DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
   Dobby: efe7dca1c2bca412034dc909d350b2409193bf99
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   EasyAnimation: e67601df3eb57e86c570948a250ce162a5665b8a
@@ -128,6 +122,6 @@ SPEC CHECKSUMS:
   URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 384995029d3627c1152a88c3de6ca609b3790658
+PODFILE CHECKSUM: cbef962cd6f6cb2593b423a2a5d0f70bb9659589
 
 COCOAPODS: 1.0.0
