@@ -49,9 +49,9 @@ class OAuthAuthorizableSpec: QuickSpec {
                     "?" +
                     "scope=fixture.scope" +
                     "&" +
-                    "client_id=fixture.clientID" +
+                    "redirect_uri=https://redirecturi" +
                     "&" +
-                    "redirect_uri=https://redirecturi"
+                    "client_id=fixture.clientID"
                 }()
                 expect(requestTokenURLRequest.url?.absoluteString).to(equal(absoluteString))
             }
