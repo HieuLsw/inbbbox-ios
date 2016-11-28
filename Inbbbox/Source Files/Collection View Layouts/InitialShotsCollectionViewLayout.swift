@@ -9,7 +9,10 @@ class InitialShotsCollectionViewLayout: UICollectionViewLayout {
 //    MARK: - UICollectionViewLayout
 
     override var collectionViewContentSize: CGSize {
-        return collectionView!.bounds.size
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        return collectionView.bounds.size
     }
 
     override func layoutAttributesForElements(in rect: CGRect)

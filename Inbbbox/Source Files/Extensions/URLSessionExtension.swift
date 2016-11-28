@@ -1,5 +1,5 @@
 //
-//  NSURLSessionExtension.swift
+//  URLSessionExtension.swift
 //  Inbbbox
 //
 //  Created by Lukasz Pikor on 08.11.2016.

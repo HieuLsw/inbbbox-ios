@@ -42,7 +42,7 @@ class GalleryViewProvider {
             return [GalleryItem.custom(fetchImageBlock: { _ in },
                     itemViewControllerBlock: { ( index , count , imageCompletion, configuration , isInitial ) -> UIViewController in
                         
-                        let controller = GifViewController(index: index, itemCount: count, fetchImageBlock:{ _ in }, configuration: configuration, isInitialController: isInitial)
+                        let controller = ItemBaseController<AnimatableShotImageView>(index: index, itemCount: count, fetchImageBlock:{ _ in }, configuration: configuration, isInitialController: isInitial)
                         controller.itemView.loadAnimatableShotFromUrl(animated)
                         return controller
                     })]
@@ -109,5 +109,3 @@ extension GalleryViewProvider: GalleryDisplacedViewsDatasource {
 }
 
 extension UIImageView: DisplaceableView {/* Empty by design */}
-
-class GifViewController: ItemBaseController<AnimatableShotImageView> {/* Empty by design */}

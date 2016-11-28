@@ -95,7 +95,7 @@ class ShotDetailsCollectionCollapsableHeader: UICollectionViewFlowLayout {
 private extension ShotDetailsCollectionCollapsableHeader {
 
     func setupLayout() {
-        sectionInset = UIEdgeInsets.zero
+        sectionInset = .zero
         minimumLineSpacing = 0
         minimumInteritemSpacing = 0
     }

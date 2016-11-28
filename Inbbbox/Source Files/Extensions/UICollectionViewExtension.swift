@@ -11,7 +11,7 @@ import UIKit
 extension UICollectionView {
 
     /// Defines type used during registering class for reusable view.
-    enum ViewType {
+    enum `Type` {
         case cell, header, footer
     }
 
@@ -22,7 +22,7 @@ extension UICollectionView {
     /// - parameter type:   Type of reusable view.
     ///
     /// - SeeAlso: `ViewType` enum.
-    func registerClass<T: UICollectionReusableView>(_ aClass: T.Type, type: ViewType) where T: Reusable {
+    func registerClass<T: UICollectionReusableView>(_ aClass: T.Type, type: Type) where T: Reusable {
 
         switch type {
         case .cell:
@@ -46,7 +46,7 @@ extension UICollectionView {
     ///
     /// - returns: A valid UICollectionReusableView object.
     func dequeueReusableClass<T: UICollectionReusableView>(_ aClass: T.Type,
-            forIndexPath indexPath: IndexPath, type: ViewType) -> T where T: Reusable {
+            forIndexPath indexPath: IndexPath, type: Type) -> T where T: Reusable {
 
         switch type {
         case .cell:

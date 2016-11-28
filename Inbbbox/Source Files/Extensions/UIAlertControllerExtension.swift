@@ -24,7 +24,6 @@ extension UIAlertController {
         AOAlertSettings.sharedSettings.cancelActionFont = UIFont.helveticaFont(.neue, size: 16)
         AOAlertSettings.sharedSettings.destructiveActionFont = UIFont.helveticaFont(.neue, size: 16)
 
-        //AOAlertSettings.sharedSettings.blurredBackground = true
     }
 
     // MARK: Buckets
@@ -105,9 +104,8 @@ extension UIAlertController {
 
     fileprivate class func defaultDismissAction(_ style: AOAlertActionStyle = .default) -> AOAlertAction {
         let title = NSLocalizedString("UIAlertControllerExtension.Dismiss", comment: "Dismiss")
-        let action = AOAlertAction(title: title, style: style, handler: nil)
 
-        return action
+        return AOAlertAction(title: title, style: style, handler: nil)
     }
 
     fileprivate class func createAlert(_ message: String,

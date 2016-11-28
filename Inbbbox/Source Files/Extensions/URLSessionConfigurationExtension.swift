@@ -1,5 +1,5 @@
 //
-//  NSURLSessionConfigurationExtension.swift
+//  URLSessionConfigurationExtension.swift
 //  Inbbbox
 //
 //  Created by Lukasz Pikor on 08.11.2016.
@@ -12,7 +12,7 @@ extension URLSessionConfiguration {
 
     class func inbbboxDefaultSessionConfiguration() -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
-        configuration.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
+        configuration.requestCachePolicy = URLRequest.CachePolicy.reloadIgnoringLocalCacheData
         return configuration
     }
 }

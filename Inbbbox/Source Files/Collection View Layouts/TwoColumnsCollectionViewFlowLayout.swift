@@ -23,13 +23,18 @@ class TwoColumnsCollectionViewFlowLayout: UICollectionViewFlowLayout {
             itemSize = CGSize(width: calculatedItemWidth, height: calculatedItemHeight)
             minimumLineSpacing = spacings.twoColumnsMinimumLineSpacing
             minimumInteritemSpacing = spacings.twoColumnsMinimymInterimSpacing
-            sectionInset = UIEdgeInsets(top: spacings.twoColumnsSectionMarginVertical,
-                                       left: spacings.twoColumnsSectionMarginVertical,
-                                     bottom: spacings.twoColumnsSectionMarginHorizontal,
-                                      right: spacings.twoColumnsSectionMarginVertical)
+            sectionInset = UIEdgeInsets(
+                top: spacings.twoColumnsSectionMarginVertical,
+                left: spacings.twoColumnsSectionMarginVertical,
+                bottom: spacings.twoColumnsSectionMarginHorizontal,
+                right: spacings.twoColumnsSectionMarginVertical
+            )
+            
             if containsHeader {
-                headerReferenceSize = CGSize(width: collectionView.bounds.width,
-                                            height: 150)
+                headerReferenceSize = CGSize(
+                    width: collectionView.bounds.width,
+                    height: 150
+                )
             }
         }
     }

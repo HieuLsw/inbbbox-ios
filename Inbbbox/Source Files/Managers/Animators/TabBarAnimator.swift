@@ -34,7 +34,7 @@ class TabBarAnimator {
         )
         tabBarView.layoutIfNeeded()
         centerButton.setImage(UIImage(named: "ic-ball-active"), for: .normal)
-        centerButton.backgroundColor = UIColor.white
+        centerButton.backgroundColor = .white
         tabBarView.addSubview(centerButton)
         centerButton.frame = CGRect(
             x: tabBarView.frame.width / 2 - centerButton.intrinsicContentSize.width / 2,
