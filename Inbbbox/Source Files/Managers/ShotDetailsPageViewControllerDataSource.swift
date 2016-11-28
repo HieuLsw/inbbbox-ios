@@ -13,7 +13,7 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
     weak var delegate: ShotDetailsPageDelegate?
     
     var shots = [ShotType]()
-    fileprivate var shotDetailsViewControllersDictionary = [Int:ShotDetailsViewController]()
+    fileprivate var shotDetailsViewControllersDictionary = [Int : ShotDetailsViewController]()
     var initialViewController: ShotDetailsViewController? {
         return shotDetailsViewControllersDictionary.values.first
     }
@@ -32,12 +32,12 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
     
     fileprivate func getShotDetailsViewController(atIndexPath indexPath: IndexPath) -> UIViewController {
         
-        if let controller = shotDetailsViewControllersDictionary[(indexPath as NSIndexPath).row] { return controller }
+        if let controller = shotDetailsViewControllersDictionary[indexPath.row] { return controller }
         
-        let shot = shots[(indexPath as NSIndexPath).row]
+        let shot = shots[indexPath.row]
         let shotDetailsViewController = ShotDetailsViewController(shot: shot)
-        shotDetailsViewController.shotIndex = (indexPath as NSIndexPath).row
-        shotDetailsViewControllersDictionary[(indexPath as NSIndexPath).row] = shotDetailsViewController
+        shotDetailsViewController.shotIndex = indexPath.row
+        shotDetailsViewControllersDictionary[indexPath.row] = shotDetailsViewController
         shotDetailsViewController.customizeFor3DTouch(false)
         shotDetailsViewController.willDismissDetailsCompletionHandler = willDismissWithIndex
         

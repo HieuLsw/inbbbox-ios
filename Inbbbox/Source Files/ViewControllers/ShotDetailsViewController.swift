@@ -51,12 +51,12 @@ final class ShotDetailsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    @available(*, unavailable, message : "Use init(shot:) instead")
+    @available(*, unavailable, message: "Use init(shot:) instead")
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         fatalError("init(nibName:bundle:) has not been implemented")
     }
 
-    @available(*, unavailable, message : "Use init(shot:) instead")
+    @available(*, unavailable, message: "Use init(shot:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -138,7 +138,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if viewModel.isShotOperationIndex((indexPath as NSIndexPath).row) {
+        if viewModel.isShotOperationIndex(indexPath.row) {
             let cell = collectionView.dequeueReusableClass(ShotDetailsOperationCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
             operationalCell = cell
@@ -162,7 +162,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             return cell
 
-        } else if viewModel.isDescriptionIndex((indexPath as NSIndexPath).row) {
+        } else if viewModel.isDescriptionIndex(indexPath.row) {
             let cell = collectionView.dequeueReusableClass(ShotDetailsDescriptionCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
 
@@ -173,7 +173,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             return cell
 
-        } else if viewModel.shouldDisplaySeparatorAtIndex((indexPath as NSIndexPath).row) {
+        } else if viewModel.shouldDisplaySeparatorAtIndex(indexPath.row) {
             return collectionView.dequeueReusableClass(ShotDetailsDummySpaceCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
 
@@ -181,13 +181,13 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableClass(ShotDetailsCommentCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
 
-            let data = viewModel.displayableDataForCommentAtIndex((indexPath as NSIndexPath).row)
+            let data = viewModel.displayableDataForCommentAtIndex(indexPath.row)
             cell.likedByMe = data.likedByMe
             cell.authorLabel.setText(data.author)
             if let comment = data.comment {
                 cell.setCommentLabelAttributedText(comment)
             }
-            let user = viewModel.userForCommentAtIndex((indexPath as NSIndexPath).row)
+            let user = viewModel.userForCommentAtIndex(indexPath.row)
             if let url = viewModel.urlForUser(user) {
                 cell.setLinkInAuthorLabel(url, delegate: self)
             }
@@ -280,7 +280,7 @@ extension ShotDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ShotDetailsCommentCollectionViewCell {
             hideUnusedCommentEditingViews()
-            let isOwner = viewModel.isCurrentUserOwnerOfCommentAtIndex((indexPath as NSIndexPath).row)
+            let isOwner = viewModel.isCurrentUserOwnerOfCommentAtIndex(indexPath.row)
             cell.showEditView(true, forActionType: isOwner ? EditActionType.editing : .reporting)
         }
     }
@@ -288,19 +288,19 @@ extension ShotDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        if viewModel.isShotOperationIndex((indexPath as NSIndexPath).row) {
+        if viewModel.isShotOperationIndex(indexPath.row) {
             return collectionView.sizeForAutoSizingCell(ShotDetailsOperationCollectionViewCell.self, textToBound: nil)
 
-        } else if viewModel.isDescriptionIndex((indexPath as NSIndexPath).row) {
+        } else if viewModel.isDescriptionIndex(indexPath.row) {
             let text = viewModel.attributedShotDescription
             return collectionView.sizeForAutoSizingCell(ShotDetailsDescriptionCollectionViewCell.self,
                     textToBound: [text])
 
-        } else if viewModel.shouldDisplaySeparatorAtIndex((indexPath as NSIndexPath).row) {
+        } else if viewModel.shouldDisplaySeparatorAtIndex(indexPath.row) {
             return collectionView.sizeForAutoSizingCell(ShotDetailsDummySpaceCollectionViewCell.self, textToBound: nil)
 
         } else {
-            let data = viewModel.displayableDataForCommentAtIndex((indexPath as NSIndexPath).row)
+            let data = viewModel.displayableDataForCommentAtIndex(indexPath.row)
             let text = [data.author, data.comment, data.date]
             return collectionView.sizeForAutoSizingCell(ShotDetailsCommentCollectionViewCell.self, textToBound: text)
         }

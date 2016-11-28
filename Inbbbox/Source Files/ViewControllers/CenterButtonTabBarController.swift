@@ -179,7 +179,7 @@ private extension CenterButtonTabBarController {
         )
         tabBarItem.setTitleTextAttributes(
             [NSForegroundColorAttributeName: ColorModeProvider.current().tabBarNormalItemTextColor],
-            for: UIControlState()
+            for: .normal
         )
 
         tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0)

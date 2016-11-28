@@ -86,8 +86,8 @@ extension ShotsInitialAnimationsStateHandler {
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
         cell.configureForDisplayingAuthorView = Settings.Customization.ShowAuthor
-        let shot = shotsCollectionViewController.shots[(indexPath as NSIndexPath).item]
-        let shouldBlurShotImage = (indexPath as NSIndexPath).row != 0
+        let shot = shotsCollectionViewController.shots[indexPath.item]
+        let shouldBlurShotImage = indexPath.row != 0
         let blur = shouldBlurShotImage ? CGFloat(1) : CGFloat(0)
         cell.shotImageView.loadShotImageFromURL(shot.shotImage.normalURL, blur: blur)
         cell.shotImageView.applyBlur(blur)

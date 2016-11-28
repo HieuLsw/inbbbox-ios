@@ -36,7 +36,7 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
 
     // MARK: UIView
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 

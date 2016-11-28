@@ -88,6 +88,6 @@ private extension ActivityIndicatorSelectableView {
 private extension ActivityIndicatorSelectableViewState {
 
     var controlState: UIControlState {
-        return self == .selected ? .selected : UIControlState()
+        return self == .selected ? .selected : .normal
     }
 }

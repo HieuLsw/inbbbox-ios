@@ -110,8 +110,8 @@ class TeamDetailsViewModel: ProfileViewModel {
     }
 
     func userCollectionViewCellViewData(_ indexPath: IndexPath) -> UserCollectionViewCellViewData {
-        return UserCollectionViewCellViewData(user: teamMembers[(indexPath as NSIndexPath).row],
-                                                  shots: memberIndexedShots[(indexPath as NSIndexPath).row])
+        return UserCollectionViewCellViewData(user: teamMembers[indexPath.row],
+                                                  shots: memberIndexedShots[indexPath.row])
     }
 }
 

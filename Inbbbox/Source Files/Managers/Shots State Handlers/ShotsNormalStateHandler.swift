@@ -96,7 +96,7 @@ extension ShotsNormalStateHandler {
                                                                                 forIndexPath: indexPath,
                                                                                 type: .cell)
 
-        let shot = shotsCollectionViewController.shots[(indexPath as NSIndexPath).item]
+        let shot = shotsCollectionViewController.shots[indexPath.item]
 
         cell.shotImageView.activityIndicatorView.startAnimating()
         cell.shotImageView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
@@ -143,7 +143,7 @@ extension ShotsNormalStateHandler {
                 certainSelf.presentShotBucketsViewController(shot)
             case .comment:
                 let shotUpdated = self?.shotDummyRecent(shot)
-                certainSelf.presentShotDetailsViewController(shotUpdated ?? shot, index: (indexPath as NSIndexPath).item, scrollToMessages: true, focusOnInput: true)
+                certainSelf.presentShotDetailsViewController(shotUpdated ?? shot, index: indexPath.item, scrollToMessages: true, focusOnInput: true)
             case .follow:
                 firstly {
                     certainSelf.followAuthorOfShot(shot)
@@ -182,10 +182,10 @@ extension ShotsNormalStateHandler {
             didSelectItemAt indexPath: IndexPath) {
         guard let shotsCollectionViewController = shotsCollectionViewController else { return }
 
-        let shot = shotsCollectionViewController.shots[(indexPath as NSIndexPath).item]
+        let shot = shotsCollectionViewController.shots[indexPath.item]
         let shotUpdated = self.shotDummyRecent(shot)
         shotsCollectionViewController.modalPresentationStyle = .overFullScreen
-        presentShotDetailsViewController(shotUpdated ?? shot, index: (indexPath as NSIndexPath).item, scrollToMessages: false)
+        presentShotDetailsViewController(shotUpdated, index: indexPath.item, scrollToMessages: false)
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -193,7 +193,7 @@ extension ShotsNormalStateHandler {
             cell.displayAuthor(Settings.Customization.ShowAuthor, animated: true)
 
             if let shotsCollectionViewController = shotsCollectionViewController {
-                let shot = shotsCollectionViewController.shots[(indexPath as NSIndexPath).item]
+                let shot = shotsCollectionViewController.shots[indexPath.item]
                 load(shot.shotImage, for: indexPath)
             }
         }
@@ -250,10 +250,10 @@ extension ShotsNormalStateHandler {
     func getShotDetailsViewController(atIndexPath indexPath: IndexPath) -> UIViewController? {
         guard let shotsCollectionViewController = shotsCollectionViewController else { return nil }
         
-        let shot = shotsCollectionViewController.shots[(indexPath as NSIndexPath).item]
+        let shot = shotsCollectionViewController.shots[indexPath.item]
         let shotDetailsViewController = ShotDetailsViewController(shot: shot)
         shotDetailsViewController.customizeFor3DTouch(true)
-        shotDetailsViewController.shotIndex = (indexPath as NSIndexPath).item
+        shotDetailsViewController.shotIndex = indexPath.item
         
         return shotDetailsViewController
     }
@@ -412,7 +412,7 @@ private extension ShotsNormalStateHandler {
                 return nil
         }
 
-        return collectionView.indexPathsForVisibleItems.map { return viewController.shots[($0 as NSIndexPath).item] }.first
+        return collectionView.indexPathsForVisibleItems.map { return viewController.shots[$0.item] }.first
     }
 
     func visibleCell() -> ShotCollectionViewCell? {
@@ -432,7 +432,7 @@ private extension ShotsNormalStateHandler {
     func downloadNextPageIfNeeded(for indexPath: IndexPath) {
         guard let shotsCollectionViewController = shotsCollectionViewController else { return }
 
-        if (indexPath as NSIndexPath).item == shotsCollectionViewController.shots.count - 6 {
+        if indexPath.item == shotsCollectionViewController.shots.count - 6 {
 
             firstly {
                 shotsCollectionViewController.shotsProvider.nextPage()
@@ -465,7 +465,7 @@ private extension ShotsNormalStateHandler {
     /// - parameter indexPath: indexPath to match.
     /// - returns: Matched UpdateableIndexes object.
     func updateableIndexPath(for indexPath: IndexPath) -> UpdateableIndex? {
-        let toCompare = (indexPath as NSIndexPath).item
+        let toCompare = indexPath.item
         return indexPathsNeededImageUpdate.filter { $0.index == toCompare }.first
     }
 
@@ -503,7 +503,7 @@ private extension ShotsNormalStateHandler {
         if let indexPathToUpdate = updateableIndexPath(for: indexPath), indexPathToUpdate.status == .inProgress {
             return
         } else {
-            indexPathsNeededImageUpdate.append(UpdateableIndex(index: (indexPath as NSIndexPath).item, status: .inProgress))
+            indexPathsNeededImageUpdate.append(UpdateableIndex(index: indexPath.item, status: .inProgress))
         }
 
         LazyImageProvider.lazyLoadImageFromURLs(

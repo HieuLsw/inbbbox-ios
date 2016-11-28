@@ -56,7 +56,7 @@ class Settings {
         }
 
         /// Indicates date that reminder should appear.
-        static var Date: Foundation.Date? {
+        static var Date: Date? {
             get { return Settings.dateForKey(.ReminderDate) }
             set { Settings.setValue(newValue as AnyObject?, forKey: .ReminderDate) }
         }

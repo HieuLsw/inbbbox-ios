@@ -70,7 +70,7 @@ private extension Authenticator {
 
     func login(_ url: URL) {
         firstly {
-            decodeRequestTokenFromCallback(url as NSURL)
+            decodeRequestTokenFromCallback(url)
         }.then { requestToken in
             self.gainAccessTokenWithRequestToken(requestToken)
         }.then { accessToken in
@@ -88,7 +88,7 @@ private extension Authenticator {
         }
     }
 
-    func decodeRequestTokenFromCallback(_ url: NSURL) -> Promise<String> {
+    func decodeRequestTokenFromCallback(_ url: URL) -> Promise<String> {
         return Promise { fulfill, reject in
             var code: String?
             let components = url.query?.components(separatedBy: "&")

@@ -99,8 +99,8 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
     }
 
     func followeeCollectionViewCellViewData(_ indexPath: IndexPath) -> FolloweeCollectionViewCellViewData {
-        return FolloweeCollectionViewCellViewData(followee: followees[(indexPath as NSIndexPath).row],
-                shots: followeesIndexedShots[(indexPath as NSIndexPath).row])
+        return FolloweeCollectionViewCellViewData(followee: followees[indexPath.row],
+                shots: followeesIndexedShots[indexPath.row])
     }
 
     func clearViewModelIfNeeded() {

@@ -10,25 +10,25 @@ import Foundation
 
 /// Defines which views can be tracked.
 enum AnalyticsScreen: String {
-    case LoginView, FolloweesView, ShotsView, SettingsView,
-            BucketsView, LikesView, ShotDetailsView, ShotBucketsView
+    case loginView, followeesView, shotsView, settingsView,
+            bucketsView, likesView, shotDetailsView, shotBucketsView
 }
 
 /// Defines which login events can be tracked.
 enum AnalyticsLoginEvent: String {
-    case LoginSucceeded, LoginFailed, LoginAsGuest
+    case loginSucceeded, loginFailed, loginAsGuest
 }
 
 /// Defines which user actions can be tracked.
 enum AnalyticsUserActionEvent: String {
-    case Like, AddToBucket, Comment, SwipeDown
+    case like, addToBucket, comment, swipeDown
 }
 
 /// Defines which settings change can be tracked.
 enum SettingsValueChangedEvent: String {
-    case DailyRemainderEnabled, FollowingStreamSource,
-            NewTodayStreamSource, PopularTodayStreamSource, DebutsStreamSource,
-            AuthorOnHomeScreen, NightMode
+    case dailyRemainderEnabled, followingStreamSource,
+            newTodayStreamSource, popularTodayStreamSource, debutsStreamSource,
+            authorOnHomeScreen, nightMode
 }
 
 class AnalyticsManager {

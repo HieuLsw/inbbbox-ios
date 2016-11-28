@@ -74,8 +74,8 @@ class LikesViewModel: SimpleShotsViewModel {
     }
 
     func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool) {
-        let shotImage = shots[(indexPath as NSIndexPath).row].shotImage
-        let animated = shots[(indexPath as NSIndexPath).row].animated
+        let shotImage = shots[indexPath.row].shotImage
+        let animated = shots[indexPath.row].animated
         return (shotImage, animated)
     }
 

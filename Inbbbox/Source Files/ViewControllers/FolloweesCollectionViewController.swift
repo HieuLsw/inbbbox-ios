@@ -124,13 +124,13 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                                  forItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == viewModel.itemsCount - 1 {
+        if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let profileViewController = ProfileViewController(user: viewModel.followees[(indexPath as NSIndexPath).item])
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(profileViewController, animated: true)
     }
@@ -215,7 +215,7 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
         previewingContext.sourceRect = cell.contentView.bounds
         
         
-        let profileViewController = ProfileViewController(user: viewModel.followees[(indexPath as NSIndexPath).item])
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         
         return profileViewController

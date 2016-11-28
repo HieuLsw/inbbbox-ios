@@ -30,7 +30,7 @@ class GalleryViewProvider {
                 GalleryConfigurationItem.blurDismissDelay(0)]
     }()
     
-    lazy var galleryViewController: GalleryViewController  = {
+    lazy var galleryViewController: GalleryViewController = {
         
         var gallery = GalleryViewController(startIndex: 0, itemsDatasource: self, displacedViewsDatasource: self, configuration: self.galleryConfiguration)
         return gallery
@@ -39,13 +39,13 @@ class GalleryViewProvider {
     fileprivate lazy var galleryItems: [GalleryItem] = {
         
         if let animated = self.animatedUrl {
-            return [GalleryItem.custom(fetchImageBlock: { completion in
-                
-            }, itemViewControllerBlock: { ( index , count , imageCompletion, configuration , isInitial ) -> UIViewController in
-                let controller = GifViewController(index: index, itemCount: count, fetchImageBlock:{ _ in }, configuration: configuration, isInitialController: isInitial)
-                controller.itemView.loadAnimatableShotFromUrl(animated)
-                return controller
-            })]
+            return [GalleryItem.custom(fetchImageBlock: { _ in },
+                    itemViewControllerBlock: { ( index , count , imageCompletion, configuration , isInitial ) -> UIViewController in
+                        
+                        let controller = GifViewController(index: index, itemCount: count, fetchImageBlock:{ _ in }, configuration: configuration, isInitialController: isInitial)
+                        controller.itemView.loadAnimatableShotFromUrl(animated)
+                        return controller
+                    })]
         }
         if let imageUrls = self.imageUrls {
             return imageUrls.map { url in

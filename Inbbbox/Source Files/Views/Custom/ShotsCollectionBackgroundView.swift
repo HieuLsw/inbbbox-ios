@@ -83,7 +83,7 @@ class ShotsCollectionBackgroundView: UIView {
 
 //    MARK: - UIView
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 

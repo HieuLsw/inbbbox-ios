@@ -84,23 +84,21 @@ class LoginViewAnimator {
     func showLoginAsGuest() {
         loginAsGuestShown = true
         animations.moveAnimation([view!.loginButton, view!.dribbbleLogoImageView], duration: 0.5,
-                fade: .fadeIn, easeFunction: UIViewAnimationOptions(), transition: CGPoint(x: 0, y: -32))
+                fade: .fadeIn, easeFunction: .curveEaseInOut, transition: CGPoint(x: 0, y: -32))
         animations.moveAnimation([view!.orLabel, view!.loginAsGuestButton], duration: 0.5,
-                fade: .fadeIn, easeFunction: UIViewAnimationOptions(), transition: CGPoint(x: 0, y: -200))
+                fade: .fadeIn, easeFunction: .curveEaseInOut, transition: CGPoint(x: 0, y: -200))
     }
 }
 
 private extension LoginViewAnimator {
 
     func prepareCanvas() -> Promise<Void> {
-        return Promise<Void> { fulfill, _ in
-            animations.prepare()
-            loginButtonTitle = view!.loginButton.title(for: UIControlState())
-            view!.isAnimating = true
-            view!.loginButton.setTitle(nil, for: UIControlState())
-            view!.loginButton.isEnabled = false
-            fulfill()
-        }
+        animations.prepare()
+        loginButtonTitle = view!.loginButton.title(for: UIControlState())
+        view!.isAnimating = true
+        view!.loginButton.setTitle(nil, for: UIControlState())
+        view!.loginButton.isEnabled = false
+        return Promise<Void>(value: Void())
     }
 
     func restoreInitialState() {
@@ -110,20 +108,15 @@ private extension LoginViewAnimator {
     }
 
     func ballBounce() -> Promise<Void> {
-        return Promise<Void> { fulfill, _ in
-            animations.bounceAnimation([view!.loginButton, view!.dribbbleLogoImageView],
-                                       duration: loopDuration, additionalYOffset: loginAsGuestShown)
-            fulfill()
-        }
+        animations.bounceAnimation([view!.loginButton, view!.dribbbleLogoImageView],
+                                    duration: loopDuration, additionalYOffset: loginAsGuestShown)
+        return Promise<Void>(value: Void())
     }
 
     func loadingFade(fade: LoginViewAnimations.FadeStyle) -> Promise<Void> {
-        return Promise<Void> { fulfill, _ in
-            animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
+        animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
                     fade: fade, transition: CGPoint.zero) {
-                fulfill()
-            }
-        }
+        return Promise<Void>(value: Void())
     }
 
     func loadingBlink() -> Promise<Void> {

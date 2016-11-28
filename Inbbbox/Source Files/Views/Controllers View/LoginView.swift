@@ -38,10 +38,10 @@ class LoginView: UIView {
         addSubview(dribbbleLogoImageView)
 
         loginButton.setTitle(NSLocalizedString("LoginView.LoginButtonTitle", comment: "Title of log in button"),
-                             for: UIControlState())
+                             for: .normal)
         loginButton.backgroundColor = UIColor.white
         loginButton.layer.cornerRadius = cornerRadius
-        loginButton.setTitleColor(UIColor.pinkColor(), for: UIControlState())
+        loginButton.setTitleColor(UIColor.pinkColor(), for: .normal)
         loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
         loginButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         loginButton.titleLabel?.textAlignment = NSTextAlignment.center
@@ -50,12 +50,12 @@ class LoginView: UIView {
         insertSubview(loginButton, belowSubview: dribbbleLogoImageView)
 
         loginAsGuestButton.setTitle(NSLocalizedString("LoginView.GuestButtonTitle", comment: "Title of guest button"),
-                                    for: UIControlState())
+                                    for: .normal)
         loginAsGuestButton.backgroundColor = UIColor.clear
         loginAsGuestButton.layer.cornerRadius = cornerRadius
         loginAsGuestButton.layer.borderWidth = 1
         loginAsGuestButton.layer.borderColor = UIColor.white.cgColor
-        loginAsGuestButton.setTitleColor(UIColor.white, for: UIControlState())
+        loginAsGuestButton.setTitleColor(UIColor.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
         addSubview(loginAsGuestButton)
 

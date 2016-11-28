@@ -10,7 +10,7 @@ class RoundedButton: UIButton {
 
     let diameter = CGFloat(70)
 
-    @available(*, unavailable, message : "Use init() or init(frame:) instead")
+    @available(*, unavailable, message: "Use init() or init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,14 +30,14 @@ class RoundedButton: UIButton {
 
 //    MARK: - UIView
 
-    override var intrinsicContentSize : CGSize {
+    override var intrinsicContentSize: CGSize {
         return CGSize(width: diameter, height: diameter)
     }
 }
 
 extension RoundedButton: ColorModeAdaptable {
     func adaptColorMode(_ mode: ColorModeType) {
-        setImage(UIImage(named: mode.tabBarCenterButtonNormalImageName), for: UIControlState())
+        setImage(UIImage(named: mode.tabBarCenterButtonNormalImageName), for: .normal)
         setImage(UIImage(named: mode.tabBarCenterButtonSelectedImageName), for: .selected)
         backgroundColor = mode.tabBarCenterButtonBackground
         layer.shadowColor = mode.shadowColor.cgColor

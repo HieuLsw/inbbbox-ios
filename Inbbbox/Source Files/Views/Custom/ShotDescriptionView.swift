@@ -47,7 +47,7 @@ class ShotDescriptionView: UIView {
 
     // MARK: UI
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 

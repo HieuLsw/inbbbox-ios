@@ -48,7 +48,7 @@ class DoubleImageView: UIView {
 
 //     MARK: - UIView
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -63,7 +63,7 @@ class DoubleImageView: UIView {
         super.updateConstraints()
     }
 
-    override var intrinsicContentSize : CGSize {
+    override var intrinsicContentSize: CGSize {
         let width = max(firstImageView.intrinsicContentSize.width, secondImageView.intrinsicContentSize.width)
         let height = max(firstImageView.intrinsicContentSize.height, secondImageView.intrinsicContentSize.height)
         return CGSize(width: width, height: height)

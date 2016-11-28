@@ -24,7 +24,7 @@ class EmptyShotsCollectionView: UIView {
         cellPlaceholder.layer.shadowColor = UIColor.cellBackgroundColor().cgColor
         cellPlaceholder.layer.shadowRadius = 3
         cellPlaceholder.layer.shadowOpacity = 1
-        cellPlaceholder.layer.shadowOffset = CGSize(width: 0, height: 0)
+        cellPlaceholder.layer.shadowOffset = CGSize.zero
         cellPlaceholder.clipsToBounds = false
         
         addSubview(cellPlaceholder)

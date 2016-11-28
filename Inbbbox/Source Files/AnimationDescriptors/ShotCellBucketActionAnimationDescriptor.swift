@@ -20,8 +20,8 @@ struct ShotCellBucketActionAnimationDescriptor: AnimationDescriptor {
     init(shotCell: ShotCollectionViewCell, swipeCompletion: (() -> ())?) {
         self.shotCell = shotCell
         animations = {
-            let contentViewWidht = shotCell.contentView.bounds.width
-            shotCell.likeImageViewLeftConstraint?.constant = round(contentViewWidht / 2 -
+            let contentViewWidth = shotCell.contentView.bounds.width
+            shotCell.likeImageViewLeftConstraint?.constant = round(contentViewWidth / 2 -
                     (shotCell.likeImageView.intrinsicContentSize.width +
                             shotCell.plusImageView.intrinsicContentSize.width +
                             shotCell.bucketImageView.intrinsicContentSize.width + 2 * 15) / 2)
@@ -35,7 +35,7 @@ struct ShotCellBucketActionAnimationDescriptor: AnimationDescriptor {
                     shotCell.bucketImageView.intrinsicContentSize.width
             shotCell.contentView.layoutIfNeeded()
             shotCell.likeImageView.alpha = 1.0
-            shotCell.shotImageView.transform = CGAffineTransform.identity.translatedBy(x: contentViewWidht, y: 0)
+            shotCell.shotImageView.transform = CGAffineTransform.identity.translatedBy(x: contentViewWidth, y: 0)
             shotCell.likeImageView.displaySecondImageView()
             shotCell.messageLabel.alpha = 1
         }

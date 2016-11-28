@@ -124,7 +124,7 @@ class ShotDetailsHeaderView: UICollectionReusableView {
         }
     }
 
-    @available(*, unavailable, message : "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -271,14 +271,14 @@ extension ShotDetailsHeaderView: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AttachmentCollectionViewCell.identifier, for: indexPath)
-        if let cell = cell as? AttachmentCollectionViewCell, let thumbnail = attachments[(indexPath as NSIndexPath).row].thumbnailURL {
+        if let cell = cell as? AttachmentCollectionViewCell, let thumbnail = attachments[indexPath.row].thumbnailURL {
             cell.imageView.loadImageFromURL(thumbnail)
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        attachmentDidTap?(collectionView.cellForItem(at: indexPath)!, attachments[(indexPath as NSIndexPath).row])
+        attachmentDidTap?(collectionView.cellForItem(at: indexPath)!, attachments[indexPath.row])
     }
 }
 

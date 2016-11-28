@@ -96,7 +96,7 @@ class ShotBucketsViewController: UIViewController {
         }
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return ColorModeProvider.current().preferredStatusBarStyle
     }
 }
@@ -111,20 +111,20 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if viewModel.isSeparatorAtIndex((indexPath as NSIndexPath).item) {
+        if viewModel.isSeparatorAtIndex(indexPath.item) {
             return configureSeparatorCell(collectionView, atIndexPath: indexPath)
         }
 
         switch viewModel.shotBucketsViewControllerMode {
         case .addToBucket:
-            if viewModel.isActionItemAtIndex((indexPath as NSIndexPath).item) {
+            if viewModel.isActionItemAtIndex(indexPath.item) {
                 return configureActionCell(collectionView, atIndexPath: indexPath,
                         selector: #selector(addNewBucketButtonDidTap(_:)))
             } else {
                 return configureAddToBucketCell(collectionView, atIndexPath: indexPath)
             }
         case .removeFromBucket:
-            if viewModel.isActionItemAtIndex((indexPath as NSIndexPath).item) {
+            if viewModel.isActionItemAtIndex(indexPath.item) {
                 return configureActionCell(collectionView, atIndexPath: indexPath,
                         selector: #selector(removeButtonDidTap(_:)))
             } else {
@@ -184,10 +184,10 @@ extension ShotBucketsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ShotBucketsSelectCollectionViewCell {
-            cell.selectBucket(viewModel.selectBucketAtIndex((indexPath as NSIndexPath).item))
+            cell.selectBucket(viewModel.selectBucketAtIndex(indexPath.item))
             setRemoveFromSelectedBucketsButtonActive(viewModel.selectedBucketsIndexes.count > 0)
         } else if let _ = collectionView.cellForItem(at: indexPath) as? ShotBucketsAddCollectionViewCell {
-            addShotToBucketAtIndex((indexPath as NSIndexPath).item)
+            addShotToBucketAtIndex(indexPath.item)
         }
     }
 }
@@ -342,7 +342,7 @@ extension ShotBucketsViewController {
                              selector: Selector) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotBucketsActionCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
-        cell.button.setTitle(viewModel.titleForActionItem, for: UIControlState())
+        cell.button.setTitle(viewModel.titleForActionItem, for: .normal)
         cell.button.addTarget(self, action: selector, for: .touchUpInside)
         cell.button.isEnabled = viewModel.shotBucketsViewControllerMode == .addToBucket
         return cell
@@ -353,10 +353,10 @@ extension ShotBucketsViewController {
         let cell = collectionView.dequeueReusableClass(ShotBucketsAddCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
 
-        let bucketData = viewModel.displayableDataForBucketAtIndex((indexPath as NSIndexPath).item)
+        let bucketData = viewModel.displayableDataForBucketAtIndex(indexPath.item)
         cell.bucketNameLabel.text = bucketData.bucketName
         cell.shotsCountLabel.text = bucketData.shotsCountText
-        cell.showBottomSeparator(viewModel.showBottomSeparatorForBucketAtIndex((indexPath as NSIndexPath).item))
+        cell.showBottomSeparator(viewModel.showBottomSeparatorForBucketAtIndex(indexPath.item))
         return cell
     }
 
@@ -365,10 +365,10 @@ extension ShotBucketsViewController {
         let cell = collectionView.dequeueReusableClass(ShotBucketsSelectCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
 
-        let bucketData = viewModel.displayableDataForBucketAtIndex((indexPath as NSIndexPath).item)
+        let bucketData = viewModel.displayableDataForBucketAtIndex(indexPath.item)
         cell.bucketNameLabel.text = bucketData.bucketName
-        cell.selectBucket(viewModel.bucketShouldBeSelectedAtIndex((indexPath as NSIndexPath).item))
-        cell.showBottomSeparator(viewModel.showBottomSeparatorForBucketAtIndex((indexPath as NSIndexPath).item))
+        cell.selectBucket(viewModel.bucketShouldBeSelectedAtIndex(indexPath.item))
+        cell.showBottomSeparator(viewModel.showBottomSeparatorForBucketAtIndex(indexPath.item))
         return cell
     }
 }
@@ -420,19 +420,6 @@ extension ShotBucketsViewController: UIScrollViewDelegate {
         animateHeader(start: true)
     }
 }
-/*
-extension ShotBucketsViewController: ImageProvider {
-
-    func provideImage(_ completion: (UIImage?) -> Void) {
-        if !viewModel.shot.animated {
-            if let image = header?.imageView.image {
-                completion(image)
-            }
-        }
-    }
-
-    func provideImage(atIndex index: Int, completion: (UIImage?) -> Void) { /* empty by design */ }
-}*/
 
 extension ShotBucketsViewController: DZNEmptyDataSetSource {
 

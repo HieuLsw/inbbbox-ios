@@ -82,7 +82,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Life cycle
 
-    @available(*, unavailable, message : "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -135,7 +135,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UIView
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 

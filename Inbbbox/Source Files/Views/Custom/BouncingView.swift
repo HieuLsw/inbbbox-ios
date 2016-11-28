@@ -54,7 +54,7 @@ class BouncingView: UIView, DefaultImage {
 
     // MARK: UI
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 

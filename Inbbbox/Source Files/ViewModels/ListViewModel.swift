@@ -64,15 +64,15 @@ extension ListViewModel: Itemizable {
 extension ListViewModel: IndexPathOperatable {
 
     func getItemAtIndexPath(_ indexPath: IndexPath) -> T {
-        return sections[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+        return sections[indexPath.section][indexPath.row]
     }
 
     func addItem(_ item: T, atIndexPath indexPath: IndexPath) {
-        sections[(indexPath as NSIndexPath).section].add(item, atIndex: (indexPath as NSIndexPath).row)
+        sections[indexPath.section].add(item, atIndex: indexPath.row)
     }
 
     func removeAtIndexPath(_ indexPath: IndexPath) {
-        sections[(indexPath as NSIndexPath).section].remove((indexPath as NSIndexPath).row)
+        sections[indexPath.section].remove(indexPath.row)
     }
 
     func removeItemsAtIndexPaths(_ indexPaths: [IndexPath]) {

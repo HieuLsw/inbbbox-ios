@@ -66,7 +66,7 @@ private extension User {
 
 extension User: NSSecureCoding {
 
-    static var supportsSecureCoding : Bool {
+    static var supportsSecureCoding: Bool {
         return true
     }
 }

@@ -263,8 +263,8 @@ extension ProfileViewController {
 
         if let viewModel = viewModel as? UserDetailsViewModel {
 
-            let detailsViewController = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[(indexPath as NSIndexPath).item]))
-            detailsViewController.shotIndex = (indexPath as NSIndexPath).item
+            let detailsViewController = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+            detailsViewController.shotIndex = indexPath.item
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
             
@@ -277,7 +277,7 @@ extension ProfileViewController {
         }
         if let viewModel = viewModel as? TeamDetailsViewModel {
 
-            let profileViewController = ProfileViewController(user: viewModel.teamMembers[(indexPath as NSIndexPath).item])
+            let profileViewController = ProfileViewController(user: viewModel.teamMembers[indexPath.item])
             profileViewController.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(profileViewController, animated: true)
         }
@@ -285,7 +285,7 @@ extension ProfileViewController {
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == viewModel.itemsCount - 1 {
+        if indexPath.row == viewModel.itemsCount - 1 {
             viewModel.downloadItemsForNextPage()
         }
     }
@@ -364,7 +364,7 @@ private extension ProfileViewController {
                                                       with: attributedStringWithImage)
 
             let backButton = UIButton()
-            backButton.setAttributedTitle(attributedString, for: UIControlState())
+            backButton.setAttributedTitle(attributedString, for: .normal)
             backButton.addTarget(self, action: #selector(didTapLeftBarButtonItem), for: .touchUpInside)
             backButton.sizeToFit()
 
@@ -391,9 +391,9 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
             
             previewingContext.sourceRect = cell.contentView.bounds
             
-            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[(indexPath as NSIndexPath).item]))
+            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
             controller.customizeFor3DTouch(true)
-            controller.shotIndex = (indexPath as NSIndexPath).item
+            controller.shotIndex = indexPath.item
             
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel {
@@ -406,7 +406,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
                 previewingContext.sourceRect = cell.contentView.bounds
             }
             
-            return ProfileViewController(user: viewModel.teamMembers[(indexPath as NSIndexPath).item])
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         
         return nil

@@ -132,7 +132,7 @@ private extension PageableProvider {
 
                 fulfill(result)
 
-                }.catch(execute: reject)
+            }.catch(execute: reject)
         }
     }
 

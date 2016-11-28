@@ -361,7 +361,7 @@ extension ShotDetailsViewModel {
 
     func reportBodyForAbusiveComment(_ indexPath: IndexPath) -> String {
 
-        let index = indexInCommentArrayBasedOnItemIndex((indexPath as NSIndexPath).row)
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         let comment = comments[index]
 
         let commentBody = comment.body?.string ?? ""
@@ -413,7 +413,7 @@ extension ShotDetailsViewModel {
 
                 firstly {
                     commentsRequester.checkIfLikeComment(comment, forShot: shot)
-                    }.then(execute: fulfill).catch(execute: reject)
+                }.then(execute: fulfill).catch(execute: reject)
             }
         }
 
@@ -422,7 +422,7 @@ extension ShotDetailsViewModel {
 
     func setLikeStatusForComment(atIndexPath indexPath: IndexPath, withValue isLiked: Bool) {
 
-        let index = indexInCommentArrayBasedOnItemIndex((indexPath as NSIndexPath).row)
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         var comment = comments[index]
 
         if comment.likedByMe != isLiked {

@@ -24,7 +24,7 @@ class ShotBucketsActionCollectionViewCell: UICollectionViewCell {
         contentView.configureForAutoLayout()
         
         button.configureForAutoLayout()
-        button.setTitleColor(.pinkColor(), for: UIControlState())
+        button.setTitleColor(.pinkColor(), for: .normal)
         button.setTitleColor(.textLightColor(), for: .disabled)
         button.setTitleColor(.pinkColor(alpha: 0.5), for: .highlighted)
         button.titleLabel?.font = UIFont.helveticaFont(.neue, size: 16)
@@ -33,7 +33,7 @@ class ShotBucketsActionCollectionViewCell: UICollectionViewCell {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message : "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

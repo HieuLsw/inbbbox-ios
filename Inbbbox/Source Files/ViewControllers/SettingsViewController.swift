@@ -58,7 +58,7 @@ extension SettingsViewController: ModelUpdatable {
     func didChangeItemsAtIndexPaths(_ indexPaths: [IndexPath]) {
         indexPaths.forEach {
             if let cell = tableView?.cellForRow(at: $0) {
-                let item = viewModel[($0 as NSIndexPath).section][($0 as NSIndexPath).row]
+                let item = viewModel[$0.section][$0.row]
                 configureSettingCell(cell, forItem: item)
             }
         }
@@ -91,7 +91,7 @@ extension SettingsViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = viewModel[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+        let item = viewModel[indexPath.section][indexPath.row]
         let cell = tableView.cellForItemCategory(item.category)
 
         configureSettingCell(cell, forItem: item)
@@ -106,7 +106,7 @@ extension SettingsViewController {
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,
                             forRowAt indexPath: IndexPath) {
-        let item = viewModel[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+        let item = viewModel[indexPath.section][indexPath.row]
 
         if let item = item as? SwitchItem, let cell = cell as? SwitchCell {
             item.bindSwitchControl(cell.switchControl)
@@ -116,8 +116,8 @@ extension SettingsViewController {
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
                             forRowAt indexPath: IndexPath) {
         let cellIndexPath = tableView.indexPath(for: cell) ?? indexPath
-        let section = (cellIndexPath as NSIndexPath).section
-        let row = (cellIndexPath as NSIndexPath).row
+        let section = cellIndexPath.section
+        let row = cellIndexPath.row
         if section < viewModel.sectionsCount() && row < viewModel[section].count {
             let item = viewModel[section][row]
 
@@ -151,7 +151,7 @@ extension SettingsViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let item = viewModel[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+        let item = viewModel[indexPath.section][indexPath.row]
 
         if let item = item as? DateItem {
 

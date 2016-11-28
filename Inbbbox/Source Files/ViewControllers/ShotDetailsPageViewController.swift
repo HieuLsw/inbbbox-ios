@@ -17,7 +17,7 @@ class ShotDetailsPageViewController: UIPageViewController {
     
     // MARK: Life cycle
     
-    @available(*, unavailable, message : "Use init() method instead")
+    @available(*, unavailable, message: "Use init() method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,7 +57,7 @@ extension ShotDetailsPageViewController {
         updateConstraints()
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return ColorModeProvider.current().preferredStatusBarStyle
     }
     

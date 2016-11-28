@@ -81,17 +81,17 @@ class KeyboardResizableView: UIView {
         name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
-    @available(*, unavailable, message : "Use init() instead")
+    @available(*, unavailable, message: "Use init() instead")
     override init(frame: CGRect) {
         fatalError("init(frame:) has not been implemented")
     }
 
-    @available(*, unavailable, message : "Use init() instead")
+    @available(*, unavailable, message: "Use init() instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -111,14 +111,14 @@ extension KeyboardResizableView {
 
     func keyboardWillAppear(_ notification: Notification) {
         if !isKeyboardPresent {
-            relayoutViewWithParameters((notification as NSNotification).userInfo! as NSDictionary, keyboardPresence: true)
+            relayoutViewWithParameters(notification.userInfo! as NSDictionary, keyboardPresence: true)
         }
         isKeyboardPresent = true
     }
 
     func keyboardWillDisappear(_ notification: Notification) {
         if isKeyboardPresent {
-            relayoutViewWithParameters((notification as NSNotification).userInfo! as NSDictionary, keyboardPresence: false)
+            relayoutViewWithParameters(notification.userInfo! as NSDictionary, keyboardPresence: false)
         }
         isKeyboardPresent = false
     }

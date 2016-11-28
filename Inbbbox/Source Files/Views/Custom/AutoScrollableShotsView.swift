@@ -36,12 +36,12 @@ class AutoScrollableShotsView: UIView {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message : "Use init(numberOfColumns:) instead")
+    @available(*, unavailable, message: "Use init(numberOfColumns:) instead")
     override init(frame: CGRect) {
         fatalError("init(frame:) has not been implemented")
     }
 
-    @available(*, unavailable, message : "Use init(numberOfColumns:) instead")
+    @available(*, unavailable, message: "Use init(numberOfColumns:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

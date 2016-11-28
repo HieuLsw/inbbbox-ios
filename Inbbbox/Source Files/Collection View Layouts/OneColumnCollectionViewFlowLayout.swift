@@ -27,8 +27,7 @@ class OneColumnCollectionViewFlowLayout: UICollectionViewFlowLayout {
                                      bottom: spacings.sectionMarginVertical,
                                       right: spacings.sectionMarginHorizontal)
             if containsHeader {
-                headerReferenceSize = CGSize(width: collectionView.bounds.width,
-                                            height: 150)
+                headerReferenceSize = CGSize(width: collectionView.bounds.width, height: 150)
             }
         }
     }

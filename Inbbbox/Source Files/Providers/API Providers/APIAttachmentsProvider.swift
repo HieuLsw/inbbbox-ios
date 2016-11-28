@@ -25,7 +25,7 @@ class APIAttachmentsProvider: PageableProvider {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (attachments: [Attachment]?) -> Void in
                 fulfill(attachments.flatMap { $0.map { $0 as Attachment } })
-                }.catch(execute: reject)
+            }.catch(execute: reject)
         }
     }
 }

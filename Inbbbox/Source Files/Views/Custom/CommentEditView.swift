@@ -19,7 +19,7 @@ class CommentEditView: UIView {
         didSet {
             deleteLabel.text = deleteLabelText
             let imageName = isEditing ? "ic-delete-comment" : "ic-report-comment"
-            deleteButton.setImage(UIImage(named: imageName), for: UIControlState())
+            deleteButton.setImage(UIImage(named: imageName), for: .normal)
             likeButton.isHidden = isEditing
             likeLabel.isHidden = isEditing
             setUpConstraints()
@@ -28,7 +28,7 @@ class CommentEditView: UIView {
     fileprivate var isLiked = false {
         didSet {
             let imageName = isLiked ? "ic-like-details-active" : "ic-like-details"
-            likeButton.setImage(UIImage(named: imageName), for: UIControlState())
+            likeButton.setImage(UIImage(named: imageName), for: .normal)
         }
     }
 
@@ -66,14 +66,14 @@ class CommentEditView: UIView {
         setupSubviews()
     }
 
-    @available(*, unavailable, message : "Use init(frame: CGRect) method instead")
+    @available(*, unavailable, message: "Use init(frame: CGRect) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: UI
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -155,19 +155,19 @@ class CommentEditView: UIView {
     }
 
     fileprivate func setupCancelButton() {
-        cancelButton.setImage(UIImage(named: "ic-cancel-comment"), for: UIControlState())
+        cancelButton.setImage(UIImage(named: "ic-cancel-comment"), for: .normal)
         cancelButton.contentMode = .scaleAspectFit
         contentView.addSubview(cancelButton)
     }
 
     fileprivate func setupDeleteButton() {
-        deleteButton.setImage(UIImage(named: "ic-delete-comment"), for: UIControlState())
+        deleteButton.setImage(UIImage(named: "ic-delete-comment"), for: .normal)
         deleteButton.contentMode = .scaleAspectFit
         contentView.addSubview(deleteButton)
     }
 
     fileprivate func setupLikeButton() {
-        likeButton.setImage(UIImage(named: "ic-like-details"), for: UIControlState())
+        likeButton.setImage(UIImage(named: "ic-like-details"), for: .normal)
         likeButton.contentMode = .scaleAspectFit
         contentView.addSubview(likeButton)
     }

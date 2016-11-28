@@ -57,7 +57,7 @@ extension AutoScrollableShotsDataSource: UICollectionViewDataSource {
                                          forIndexPath: indexPath,
                                                  type: .cell)
 
-        cell.imageView.image = content[(indexPath as NSIndexPath).row].image
+        cell.imageView.image = content[indexPath.row].image
 
         return cell
     }

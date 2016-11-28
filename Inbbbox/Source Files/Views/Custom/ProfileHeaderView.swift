@@ -62,7 +62,7 @@ class ProfileHeaderView: UICollectionReusableView {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message : "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

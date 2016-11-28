@@ -71,8 +71,7 @@ class InitialShotsCollectionViewLayout: UICollectionViewLayout {
         let layoutAttributes = layoutAttributesForItem(at: indexPath)
         if let collectionView = collectionView, let layoutAttributes = layoutAttributes {
             layoutAttributes.center = CGPoint(x: collectionView.bounds.midX,
-                    y: collectionView.bounds.maxY +
-                    layoutAttributes.bounds.maxY)
+                    y: collectionView.bounds.maxY + layoutAttributes.bounds.maxY)
             layoutAttributes.alpha = 0
         }
         return layoutAttributes

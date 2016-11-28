@@ -22,7 +22,7 @@ class ShotsCollectionViewController: UICollectionViewController {
 
     // MARK: Life cycle
 
-    @available(*, unavailable, message : "Use init() method instead")
+    @available(*, unavailable, message: "Use init() method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -252,7 +252,7 @@ private extension ShotsCollectionViewController {
             refreshShotsData()
         }.then { () -> Void in
             self.collectionView?.reloadData()
-            self.collectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
         }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
         }

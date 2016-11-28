@@ -91,7 +91,7 @@ extension ShotDetailsViewController: UIScrollViewDelegate {
         let visibleCells = shotDetailsView.collectionView.indexPathsForVisibleItems
 
         for indexPath in visibleCells {
-            let index = viewModel.indexInCommentArrayBasedOnItemIndex((indexPath as NSIndexPath).row)
+            let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
 
             if index >= 0 && index < viewModel.comments.count {
                 firstly {
@@ -157,7 +157,7 @@ extension ShotDetailsViewController: AvatarViewDelegate {
             guard let cell = avatarView.superview?.superview as? ShotDetailsCommentCollectionViewCell else { return }
 
             if let indexPath = shotDetailsView.collectionView.indexPath(for: cell) {
-                let index = viewModel.indexInCommentArrayBasedOnItemIndex((indexPath as NSIndexPath).row)
+                let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
                 user = viewModel.comments[index].user
             }
         }

@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
         AnalyticsManager.trackScreen(.LoginView)
     }
 
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return statusBarStyle
     }
 

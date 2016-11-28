@@ -117,8 +117,8 @@ class UserDetailsViewModel: ProfileViewModel {
     // MARK: Cell data section
 
     func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool) {
-        let shotImage = userShots[(indexPath as NSIndexPath).row].shotImage
-        let animated = userShots[(indexPath as NSIndexPath).row].animated
+        let shotImage = userShots[indexPath.row].shotImage
+        let animated = userShots[indexPath.row].animated
         return (shotImage, animated)
     }
 }

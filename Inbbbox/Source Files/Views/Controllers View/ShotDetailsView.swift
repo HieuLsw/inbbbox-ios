@@ -49,7 +49,7 @@ class ShotDetailsView: UIView {
         addSubview(keyboardResizableView)
     }
 
-    @available(*, unavailable, message : "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

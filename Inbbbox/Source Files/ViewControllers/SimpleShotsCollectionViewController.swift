@@ -81,9 +81,9 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
         
         previewingContext.sourceRect = cell.contentView.bounds
         
-        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[(indexPath as NSIndexPath).item])
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
         detailsViewController.customizeFor3DTouch(true)
-        detailsViewController.shotIndex = (indexPath as NSIndexPath).item
+        detailsViewController.shotIndex = indexPath.item
         
         return detailsViewController
     }
@@ -120,7 +120,7 @@ extension SimpleShotsCollectionViewController {
                 type: .cell)
         let cellData = viewModel!.shotCollectionViewCellViewData(indexPath)
 
-        indexesToUpdateCellImage.append((indexPath as NSIndexPath).row)
+        indexesToUpdateCellImage.append(indexPath.row)
         lazyLoadImage(cellData.shotImage, atIndexPath: indexPath)
         
         if !cell.isRegisteredTo3DTouch {
@@ -139,7 +139,7 @@ extension SimpleShotsCollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
             forItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == viewModel!.itemsCount - 1 {
+        if (indexPath.row == viewModel!.itemsCount - 1) {
             viewModel?.downloadItemsForNextPage()
         }
     }
@@ -150,8 +150,8 @@ extension SimpleShotsCollectionViewController {
             return
         }
 
-        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[(indexPath as NSIndexPath).item])
-        detailsViewController.shotIndex = (indexPath as NSIndexPath).item
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        detailsViewController.shotIndex = indexPath.item
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
         
@@ -165,7 +165,7 @@ extension SimpleShotsCollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
                                  forItemAt indexPath: IndexPath) {
-        if let index = indexesToUpdateCellImage.index(of: (indexPath as NSIndexPath).row) {
+        if let index = indexesToUpdateCellImage.index(of: indexPath.row) {
             indexesToUpdateCellImage.remove(at: index)
         }
     }
@@ -237,7 +237,7 @@ private extension SimpleShotsCollectionViewController {
     func lazyLoadImage(_ shotImage: ShotImageType, atIndexPath indexPath: IndexPath) {
         let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
-            guard let certainSelf = self, certainSelf.indexesToUpdateCellImage.contains((indexPath as NSIndexPath).row) else {
+            guard let certainSelf = self, certainSelf.indexesToUpdateCellImage.contains(indexPath.row) else {
                 return
             }
 

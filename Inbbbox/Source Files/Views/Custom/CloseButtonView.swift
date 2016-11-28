@@ -37,7 +37,7 @@ class CloseButtonView: UIView {
         closeButton.configureForAutoLayout()
         closeButton.backgroundColor = UIColor.white.withAlphaComponent(0.01)
         let image = UIImage(named: "ic-cross-naked")?.withRenderingMode(.alwaysOriginal)
-        closeButton.setImage(image, for: UIControlState())
+        closeButton.setImage(image, for: .normal)
         addSubview(closeButton)
     }
 

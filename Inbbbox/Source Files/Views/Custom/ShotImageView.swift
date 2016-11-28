@@ -32,7 +32,7 @@ class ShotImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -65,7 +65,7 @@ class ShotImageView: UIImageView {
             self.image = originalImage
             return
         }
-        let bluredImageUrl = (imageUrl as NSURL?)?.copy()
+        let bluredImageUrl = imageUrl?.copy()
         DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: { [weak self] in
             let bluredImage = self?.originalImage?.imageByBlurringImageWithBlur(blur)
             DispatchQueue.main.async(execute: {

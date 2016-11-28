@@ -33,7 +33,7 @@ class TabBarAnimator {
             height: tabBarHeight
         )
         tabBarView.layoutIfNeeded()
-        centerButton.setImage(UIImage(named: "ic-ball-active"), for: UIControlState())
+        centerButton.setImage(UIImage(named: "ic-ball-active"), for: .normal)
         centerButton.backgroundColor = UIColor.white
         tabBarView.addSubview(centerButton)
         centerButton.frame = CGRect(
@@ -129,15 +129,13 @@ private extension TabBarAnimator {
     }
 
     func prepare() -> Promise<Void> {
-        return Promise<Void> { fulfill, _ in
 
-            tabBarView.likesItemViewVerticalConstraint?.constant += tabBarHeight
-            tabBarView.bucketsItemViewVerticalConstraint?.constant += tabBarHeight
-            tabBarView.followingItemViewVerticalConstraint?.constant += tabBarHeight
-            tabBarView.accountItemViewVerticalConstraint?.constant += tabBarHeight
+        tabBarView.likesItemViewVerticalConstraint?.constant += tabBarHeight
+        tabBarView.bucketsItemViewVerticalConstraint?.constant += tabBarHeight
+        tabBarView.followingItemViewVerticalConstraint?.constant += tabBarHeight
+        tabBarView.accountItemViewVerticalConstraint?.constant += tabBarHeight
 
-            centerButton.alpha = 0.0
-            fulfill()
-        }
+        centerButton.alpha = 0.0
+        return Promise<Void>(value:Void())
     }
 }

@@ -72,11 +72,11 @@ class CommentComposerView: UIView {
         cornerWrapperView.addSubview(textField)
     }
 
-    override class var requiresConstraintBasedLayout : Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
-    @available(*, unavailable, message : "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -169,7 +169,7 @@ private extension CommentComposerView {
         let button = UIButton(type: .custom)
         button.isEnabled = false
         button.frame = CGRect(x: 0, y: 0, width: 65, height: 40)
-        button.setImage(UIImage(named: "ic-sendmessage"), for: UIControlState())
+        button.setImage(UIImage(named: "ic-sendmessage"), for: .normal)
         button.addTarget(self, action: #selector(addCommentButtonDidTap(_:)),
                 for: .touchUpInside)
 

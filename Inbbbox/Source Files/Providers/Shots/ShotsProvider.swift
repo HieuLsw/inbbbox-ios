@@ -37,7 +37,7 @@ class ShotsProvider {
                     return $0.createdAt.compare($1.createdAt) == ComparisonResult.orderedAscending
                 }
                 fulfill(shotsSorted)
-                }.catch(execute: reject)
+            }.catch(execute: reject)
         }
 
     }

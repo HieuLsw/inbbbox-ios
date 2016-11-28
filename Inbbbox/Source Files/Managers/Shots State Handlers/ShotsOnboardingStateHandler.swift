@@ -87,7 +87,7 @@ extension ShotsOnboardingStateHandler {
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if (indexPath as NSIndexPath).row < onboardingSteps.count {
+        if indexPath.row < onboardingSteps.count {
             return cellForOnboardingShot(collectionView, indexPath: indexPath)
         } else {
             return cellForShot(collectionView, indexPath: indexPath)
@@ -99,7 +99,7 @@ extension ShotsOnboardingStateHandler {
 extension ShotsOnboardingStateHandler {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == onboardingSteps.count {
+        if indexPath.row == onboardingSteps.count {
             scrollViewAnimationsCompletion = {
                 Defaults[.onboardingPassed] = true
                 self.delegate?.shotsStateHandlerDidInvalidate(self)
@@ -108,7 +108,7 @@ extension ShotsOnboardingStateHandler {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard (indexPath as NSIndexPath).row == onboardingSteps.count - 1 else {
+        guard indexPath.row == onboardingSteps.count - 1 else {
             return
         }
         collectionView.animateToNextCell()
@@ -142,12 +142,12 @@ private extension ShotsOnboardingStateHandler {
     func cellForOnboardingShot(_ collectionView: UICollectionView, indexPath: IndexPath) -> ShotCollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
-        let stepImage = onboardingSteps[(indexPath as NSIndexPath).row].image
+        let stepImage = onboardingSteps[indexPath.row].image
         cell.shotImageView.image = stepImage
         cell.gifLabel.isHidden = true
-        cell.enabledActions = [self.onboardingSteps[(indexPath as NSIndexPath).row].action]
+        cell.enabledActions = [self.onboardingSteps[indexPath.row].action]
         cell.swipeCompletion = { [weak self] action in
-            guard let certainSelf = self, action == certainSelf.onboardingSteps[(indexPath as NSIndexPath).row].action else {
+            guard let certainSelf = self, action == certainSelf.onboardingSteps[indexPath.row].action else {
                 return
             }
             collectionView.animateToNextCell()

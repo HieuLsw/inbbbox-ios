@@ -47,7 +47,7 @@ class ShotDetailsOperationView: UIView {
         
     }
 
-    @available(*, unavailable, message : "Use init(withImage: UIImage) method instead")
+    @available(*, unavailable, message: "Use init(withImage: UIImage) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

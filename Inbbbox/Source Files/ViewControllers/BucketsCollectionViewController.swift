@@ -92,7 +92,7 @@ class BucketsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                            willDisplay cell: UICollectionViewCell,
                    forItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == viewModel.itemsCount - 1 {
+        if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
@@ -100,7 +100,7 @@ class BucketsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
              didSelectItemAt indexPath: IndexPath) {
         let bucketContentCollectionViewController =
-                SimpleShotsCollectionViewController(bucket: viewModel.buckets[(indexPath as NSIndexPath).row])
+                SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.row])
         navigationController?.pushViewController(bucketContentCollectionViewController,
                 animated: true)
     }
@@ -215,7 +215,7 @@ extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
         
         previewingContext.sourceRect = cell.contentView.bounds
         
-        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[(indexPath as NSIndexPath).item])
+        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
