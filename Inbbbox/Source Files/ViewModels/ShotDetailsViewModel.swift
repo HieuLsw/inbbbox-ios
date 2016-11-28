@@ -55,8 +55,9 @@ final class ShotDetailsViewModel {
     private var isShotLikedByMe: Bool?
     private var userBucketsForShotCount: Int?
 
-    init(shot: ShotType) {
+    init(shot: ShotType, isLiked: Bool?) {
         self.shot = shot
+        isShotLikedByMe = isLiked
     }
 
     func isDescriptionIndex(index: Int) -> Bool {

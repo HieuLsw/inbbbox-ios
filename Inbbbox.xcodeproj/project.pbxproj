@@ -1701,7 +1701,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E3A98071AA72F0A00CE2F20 /* Build configuration list for PBXNativeTarget "Inbbbox" */;
 			buildPhases = (
-				36F3F57B8130E76F77E91B08 /* 📦 Check Pods Manifest.lock */,
+				36F3F57B8130E76F77E91B08 /* [CP] Check Pods Manifest.lock */,
 				D084FEB7B98567D14C689620 /* [CP] Check Pods Manifest.lock */,
 				5E3A97E41AA72F0A00CE2F20 /* Sources */,
 				5E3A97E51AA72F0A00CE2F20 /* Frameworks */,
@@ -1725,7 +1725,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E3A983E1AA73A6600CE2F20 /* Build configuration list for PBXNativeTarget "Unit Tests" */;
 			buildPhases = (
-				49440D3BA0E7261BE46511D0 /* 📦 Check Pods Manifest.lock */,
+				49440D3BA0E7261BE46511D0 /* [CP] Check Pods Manifest.lock */,
 				E8C8763099C341F5A6E3E95F /* [CP] Check Pods Manifest.lock */,
 				5E3A98321AA73A6500CE2F20 /* Sources */,
 				5E3A98331AA73A6500CE2F20 /* Frameworks */,
@@ -1868,34 +1868,34 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Inbbbox/Pods-Inbbbox-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		36F3F57B8130E76F77E91B08 /* 📦 Check Pods Manifest.lock */ = {
+		36F3F57B8130E76F77E91B08 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		49440D3BA0E7261BE46511D0 /* 📦 Check Pods Manifest.lock */ = {
+		49440D3BA0E7261BE46511D0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		5AC2F3E857DA75D7B186A58C /* [CP] Embed Pods Frameworks */ = {
@@ -2519,7 +2519,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2636,7 +2636,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2655,7 +2655,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2760,7 +2760,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				PROVISIONING_PROFILE = "12578a8b-2366-46b0-80c8-66e5bc1b862d";
 				PROVISIONING_PROFILE_SPECIFIER = "Inbbbox Development";
@@ -2840,7 +2840,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
