@@ -114,9 +114,13 @@ private extension LoginViewAnimator {
     }
 
     func loadingFade(fade: LoginViewAnimations.FadeStyle) -> Promise<Void> {
-        animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
-                    fade: fade, transition: CGPoint.zero) {
-        return Promise<Void>(value: Void())
+        return Promise<Void> { fulfill, _ in
+                animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
+                                 fade: fade, transition: CGPoint.zero) {
+                    fulfill()
+            }
+            
+        }
     }
 
     func loadingBlink() -> Promise<Void> {
@@ -249,4 +253,5 @@ private extension LoginViewAnimator {
         let tabBarAnimator = TabBarAnimator(view: view!)
         return tabBarAnimator.animateTabBar()
     }
+    
 }

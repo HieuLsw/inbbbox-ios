@@ -14,8 +14,18 @@ import Async
 
 class AnimatableShotImageView: FLAnimatedImageView {
     let downloader = DataDownloader()
+
     fileprivate let progressAnimator = ProgressAnimator(imageBaseName: "loadgif_", imageCount: 59)
     fileprivate var didSetupConstraints = false
+    var hiddenProgressView: Bool {
+        get {
+            return progressAnimator.progressImageView.isHidden
+        }
+        
+        set {
+            progressAnimator.progressImageView.isHidden = newValue
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,14 +87,16 @@ class AnimatableShotImageView: FLAnimatedImageView {
 
     fileprivate func setImageWithData(_ data: Data) {
         Async.main {
-            self.progressAnimator.progressImageView.isHidden = true
-            self.animatedImage = FLAnimatedImage(animatedGIFData: data)
+            self.progressAnimator.updateProgress(progress: 1.0) { [weak self] in
+                self?.progressAnimator.progressImageView.isHidden = true
+                self?.animatedImage = FLAnimatedImage(animatedGIFData: data)
+            }
         }
     }
 
     fileprivate func updateWithProgress(_ progress: Float) {
         Async.main {
-            self.progressAnimator.updateProgress(progress)
+            self.progressAnimator.updateProgress(progress: progress)
         }
     }
 }

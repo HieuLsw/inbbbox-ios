@@ -47,7 +47,7 @@ class SettingsViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AnalyticsManager.trackScreen(.SettingsView)
+        AnalyticsManager.trackScreen(.settingsView)
     }
 }
 

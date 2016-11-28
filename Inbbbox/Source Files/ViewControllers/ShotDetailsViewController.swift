@@ -110,7 +110,7 @@ final class ShotDetailsViewController: UIViewController {
 
         _ = self.__once
 
-        AnalyticsManager.trackScreen(.ShotDetailsView)
+        AnalyticsManager.trackScreen(.shotDetailsView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

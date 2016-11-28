@@ -80,10 +80,10 @@ private extension Authenticator {
         }.then { user in
             self.persistUser(user)
         }.then { () -> Void in
-            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.LoginSucceeded)
+            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.loginSucceeded)
             self.success()
         }.catch { error in
-            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.LoginFailed)
+            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.loginFailed)
             self.failure(error)
         }
     }

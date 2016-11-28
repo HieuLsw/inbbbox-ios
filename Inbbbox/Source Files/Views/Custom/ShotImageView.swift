@@ -52,7 +52,7 @@ class ShotImageView: UIImageView {
         image = nil
         originalImage = nil
         activityIndicatorView.startAnimating()
-        Shared.imageCache.fetch(URL: url, formatName: CacheManager.imageFormatName, failure: nil) { [weak self] image in
+        _ = Shared.imageCache.fetch(URL: url, formatName: CacheManager.imageFormatName, failure: nil) { [weak self] image in
             self?.activityIndicatorView.stopAnimating()
             self?.image = image
             self?.originalImage = image
@@ -65,7 +65,7 @@ class ShotImageView: UIImageView {
             self.image = originalImage
             return
         }
-        let bluredImageUrl = imageUrl?.copy()
+        let bluredImageUrl = imageUrl
         DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: { [weak self] in
             let bluredImage = self?.originalImage?.imageByBlurringImageWithBlur(blur)
             DispatchQueue.main.async(execute: {

@@ -208,7 +208,7 @@ private extension SettingsViewModel {
             } else {
                 self.unregisterLocalNotification()
             }
-            AnalyticsManager.trackSettingChanged(.DailyRemainderEnabled, state: newValue)
+            AnalyticsManager.trackSettingChanged(.dailyRemainderEnabled, state: newValue)
         }
 
         reminderDateItem.onValueChanged = { date -> Void in
@@ -221,37 +221,37 @@ private extension SettingsViewModel {
         followingStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.Following = newValue
             self.checkStreamsSource()
-            AnalyticsManager.trackSettingChanged(.FollowingStreamSource, state: newValue)
+            AnalyticsManager.trackSettingChanged(.followingStreamSource, state: newValue)
         }
 
         newTodayStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.NewToday = newValue
             self.checkStreamsSource()
-            AnalyticsManager.trackSettingChanged(.NewTodayStreamSource, state: newValue)
+            AnalyticsManager.trackSettingChanged(.newTodayStreamSource, state: newValue)
         }
 
         popularTodayStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.PopularToday = newValue
             self.checkStreamsSource()
-            AnalyticsManager.trackSettingChanged(.PopularTodayStreamSource, state: newValue)
+            AnalyticsManager.trackSettingChanged(.popularTodayStreamSource, state: newValue)
         }
 
         debutsStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.Debuts = newValue
             self.checkStreamsSource()
-            AnalyticsManager.trackSettingChanged(.DebutsStreamSource, state: newValue)
+            AnalyticsManager.trackSettingChanged(.debutsStreamSource, state: newValue)
         }
 
         showAuthorItem.valueChanged = { newValue in
             Settings.Customization.ShowAuthor = newValue
             self.checkStreamsSource()
-            AnalyticsManager.trackSettingChanged(.AuthorOnHomeScreen, state: newValue)
+            AnalyticsManager.trackSettingChanged(.authorOnHomeScreen, state: newValue)
         }
         
         nightModeItem.valueChanged = { newValue in
             Settings.Customization.NightMode = newValue
             ColorModeProvider.change(to: newValue ? .NightMode : .DayMode)
-            AnalyticsManager.trackSettingChanged(.NightMode, state: newValue)
+            AnalyticsManager.trackSettingChanged(.nightMode, state: newValue)
         }
     }
     

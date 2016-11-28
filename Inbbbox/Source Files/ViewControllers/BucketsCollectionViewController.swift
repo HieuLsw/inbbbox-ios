@@ -47,7 +47,7 @@ class BucketsCollectionViewController: UICollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
-        AnalyticsManager.trackScreen(.BucketsView)
+        AnalyticsManager.trackScreen(.bucketsView)
         
         cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }

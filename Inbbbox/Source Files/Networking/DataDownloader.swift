@@ -42,7 +42,7 @@ extension DataDownloader: URLSessionDataDelegate {
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        self.data.append(data)
+        self.data.append(data) //NGRFixme: During test this line cause crases once or twice with memory allocation, better remember about it.
         let progress = Float(self.data.length) / totalSize
         if progress != 1 {
             if self.progress != nil {

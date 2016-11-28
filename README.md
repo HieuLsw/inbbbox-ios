@@ -4,7 +4,7 @@
 [![codebeat badge](https://codebeat.co/badges/b554db34-7c30-4e41-8b32-9ec8fc3742d9)](https://codebeat.co/a/netguru/projects/inbbbox-ios-master)
 
 With Inbbbox you can discover excellent visual works from Dribbble, the global directory for digital design.
-If you want to grab a copy for yourself just go straight to [App Store](link to App Store after release). However, if you are interested in the core of Inbbbox, check out [Configuration](#configuration) section. Note that Dribbble account is necessary for using the app.
+If you want to grab a copy for yourself just go straight to [App Store](https://itunes.apple.com/app/inbbbox/id1101252506). However, if you are interested in the core of Inbbbox, check out [Configuration](#configuration) section. Note that Dribbble account is necessary for using the app.
 
 We at Netguru strongly believe in open-source software. Inbbbox isn’t our only project repo where you can find the app’s full source code. Explore other [open source projects](https://www.netguru.co/opensource) created by our team.
 
@@ -63,6 +63,7 @@ You're more than welcome to contribute. Just try to follow our [coding style gui
     * [Łukasz Wolańczyk](https://github.com/lukwol)
     * [Robert Abramczyk](https://github.com/Malibris)
     * [Tomasz Walenciak](https://github.com/twalenciak)
+    * [Błażej Wdowikowski](https://github.com/bwdowikowski)
 
 Copyright © 2016 [Netguru](http://netguru.co).
 

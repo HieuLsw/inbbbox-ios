@@ -11,7 +11,7 @@ class ShotsRequester {
     let managedShotsRequester = ManagedShotsRequester()
 
     func likeShot(_ shot: ShotType) -> Promise<Void> {
-        AnalyticsManager.trackUserActionEvent(.Like)
+        AnalyticsManager.trackUserActionEvent(.like)
         if UserStorage.isUserSignedIn {
             return apiShotsRequester.likeShot(shot)
         }
