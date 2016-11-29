@@ -9,7 +9,7 @@
 import UIKit
 import TTTAttributedLabel
 
-class ShotDetailsDescriptionCollectionViewCell: UICollectionViewCell {
+class ShotDetailsDescriptionCollectionViewCell: UICollectionViewCell, Reusable {
 
     weak var delegate: UICollectionViewCellWithLabelContainingClickableLinksDelegate?
 
@@ -102,12 +102,5 @@ extension ShotDetailsDescriptionCollectionViewCell: AutoSizable {
 
     static var contentInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-    }
-}
-
-extension ShotDetailsDescriptionCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotDetailsDescriptionCollectionViewCell.self)
     }
 }

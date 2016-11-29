@@ -11,10 +11,6 @@ import PureLayout
 
 class LabelCell: UITableViewCell, Reusable {
 
-    class var identifier: String {
-        return "TableViewLabelCellReuseIdentifier"
-    }
-
     let titleLabel = UILabel.newAutoLayout()
 
     fileprivate var didSetConstraints = false

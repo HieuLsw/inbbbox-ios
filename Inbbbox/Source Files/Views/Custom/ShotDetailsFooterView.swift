@@ -17,7 +17,7 @@ private var footerBottomEdgeSpace: CGFloat {
     return 20
 }
 
-class ShotDetailsFooterView: UICollectionReusableView {
+class ShotDetailsFooterView: UICollectionReusableView, Reusable {
 
     class var minimumRequiredHeight: CGFloat {
         return cornerRadius + footerBottomEdgeSpace
@@ -83,12 +83,5 @@ class ShotDetailsFooterView: UICollectionReusableView {
     func grayOutBackground(_ grayOut: Bool) {
         let currentMode = ColorModeProvider.current()
         cornerWrapperView.backgroundColor = grayOut ? currentMode.tableViewBackground : currentMode.shotBucketsFooterViewBackground
-    }
-}
-
-extension ShotDetailsFooterView: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotDetailsFooterView.self)
     }
 }

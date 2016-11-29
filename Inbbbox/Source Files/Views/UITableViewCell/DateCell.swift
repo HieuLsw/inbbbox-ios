@@ -11,10 +11,6 @@ import PureLayout
 
 class DateCell: UITableViewCell, Reusable {
 
-    class var identifier: String {
-        return "TableViewDateCellReuseIdentifier"
-    }
-
     let dateLabel = UILabel.newAutoLayout()
     let titleLabel = UILabel.newAutoLayout()
 

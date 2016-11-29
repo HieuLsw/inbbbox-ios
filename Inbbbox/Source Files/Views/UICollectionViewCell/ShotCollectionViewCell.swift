@@ -10,7 +10,7 @@ protocol ShotCollectionViewCellDelegate: class {
     func shotCollectionViewCellDidEndSwiping(_ shotCollectionViewCell: ShotCollectionViewCell)
 }
 
-class ShotCollectionViewCell: UICollectionViewCell {
+class ShotCollectionViewCell: UICollectionViewCell, Reusable {
 
     enum Action {
         case doNothing
@@ -411,13 +411,6 @@ class ShotCollectionViewCell: UICollectionViewCell {
         authorView.alpha = shouldDisplay ? 1 : 0
         authorView.isHidden = !shouldDisplay
         authorInfoHeightConstraint?.constant = shouldDisplay ? authorInfoHeight : 0
-    }
-}
-
-extension ShotCollectionViewCell: Reusable {
-
-    static var identifier: String {
-        return "ShotCollectionViewCellIdentifier"
     }
 }
 

@@ -9,7 +9,7 @@
 import UIKit.UICollectionViewCell
 import PureLayout
 
-class AutoScrollableCollectionViewCell: UICollectionViewCell {
+class AutoScrollableCollectionViewCell: UICollectionViewCell, Reusable {
 
     let imageView = UIImageView.newAutoLayout()
     fileprivate var didSetConstraints = false
@@ -42,12 +42,5 @@ class AutoScrollableCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
 
         imageView.image = nil
-    }
-}
-
-extension AutoScrollableCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return "AutoScrollableCollectionViewCellReuseIdentifier"
     }
 }

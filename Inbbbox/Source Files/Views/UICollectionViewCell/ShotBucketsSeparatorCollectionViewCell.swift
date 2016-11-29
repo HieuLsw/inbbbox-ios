@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
+class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell, Reusable {
 
     fileprivate let cellHeight = CGFloat(20)
 
@@ -71,12 +71,5 @@ class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
         }()
 
         return layoutAttributes
-    }
-}
-
-extension ShotBucketsSeparatorCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsSeparatorCollectionViewCell.self)
     }
 }

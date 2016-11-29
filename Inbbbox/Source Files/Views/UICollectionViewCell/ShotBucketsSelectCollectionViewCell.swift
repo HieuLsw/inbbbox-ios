@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotBucketsSelectCollectionViewCell: UICollectionViewCell {
+class ShotBucketsSelectCollectionViewCell: UICollectionViewCell, Reusable {
 
     let bucketNameLabel = UILabel.newAutoLayout()
     fileprivate let selectImageView = UIImageView.newAutoLayout()
@@ -120,12 +120,5 @@ class ShotBucketsSelectCollectionViewCell: UICollectionViewCell {
 
     func showBottomSeparator(_ show: Bool) {
         separatorLine.isHidden = !show
-    }
-}
-
-extension ShotBucketsSelectCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsSelectCollectionViewCell.self)
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
+class ShotBucketsAddCollectionViewCell: UICollectionViewCell, Reusable {
 
     let bucketNameLabel = UILabel.newAutoLayout()
     let shotsCountLabel = UILabel.newAutoLayout()
@@ -124,12 +124,5 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
 
     func showBottomSeparator(_ show: Bool) {
         separatorLine.isHidden = !show
-    }
-}
-
-extension ShotBucketsAddCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsAddCollectionViewCell.self)
     }
 }

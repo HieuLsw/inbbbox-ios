@@ -11,10 +11,6 @@ import Async
 
 class SettingsTableHeaderView: UIView, Reusable, AvatarSettable {
 
-    class var identifier: String {
-        return "SettingsTableHeaderViewReuseIdentifier"
-    }
-
     fileprivate(set) var avatarView: AvatarView!
     fileprivate(set) var usernameLabel = UILabel.newAutoLayout()
 

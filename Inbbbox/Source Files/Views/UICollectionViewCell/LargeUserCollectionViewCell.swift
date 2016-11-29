@@ -72,12 +72,6 @@ class LargeUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
         shotImageView.image = nil
     }
 
-    // MARK: - Reusable
-
-    static var identifier: String {
-        return String(describing: LargeUserCollectionViewCell.self)
-    }
-
     // MARK: - Width dependent height
 
     static var heightToWidthRatio: CGFloat {

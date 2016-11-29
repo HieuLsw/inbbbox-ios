@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotDetailsDummySpaceCollectionViewCell: UICollectionViewCell {
+class ShotDetailsDummySpaceCollectionViewCell: UICollectionViewCell, Reusable {
 
     fileprivate let separatorView = UIView.newAutoLayout()
     fileprivate var didUpdateConstraints = false
@@ -52,12 +52,5 @@ extension ShotDetailsDummySpaceCollectionViewCell: AutoSizable {
 
     static var minimumRequiredHeight: CGFloat {
         return 20
-    }
-}
-
-extension ShotDetailsDummySpaceCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotDetailsDummySpaceCollectionViewCell.self)
     }
 }

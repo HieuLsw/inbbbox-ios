@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotBucketsActionCollectionViewCell: UICollectionViewCell {
+class ShotBucketsActionCollectionViewCell: UICollectionViewCell, Reusable {
 
     let button = UIButton.newAutoLayout()
 
@@ -63,12 +63,5 @@ class ShotBucketsActionCollectionViewCell: UICollectionViewCell {
         }()
 
         return layoutAttributes
-    }
-}
-
-extension ShotBucketsActionCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsActionCollectionViewCell.self)
     }
 }

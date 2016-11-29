@@ -17,7 +17,7 @@ private var margin: CGFloat {
     return 10
 }
 
-class ShotBucketsHeaderView: UICollectionReusableView {
+class ShotBucketsHeaderView: UICollectionReusableView, Reusable {
 
     var availableWidthForTitle: CGFloat {
         return avatarSize.width + 3 * margin
@@ -214,12 +214,5 @@ private extension ShotBucketsHeaderView {
 
     dynamic func shotImageDidTap(_: UITapGestureRecognizer) {
         imageDidTap?()
-    }
-}
-
-extension ShotBucketsHeaderView: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsHeaderView.self)
     }
 }

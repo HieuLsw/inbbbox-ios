@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotBucketsFooterView: UICollectionReusableView {
+class ShotBucketsFooterView: UICollectionReusableView, Reusable {
 
     fileprivate let separatorLine = UIView.newAutoLayout()
 
@@ -50,12 +50,5 @@ class ShotBucketsFooterView: UICollectionReusableView {
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         layer.mask = mask
-    }
-}
-
-extension ShotBucketsFooterView: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotBucketsFooterView.self)
     }
 }

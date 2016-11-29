@@ -10,10 +10,6 @@ import UIKit
 
 class SwitchCell: UITableViewCell, Reusable {
 
-    class var identifier: String {
-        return "TableViewSwitchCellReuseIdentifier"
-    }
-
     let switchControl = UISwitch.newAutoLayout()
     let titleLabel = UILabel.newAutoLayout()
     let edgesInset: CGFloat = 16

@@ -16,7 +16,7 @@ private var margin: CGFloat {
     return 10
 }
 
-class ProfileHeaderView: UICollectionReusableView {
+class ProfileHeaderView: UICollectionReusableView, Reusable {
 
     let avatarView = AvatarView(size: avatarSize, bordered: true, borderWidth: 3)
     var shouldShowButton = true
@@ -95,12 +95,5 @@ class ProfileHeaderView: UICollectionReusableView {
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
         button.isHidden = false
-    }
-}
-
-extension ProfileHeaderView: Reusable {
-
-    class var identifier: String {
-        return String(describing: ProfileHeaderView.self)
     }
 }

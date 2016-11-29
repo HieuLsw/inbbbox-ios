@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AttachmentCollectionViewCell: UICollectionViewCell {
+class AttachmentCollectionViewCell: UICollectionViewCell, Reusable {
     
     let imageView = UIImageView.newAutoLayout()
     fileprivate let attachmentIconImageView = UIImageView.newAutoLayout()
@@ -56,12 +56,5 @@ class AttachmentCollectionViewCell: UICollectionViewCell {
         }
         
         super.updateConstraints()
-    }
-}
-
-extension AttachmentCollectionViewCell: Reusable {
-    
-    class var identifier: String {
-        return String(describing: AttachmentCollectionViewCell.self)
     }
 }

@@ -56,11 +56,6 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
         shotImageView.image = nil
     }
 
-    // MARK: - Reusable
-    static var identifier: String {
-        return "SimpleShotCollectionViewCellIdentifier"
-    }
-
     // MARK: - Width dependent height
     static var heightToWidthRatio: CGFloat {
         return CGFloat(0.75)

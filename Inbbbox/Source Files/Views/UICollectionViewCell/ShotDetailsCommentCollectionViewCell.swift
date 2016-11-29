@@ -26,7 +26,7 @@ enum EditActionType {
     case reporting
 }
 
-class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
+class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
 
     weak var delegate: UICollectionViewCellWithLabelContainingClickableLinksDelegate?
 
@@ -277,12 +277,5 @@ extension ShotDetailsCommentCollectionViewCell: AutoSizable {
 
     static var verticalInteritemSpacing: CGFloat {
         return 5
-    }
-}
-
-extension ShotDetailsCommentCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotDetailsCommentCollectionViewCell.self)
     }
 }

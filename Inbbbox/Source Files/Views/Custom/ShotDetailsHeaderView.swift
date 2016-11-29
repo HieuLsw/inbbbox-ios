@@ -18,7 +18,7 @@ private var margin: CGFloat {
     return 10
 }
 
-class ShotDetailsHeaderView: UICollectionReusableView {
+class ShotDetailsHeaderView: UICollectionReusableView, Reusable {
     
     var showAttachments: Bool = false {
         didSet {
@@ -253,13 +253,6 @@ extension ShotDetailsHeaderView {
     fileprivate func setupImageView() {
         imageViewCenterWrapperView.insertSubview(imageView, belowSubview: dimView)
         imageView.autoPinEdgesToSuperviewEdges()
-    }
-}
-
-extension ShotDetailsHeaderView: Reusable {
-    
-    class var identifier: String {
-        return String(describing: ShotDetailsHeaderView.self)
     }
 }
 

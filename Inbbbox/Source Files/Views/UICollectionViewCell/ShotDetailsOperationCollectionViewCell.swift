@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShotDetailsOperationCollectionViewCell: UICollectionViewCell {
+class ShotDetailsOperationCollectionViewCell: UICollectionViewCell, Reusable {
 
     let operationView = ShotDetailsOperationView.newAutoLayout()
     fileprivate var didUpdateConstraints = false
@@ -45,12 +45,5 @@ extension ShotDetailsOperationCollectionViewCell: AutoSizable {
 
     static var minimumRequiredHeight: CGFloat {
         return ShotDetailsOperationView.minimumRequiredHeight
-    }
-}
-
-extension ShotDetailsOperationCollectionViewCell: Reusable {
-
-    class var identifier: String {
-        return String(describing: ShotDetailsOperationCollectionViewCell.self)
     }
 }
