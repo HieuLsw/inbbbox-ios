@@ -16,7 +16,7 @@ class UserSpec: QuickSpec {
     override func spec() {
         
         it("should support secure coding") {
-            expect(User.supportsSecureCoding()).to(beTruthy())
+            expect(User.supportsSecureCoding).to(beTruthy())
         }
         
         var sut: User!
@@ -44,7 +44,7 @@ class UserSpec: QuickSpec {
             }
             
             it("user's avatar url should be properly mapped") {
-                expect(sut.avatarURL).to(equal(NSURL(string: "fixture.avatar.url")))
+                expect(sut.avatarURL).to(equal(URL(string: "fixture.avatar.url")))
             }
             
             it("user's id should be properly mapped") {
@@ -58,11 +58,11 @@ class UserSpec: QuickSpec {
         
         describe("when encoding user") {
             
-            var data: NSData!
+            var data: Data!
             
             beforeEach {
                 sut = User.fixtureUser()
-                data = NSKeyedArchiver.archivedDataWithRootObject(sut)
+                data = NSKeyedArchiver.archivedData(withRootObject: sut)
             }
             
             it("data should not be nil") {
@@ -74,7 +74,7 @@ class UserSpec: QuickSpec {
                 var decodedUser: User?
                 
                 beforeEach {
-                    decodedUser = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? User
+                    decodedUser = NSKeyedUnarchiver.unarchiveObject(with: data) as? User
                 }
                 
                 it("user should not be nil") {

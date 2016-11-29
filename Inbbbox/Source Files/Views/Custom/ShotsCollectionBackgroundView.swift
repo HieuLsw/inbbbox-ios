@@ -38,7 +38,7 @@ class ShotsCollectionSourceItem {
 
 class ShotsCollectionBackgroundView: UIView {
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
     
     let logoImageView = UIImageView(image: UIImage(named: ColorModeProvider.current().logoImageName))
     let containerView = UIView()
@@ -66,8 +66,8 @@ class ShotsCollectionBackgroundView: UIView {
         popularTodayItem.label.text = NSLocalizedString("SettingsViewModel.Popular", comment: "User settings, enable popular")
         debutsItem.label.text = NSLocalizedString("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
         for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
-            item.label.textAlignment = .Center
-            item.label.font = UIFont.helveticaFont(.NeueLight, size: 15)
+            item.label.textAlignment = .center
+            item.label.font = UIFont.helveticaFont(.neueLight, size: 15)
             item.label.textColor = UIColor.RGBA(143, 142, 148, 1)
             item.label.alpha = 0
             containerView.addSubview(item.label)
@@ -75,7 +75,7 @@ class ShotsCollectionBackgroundView: UIView {
         addSubview(containerView)
         
         showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
-        showingYouLabel.font = UIFont.helveticaFont(.Neue, size: 15)
+        showingYouLabel.font = UIFont.helveticaFont(.neue, size: 15)
         showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
         showingYouLabel.alpha = 0
         addSubview(showingYouLabel)
@@ -83,31 +83,31 @@ class ShotsCollectionBackgroundView: UIView {
 
 //    MARK: - UIView
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     override func updateConstraints() {
 
         if !didSetConstraints {
-            logoVerticalConstraint = logoImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset)
-            logoImageView.autoAlignAxisToSuperviewAxis(.Vertical)
-            showingYouVerticalConstraint = showingYouLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: ShotsCollectionBackgroundViewSpacing.showingYouHiddenVerticalSpacing)
-            showingYouLabel.autoAlignAxisToSuperviewAxis(.Vertical)
-            showingYouLabel.autoSetDimension(.Height, toSize: 29)
-            containerView.autoPinEdgeToSuperviewEdge(.Top, withInset: ShotsCollectionBackgroundViewSpacing.containerDefaultVerticalSpacing)
-            containerView.autoAlignAxisToSuperviewAxis(.Vertical)
-            containerView.autoSetDimensionsToSize(CGSizeMake(150, 4 * ShotsCollectionBackgroundViewSpacing.labelDefaultHeight))
+            logoVerticalConstraint = logoImageView.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset)
+            logoImageView.autoAlignAxis(toSuperviewAxis: .vertical)
+            showingYouVerticalConstraint = showingYouLabel.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.showingYouHiddenVerticalSpacing)
+            showingYouLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            showingYouLabel.autoSetDimension(.height, toSize: 29)
+            containerView.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.containerDefaultVerticalSpacing)
+            containerView.autoAlignAxis(toSuperviewAxis: .vertical)
+            containerView.autoSetDimensions(to: CGSize(width: 150, height: 4 * ShotsCollectionBackgroundViewSpacing.labelDefaultHeight))
             let items = [followingItem, newTodayItem, popularTodayItem, debutsItem]
         
-            for (index, item) in items.enumerate() {
-                item.heightConstraint = item.label.autoSetDimension(.Height, toSize: 0)
-                item.label.autoSetDimension(.Width, toSize: 150)
-                item.label.autoAlignAxisToSuperviewAxis(.Vertical)
+            for (index, item) in items.enumerated() {
+                item.heightConstraint = item.label.autoSetDimension(.height, toSize: 0)
+                item.label.autoSetDimension(.width, toSize: 150)
+                item.label.autoAlignAxis(toSuperviewAxis: .vertical)
                 if (index == 0) {
-                    item.verticalSpacingConstraint = item.label.autoPinEdgeToSuperviewEdge(.Top, withInset: -5)
+                    item.verticalSpacingConstraint = item.label.autoPinEdge(toSuperviewEdge: .top, withInset: -5)
                 } else {
-                    item.verticalSpacingConstraint = item.label.autoPinEdge(.Top, toEdge: .Bottom, ofView: items[index - 1].label, withOffset: -5)
+                    item.verticalSpacingConstraint = item.label.autoPinEdge(.top, to: .bottom, of: items[index - 1].label, withOffset: -5)
                 }
             }
             

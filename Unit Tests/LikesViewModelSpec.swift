@@ -17,9 +17,9 @@ class LikesViewModelSpec: QuickSpec {
         
         var sut: LikesViewModelMock!
         let fixtureShotImage: ShotImageType = ShotImage(
-            hidpiURL: NSURL(string: "https://fixture.domain/fixture.image.hidpi.png"),
-            normalURL: NSURL(string: "https://fixture.domain/fixture.image.normal.png")!,
-            teaserURL: NSURL(string: "https://fixture.domain/fixture.image.teaser.png")!
+            hidpiURL: URL(string: "https://fixture.domain/fixture.image.hidpi.png"),
+            normalURL: URL(string: "https://fixture.domain/fixture.image.normal.png")!,
+            teaserURL: URL(string: "https://fixture.domain/fixture.image.teaser.png")!
         )
         
         beforeEach {
@@ -48,7 +48,7 @@ class LikesViewModelSpec: QuickSpec {
             }
             
             it("should return proper cell data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.shotCollectionViewCellViewData(indexPath)
                 expect(cellData.animated).to(equal(true))
                 expect(cellData.shotImage.teaserURL).to(equal(fixtureShotImage.teaserURL))
@@ -68,7 +68,7 @@ class LikesViewModelSpec: QuickSpec {
             }
             
             it("should return proper shot data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.shotCollectionViewCellViewData(indexPath)
                 expect(cellData.animated).to(equal(true))
                 expect(cellData.shotImage.teaserURL).to(equal(fixtureShotImage.teaserURL))

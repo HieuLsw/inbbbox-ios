@@ -17,7 +17,7 @@ class APIShotsRequesterSpec: QuickSpec {
     override func spec() {
         
         var sut: APIShotsRequester!
-        var error: ErrorType?
+        var error: Error?
         var didInvokePromise: Bool?
         
         beforeEach {
@@ -42,7 +42,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 it("error should appear") {
                     sut.likeShot(Shot.fixtureShot()).then { _ in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -54,13 +54,13 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
-                    self.stub(everything, builder: json([], status: 201))
+                    self.stub(everything, json([], status: 201))
                 }
                 
                 it("should like shot") {
                     sut.likeShot(Shot.fixtureShot()).then { _ in
                         didInvokePromise = true
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
                 }
@@ -78,7 +78,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 it("error should appear") {
                     sut.unlikeShot(Shot.fixtureShot()).then { _ in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -90,13 +90,13 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
-                    self.stub(everything, builder: json([], status: 204))
+                    self.stub(everything, json([], status: 204))
                 }
                 
                 it("should like shot") {
                     sut.unlikeShot(Shot.fixtureShot()).then { _ in
                         didInvokePromise = true
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
                 }
@@ -115,7 +115,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 it("error should appear") {
                     sut.isShotLikedByMe(Shot.fixtureShot()).then { _ in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -129,7 +129,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
-                    self.stub(everything, builder: json([], status: 200))
+                    self.stub(everything, json([], status: 200))
                 }
                 
                 afterEach {
@@ -139,7 +139,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 it("shot should be liked by authenticated user") {
                     sut.isShotLikedByMe(Shot.fixtureShot()).then { _isLikedByMe in
                         isLikedByMe = _isLikedByMe
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(isLikedByMe).toNotEventually(beNil())
                     expect(isLikedByMe).toEventually(beTruthy())
@@ -153,7 +153,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
                     let error = NSError(domain: "fixture.domain", code: 404, userInfo: nil)
-                    self.stub(everything, builder: failure(error))
+                    self.stub(everything, failure(error))
                 }
                 
                 afterEach {
@@ -163,7 +163,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 it("shot should not be liked by authenticated user") {
                     sut.isShotLikedByMe(Shot.fixtureShot()).then { _isLikedByMe in
                         isLikedByMe = _isLikedByMe
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(isLikedByMe).toNotEventually(beNil())
                     expect(isLikedByMe).toEventually(beFalsy())
@@ -178,14 +178,14 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
-                    self.stub(everything, builder: json(self.fixtureJSON))
+                    self.stub(everything, json(self.fixtureJSON))
                     UserStorage.storeUser(User.fixtureUser())
                 }
                 
                 it("should return 1 user bucket") {
-                    sut.userBucketsForShot(Shot.fixtureShot()).then({ _buckets in
+                    sut.userBucketsForShot(Shot.fixtureShot()).then{ _buckets in
                         buckets = _buckets
-                    }).error { _ in fail() }
+                    }.catch { _ in fail() }
                     expect(buckets).toEventually(haveCount(1), timeout: 3)
                 }
             }
@@ -196,7 +196,7 @@ class APIShotsRequesterSpec: QuickSpec {
 private extension APIShotsRequesterSpec {
     
     var fixtureJSON: [AnyObject] {
-        return JSONSpecLoader.sharedInstance.jsonWithResourceName("Buckets").arrayObject!
+        return JSONSpecLoader.sharedInstance.jsonWithResourceName("Buckets").arrayObject! as [AnyObject]
     }
 }
 

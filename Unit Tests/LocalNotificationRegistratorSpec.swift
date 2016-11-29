@@ -21,8 +21,8 @@ class LocalNotificationRegistratorSpec: QuickSpec {
         describe("when managing local notifications") {
             
             var localNotificationSettingsTypeFits: Bool {
-                if let localNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
-                    return localNotificationSettings.types == [.Alert, .Sound]
+                if let localNotificationSettings = UIApplication.shared.currentUserNotificationSettings {
+                    return localNotificationSettings.types == [.alert, .sound]
                 }
                 return false
             }
@@ -32,7 +32,7 @@ class LocalNotificationRegistratorSpec: QuickSpec {
             describe("when local notification registered") {
                 
                 beforeEach {
-                    localNotification = LocalNotificationRegistrator.registerNotification(forUserID: fixtureUserID, time: NSDate())
+                    localNotification = LocalNotificationRegistrator.registerNotification(forUserID: fixtureUserID, time: Date())
                 }
                 
                 afterEach {
@@ -63,7 +63,7 @@ class LocalNotificationRegistratorSpec: QuickSpec {
                 var containsNotification = false
                 
                 beforeEach {
-                    localNotification = LocalNotificationRegistrator.registerNotification(forUserID: fixtureUserID, time: NSDate())
+                    localNotification = LocalNotificationRegistrator.registerNotification(forUserID: fixtureUserID, time: Date())
                     LocalNotificationRegistrator.unregisterNotification(forUserID: fixtureUserID)
                 }
                 
@@ -73,7 +73,7 @@ class LocalNotificationRegistratorSpec: QuickSpec {
                 
                 it("notification should not exist") {
                     
-                    if let localNotification = localNotification, scheduledLocalNotifications = UIApplication.sharedApplication().scheduledLocalNotifications {
+                    if let localNotification = localNotification, let scheduledLocalNotifications = UIApplication.shared.scheduledLocalNotifications {
                         containsNotification = scheduledLocalNotifications.contains(localNotification)
                     }
                     

@@ -14,11 +14,11 @@ class PanGestureRecognizerMock: UIPanGestureRecognizer {
     let stateStub = Stub<Void, UIGestureRecognizerState>()
 
 
-    override func velocityInView(view: UIView?) -> CGPoint {
+    override func velocity(in view: UIView?) -> CGPoint {
         return try! velocityInViewStub.invoke(view)
     }
 
-    override func translationInView(view: UIView?) -> CGPoint {
+    override func translation(in view: UIView?) -> CGPoint {
         return try! translationInViewStub.invoke(view)
     }
 

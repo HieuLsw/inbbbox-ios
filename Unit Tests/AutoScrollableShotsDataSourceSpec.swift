@@ -20,9 +20,9 @@ class AutoScrollableShotsDataSourceSpec: QuickSpec {
             
             var collectionView: UICollectionView!
             let content = [
-                UIImage.referenceImageWithColor(.greenColor()),
-                UIImage.referenceImageWithColor(.yellowColor()),
-                UIImage.referenceImageWithColor(.redColor())
+                UIImage.referenceImageWithColor(.green),
+                UIImage.referenceImageWithColor(.yellow),
+                UIImage.referenceImageWithColor(.red)
             ]
             
             beforeEach {
@@ -52,12 +52,12 @@ class AutoScrollableShotsDataSourceSpec: QuickSpec {
             }
             
             it("collection view should have exactly 1 section") {
-                expect(sut.collectionView.numberOfSections()).to(equal(1))
+                expect(sut.collectionView.numberOfSections).to(equal(1))
             }
             
             it("collection view should have proper cell class") {
-                let indexPath = NSIndexPath(forItem: 0, inSection: 0)
-                expect(sut.collectionView.dataSource!.collectionView(sut.collectionView, cellForItemAtIndexPath: indexPath)).to(beAKindOf(AutoScrollableCollectionViewCell.self))
+                let indexPath = IndexPath(item: 0, section: 0)
+                expect(sut.collectionView.dataSource!.collectionView(sut.collectionView, cellForItemAt: indexPath)).to(beAKindOf(AutoScrollableCollectionViewCell.self))
             }
             
             describe("and showing content") {
@@ -69,7 +69,7 @@ class AutoScrollableShotsDataSourceSpec: QuickSpec {
                     }
                     
                     it("collection view should have exactly 1 section") {
-                        expect(sut.collectionView.numberOfItemsInSection(0)).to(equal(7))
+                        expect(sut.collectionView.numberOfItems(inSection: 0)).to(equal(7))
                     }
                     
                     it("extended content should be 2") {
@@ -80,15 +80,15 @@ class AutoScrollableShotsDataSourceSpec: QuickSpec {
                 context("without preparing for animation") {
                     
                     it("collection view should have exactly 1 section") {
-                        expect(sut.collectionView.numberOfItemsInSection(0)).to(equal(content.count))
+                        expect(sut.collectionView.numberOfItems(inSection: 0)).to(equal(content.count))
                     }
                 }
                 
                 context("for first cell") {
                     
                     it("image should be same as first in content") {
-                        let indexPath = NSIndexPath(forItem: 0, inSection: 0)
-                        let cell = sut.collectionView.dataSource!.collectionView(sut.collectionView, cellForItemAtIndexPath: indexPath) as! AutoScrollableCollectionViewCell
+                        let indexPath = IndexPath(item: 0, section: 0)
+                        let cell = sut.collectionView.dataSource!.collectionView(sut.collectionView, cellForItemAt: indexPath) as! AutoScrollableCollectionViewCell
                         
                         expect(cell.imageView.image).to(equal(content.first!))
                     }

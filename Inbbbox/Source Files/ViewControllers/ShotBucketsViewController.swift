@@ -13,8 +13,8 @@ import ImageViewer
 import DZNEmptyDataSet
 
 enum ShotBucketsViewControllerMode {
-    case AddToBucket
-    case RemoveFromBucket
+    case addToBucket
+    case removeFromBucket
 }
 
 class ShotBucketsViewController: UIViewController {
@@ -27,21 +27,21 @@ class ShotBucketsViewController: UIViewController {
     var didDismissViewControllerClosure: (() -> Void)?
     var alertView: UIAlertController?
 
-    private var header: ShotBucketsHeaderView?
-    private var footer: ShotBucketsFooterView?
-    private let viewModel: ShotBucketsViewModel
+    fileprivate var header: ShotBucketsHeaderView?
+    fileprivate var footer: ShotBucketsFooterView?
+    fileprivate let viewModel: ShotBucketsViewModel
 
     init(shot: ShotType, mode: ShotBucketsViewControllerMode) {
         viewModel = ShotBucketsViewModel(shot: shot, mode: mode)
         super.init(nibName: nil, bundle: nil)
     }
 
-    @available(*, unavailable, message="Use init(shot:) instead")
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    @available(*, unavailable, message: "Use init(shot:) instead")
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         fatalError("init(nibName:bundle:) has not been implemented")
     }
 
-    @available(*, unavailable, message="Use init(shot:) instead")
+    @available(*, unavailable, message: "Use init(shot:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -61,23 +61,23 @@ class ShotBucketsViewController: UIViewController {
             self.shotBucketsView.collectionView.reloadData()
         }.then {
             self.setEstimatedSizeIfNeeded()
-        }.error { error in
+        }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
         shotBucketsView.viewController = self
         shotBucketsView.collectionView.delegate = self
         shotBucketsView.collectionView.dataSource = self
-        shotBucketsView.collectionView.registerClass(ShotBucketsAddCollectionViewCell.self, type: .Cell)
-        shotBucketsView.collectionView.registerClass(ShotBucketsSelectCollectionViewCell.self, type: .Cell)
-        shotBucketsView.collectionView.registerClass(ShotBucketsActionCollectionViewCell.self, type: .Cell)
-        shotBucketsView.collectionView.registerClass(ShotBucketsSeparatorCollectionViewCell.self, type: .Cell)
-        shotBucketsView.collectionView.registerClass(ShotBucketsHeaderView.self, type: .Header)
-        shotBucketsView.collectionView.registerClass(ShotBucketsFooterView.self, type: .Footer)
+        shotBucketsView.collectionView.registerClass(ShotBucketsAddCollectionViewCell.self, type: .cell)
+        shotBucketsView.collectionView.registerClass(ShotBucketsSelectCollectionViewCell.self, type: .cell)
+        shotBucketsView.collectionView.registerClass(ShotBucketsActionCollectionViewCell.self, type: .cell)
+        shotBucketsView.collectionView.registerClass(ShotBucketsSeparatorCollectionViewCell.self, type: .cell)
+        shotBucketsView.collectionView.registerClass(ShotBucketsHeaderView.self, type: .header)
+        shotBucketsView.collectionView.registerClass(ShotBucketsFooterView.self, type: .footer)
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AnalyticsManager.trackScreen(.ShotBucketsView)
+        AnalyticsManager.trackScreen(.shotBucketsView)
     }
 
     override func viewDidLayoutSubviews() {
@@ -88,15 +88,15 @@ class ShotBucketsViewController: UIViewController {
                 heightForCollapsedCollectionViewHeader
     }
 
-    override func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
+    override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
 
         header?.imageView.startAnimating()
-        super.dismissViewControllerAnimated(flag) {
+        super.dismiss(animated: flag) {
             self.didDismissViewControllerClosure?()
         }
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return ColorModeProvider.current().preferredStatusBarStyle
     }
 }
@@ -104,26 +104,26 @@ class ShotBucketsViewController: UIViewController {
 // MARK: UICollectionViewDataSource
 extension ShotBucketsViewController: UICollectionViewDataSource {
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
     }
 
-    func collectionView(collectionView: UICollectionView,
-                        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         if viewModel.isSeparatorAtIndex(indexPath.item) {
             return configureSeparatorCell(collectionView, atIndexPath: indexPath)
         }
 
         switch viewModel.shotBucketsViewControllerMode {
-        case .AddToBucket:
+        case .addToBucket:
             if viewModel.isActionItemAtIndex(indexPath.item) {
                 return configureActionCell(collectionView, atIndexPath: indexPath,
                         selector: #selector(addNewBucketButtonDidTap(_:)))
             } else {
                 return configureAddToBucketCell(collectionView, atIndexPath: indexPath)
             }
-        case .RemoveFromBucket:
+        case .removeFromBucket:
             if viewModel.isActionItemAtIndex(indexPath.item) {
                 return configureActionCell(collectionView, atIndexPath: indexPath,
                         selector: #selector(removeButtonDidTap(_:)))
@@ -133,13 +133,13 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
-                        atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
 
         if kind == UICollectionElementKindSectionHeader {
             if header == nil && kind == UICollectionElementKindSectionHeader {
                 header = collectionView.dequeueReusableClass(ShotBucketsHeaderView.self, forIndexPath: indexPath,
-                        type: .Header)
+                        type: .header)
                 if viewModel.shot.animated {
                     if let url = viewModel.shot.shotImage.hidpiURL {
                         header?.setAnimatedImageWithUrl(url)
@@ -157,11 +157,11 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
                 header?.avatarView.imageView.loadImageFromURL(viewModel.shot.user.avatarURL)
                 header?.avatarView.delegate = self
                 header?.closeButtonView.closeButton.addTarget(self, action: #selector(closeButtonDidTap(_:)),
-                forControlEvents: .TouchUpInside)
+                for: .touchUpInside)
                 if let url = viewModel.urlForUser(viewModel.shot.user) {
                     header?.setLinkInTitle(url, range: viewModel.userLinkRange, delegate: self)
                 }
-                if let team = viewModel.shot.team, url = viewModel.urlForTeam(team) {
+                if let team = viewModel.shot.team, let url = viewModel.urlForTeam(team) {
                     header?.setLinkInTitle(url, range: viewModel.teamLinkRange, delegate: self)
                 }
                 header?.imageDidTap = { [weak self] in
@@ -172,7 +172,7 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
         } else {
             if footer == nil {
                 footer = collectionView.dequeueReusableClass(ShotBucketsFooterView.self, forIndexPath: indexPath,
-                        type: .Footer)
+                        type: .footer)
             }
             return footer!
         }
@@ -182,11 +182,11 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
 // MARK: UICollectionViewDelegate
 extension ShotBucketsViewController: UICollectionViewDelegate {
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? ShotBucketsSelectCollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ShotBucketsSelectCollectionViewCell {
             cell.selectBucket(viewModel.selectBucketAtIndex(indexPath.item))
             setRemoveFromSelectedBucketsButtonActive(viewModel.selectedBucketsIndexes.count > 0)
-        } else if let _ = collectionView.cellForItemAtIndexPath(indexPath) as? ShotBucketsAddCollectionViewCell {
+        } else if let _ = collectionView.cellForItem(at: indexPath) as? ShotBucketsAddCollectionViewCell {
             addShotToBucketAtIndex(indexPath.item)
         }
     }
@@ -195,12 +195,12 @@ extension ShotBucketsViewController: UICollectionViewDelegate {
 // MARK: UICollectionViewDelegateFlowLayout
 extension ShotBucketsViewController: UICollectionViewDelegateFlowLayout {
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         return sizeForExpandedCollectionViewHeader(collectionView)
     }
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         return CGSize(width: floor(collectionView.bounds.width), height: 20)
     }
@@ -211,7 +211,7 @@ extension ShotBucketsViewController {
 
     func closeButtonDidTap(_: UIButton) {
         self.willDismissViewControllerClosure?()
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
     func removeButtonDidTap(_: UIButton) {
@@ -219,8 +219,8 @@ extension ShotBucketsViewController {
             viewModel.removeShotFromSelectedBuckets()
         }.then { () -> Void in
             self.willDismissViewControllerClosure?()
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }.error { error in
+            self.dismiss(animated: true, completion: nil)
+        }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }
     }
@@ -234,19 +234,19 @@ extension ShotBucketsViewController {
         
     }
 
-    func setRemoveFromSelectedBucketsButtonActive(active: Bool) {
-        let removeCellIndexPath =  NSIndexPath(forItem: viewModel.indexForRemoveFromSelectedBucketsActionItem(),
-                inSection: 0)
-        if let cell = shotBucketsView.collectionView.cellForItemAtIndexPath(removeCellIndexPath)
+    func setRemoveFromSelectedBucketsButtonActive(_ active: Bool) {
+        let removeCellIndexPath =  IndexPath(item: viewModel.indexForRemoveFromSelectedBucketsActionItem(),
+                section: 0)
+        if let cell = shotBucketsView.collectionView.cellForItem(at: removeCellIndexPath)
                 as? ShotBucketsActionCollectionViewCell {
-            cell.button.enabled = active
+            cell.button.isEnabled = active
         }
     }
 }
 
 private extension ShotBucketsViewController {
 
-    func presentProfileViewControllerForUser(user: UserType) {
+    func presentProfileViewControllerForUser(_ user: UserType) {
 
         let profileViewController = ProfileViewController(user: user)
         let navigationController = UINavigationController(rootViewController: profileViewController)
@@ -255,40 +255,39 @@ private extension ShotBucketsViewController {
         profileViewController.dismissClosure = { [weak self] in
             self?.animateHeader(start: true)
         }
-        presentViewController(navigationController, animated: true, completion: nil)
+        present(navigationController, animated: true, completion: nil)
     }
 
     func presentShotFullscreen() {
 
         guard let header = header else { return }
-
-        var imageViewer: ImageViewer {
-            if viewModel.shot.animated {
-                let url = viewModel.shot.shotImage.hidpiURL ?? viewModel.shot.shotImage.normalURL
-                return ImageViewer(imageProvider: self, displacedView: header.imageView, animatedUrl: url)
-            } else {
-                return ImageViewer(imageProvider: self, displacedView: header.imageView)
-            }
+        
+        let url = viewModel.shot.shotImage.hidpiURL ?? viewModel.shot.shotImage.normalURL
+        if viewModel.shot.animated {
+            let galleryProvider = GalleryViewProvider(animatedUrl: url, displacedView: header.imageView)
+            presentImageGallery(galleryProvider.galleryViewController)
+            
+        } else {
+            let galleryProvider = GalleryViewProvider(imageUrls: [url], displacedView: header.imageView)
+            presentImageGallery(galleryProvider.galleryViewController)
         }
-
-        presentImageViewer(imageViewer)
     }
 
-    func animateHeader(start start: Bool) {
+    func animateHeader(start: Bool) {
         start ? header?.imageView.startAnimating() : header?.imageView.stopAnimating()
     }
 
     var heightForCollapsedCollectionViewHeader: CGFloat {
 
         let margin = CGFloat(5)
-        let maxWidth = abs((shotBucketsView.collectionView.frame.size.width ?? 0) -
+        let maxWidth = abs((shotBucketsView.collectionView.frame.size.width) -
                 (header?.availableWidthForTitle ?? 0))
         let height = viewModel.attributedShotTitleForHeader.boundingHeightUsingAvailableWidth(maxWidth) + 2 * margin
 
         return max(70, height)
     }
 
-    func sizeForExpandedCollectionViewHeader(collectionView: UICollectionView) -> CGSize {
+    func sizeForExpandedCollectionViewHeader(_ collectionView: UICollectionView) -> CGSize {
         let dribbbleImageRatio = CGFloat(0.75)
         return CGSize(
             width: floor(collectionView.bounds.width),
@@ -301,29 +300,29 @@ private extension ShotBucketsViewController {
         let width = shotBucketsView.collectionView.frame.size.width ?? 0
 
         if let layout = shotBucketsView.collectionView.collectionViewLayout as?
-            UICollectionViewFlowLayout where layout.estimatedItemSize.width != width {
+            UICollectionViewFlowLayout, layout.estimatedItemSize.width != width {
             layout.estimatedItemSize = CGSize(width: width, height: 40)
             layout.invalidateLayout()
         }
     }
 
-    func addShotToBucketAtIndex(index: Int) {
+    func addShotToBucketAtIndex(_ index: Int) {
         firstly {
             viewModel.addShotToBucketAtIndex(index)
         }.then { () -> Void in
             self.willDismissViewControllerClosure?()
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }.error { error in
+            self.dismiss(animated: true, completion: nil)
+        }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }
     }
 
-    func createBucketAndAddShot(bucketName: String) {
+    func createBucketAndAddShot(_ bucketName: String) {
         firstly {
             viewModel.createBucket(bucketName)
         }.then { () -> Void in
             self.addShotToBucketAtIndex(self.viewModel.buckets.count-1)
-        }.error { error in
+        }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketCreationFailed, canBeDismissedByUser: true)
         }
     }
@@ -333,26 +332,26 @@ private extension ShotBucketsViewController {
 
 extension ShotBucketsViewController {
 
-    func configureSeparatorCell(collectionView: UICollectionView,
-                                atIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func configureSeparatorCell(_ collectionView: UICollectionView,
+                                atIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         return collectionView.dequeueReusableClass(ShotBucketsSeparatorCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
     }
 
-    func configureActionCell(collectionView: UICollectionView, atIndexPath indexPath: NSIndexPath,
+    func configureActionCell(_ collectionView: UICollectionView, atIndexPath indexPath: IndexPath,
                              selector: Selector) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotBucketsActionCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
-        cell.button.setTitle(viewModel.titleForActionItem, forState: .Normal)
-        cell.button.addTarget(self, action: selector, forControlEvents: .TouchUpInside)
-        cell.button.enabled = viewModel.shotBucketsViewControllerMode == .AddToBucket
+                forIndexPath: indexPath, type: .cell)
+        cell.button.setTitle(viewModel.titleForActionItem, for: .normal)
+        cell.button.addTarget(self, action: selector, for: .touchUpInside)
+        cell.button.isEnabled = viewModel.shotBucketsViewControllerMode == .addToBucket
         return cell
     }
 
-    func configureAddToBucketCell(collectionView: UICollectionView,
-                                  atIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func configureAddToBucketCell(_ collectionView: UICollectionView,
+                                  atIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotBucketsAddCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
 
         let bucketData = viewModel.displayableDataForBucketAtIndex(indexPath.item)
         cell.bucketNameLabel.text = bucketData.bucketName
@@ -361,10 +360,10 @@ extension ShotBucketsViewController {
         return cell
     }
 
-    func configureRemoveFromBucketCell(collectionView: UICollectionView,
-                                       atIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func configureRemoveFromBucketCell(_ collectionView: UICollectionView,
+                                       atIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotBucketsSelectCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
 
         let bucketData = viewModel.displayableDataForBucketAtIndex(indexPath.item)
         cell.bucketNameLabel.text = bucketData.bucketName
@@ -382,7 +381,7 @@ extension ShotBucketsViewController: ModalByDraggingClosable {
 
 extension ShotBucketsViewController: AvatarViewDelegate {
 
-    func avatarView(avatarView: AvatarView, didTapButton avatarButton: UIButton) {
+    func avatarView(_ avatarView: AvatarView, didTapButton avatarButton: UIButton) {
         if avatarView.superview == header {
             let user = viewModel.shot.user
             presentProfileViewControllerForUser(user)
@@ -392,7 +391,7 @@ extension ShotBucketsViewController: AvatarViewDelegate {
 
 extension ShotBucketsViewController: TTTAttributedLabelDelegate {
 
-    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWith url: URL!) {
         if let user = viewModel.userForURL(url) {
             presentProfileViewControllerForUser(user)
         } else {
@@ -407,37 +406,24 @@ extension ShotBucketsViewController: TTTAttributedLabelDelegate {
 
 extension ShotBucketsViewController: UIScrollViewDelegate {
 
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         animateHeader(start: false)
     }
 
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             animateHeader(start: true)
         }
     }
 
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         animateHeader(start: true)
     }
 }
 
-extension ShotBucketsViewController: ImageProvider {
-
-    func provideImage(completion: UIImage? -> Void) {
-        if !viewModel.shot.animated {
-            if let image = header?.imageView.image {
-                completion(image)
-            }
-        }
-    }
-
-    func provideImage(atIndex index: Int, completion: UIImage? -> Void) { /* empty by design */ }
-}
-
 extension ShotBucketsViewController: DZNEmptyDataSetSource {
 
-    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
-        return UIView.newAutoLayoutView()
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
+        return UIView.newAutoLayout()
     }
 }

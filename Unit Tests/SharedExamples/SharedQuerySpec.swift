@@ -15,7 +15,7 @@ typealias QueryExpectation = (method: Inbbbox.Method, encoding: Parameters.Encod
 
 class SharedQuerySpec {
     
-    class func performSpecForQuery(query: Void -> Query, expectations: Void -> QueryExpectation) {
+    class func performSpecForQuery(_ query: @escaping (Void) -> Query, expectations: @escaping (Void) -> QueryExpectation) {
         
         var sut: Query!
         var expected: QueryExpectation!

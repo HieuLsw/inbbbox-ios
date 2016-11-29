@@ -17,7 +17,7 @@ class UnlikeQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return UnlikeQuery(shot: Shot.fixtureShot())
         }) { Void -> QueryExpectation in
-            return (method: .DELETE, encoding: .JSON, path: "/shots/fixture.identifier/like")
+            return (method: .DELETE, encoding: .json, path: "/shots/fixture.identifier/like")
         }
         
         describe("when newly initialized with shot") {

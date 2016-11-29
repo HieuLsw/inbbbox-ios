@@ -17,7 +17,7 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
 
     var isCurrentLayoutOneColumn: Bool {
         get {
-            return collectionView!.collectionViewLayout.isKindOfClass(OneColumnCollectionViewFlowLayout)
+            return collectionView!.collectionViewLayout.isKind(of: OneColumnCollectionViewFlowLayout.self)
         }
     }
 
@@ -25,8 +25,8 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
         return false
     }
 
-    private var oneColumnLayoutButton: UIBarButtonItem?
-    private var twoColumnsLayoutButton: UIBarButtonItem?
+    fileprivate var oneColumnLayoutButton: UIBarButtonItem?
+    fileprivate var twoColumnsLayoutButton: UIBarButtonItem?
 
     convenience init(oneColumnLayoutCellHeightToWidthRatio: CGFloat, twoColumnsLayoutCellHeightToWidthRatio: CGFloat) {
         let flowLayout = TwoColumnsCollectionViewFlowLayout()
@@ -50,17 +50,17 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
 
     func setupBarButtons() {
         oneColumnLayoutButton = UIBarButtonItem(image: UIImage(named: "ic-listview"),
-                style: .Plain, target: self, action: #selector(didTapOneColumnLayoutButton(_:)))
+                style: .plain, target: self, action: #selector(didTapOneColumnLayoutButton(_:)))
         twoColumnsLayoutButton = UIBarButtonItem(image: UIImage(named: "ic-gridview-active"),
-                style: .Plain, target: self, action: #selector(didTapTwoColumnsLayoutButton(_:)))
+                style: .plain, target: self, action: #selector(didTapTwoColumnsLayoutButton(_:)))
         navigationItem.rightBarButtonItems = [oneColumnLayoutButton!, twoColumnsLayoutButton!]
     }
 
-    func updateBarButtons(layout: UICollectionViewLayout) {
+    func updateBarButtons(_ layout: UICollectionViewLayout) {
         oneColumnLayoutButton?.tintColor =
-                !isCurrentLayoutOneColumn ? UIColor.whiteColor().colorWithAlphaComponent(0.35) : UIColor.whiteColor()
+                !isCurrentLayoutOneColumn ? UIColor.white.withAlphaComponent(0.35) : UIColor.white
         twoColumnsLayoutButton?.tintColor =
-                isCurrentLayoutOneColumn ? UIColor.whiteColor().colorWithAlphaComponent(0.35) : UIColor.whiteColor()
+                isCurrentLayoutOneColumn ? UIColor.white.withAlphaComponent(0.35) : UIColor.white
     }
 
     // MARK: Actions:
@@ -83,7 +83,7 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
         guard let collectionView = collectionView else {
             return
         }
-        if collectionView.collectionViewLayout.isKindOfClass(OneColumnCollectionViewFlowLayout) {
+        if collectionView.collectionViewLayout.isKind(of: OneColumnCollectionViewFlowLayout.self) {
             let flowLayout = TwoColumnsCollectionViewFlowLayout()
             flowLayout.itemHeightToWidthRatio = twoColumnsLayoutCellHeightToWidthRatio
             flowLayout.containsHeader = containsHeader
@@ -98,15 +98,15 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
          Hack for ticket: https://netguru.atlassian.net/browse/IOS-441
          reloadData() was not always causing refreshing visible cells, this do the work
          */
-        collectionView.reloadItemsAtIndexPaths(collectionView.indexPathsForVisibleItems())
+        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
         scrollToTop(collectionView)
         updateBarButtons(collectionView.collectionViewLayout)
     }
 
-    func scrollToTop(collectionView: UICollectionView) {
-        if collectionView.numberOfItemsInSection(0) > 0 {
-            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-            collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: false)
+    func scrollToTop(_ collectionView: UICollectionView) {
+        if collectionView.numberOfItems(inSection: 0) > 0 {
+            let indexPath = IndexPath(row: 0, section: 0)
+            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: false)
         }
     }
 }

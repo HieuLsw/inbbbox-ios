@@ -11,21 +11,21 @@ import PureLayout
 
 class AutoScrollableShotsView: UIView {
 
-    private var didSetConstraints = false
-    private(set) var collectionViews = [UICollectionView]()
+    fileprivate var didSetConstraints = false
+    fileprivate(set) var collectionViews = [UICollectionView]()
 
     init(numberOfColumns: Int) {
         super.init(frame: CGRect.zero)
 
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Vertical
+        layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
 
         repeat {
 
             let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-            collectionView.userInteractionEnabled = false
+            collectionView.isUserInteractionEnabled = false
             collectionView.configureForAutoLayout()
             addSubview(collectionView)
 
@@ -36,12 +36,12 @@ class AutoScrollableShotsView: UIView {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message = "Use init(numberOfColumns:) instead")
+    @available(*, unavailable, message: "Use init(numberOfColumns:) instead")
     override init(frame: CGRect) {
         fatalError("init(frame:) has not been implemented")
     }
 
-    @available(*, unavailable, message = "Use init(numberOfColumns:) instead")
+    @available(*, unavailable, message: "Use init(numberOfColumns:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -52,12 +52,12 @@ class AutoScrollableShotsView: UIView {
             didSetConstraints = true
 
             let viewsToDistribute = collectionViews as NSArray
-            viewsToDistribute.autoDistributeViewsAlongAxis(.Horizontal, alignedTo: .Horizontal,
+            viewsToDistribute.autoDistributeViews(along: .horizontal, alignedTo: .horizontal,
                     withFixedSpacing: 0, insetSpacing: false)
 
             for collectionView in collectionViews {
-                collectionView.autoPinEdgeToSuperviewEdge(.Top)
-                collectionView.autoPinEdgeToSuperviewEdge(.Bottom)
+                collectionView.autoPinEdge(toSuperviewEdge: .top)
+                collectionView.autoPinEdge(toSuperviewEdge: .bottom)
             }
         }
 

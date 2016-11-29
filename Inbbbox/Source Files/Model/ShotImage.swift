@@ -19,13 +19,13 @@ import SwiftyJSON
  */
 
 struct ShotImage: ShotImageType {
-    let hidpiURL: NSURL?
-    let normalURL: NSURL
-    let teaserURL: NSURL
+    let hidpiURL: URL?
+    let normalURL: URL
+    let teaserURL: URL
 }
 
 extension ShotImage: Mappable {
-    static var map: JSON -> ShotImage {
+    static var map: (JSON) -> ShotImage {
         return { json in
             ShotImage(
                 hidpiURL: json[Key.Hidpi.rawValue].URL,
@@ -35,7 +35,7 @@ extension ShotImage: Mappable {
         }
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Hidpi = "hidpi"
         case Normal = "normal"
         case Teaser = "teaser"

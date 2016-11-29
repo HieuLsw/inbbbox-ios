@@ -13,14 +13,14 @@ typealias Path = (section: Int, row: Int)
 
 protocol Itemizable {
     associatedtype T
-    func itemize(closure: (path: Path, item: T) -> ())
+    func itemize(_ closure: @escaping (_ path: Path, _ item: T) -> ())
 }
 
 protocol IndexPathOperatable {
     associatedtype T
-    func addItem(item: T, atIndexPath indexPath: NSIndexPath)
-    func removeAtIndexPath(indexPath: NSIndexPath)
-    func removeItemsAtIndexPaths(indexPaths: [NSIndexPath])
+    func addItem(_ item: T, atIndexPath indexPath: IndexPath)
+    func removeAtIndexPath(_ indexPath: IndexPath)
+    func removeItemsAtIndexPaths(_ indexPaths: [IndexPath])
 }
 
 class ListViewModel<T: Equatable> {
@@ -29,10 +29,6 @@ class ListViewModel<T: Equatable> {
 
     required init(_ items: [T]) {
         sections = List([Section<T>(items)])
-    }
-
-    required init<U: Equatable>(_ items: [T], readValue: T -> U) {
-        sections = sectionsFromItems(items, byReadingValue: readValue) ?? List([Section<T>(items)])
     }
 
     required init(sections: [Section<T>]) {
@@ -56,9 +52,9 @@ class ListViewModel<T: Equatable> {
 
 extension ListViewModel: Itemizable {
 
-    func itemize(closure: (path: Path, item: T) -> ()) {
+    func itemize(_ closure: @escaping (_ path: Path, _ item: T) -> ()) {
         sections.itemize { section, item in
-            item.itemize { closure(path: (section, $0), item: $1) }
+            item.itemize { closure((section, $0), $1) }
         }
     }
 }
@@ -67,19 +63,19 @@ extension ListViewModel: Itemizable {
 
 extension ListViewModel: IndexPathOperatable {
 
-    func getItemAtIndexPath(indexPath: NSIndexPath) -> T {
+    func getItemAtIndexPath(_ indexPath: IndexPath) -> T {
         return sections[indexPath.section][indexPath.row]
     }
 
-    func addItem(item: T, atIndexPath indexPath: NSIndexPath) {
+    func addItem(_ item: T, atIndexPath indexPath: IndexPath) {
         sections[indexPath.section].add(item, atIndex: indexPath.row)
     }
 
-    func removeAtIndexPath(indexPath: NSIndexPath) {
+    func removeAtIndexPath(_ indexPath: IndexPath) {
         sections[indexPath.section].remove(indexPath.row)
     }
 
-    func removeItemsAtIndexPaths(indexPaths: [NSIndexPath]) {
+    func removeItemsAtIndexPaths(_ indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
             removeAtIndexPath(indexPath)
         }
@@ -90,7 +86,7 @@ extension ListViewModel: IndexPathOperatable {
 
 private extension ListViewModel {
 
-    func sectionsFromItems<U: Equatable>(items: [T], byReadingValue readValue: T -> U) -> List<Section<T>>? {
+    func sectionsFromItems<U: Equatable>(_ items: [T], byReadingValue readValue: @escaping (T) -> U) -> List<Section<T>>? {
 
         let values = items.map { readValue($0) }
 

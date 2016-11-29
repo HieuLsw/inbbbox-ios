@@ -11,27 +11,27 @@ import UIKit
 class SwitchItem: GroupItem {
 
     var enabled = false
-    var valueChanged: ((newValue: Bool) -> Void)?
-    private weak var switchControl: UISwitch?
+    var valueChanged: ((_ newValue: Bool) -> Void)?
+    fileprivate weak var switchControl: UISwitch?
 
     init(title: String, enabled: Bool? = false) {
         self.enabled = enabled ?? false
-        super.init(title: title, category: .Boolean)
+        super.init(title: title, category: .boolean)
     }
 
-    func bindSwitchControl(switchControl: UISwitch) {
+    func bindSwitchControl(_ switchControl: UISwitch) {
         self.switchControl = switchControl
         self.switchControl?.addTarget(self, action: #selector(didChangeSwitchState(_: forEvents:)),
-        forControlEvents: .ValueChanged)
+        for: .valueChanged)
     }
 
     func unbindSwitchControl() {
         switchControl?.removeTarget(self, action: #selector(didChangeSwitchState(_: forEvents:)),
-        forControlEvents: .ValueChanged)
+        for: .valueChanged)
     }
 
-    dynamic func didChangeSwitchState(sender: UISwitch, forEvents events: UIControlEvents) {
-        enabled = sender.on
-        valueChanged?(newValue: sender.on)
+    dynamic func didChangeSwitchState(_ sender: UISwitch, forEvents events: UIControlEvents) {
+        enabled = sender.isOn
+        valueChanged?(sender.isOn)
     }
 }

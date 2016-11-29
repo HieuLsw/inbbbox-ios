@@ -17,16 +17,16 @@ protocol LoginViewAnimatorDelegate: class {
 class LoginViewAnimator {
 
     enum StopAnimationType {
-        case Continue, Undo
+        case `continue`, undo
     }
 
-    private weak var view: LoginView?
-    private var animations = LoginViewAnimations()
-    private weak var delegate: LoginViewAnimatorDelegate?
+    fileprivate weak var view: LoginView?
+    fileprivate var animations = LoginViewAnimations()
+    fileprivate weak var delegate: LoginViewAnimatorDelegate?
 
-    private var loginButtonTitle: String?
-    private let loopDuration = NSTimeInterval(1)
-    private var loginAsGuestShown = false
+    fileprivate var loginButtonTitle: String?
+    fileprivate let loopDuration = TimeInterval(1)
+    fileprivate var loginAsGuestShown = false
 
     init(view: LoginView?, delegate: LoginViewAnimatorDelegate?) {
         self.view = view
@@ -35,7 +35,7 @@ class LoginViewAnimator {
 
     func startLoginAnimation(stopAfterShrink stop: Bool = false) {
 
-        guard let view = view where !view.isAnimating else { return }
+        guard let view = view, !view.isAnimating else { return }
 
         firstly {
             prepareCanvas()
@@ -47,22 +47,21 @@ class LoginViewAnimator {
                 // break chain:
                 throw NSError(domain: "", code: 0, message: "")
             }
-
-            return when(self.ballBounce(), self.loadingFade(.FadeIn))
+            return when(fulfilled: [self.ballBounce(), self.loadingFade(fade: .fadeIn)])
         }.then {
             self.loadingBlink()
-        }.error { _ in /* silence error */}
+        }
 
     }
 
-    func stopAnimationWithType(type: StopAnimationType, completion: (() -> Void)? = nil) {
+    func stopAnimationWithType(_ type: StopAnimationType, completion: (() -> Void)? = nil) {
 
         animations.stop()
 
-        guard let view = view where view.isAnimating else { return }
-        if type == .Undo {
+        guard let view = view, view.isAnimating else { return }
+        if type == .undo {
             firstly {
-                when(self.extendToButtonWithRotation(), self.loadingFade(.FadeOut))
+                when(fulfilled: [self.extendToButtonWithRotation(), self.loadingFade(fade: .fadeOut)])
             }.then { _ -> Void in
                 self.restoreInitialState()
                 completion?()
@@ -70,12 +69,12 @@ class LoginViewAnimator {
 
         } else {
             firstly {
-                when(self.loadingFade(.FadeOut), self.slideInterfaceUp(),
-                        self.sloganFadeOut(), self.saturateBackground())
+                when(fulfilled: [self.loadingFade(fade: .fadeOut), self.slideInterfaceUp(),
+                        self.sloganFadeOut(), self.saturateBackground()])
             }.then {
                 self.delegate?.tabBarWillAppear()
-                return when(self.animateTabBar(), self.slideOutBallWithFadingOut(),
-                        self.addInbbboxLogo(fromTop: 60))
+                return when(fulfilled: [self.animateTabBar(), self.slideOutBallWithFadingOut(),
+                        self.addInbbboxLogo(fromTop: 60)])
             }.then {
                 completion?()
             }
@@ -85,49 +84,48 @@ class LoginViewAnimator {
     func showLoginAsGuest() {
         loginAsGuestShown = true
         animations.moveAnimation([view!.loginButton, view!.dribbbleLogoImageView], duration: 0.5,
-                fade: .FadeIn, easeFunction: .CurveEaseInOut, transition: CGPoint(x: 0, y: -32))
+                fade: .fadeIn, easeFunction: .curveEaseInOut, transition: CGPoint(x: 0, y: -32))
         animations.moveAnimation([view!.orLabel, view!.loginAsGuestButton], duration: 0.5,
-                fade: .FadeIn, easeFunction: .CurveEaseInOut, transition: CGPoint(x: 0, y: -200))
+                fade: .fadeIn, easeFunction: .curveEaseInOut, transition: CGPoint(x: 0, y: -200))
     }
 }
 
 private extension LoginViewAnimator {
 
     func prepareCanvas() -> Promise<Void> {
-
         animations.prepare()
-        loginButtonTitle = view!.loginButton.titleForState(.Normal)
+        loginButtonTitle = view!.loginButton.title(for: UIControlState())
         view!.isAnimating = true
-        view!.loginButton.setTitle(nil, forState: .Normal)
-        view!.loginButton.enabled = false
-
-        return Promise()
+        view!.loginButton.setTitle(nil, for: UIControlState())
+        view!.loginButton.isEnabled = false
+        return Promise<Void>(value: Void())
     }
 
     func restoreInitialState() {
         loginButtonTitle = nil
         view!.isAnimating = false
-        view!.loginButton.enabled = true
+        view!.loginButton.isEnabled = true
     }
 
     func ballBounce() -> Promise<Void> {
         animations.bounceAnimation([view!.loginButton, view!.dribbbleLogoImageView],
-                duration: loopDuration, additionalYOffset: loginAsGuestShown)
-        return Promise()
+                                    duration: loopDuration, additionalYOffset: loginAsGuestShown)
+        return Promise<Void>(value: Void())
     }
 
     func loadingFade(fade: LoginViewAnimations.FadeStyle) -> Promise<Void> {
         return Promise<Void> { fulfill, _ in
-            animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
-                    fade: fade, transition: CGPoint.zero) {
-                fulfill()
+                animations.moveAnimation([view!.loadingLabel, view!.copyrightlabel], duration: 0.4,
+                                 fade: fade, transition: CGPoint.zero) {
+                    fulfill()
             }
+            
         }
     }
 
     func loadingBlink() -> Promise<Void> {
         animations.blinkAnimation([view!.loadingLabel], duration: loopDuration)
-        return Promise()
+        return Promise<Void>(value: Void())
     }
 
     func shrinkToBallWithRotation() -> Promise<Void> {
@@ -138,7 +136,7 @@ private extension LoginViewAnimator {
 
             // fade out button + label animation:
             animations.moveAnimation([view!.orLabel, view!.loginAsGuestButton], duration: 0.8,
-                    fade: .FadeOut, transition: CGPoint(x: 0, y: 200))
+                    fade: .fadeOut, transition: CGPoint(x: 0, y: 200))
 
             // login button corner radius animation
             animations.animateCornerRadiusForthAndBack(view!.loginButton)
@@ -159,7 +157,7 @@ private extension LoginViewAnimator {
 
             // fade out button + label animation:
             animations.moveAnimation([view!.orLabel, view!.loginAsGuestButton], duration: 0.8,
-                    fade: .FadeIn, transition: CGPoint(x: 0, y: -200))
+                    fade: .fadeIn, transition: CGPoint(x: 0, y: -200))
 
             // login button corner radius animation
             animations.animateCornerRadiusForthAndBack(view!.loginButton)
@@ -170,9 +168,9 @@ private extension LoginViewAnimator {
                 fulfill()
             }
 
-            view!.loginButton.setTitle(loginButtonTitle, forState: .Normal)
+            view!.loginButton.setTitle(loginButtonTitle, for: .normal)
             view!.loginButton.titleLabel!.alpha = 0
-            UIView.animateWithDuration(1.5) {
+            UIView.animate(withDuration: 1.5) {
                 self.view!.loginButton.titleLabel!.alpha = 1
             }
         }
@@ -181,9 +179,9 @@ private extension LoginViewAnimator {
     func slideInterfaceUp() -> Promise<Void> {
         return Promise<Void> { fulfill, _ in
 
-            let transition = CGPoint(x: 0, y: -CGRectGetHeight(view!.pinkOverlayView.frame))
+            let transition = CGPoint(x: 0, y: -view!.pinkOverlayView.frame.height)
             let views = [view!.pinkOverlayView, view!.logoImageView]
-            animations.moveAnimation(views, duration: 0.4, fade: .FadeOut, transition: transition) {
+            animations.moveAnimation(views, duration: 0.4, fade: .fadeOut, transition: transition) {
                 fulfill()
             }
         }
@@ -192,7 +190,7 @@ private extension LoginViewAnimator {
     func sloganFadeOut() -> Promise<Void> {
         return Promise<Void> { fulfill, _ in
             animations.moveAnimation([view!.sloganLabel], duration: 0.4,
-                    fade: .FadeOut, transition: CGPoint.zero) {
+                    fade: .fadeOut, transition: CGPoint.zero) {
                 fulfill()
             }
         }
@@ -203,11 +201,11 @@ private extension LoginViewAnimator {
 
             let frame = CGRect(
                 x: 0,
-                y: CGRectGetMaxY(view!.frame),
-                width: CGRectGetWidth(view!.frame),
-                height: CGRectGetHeight(view!.frame)
+                y: view!.frame.maxY,
+                width: view!.frame.width,
+                height: view!.frame.height
             )
-            let transition = CGPoint(x: 0, y: -CGRectGetHeight(frame))
+            let transition = CGPoint(x: 0, y: -frame.height)
 
             let whiteView = UIView(frame: frame)
             whiteView.backgroundColor = UIColor.backgroundGrayColor()
@@ -215,25 +213,25 @@ private extension LoginViewAnimator {
             view!.insertSubview(whiteView, belowSubview: view!.pinkOverlayView)
 
             animations.moveAnimation([whiteView], duration: 0.4,
-                    fade: .FadeIn, transition: transition) {
+                    fade: .fadeIn, transition: transition) {
                 fulfill()
             }
         }
     }
 
-    func addInbbboxLogo(fromTop fromTop: CGFloat) -> Promise<Void> {
+    func addInbbboxLogo(fromTop: CGFloat) -> Promise<Void> {
 
         let logoImageView = UIImageView(image: UIImage(named: ColorModeProvider.current().logoImageName))
         logoImageView.alpha = 0.0
 
         let size = logoImageView.image?.size ?? CGSize.zero
-        let origin = CGPoint(x: CGRectGetMidX(view!.frame) - size.width * 0.5, y: fromTop)
+        let origin = CGPoint(x: (view!.frame).midX - size.width * 0.5, y: fromTop)
         logoImageView.frame = CGRect(origin: origin, size: size)
 
         view!.insertSubview(logoImageView, belowSubview: view!.pinkOverlayView)
 
         return Promise<Void> { fulfill, _ in
-            UIView.animateWithDuration(0.5, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 logoImageView.alpha = 1
             }, completion: { _ in
                 fulfill()
@@ -244,7 +242,7 @@ private extension LoginViewAnimator {
     func slideOutBallWithFadingOut() -> Promise<Void> {
         return Promise<Void> { fulfill, _ in
             animations.moveAnimation([view!.dribbbleLogoImageView, view!.loginButton],
-                    duration: 0.3, fade: .FadeOut, transition: CGPoint(x: 0, y: 200)) {
+                    duration: 0.3, fade: .fadeOut, transition: CGPoint(x: 0, y: 200)) {
                 fulfill()
             }
         }
@@ -255,4 +253,5 @@ private extension LoginViewAnimator {
         let tabBarAnimator = TabBarAnimator(view: view!)
         return tabBarAnimator.animateTabBar()
     }
+    
 }

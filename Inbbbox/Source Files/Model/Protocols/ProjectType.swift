@@ -21,7 +21,7 @@ protocol ProjectType {
     var attributedDescription: NSAttributedString? { get }
 
     /// Date when Project was created.
-    var createdAt: NSDate { get }
+    var createdAt: Date { get }
 
     /// Number of shots associated to this Project.
     var shotsCount: UInt { get }

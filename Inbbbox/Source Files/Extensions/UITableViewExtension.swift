@@ -13,9 +13,9 @@ extension UITableView {
     /// Deselects row if is already selected
     ///
     /// - parameter animated: bool value that indicates if deselection should be animated
-    func deselectRowIfSelectedAnimated(animated: Bool) {
+    func deselectRowIfSelectedAnimated(_ animated: Bool) {
         if let indexPath = indexPathForSelectedRow {
-            deselectRowAtIndexPath(indexPath, animated: animated)
+            deselectRow(at: indexPath, animated: animated)
         }
     }
 
@@ -24,10 +24,10 @@ extension UITableView {
     /// - parameter indexPath: index path of row
     /// - parameter animated: bool value that indicates if deselection should be animated.
     ///                      Default is true.
-    func reloadAndDeselectRowAtIndexPath(indexPath: NSIndexPath, animated: Bool = true) {
-        reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-        selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
-        deselectRowAtIndexPath(indexPath, animated: animated)
+    func reloadAndDeselectRowAtIndexPath(_ indexPath: IndexPath, animated: Bool = true) {
+        reloadRows(at: [indexPath], with: .none)
+        selectRow(at: indexPath, animated: false, scrollPosition: .none)
+        deselectRow(at: indexPath, animated: animated)
     }
 
     /// Hides separator for empty cells
@@ -38,8 +38,8 @@ extension UITableView {
     /// Registers class
     ///
     /// - parameter aClass: type of UITableViewCell which conforms to Reusable protocol
-    func registerClass<T: UITableViewCell where T: Reusable>(aClass: T.Type) {
-        registerClass(aClass, forCellReuseIdentifier: T.reuseIdentifier)
+    func registerClass<T: UITableViewCell>(_ aClass: T.Type) where T: Reusable {
+        register(aClass, forCellReuseIdentifier: T.identifier)
     }
 
     /// Dequeues reusable cell
@@ -48,7 +48,7 @@ extension UITableView {
     ///
     /// - returns: reusable cell with proper reuse identifier.
     ///            Used to acquire an already allocated cell, in lieu of allocating a new one.
-    func dequeueReusableCell<T: UITableViewCell where T: Reusable>(aClass: T.Type) -> T {
-        return (dequeueReusableCellWithIdentifier(T.reuseIdentifier) as? T)!
+    func dequeueReusableCell<T: UITableViewCell>(_ aClass: T.Type) -> T where T: Reusable {
+        return (self.dequeueReusableCell(withIdentifier: T.identifier) as? T)!
     }
 }

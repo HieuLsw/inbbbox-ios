@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 class DataDownloader: NSObject {
-    private var data = NSMutableData()
-    private var totalSize = Float(0)
-    private var progress: ((Float) -> Void)?
-    private var completion: ((NSData) -> Void)?
-    private var session: NSURLSession?
+    fileprivate var data = NSMutableData()
+    fileprivate var totalSize = Float(0)
+    fileprivate var progress: ((Float) -> Void)?
+    fileprivate var completion: ((Data) -> Void)?
+    fileprivate var session: URLSession?
 
     /// Fetches data from given URL and gives information about progress and completion of operation.
     ///
@@ -22,27 +22,27 @@ class DataDownloader: NSObject {
     /// - parameter progress:   Block called every time when portion of data is fetched.
     ///                         Gives information about progress.
     /// - parameter completion: Block called when fetching is complete. It returns fetched data as parameter.
-    func fetchData(url: NSURL, progress:(progress: Float) -> Void, completion:(data: NSData) -> Void) {
+    func fetchData(_ url: URL, progress:@escaping (_ progress: Float) -> Void, completion:@escaping (_ data: Data) -> Void) {
         self.progress = progress
         self.completion = completion
-        self.session = NSURLSession.init(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+        self.session = URLSession.init(configuration: URLSessionConfiguration.default,
                                          delegate: self,
                                          delegateQueue: nil)
-        let task = session!.dataTaskWithURL(url)
+        let task = session!.dataTask(with: url)
 
         task.resume()
     }
 }
 
-extension DataDownloader: NSURLSessionDataDelegate {
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse,
-        completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-            completionHandler(.Allow)
+extension DataDownloader: URLSessionDataDelegate {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+            completionHandler(.allow)
             totalSize = Float(response.expectedContentLength)
     }
 
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-        self.data.appendData(data) //NGRFixme: During test this line cause crases once or twice with memory allocation, better remember about it.
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        self.data.append(data) //NGRFixme: During test this line cause crases once or twice with memory allocation, better remember about it.
         let progress = Float(self.data.length) / totalSize
         if progress != 1 {
             if self.progress != nil {
@@ -51,7 +51,7 @@ extension DataDownloader: NSURLSessionDataDelegate {
             }
         }
         if let completion = self.completion {
-            completion(NSData(data: self.data))
+            completion(NSData(data: self.data as Data) as Data)
             self.session?.finishTasksAndInvalidate()
         }
     }

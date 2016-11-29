@@ -11,29 +11,25 @@ import Async
 
 class SettingsTableHeaderView: UIView, Reusable, AvatarSettable {
 
-    class var reuseIdentifier: String {
-        return "SettingsTableHeaderViewReuseIdentifier"
-    }
-
-    private(set) var avatarView: AvatarView!
-    private(set) var usernameLabel = UILabel.newAutoLayoutView()
+    fileprivate(set) var avatarView: AvatarView!
+    fileprivate(set) var usernameLabel = UILabel.newAutoLayout()
 
     let avatarSize = CGSize(width: 176, height: 176)
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     // MARK: Lifecycyle
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         clipsToBounds = true
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         setupAvatar()
         setupUsernameLabel()
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message="Use init(_: CGRect) method instead")
+    @available(*, unavailable, message: "Use init(_: CGRect) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -49,14 +45,14 @@ class SettingsTableHeaderView: UIView, Reusable, AvatarSettable {
         if !didSetConstraints {
             didSetConstraints = true
 
-            avatarView.autoPinEdgeToSuperviewEdge(.Top, withInset: 20)
-            avatarView.autoSetDimensionsToSize(avatarSize)
-            avatarView.autoAlignAxisToSuperviewAxis(.Vertical)
+            avatarView.autoPinEdge(toSuperviewEdge: .top, withInset: 20)
+            avatarView.autoSetDimensions(to: avatarSize)
+            avatarView.autoAlignAxis(toSuperviewAxis: .vertical)
 
-            usernameLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: avatarView, withOffset: 14)
-            usernameLabel.autoSetDimension(.Height, toSize: 28)
-            usernameLabel.autoMatchDimension(.Width, toDimension: .Width, ofView: self)
-            usernameLabel.autoAlignAxis(.Vertical, toSameAxisOfView: avatarView)
+            usernameLabel.autoPinEdge(.top, to: .bottom, of: avatarView, withOffset: 14)
+            usernameLabel.autoSetDimension(.height, toSize: 28)
+            usernameLabel.autoMatch(.width, to: .width, of: self)
+            usernameLabel.autoAlignAxis(.vertical, toSameAxisOf: avatarView)
         }
 
         super.updateConstraints()
@@ -74,15 +70,15 @@ class SettingsTableHeaderView: UIView, Reusable, AvatarSettable {
     // MARK: Setup label
 
     func setupUsernameLabel() {
-        usernameLabel.textAlignment = .Center
+        usernameLabel.textAlignment = .center
         usernameLabel.textColor = ColorModeProvider.current().settingsUsernameTextColor
-        usernameLabel.font = UIFont.helveticaFont(.Neue, size: 23)
+        usernameLabel.font = UIFont.helveticaFont(.neue, size: 23)
         addSubview(usernameLabel)
     }
 }
 
 extension SettingsTableHeaderView: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         usernameLabel.textColor = mode.settingsUsernameTextColor
     }
 }

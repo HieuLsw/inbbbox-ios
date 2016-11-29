@@ -9,7 +9,7 @@ extension UIView {
     /// Animate UIView with descriptor
     ///
     /// - parameter animationDescriptor: animation descriptor with values for animation aspects.
-    class func animateWithDescriptor(animationDescriptor: AnimationDescriptor) {
+    class func animateWithDescriptor(_ animationDescriptor: AnimationDescriptor) {
         let duration = animationDescriptor.duration
         let delay = animationDescriptor.delay
         let options = animationDescriptor.options
@@ -18,16 +18,16 @@ extension UIView {
         let completion = animationDescriptor.completion
 
         switch animationType {
-        case AnimationType.Plain:
-            self.animateWithDuration(duration,
+        case AnimationType.plain:
+            self.animate(withDuration: duration,
                               delay: delay,
                             options: options,
                          animations: animations,
                          completion: completion)
-        case AnimationType.Spring:
+        case AnimationType.spring:
             let springDamping = animationDescriptor.springDamping
             let springVelocity = animationDescriptor.springVelocity
-            self.animateWithDuration(duration,
+            self.animate(withDuration: duration,
                               delay: delay,
              usingSpringWithDamping: springDamping,
               initialSpringVelocity: springVelocity,

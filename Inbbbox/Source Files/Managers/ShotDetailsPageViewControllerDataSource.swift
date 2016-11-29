@@ -13,7 +13,7 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
     weak var delegate: ShotDetailsPageDelegate?
     
     var shots = [ShotType]()
-    private var shotDetailsViewControllersDictionary = [Int:ShotDetailsViewController]()
+    fileprivate var shotDetailsViewControllersDictionary = [Int : ShotDetailsViewController]()
     var initialViewController: ShotDetailsViewController? {
         return shotDetailsViewControllersDictionary.values.first
     }
@@ -30,7 +30,7 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
     
     // MARK: Private
     
-    private func getShotDetailsViewController(atIndexPath indexPath: NSIndexPath) -> UIViewController {
+    fileprivate func getShotDetailsViewController(atIndexPath indexPath: IndexPath) -> UIViewController {
         
         if let controller = shotDetailsViewControllersDictionary[indexPath.row] { return controller }
         
@@ -44,26 +44,26 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         return shotDetailsViewController
     }
     
-    private func willDismissWithIndex(index: Int) {
+    fileprivate func willDismissWithIndex(_ index: Int) {
         delegate?.shotDetailsDismissed(atIndex: index)
     }
     
     // MARK: UIPageViewControllerDataSource
     
-    func pageViewController(pageViewController: UIPageViewController,
-                            viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        if let currentController = viewController as? ShotDetailsViewController where
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if let currentController = viewController as? ShotDetailsViewController,
             currentController.shotIndex > 0 {
-            return getShotDetailsViewController(atIndexPath: NSIndexPath(forItem: currentController.shotIndex - 1, inSection: 0)) as? ShotDetailsViewController
+            return getShotDetailsViewController(atIndexPath: IndexPath(item: currentController.shotIndex - 1, section: 0)) as? ShotDetailsViewController
         }
         return nil
     }
     
-    func pageViewController(pageViewController: UIPageViewController,
-                            viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        if let currentController = viewController as? ShotDetailsViewController where
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if let currentController = viewController as? ShotDetailsViewController,
             currentController.shotIndex < shots.count - 1 {
-            return getShotDetailsViewController(atIndexPath: NSIndexPath(forItem: currentController.shotIndex + 1, inSection: 0)) 
+            return getShotDetailsViewController(atIndexPath: IndexPath(item: currentController.shotIndex + 1, section: 0)) 
         }
         return nil
     }

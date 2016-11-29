@@ -13,36 +13,36 @@ class ORLoginLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        textAlignment = .Center
+        textAlignment = .center
         textColor = UIColor.RGBA(249, 212, 226, 1)
-        font = UIFont.helveticaFont(.NeueMedium, size: 11)
+        font = UIFont.helveticaFont(.neueMedium, size: 11)
         text = NSLocalizedString("ORLoginLabel.OR", comment: "Visible as a text allowing user to choose login method.")
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
 
-        let boundingTextRect = text?.boundingRectWithFont(font!, constrainedToWidth: CGRectGetWidth(rect)) ??
+        let boundingTextRect = text?.boundingRectWithFont(font!, constrainedToWidth: rect.width) ??
                 CGRect.zero
         let space = CGFloat(10)
-        let y = CGRectGetMidY(rect)
+        let y = rect.midY
 
         let context = UIGraphicsGetCurrentContext()
 
-        CGContextSetStrokeColorWithColor(context, textColor!.CGColor)
-        CGContextSetLineWidth(context, 1)
+        context?.setStrokeColor(textColor!.cgColor)
+        context?.setLineWidth(1)
 
-        CGContextMoveToPoint(context, 0, y)
-        CGContextAddLineToPoint(context, CGRectGetMidX(rect) - CGRectGetWidth(boundingTextRect) * 0.5 - space, y)
+        context?.move(to: CGPoint(x: 0, y: y))
+        context?.addLine(to: CGPoint(x: rect.midX - boundingTextRect.width * 0.5 - space, y: y))
 
-        CGContextMoveToPoint(context, CGRectGetMidX(rect) + CGRectGetWidth(boundingTextRect) * 0.5 + space, y)
-        CGContextAddLineToPoint(context, CGRectGetMaxX(rect), y)
+        context?.move(to: CGPoint(x: rect.midX + boundingTextRect.width * 0.5 + space, y: y))
+        context?.addLine(to: CGPoint(x: rect.maxX, y: y))
 
-        CGContextStrokePath(context)
+        context?.strokePath()
     }
 }

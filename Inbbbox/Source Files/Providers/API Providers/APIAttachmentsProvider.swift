@@ -18,14 +18,14 @@ class APIAttachmentsProvider: PageableProvider {
      
      - returns: Promise which resolves with attachments or nil.
      */
-    func provideAttachmentsForShot(shot: ShotType) -> Promise<[Attachment]?> {
+    func provideAttachmentsForShot(_ shot: ShotType) -> Promise<[Attachment]?> {
         let query = AttachmentQuery(shot: shot)
         return Promise<[Attachment]?> { fulfill, reject in
             firstly {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (attachments: [Attachment]?) -> Void in
                 fulfill(attachments.flatMap { $0.map { $0 as Attachment } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

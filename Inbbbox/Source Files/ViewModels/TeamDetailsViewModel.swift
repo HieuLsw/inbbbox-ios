@@ -17,8 +17,8 @@ class TeamDetailsViewModel: ProfileViewModel {
         return team.name
     }
 
-    var avatarURL: NSURL? {
-        return team.avatarURL
+    var avatarURL: URL? {
+        return team.avatarURL as URL?
     }
 
     var collectionIsEmpty: Bool {
@@ -36,11 +36,11 @@ class TeamDetailsViewModel: ProfileViewModel {
     var teamMembers = [UserType]()
     var memberIndexedShots = [Int: [ShotType]]()
 
-    private let connectionsRequester = APIConnectionsRequester()
-    private let teamsProvider = APITeamsProvider()
-    private let shotsProvider = ShotsProvider()
+    fileprivate let connectionsRequester = APIConnectionsRequester()
+    fileprivate let teamsProvider = APITeamsProvider()
+    fileprivate let shotsProvider = ShotsProvider()
 
-    private let team: TeamType
+    fileprivate let team: TeamType
 
     init(team: TeamType) {
         self.team = team
@@ -51,12 +51,12 @@ class TeamDetailsViewModel: ProfileViewModel {
         firstly {
             teamsProvider.provideMembersForTeam(team)
         }.then { teamMembers -> Void in
-            if let teamMembers = teamMembers where teamMembers != self.teamMembers || teamMembers.count == 0 {
+            if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers
                 self.downloadShots(teamMembers)
                 self.delegate?.viewModelDidLoadInitialItems()
             }
-        }.error { error in
+        }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
@@ -66,18 +66,18 @@ class TeamDetailsViewModel: ProfileViewModel {
         firstly {
             teamsProvider.nextPage()
         }.then { teamMembers -> Void in
-            if let teamMembers = teamMembers where teamMembers.count > 0 {
-                let indexes = teamMembers.enumerate().map { index, _ in
+            if let teamMembers = teamMembers, teamMembers.count > 0 {
+                let indexes = teamMembers.enumerated().map { index, _ in
                     return index + self.teamMembers.count
                 }
-                self.teamMembers.appendContentsOf(teamMembers)
+                self.teamMembers.append(contentsOf: teamMembers)
                 let indexPaths = indexes.map {
-                    NSIndexPath(forRow: ($0), inSection: 0)
+                    IndexPath(row: ($0), section: 0)
                 }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
                 self.downloadShots(teamMembers)
             }
-        }.error { error in
+        }.catch { error in
             self.notifyDelegateAboutFailure(error)
         }
     }
@@ -87,7 +87,7 @@ class TeamDetailsViewModel: ProfileViewModel {
         return Promise<Bool> { fulfill, reject in
             firstly {
                 connectionsRequester.isTeamFollowedByMe(team)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -96,7 +96,7 @@ class TeamDetailsViewModel: ProfileViewModel {
         return Promise<Void> { fulfill, reject in
             firstly {
                 connectionsRequester.followTeam(team)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -105,11 +105,11 @@ class TeamDetailsViewModel: ProfileViewModel {
         return Promise<Void> { fulfill, reject in
             firstly {
                 connectionsRequester.unfollowTeam(team)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func userCollectionViewCellViewData(indexPath: NSIndexPath) -> UserCollectionViewCellViewData {
+    func userCollectionViewCellViewData(_ indexPath: IndexPath) -> UserCollectionViewCellViewData {
         return UserCollectionViewCellViewData(user: teamMembers[indexPath.row],
                                                   shots: memberIndexedShots[indexPath.row])
     }
@@ -119,33 +119,33 @@ extension TeamDetailsViewModel {
 
     struct UserCollectionViewCellViewData {
         let name: String?
-        let avatarURL: NSURL?
+        let avatarURL: URL?
         let numberOfShots: String
-        let shotsImagesURLs: [NSURL]?
+        let shotsImagesURLs: [URL]?
         let firstShotImage: ShotImageType?
 
         init(user: UserType, shots: [ShotType]?) {
             self.name = user.name
-            self.avatarURL = user.avatarURL
+            self.avatarURL = user.avatarURL as URL?
             self.numberOfShots = String.localizedStringWithFormat(NSLocalizedString("%d shots",
                 comment: "How many shots in collection?"), user.shotsCount)
-            if let shots = shots where shots.count > 0 {
+            if let shots = shots, shots.count > 0 {
 
                 let allShotsImagesURLs = shots.map { $0.shotImage.teaserURL }
 
                 switch allShotsImagesURLs.count {
                 case 1:
-                    shotsImagesURLs = [allShotsImagesURLs[0], allShotsImagesURLs[0],
-                                       allShotsImagesURLs[0], allShotsImagesURLs[0]]
+                    shotsImagesURLs = [allShotsImagesURLs[0] as URL, allShotsImagesURLs[0] as URL,
+                                       allShotsImagesURLs[0] as URL, allShotsImagesURLs[0] as URL]
                 case 2:
-                    shotsImagesURLs = [allShotsImagesURLs[0], allShotsImagesURLs[1],
-                                       allShotsImagesURLs[1], allShotsImagesURLs[0]]
+                    shotsImagesURLs = [allShotsImagesURLs[0] as URL, allShotsImagesURLs[1] as URL,
+                                       allShotsImagesURLs[1] as URL, allShotsImagesURLs[0] as URL]
                 case 3:
-                    shotsImagesURLs = [allShotsImagesURLs[0], allShotsImagesURLs[1],
-                                       allShotsImagesURLs[2], allShotsImagesURLs[0]]
+                    shotsImagesURLs = [allShotsImagesURLs[0] as URL, allShotsImagesURLs[1] as URL,
+                                       allShotsImagesURLs[2] as URL, allShotsImagesURLs[0] as URL]
                 default:
-                    shotsImagesURLs = [allShotsImagesURLs[0], allShotsImagesURLs[1],
-                                       allShotsImagesURLs[2], allShotsImagesURLs[3]]
+                    shotsImagesURLs = [allShotsImagesURLs[0] as URL, allShotsImagesURLs[1] as URL,
+                                       allShotsImagesURLs[2] as URL, allShotsImagesURLs[3] as URL]
                 }
                 firstShotImage = shots[0].shotImage
             } else {
@@ -157,13 +157,13 @@ extension TeamDetailsViewModel {
 }
 
 private extension TeamDetailsViewModel {
-    func downloadShots(teamMembers: [UserType]) {
+    func downloadShots(_ teamMembers: [UserType]) {
         for member in teamMembers {
             firstly {
                 shotsProvider.provideShotsForUser(member)
             }.then { shots -> Void in
                 var indexOfMember: Int?
-                for (index, item) in self.teamMembers.enumerate() {
+                for (index, item) in self.teamMembers.enumerated() {
                     if item.identifier == member.identifier {
                         indexOfMember = index
                         break
@@ -177,9 +177,9 @@ private extension TeamDetailsViewModel {
                 } else {
                     self.memberIndexedShots[index] = [ShotType]()
                 }
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                let indexPath = IndexPath(row: index, section: 0)
                 self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
-            }.error { error in
+            }.catch { error in
                 self.notifyDelegateAboutFailure(error)
             }
         }

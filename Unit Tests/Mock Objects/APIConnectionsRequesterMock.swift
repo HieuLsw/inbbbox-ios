@@ -17,15 +17,15 @@ class APIConnectionsRequesterMock: APIConnectionsRequester {
     let followUserStub = Stub<UserType, Promise<Void>>()
     let unfollowUserStub = Stub<UserType, Promise<Void>>()
 
-    override func isUserFollowedByMe(user: UserType) -> Promise<Bool> {
+    override func isUserFollowedByMe(_ user: UserType) -> Promise<Bool> {
         return try! isUserFollowedByMeStub.invoke(user)
     }
     
-    override func followUser(user: UserType) -> Promise<Void> {
+    override func followUser(_ user: UserType) -> Promise<Void> {
         return try! followUserStub.invoke(user)
     }
     
-    override func unfollowUser(user: UserType) -> Promise<Void> {
+    override func unfollowUser(_ user: UserType) -> Promise<Void> {
         return try! unfollowUserStub.invoke(user)
     }
 }

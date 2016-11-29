@@ -9,14 +9,34 @@
 import UIKit
 import ZFDragableModalTransition
 import PromiseKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ProfileViewController: TwoLayoutsCollectionViewController {
 
-    private var viewModel: ProfileViewModel!
+    fileprivate var viewModel: ProfileViewModel!
 
-    private var header: ProfileHeaderView?
+    fileprivate var header: ProfileHeaderView?
 
-    private var indexPathsNeededImageUpdate = [NSIndexPath]()
+    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
 
     var dismissClosure: (() -> Void)?
 
@@ -26,14 +46,14 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         return true
     }
 
-    func isDisplayingUser(user: UserType) -> Bool {
-        if let userDetailsViewModel = viewModel as? UserDetailsViewModel where userDetailsViewModel.user == user {
+    func isDisplayingUser(_ user: UserType) -> Bool {
+        if let userDetailsViewModel = viewModel as? UserDetailsViewModel, userDetailsViewModel.user == user {
             return true
         }
         return false
     }
 
-    private var isModal: Bool {
+    fileprivate var isModal: Bool {
         return self.tabBarController?.presentingViewController is UITabBarController ||
                 self.navigationController?.presentingViewController?.presentedViewController ==
                 self.navigationController && (self.navigationController != nil)
@@ -47,7 +67,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
     /// - parameter user: User to initialize view controller with.
     convenience init(user: UserType) {
 
-        guard let accountType = user.accountType where accountType == .Team else {
+        guard let accountType = user.accountType, accountType == .Team else {
             self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
                       twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
             viewModel = UserDetailsViewModel(user: user)
@@ -61,12 +81,12 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
             name: user.name ?? "",
             username: user.username,
             avatarURL: user.avatarURL,
-            createdAt: NSDate()
+            createdAt: Date()
         )
         self.init(team: team)
     }
 
-    private convenience init(team: TeamType) {
+    fileprivate convenience init(team: TeamType) {
 
         self.init(oneColumnLayoutCellHeightToWidthRatio: LargeUserCollectionViewCell.heightToWidthRatio,
                   twoColumnsLayoutCellHeightToWidthRatio: SmallUserCollectionViewCell.heightToWidthRatio)
@@ -83,17 +103,17 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .Cell)
-        collectionView.registerClass(SmallUserCollectionViewCell.self, type: .Cell)
-        collectionView.registerClass(LargeUserCollectionViewCell.self, type: .Cell)
-        collectionView.registerClass(ProfileHeaderView.self, type: .Header)
+        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
+        collectionView.registerClass(SmallUserCollectionViewCell.self, type: .cell)
+        collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
+        collectionView.registerClass(ProfileHeaderView.self, type: .header)
 
         do { // hides bottom border of navigationBar
             let currentColorMode = ColorModeProvider.current()
             navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
             navigationController?.navigationBar.setBackgroundImage(
 				UIImage(color: currentColorMode.navigationBarTint),
-                forBarMetrics: .Default
+                for: .default
 			)
         }
 
@@ -101,7 +121,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         viewModel.downloadInitialItems()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         guard viewModel.shouldShowFollowButton else { return }
@@ -131,7 +151,7 @@ extension ProfileViewController {
                 self.header?.userFollowed = !userFollowed
             }.always {
                 self.header?.stopActivityIndicator()
-            }.error { error in
+            }.catch { error in
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
@@ -142,16 +162,16 @@ extension ProfileViewController {
 
 extension ProfileViewController {
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
     }
 
-    override func collectionView(collectionView: UICollectionView,
-                        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         if let viewModel = viewModel as? UserDetailsViewModel {
             let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self,
-                                                           forIndexPath: indexPath, type: .Cell)
+                                                           forIndexPath: indexPath, type: .cell)
 
             cell.backgroundColor = ColorModeProvider.current().shotViewCellBackground
             cell.shotImageView.image = nil
@@ -160,7 +180,7 @@ extension ProfileViewController {
             indexPathsNeededImageUpdate.append(indexPath)
             lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
 
-            cell.gifLabel.hidden = !cellData.animated
+            cell.gifLabel.isHidden = !cellData.animated
             if !cell.isRegisteredTo3DTouch {
                 cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
             }
@@ -172,9 +192,9 @@ extension ProfileViewController {
 
             indexPathsNeededImageUpdate.append(indexPath)
 
-            if collectionView.collectionViewLayout.isKindOfClass(TwoColumnsCollectionViewFlowLayout) {
+            if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
                 let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
-                                                               forIndexPath: indexPath, type: .Cell)
+                                                               forIndexPath: indexPath, type: .cell)
                 cell.clearImages()
                 cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
                 cell.nameLabel.text = cellData.name
@@ -191,17 +211,16 @@ extension ProfileViewController {
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
-                                                               forIndexPath: indexPath, type: .Cell)
+                                                               forIndexPath: indexPath, type: .cell)
                 cell.clearImages()
                 cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
                 cell.nameLabel.text = cellData.name
                 cell.numberOfShotsLabel.text = cellData.numberOfShots
                 if let shotImage = cellData.firstShotImage {
 
-                    let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
+                    let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
-                        guard let certainSelf = self
-                            where certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
+                        guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
 
                         cell.shotImageView.image = image
                     }
@@ -221,14 +240,14 @@ extension ProfileViewController {
         return UICollectionViewCell()
     }
 
-    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
-                        atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
 
         if header == nil && kind == UICollectionElementKindSectionHeader {
             header = collectionView.dequeueReusableClass(ProfileHeaderView.self, forIndexPath: indexPath,
-                    type: .Header)
+                    type: .header)
             header?.avatarView.imageView.loadImageFromURL(viewModel.avatarURL)
-            header?.button.addTarget(self, action: #selector(didTapFollowButton(_:)), forControlEvents: .TouchUpInside)
+            header?.button.addTarget(self, action: #selector(didTapFollowButton(_:)), for: .touchUpInside)
             viewModel.shouldShowFollowButton ? header?.startActivityIndicator() : (header?.shouldShowButton = false)
         }
 
@@ -240,7 +259,7 @@ extension ProfileViewController {
 
 extension ProfileViewController {
 
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         if let viewModel = viewModel as? UserDetailsViewModel {
 
@@ -252,9 +271,9 @@ extension ProfileViewController {
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
             
             pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .Custom
+            pageViewController.modalPresentationStyle = .custom
 
-            presentViewController(pageViewController, animated: true, completion: nil)
+            present(pageViewController, animated: true, completion: nil)
         }
         if let viewModel = viewModel as? TeamDetailsViewModel {
 
@@ -264,17 +283,17 @@ extension ProfileViewController {
         }
     }
 
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell,
-                        forItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         if indexPath.row == viewModel.itemsCount - 1 {
             viewModel.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
-                        forItemAtIndexPath indexPath: NSIndexPath) {
-        if let index = indexPathsNeededImageUpdate.indexOf(indexPath) {
-            indexPathsNeededImageUpdate.removeAtIndex(index)
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        if let index = indexPathsNeededImageUpdate.index(of: indexPath) {
+            indexPathsNeededImageUpdate.remove(at: index)
         }
     }
 }
@@ -287,7 +306,7 @@ extension ProfileViewController: BaseCollectionViewViewModelDelegate {
         collectionView?.reloadData()
     }
 
-    func viewModelDidFailToLoadInitialItems(error: ErrorType) {
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
         collectionView?.reloadData()
 
         if viewModel.collectionIsEmpty {
@@ -295,16 +314,16 @@ extension ProfileViewController: BaseCollectionViewViewModelDelegate {
         }
     }
 
-    func viewModelDidFailToLoadItems(error: ErrorType) {
+    func viewModelDidFailToLoadItems(_ error: Error) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
-        collectionView?.insertItemsAtIndexPaths(indexPaths)
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        collectionView?.insertItems(at: indexPaths)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
-        collectionView?.reloadItemsAtIndexPaths([indexPath])
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        collectionView?.reloadItems(at: [indexPath])
     }
 }
 
@@ -312,11 +331,11 @@ extension ProfileViewController: BaseCollectionViewViewModelDelegate {
 
 private extension ProfileViewController {
 
-    func lazyLoadImage(shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
-                       atIndexPath indexPath: NSIndexPath) {
-        let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
+    func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
+                       atIndexPath indexPath: IndexPath) {
+        let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
-            guard let certainSelf = self where certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else {
+            guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else {
                 return
             }
 
@@ -334,19 +353,19 @@ private extension ProfileViewController {
             let attributedString = NSMutableAttributedString(
                 string: NSLocalizedString("Profile.BackButton",
                 comment: "Back button, user details"),
-                attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+                attributes: [NSForegroundColorAttributeName: UIColor.white])
             let textAttachment = NSTextAttachment()
             if let image = UIImage(named: "ic-back") {
                 textAttachment.image = image
                 textAttachment.bounds = CGRect(x: 0, y: -3, width: image.size.width, height: image.size.height)
             }
             let attributedStringWithImage = NSAttributedString(attachment: textAttachment)
-            attributedString.replaceCharactersInRange(NSRange(location: 0, length: 0),
-                                                      withAttributedString: attributedStringWithImage)
+            attributedString.replaceCharacters(in: NSRange(location: 0, length: 0),
+                                                      with: attributedStringWithImage)
 
             let backButton = UIButton()
-            backButton.setAttributedTitle(attributedString, forState: .Normal)
-            backButton.addTarget(self, action: #selector(didTapLeftBarButtonItem), forControlEvents: .TouchUpInside)
+            backButton.setAttributedTitle(attributedString, for: .normal)
+            backButton.addTarget(self, action: #selector(didTapLeftBarButtonItem), for: .touchUpInside)
             backButton.sizeToFit()
 
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
@@ -355,7 +374,7 @@ private extension ProfileViewController {
 
     dynamic func didTapLeftBarButtonItem() {
         dismissClosure?()
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -363,12 +382,12 @@ private extension ProfileViewController {
 
 extension ProfileViewController: UIViewControllerPreviewingDelegate {
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
-        guard let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)) else { return nil }
+        guard let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)) else { return nil }
         
         if let viewModel = viewModel as? UserDetailsViewModel {
-            guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+            guard let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
             
             previewingContext.sourceRect = cell.contentView.bounds
             
@@ -378,12 +397,12 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
             
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel {
-            if let collectionView = collectionView where
-                collectionView.collectionViewLayout.isKindOfClass(TwoColumnsCollectionViewFlowLayout) {
-                guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
+            if let collectionView = collectionView,
+                collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
+                guard let cell = collectionView.cellForItem(at: indexPath) else { return nil }
                 previewingContext.sourceRect = cell.contentView.bounds
             } else {
-                guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+                guard let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
                 previewingContext.sourceRect = cell.contentView.bounds
             }
             
@@ -393,7 +412,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
         return nil
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         if let viewModel = viewModel as? UserDetailsViewModel,
             let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
             detailsViewController.customizeFor3DTouch(false)
@@ -403,9 +422,9 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
             modalTransitionAnimator?.behindViewScale = 1
             
             pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .Custom
+            pageViewController.modalPresentationStyle = .custom
             
-            presentViewController(pageViewController, animated: true, completion: nil)
+            present(pageViewController, animated: true, completion: nil)
         } else if (viewModel as? TeamDetailsViewModel) != nil {
             navigationController?.pushViewController(viewControllerToCommit, animated: true)
         }

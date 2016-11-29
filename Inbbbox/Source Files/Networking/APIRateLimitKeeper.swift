@@ -9,6 +9,17 @@
 import Foundation
 import SwiftyUserDefaults
 import Async
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 private let xRateLimit = "X-RateLimit-Limit"
 private let xRateLimitRemaining = "X-RateLimit-Remaining"
@@ -23,16 +34,16 @@ private let dailyRateLimitRemainingKey = "DailyRateLimitRemainingKey"
  - DidExceedRateLimitPerDay:    Occurs when application did perform to many hits to API per day.
                                 Provides time left to reset as parameter.
  */
-enum APIRateLimitKeeperError: ErrorType {
-    case DidExceedRateLimitPerMinute(NSTimeInterval)
-    case DidExceedRateLimitPerDay(NSTimeInterval)
+enum APIRateLimitKeeperError: Error {
+    case didExceedRateLimitPerMinute(TimeInterval)
+    case didExceedRateLimitPerDay(TimeInterval)
 }
 
 /// Protects against exceeding the API limit.
 final class APIRateLimitKeeper {
 
     /// Minute rate limit.
-    private(set) var rateLimitPerMinute: UInt?
+    fileprivate(set) var rateLimitPerMinute: UInt?
 
     /// Daily rate limit.
     /// When user is **not** authenticated, then limit is uknown due to client access token usage.
@@ -45,11 +56,11 @@ final class APIRateLimitKeeper {
 
     /// Number of api hits remaining during current minute.
     /// The number is unknown until api request wasn't sent previously.
-    private(set) var rateLimitRemainingPerMinute: UInt?
+    fileprivate(set) var rateLimitRemainingPerMinute: UInt?
 
     /// Number of api hits remaining during current day.
     /// The number is unknown if user is not currently logged in.
-    private(set) var rateLimitRemainingPerDay: UInt? {
+    fileprivate(set) var rateLimitRemainingPerDay: UInt? {
         get {
             if let value = Defaults[dailyRateLimitRemainingKey].int {
                 return UInt(value)
@@ -63,23 +74,23 @@ final class APIRateLimitKeeper {
 
     /// Time interval left to reset minute rate limit.
     /// The number is unknown until api request wasn't sent previously.
-    private(set) var timeIntervalRemainingToResetMinuteLimit: NSTimeInterval?
+    fileprivate(set) var timeIntervalRemainingToResetMinuteLimit: TimeInterval?
 
     /// Time interval left to reset daily rate limit.
-    var timeIntervalRemainingToResetDailyLimit: NSTimeInterval {
+    var timeIntervalRemainingToResetDailyLimit: TimeInterval {
 
-        let oneDayTimeInterval = NSTimeInterval(60 * 60 * 24)
-        let startOfNextDay = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!.startOfDayForDate(
-                NSDate(timeIntervalSinceNow: oneDayTimeInterval))
+        let oneDayTimeInterval = TimeInterval(60 * 60 * 24)
+        let startOfNextDay = Calendar(identifier: Calendar.Identifier.gregorian).startOfDay(
+                for: Date(timeIntervalSinceNow: oneDayTimeInterval))
 
-        return startOfNextDay.timeIntervalSinceDate(NSDate())
+        return startOfNextDay.timeIntervalSince(Date())
     }
 
     /// Boolean that indicates if timer to reset API rate limit per minute is set
-    private var timerToResetMinuteLimitIsSet = false
+    fileprivate var timerToResetMinuteLimitIsSet = false
 
     /// Boolean that indicates if timer to reset API rate limit per day is set
-    private var timerToResetDailyLimitIsSet = false
+    fileprivate var timerToResetDailyLimitIsSet = false
 
     /// Shared instance.
     static let sharedKeeper = APIRateLimitKeeper()
@@ -89,7 +100,7 @@ final class APIRateLimitKeeper {
 
      - parameter header: Header which will be used to obtain the limits.
      */
-    func setCurrentLimitFromHeader(header: [String: AnyObject]) {
+    func setCurrentLimitFromHeader(_ header: [String: AnyObject]) {
 
         rateLimitPerMinute = integerFromHeader(header, forKey: xRateLimit)
 
@@ -98,7 +109,7 @@ final class APIRateLimitKeeper {
             let previousTimeIntervalRemainingToResetMinuteLimit = timeIntervalRemainingToResetMinuteLimit
 
             timeIntervalRemainingToResetMinuteLimit = {
-                let resetDate = NSDate(timeIntervalSince1970: NSTimeInterval(interval))
+                let resetDate = Date(timeIntervalSince1970: TimeInterval(interval))
                 return max(resetDate.timeIntervalSinceNow, 0)
             }()
 
@@ -132,10 +143,10 @@ final class APIRateLimitKeeper {
      - throws: APIRateLimitKeeperError.DidExceedRateLimitPerDay error with time interval remaining
                to reset daily limit as parameter.
      */
-    func verifyResponseForRateLimitation(response: NSURLResponse?) throws {
+    func verifyResponseForRateLimitation(_ response: URLResponse?) throws {
 
-        if let response = response as? NSHTTPURLResponse where response.statusCode == 429 {
-            throw APIRateLimitKeeperError.DidExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit)
+        if let response = response as? HTTPURLResponse, response.statusCode == 429 {
+            throw APIRateLimitKeeperError.didExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit)
         }
     }
 
@@ -152,7 +163,7 @@ final class APIRateLimitKeeper {
             rateLimitRemainingPerDay = perDayRemainingLimit
         }
 
-        if let limit = rateLimitRemainingPerDay where limit <= 0 {
+        if let limit = rateLimitRemainingPerDay, limit <= 0 {
 
             if !timerToResetDailyLimitIsSet {
                 Async.background(after: timeIntervalRemainingToResetDailyLimit) { [weak self] in
@@ -162,10 +173,10 @@ final class APIRateLimitKeeper {
                 timerToResetDailyLimitIsSet = true
             }
 
-            throw APIRateLimitKeeperError.DidExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit ?? 0)
+            throw APIRateLimitKeeperError.didExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit ?? 0)
         }
 
-        if let limit = rateLimitRemainingPerMinute where limit <= 1 {
+        if let limit = rateLimitRemainingPerMinute, limit <= 1 {
 
             if !timerToResetMinuteLimitIsSet {
                 Async.background(after: timeIntervalRemainingToResetMinuteLimit) { [weak self] in
@@ -175,7 +186,7 @@ final class APIRateLimitKeeper {
                 timerToResetMinuteLimitIsSet = true
             }
 
-            throw APIRateLimitKeeperError.DidExceedRateLimitPerMinute(timeIntervalRemainingToResetMinuteLimit ?? 0)
+            throw APIRateLimitKeeperError.didExceedRateLimitPerMinute(timeIntervalRemainingToResetMinuteLimit ?? 0)
         }
     }
 
@@ -190,9 +201,9 @@ final class APIRateLimitKeeper {
 
 private extension APIRateLimitKeeper {
 
-    func integerFromHeader(header: [String: AnyObject], forKey key: String) -> UInt? {
+    func integerFromHeader(_ header: [String: AnyObject], forKey key: String) -> UInt? {
 
-        if let stringValue = header[key] as? String, uintValue = UInt(stringValue) {
+        if let stringValue = header[key] as? String, let uintValue = UInt(stringValue) {
             return uintValue
         }
         return nil

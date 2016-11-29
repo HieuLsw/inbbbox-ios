@@ -37,7 +37,7 @@ final class ColorModeProvider {
 
     // MARK: Private
 
-    private class func select(mode: ColorMode) {
+    fileprivate class func select(_ mode: ColorMode) {
         switch mode {
             case .DayMode:
                 let mode = DayMode()
@@ -50,7 +50,7 @@ final class ColorModeProvider {
         }
     }
 
-    private class func adaptInterface(to mode: ColorModeType) {
+    fileprivate class func adaptInterface(to mode: ColorModeType) {
         UITabBar.appearance().barTintColor = mode.tabBarTint
         UITabBar.appearance().backgroundColor = mode.windowBackgroundColor
         UINavigationBar.appearance().barTintColor = mode.navigationBarTint
@@ -69,28 +69,28 @@ final class ColorModeProvider {
         ShotDetailsCommentCollectionViewCell.appearance().backgroundColor = mode.shotDetailsCommentCollectionViewCellBackground
         ProfileHeaderView.appearance().backgroundColor = mode.profileHeaderViewBackground
 
-        UICollectionView.appearanceWhenContainedInInstancesOfClasses([TwoLayoutsCollectionViewController.self]).backgroundColor = mode.twoLayoutsCollectionViewBackground
-        UICollectionView.appearanceWhenContainedInInstancesOfClasses([BucketsCollectionViewController.self]).backgroundColor = mode.bucketsCollectionViewBackground
+        UICollectionView.appearance(whenContainedInInstancesOf: [TwoLayoutsCollectionViewController.self]).backgroundColor = mode.twoLayoutsCollectionViewBackground
+        UICollectionView.appearance(whenContainedInInstancesOf: [BucketsCollectionViewController.self]).backgroundColor = mode.bucketsCollectionViewBackground
 
-        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().barStyle = .Black
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().barStyle = .black
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().isTranslucent = false
         UIWindow.appearance().backgroundColor = mode.windowBackgroundColor
         UITabBar.appearance().backgroundColor = mode.windowBackgroundColor
-        UIApplication.sharedApplication().keyWindow?.backgroundColor = mode.windowBackgroundColor
+        UIApplication.shared.keyWindow?.backgroundColor = mode.windowBackgroundColor
 
         UIDatePicker.appearance().backgroundColor = mode.tableViewBackground
         
         FlashMessageView.defaultStyle = FlashMessageView.Style(backgroundColor: mode.flashMessageBackgroundColor,
                 textColor: mode.flashMessageTextColor,
-                titleFont: UIFont.helveticaFont(.Neue, size:14),
-                roundedCorners: [.BottomLeft, .BottomRight], roundSize: CGSizeMake(10, 10), padding: 25.0)
+                titleFont: UIFont.helveticaFont(.neue, size:14),
+                roundedCorners: [.bottomLeft, .bottomRight], roundSize: CGSize(width: 10, height: 10), padding: 25.0)
         ColorModeProvider.resetViews()
     }
 
-    private class func resetViews() {
-        let windows = UIApplication.sharedApplication().windows as [UIWindow]
+    fileprivate class func resetViews() {
+        let windows = UIApplication.shared.windows as [UIWindow]
         for window in windows {
             let subviews = window.subviews as [UIView]
             for v in subviews {
@@ -100,7 +100,7 @@ final class ColorModeProvider {
         }
     }
     
-    private class func adaptInterfaceToCustomViews(to mode: ColorModeType) {
+    fileprivate class func adaptInterfaceToCustomViews(to mode: ColorModeType) {
         guard let centerButtonTabBarController = findCenterButtonTabControllerInWindows() else {
             return
         }
@@ -108,8 +108,8 @@ final class ColorModeProvider {
         centerButtonTabBarController.adaptColorMode(mode)
     }
     
-    private class func findCenterButtonTabControllerInWindows() -> CenterButtonTabBarController? {
-        let windows = UIApplication.sharedApplication().windows as [UIWindow]
+    fileprivate class func findCenterButtonTabControllerInWindows() -> CenterButtonTabBarController? {
+        let windows = UIApplication.shared.windows as [UIWindow]
         for window in windows {
             guard let centerButtonTabBarController = window.rootViewController as? CenterButtonTabBarController  else {
                 continue

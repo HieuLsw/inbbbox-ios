@@ -11,15 +11,15 @@ import Foundation
 struct UpdateableIndex {
 
     enum UpdateStatus {
-        case NotStarted
-        case InProgress
-        case Updated
+        case notStarted
+        case inProgress
+        case updated
     }
 
     let index: Int
-    var status: UpdateStatus = .NotStarted
+    var status: UpdateStatus = .notStarted
 
-    init(index: Int, status: UpdateStatus = .NotStarted) {
+    init(index: Int, status: UpdateStatus = .notStarted) {
         self.index = index
         self.status = status
     }

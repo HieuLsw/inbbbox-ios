@@ -11,11 +11,11 @@ class ShotsAnimatorDelegateMock: ShotsAnimatorDelegate {
     let collectionViewForShotsAnimatorStub = Stub<(ShotsAnimator), UICollectionView?>()
     let itemsForShotsAnimatorStub = Stub<ShotsAnimator, [ShotType]>()
 
-    func collectionViewForShotsAnimator(animator: ShotsAnimator) -> UICollectionView? {
+    func collectionViewForShotsAnimator(_ animator: ShotsAnimator) -> UICollectionView? {
         return try! collectionViewForShotsAnimatorStub.invoke(animator)
     }
 
-    func itemsForShotsAnimator(animator: ShotsAnimator) -> [ShotType] {
+    func itemsForShotsAnimator(_ animator: ShotsAnimator) -> [ShotType] {
         return try! itemsForShotsAnimatorStub.invoke(animator)
     }
 }

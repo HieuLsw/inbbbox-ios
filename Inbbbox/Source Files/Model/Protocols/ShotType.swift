@@ -31,7 +31,7 @@ protocol ShotType {
     var shotImage: ShotImageType { get }
 
     /// Date when Shot was created.
-    var createdAt: NSDate { get }
+    var createdAt: Date { get }
 
     /// Indicates whether Shot image is GIF.
     var animated: Bool { get }
@@ -65,11 +65,11 @@ func == (lhs: [ShotType], rhs: [ShotType]) -> Bool {
 
     guard lhs.count == rhs.count else { return false }
 
-    var indexingGenerators = (left: lhs.generate(), right: rhs.generate())
+    var indexingGenerators = (left: lhs.makeIterator(), right: rhs.makeIterator())
 
     var isEqual = true
     while let leftElement = indexingGenerators.left.next(),
-            rightElement = indexingGenerators.right.next() where isEqual {
+            let rightElement = indexingGenerators.right.next(), isEqual {
         isEqual = leftElement == rightElement
     }
 

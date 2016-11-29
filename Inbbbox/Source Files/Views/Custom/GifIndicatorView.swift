@@ -11,13 +11,13 @@ import UIKit
 class GifIndicatorView: UIView {
 
     let gifLabel = UILabel()
-    let vibrancyGifView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+    let vibrancyGifView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     // MARK: - Life cycle
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -27,12 +27,12 @@ class GifIndicatorView: UIView {
 
         gifLabel.configureForAutoLayout()
         gifLabel.text = NSLocalizedString("GifIndicatorView.GIF", comment: "GIF file type.")
-        gifLabel.font = UIFont.helveticaFont(.NeueMedium, size: 11)
+        gifLabel.font = UIFont.helveticaFont(.neueMedium, size: 11)
         gifLabel.textColor = UIColor.textDarkColor()
-        gifLabel.textAlignment = .Center
+        gifLabel.textAlignment = .center
 
         vibrancyGifView.contentView.addSubview(gifLabel)
-        vibrancyGifView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        vibrancyGifView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         vibrancyGifView.layer.cornerRadius = 4
         vibrancyGifView.clipsToBounds = true
         self.addSubview(vibrancyGifView)
@@ -44,8 +44,8 @@ class GifIndicatorView: UIView {
 
             gifLabel.autoPinEdgesToSuperviewEdges()
             vibrancyGifView.autoPinEdgesToSuperviewEdges()
-            autoSetDimension(.Width, toSize: 30)
-            autoSetDimension(.Height, toSize: 20)
+            autoSetDimension(.width, toSize: 30)
+            autoSetDimension(.height, toSize: 20)
         }
         super.updateConstraints()
     }

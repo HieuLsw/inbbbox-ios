@@ -32,7 +32,7 @@ class APIBucketsProvider: PageableProvider {
 
      - returns: Promise which resolves with buckets or nil.
      */
-    func provideBucketsForUser(user: UserType) -> Promise<[BucketType]?> {
+    func provideBucketsForUser(_ user: UserType) -> Promise<[BucketType]?> {
         return provideBucketsForUsers([user])
     }
 
@@ -43,7 +43,7 @@ class APIBucketsProvider: PageableProvider {
 
      - returns: Promise which resolves with buckets or nil.
      */
-    func provideBucketsForUsers(users: [UserType]) -> Promise<[BucketType]?> {
+    func provideBucketsForUsers(_ users: [UserType]) -> Promise<[BucketType]?> {
 
         let queries = users.map { BucketQuery(user: $0) } as [Query]
         return provideBucketsWithQueries(queries, authentizationRequired: false)
@@ -63,7 +63,7 @@ class APIBucketsProvider: PageableProvider {
                 nextPageFor(Bucket)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as BucketType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -81,14 +81,14 @@ class APIBucketsProvider: PageableProvider {
                 previousPageFor(Bucket)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as BucketType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }
 
 private extension APIBucketsProvider {
 
-    func provideBucketsWithQueries(queries: [Query], authentizationRequired: Bool) -> Promise<[BucketType]?> {
+    func provideBucketsWithQueries(_ queries: [Query], authentizationRequired: Bool) -> Promise<[BucketType]?> {
         return Promise<[BucketType]?> { fulfill, reject in
             firstly {
                 verifyAuthenticationStatus(authentizationRequired)
@@ -96,7 +96,7 @@ private extension APIBucketsProvider {
                 self.firstPageForQueries(queries, withSerializationKey: nil)
             }.then {  (buckets: [Bucket]?) -> Void in
                fulfill(buckets.flatMap { $0.map { $0 as BucketType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

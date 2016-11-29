@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    static func withColor(color: UIColor) -> UIView {
+    static func withColor(_ color: UIColor) -> UIView {
         let viewForReturn = UIView()
         viewForReturn.backgroundColor = color
         return viewForReturn

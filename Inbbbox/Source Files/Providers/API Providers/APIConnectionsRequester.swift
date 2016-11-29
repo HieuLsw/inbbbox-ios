@@ -23,7 +23,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter user: User to follow.
     ///
     /// - returns: Promise which resolves with void.
-    func followUser(user: UserType) -> Promise<Void> {
+    func followUser(_ user: UserType) -> Promise<Void> {
 
         let query = FollowUserQuery(user: user)
         return sendConnectionQuery(query)
@@ -41,7 +41,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter team: Team to follow.
     ///
     /// - returns: Promise which resolves with void.
-    func followTeam(team: TeamType) -> Promise<Void> {
+    func followTeam(_ team: TeamType) -> Promise<Void> {
 
         let query = FollowUserQuery(team: team)
         return sendConnectionQuery(query)
@@ -56,7 +56,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter user: User to unfollow.
     ///
     /// - returns: Promise which resolves with void.
-    func unfollowUser(user: UserType) -> Promise<Void> {
+    func unfollowUser(_ user: UserType) -> Promise<Void> {
 
         let query = UnfollowUserQuery(user: user)
         return sendConnectionQuery(query)
@@ -70,7 +70,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter team: Team to unfollow.
     ///
     /// - returns: Promise which resolves with void.
-    func unfollowTeam(team: TeamType) -> Promise<Void> {
+    func unfollowTeam(_ team: TeamType) -> Promise<Void> {
 
         let query = UnfollowUserQuery(team: team)
         return sendConnectionQuery(query)
@@ -83,7 +83,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter user: User to check.
     ///
     /// - returns: Promise which resolves with true (if current user follows given user) or false (if doesn't).
-    func isUserFollowedByMe(user: UserType) -> Promise<Bool> {
+    func isUserFollowedByMe(_ user: UserType) -> Promise<Bool> {
 
         return Promise<Bool> { fulfill, reject in
 
@@ -93,7 +93,7 @@ class APIConnectionsRequester: Verifiable {
                 sendConnectionQuery(query)
             }.then { _ in
                 fulfill(true)
-            }.error { error in
+            }.catch { error in
                 // According to API documentation, when response.code is 404,
                 // then user is not followed by authenticated user.
                 (error as NSError).code == 404 ? fulfill(false) : reject(error)
@@ -108,7 +108,7 @@ class APIConnectionsRequester: Verifiable {
     /// - parameter team: Team to check.
     ///
     /// - returns: Promise which resolves with true (if current user follows given team) or false (if doesn't).
-    func isTeamFollowedByMe(team: TeamType) -> Promise<Bool> {
+    func isTeamFollowedByMe(_ team: TeamType) -> Promise<Bool> {
 
         return Promise<Bool> { fulfill, reject in
 
@@ -116,12 +116,12 @@ class APIConnectionsRequester: Verifiable {
 
             firstly {
                 sendConnectionQuery(query)
-                }.then { _ in
-                    fulfill(true)
-                }.error { error in
-                    // According to API documentation, when response.code is 404,
-                    // then team is not followed by authenticated user.
-                    (error as NSError).code == 404 ? fulfill(false) : reject(error)
+            }.then { _ in
+                fulfill(true)
+            }.catch { error in
+                // According to API documentation, when response.code is 404,
+                // then team is not followed by authenticated user.
+                (error as NSError).code == 404 ? fulfill(false) : reject(error)
             }
         }
     }
@@ -129,7 +129,7 @@ class APIConnectionsRequester: Verifiable {
 
 private extension APIConnectionsRequester {
 
-    func sendConnectionQuery(query: Query) -> Promise<Void> {
+    func sendConnectionQuery(_ query: Query) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             firstly {
@@ -138,7 +138,7 @@ private extension APIConnectionsRequester {
                 Request(query: query).resume()
             }.then { _ -> Void in
                 fulfill()
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

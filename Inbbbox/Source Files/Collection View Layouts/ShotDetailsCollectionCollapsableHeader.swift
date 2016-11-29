@@ -22,14 +22,14 @@ class ShotDetailsCollectionCollapsableHeader: UICollectionViewFlowLayout {
         setupLayout()
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect)
+    override func layoutAttributesForElements(in rect: CGRect)
                     -> [UICollectionViewLayoutAttributes]? {
 
-        var superAttributes = super.layoutAttributesForElementsInRect(rect)
+        var superAttributes = super.layoutAttributesForElements(in: rect)
 
         guard let collectionView = collectionView else {
             return superAttributes
@@ -59,7 +59,7 @@ class ShotDetailsCollectionCollapsableHeader: UICollectionViewFlowLayout {
 
             let attributes = UICollectionViewLayoutAttributes(
                     forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
-                                 withIndexPath: NSIndexPath(forItem: 0, inSection: 0))
+                                 with: IndexPath(item: 0, section: 0))
             superAttributes?.append(attributes)
 
             return attributes
@@ -95,7 +95,7 @@ class ShotDetailsCollectionCollapsableHeader: UICollectionViewFlowLayout {
 private extension ShotDetailsCollectionCollapsableHeader {
 
     func setupLayout() {
-        sectionInset = UIEdgeInsetsZero
+        sectionInset = .zero
         minimumLineSpacing = 0
         minimumInteritemSpacing = 0
     }

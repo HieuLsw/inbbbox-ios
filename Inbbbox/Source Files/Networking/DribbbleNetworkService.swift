@@ -35,7 +35,7 @@ struct DribbbleNetworkService: SecureNetworkService, HeaderAuthorizable, OAuthAu
     /// Authorize given request.
     ///
     /// - parameter request: Request to authorize.
-    func authorizeRequest(request: NSMutableURLRequest) {
+    func authorizeRequest(_ request: NSMutableURLRequest) {
 
         let token = TokenStorage.currentToken ?? Dribbble.ClientAccessToken
         let header = authorizationHeader(token)
@@ -44,7 +44,7 @@ struct DribbbleNetworkService: SecureNetworkService, HeaderAuthorizable, OAuthAu
 }
 
 extension NSMutableURLRequest {
-    func setHeader(header: HTTPHeader) {
+    func setHeader(_ header: HTTPHeader) {
         setValue(header.value, forHTTPHeaderField: header.name)
     }
 }

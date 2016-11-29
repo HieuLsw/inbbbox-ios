@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum AuthenticatorError: ErrorType {
-    case UnableToFetchUser
-    case AuthenticationDidCancel
-    case DataDecodingFailure
-    case AccessTokenMissing
-    case AuthTokenMissing
-    case UnknownError
-    case InvalidCallbackURL
-    case RequestTokenURLFailure
+enum AuthenticatorError: Error {
+    case unableToFetchUser
+    case authenticationDidCancel
+    case dataDecodingFailure
+    case accessTokenMissing
+    case authTokenMissing
+    case unknownError
+    case invalidCallbackURL
+    case requestTokenURLFailure
 }

@@ -24,21 +24,21 @@ class ShotsAnimatorSpec: QuickSpec {
 
         describe("start animation with completion") {
 
-            var capturedAddedItemsIndexPaths: [NSIndexPath]?
-            var capturedDeletedItemsIndexPaths: [NSIndexPath]?
+            var capturedAddedItemsIndexPaths: [IndexPath]?
+            var capturedDeletedItemsIndexPaths: [IndexPath]?
             var capturedDelays: [Double]?
             var didInvokeCompletion: Bool?
 
             beforeEach {
-                capturedAddedItemsIndexPaths = [NSIndexPath]()
-                capturedDeletedItemsIndexPaths = [NSIndexPath]()
+                capturedAddedItemsIndexPaths = [IndexPath]()
+                capturedDeletedItemsIndexPaths = [IndexPath]()
                 capturedDelays = [Double]()
 
-                let collectionViewMock = CollectionViewMock(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
-                collectionViewMock.insertItemsAtIndexPathsStub.on(any()) { indexPaths in
+                let collectionViewMock = CollectionViewMock(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+                collectionViewMock.insertItemsAtIndexPathsStub.on(any()) { (indexPaths:[IndexPath]) in
                     capturedAddedItemsIndexPaths!.append(indexPaths.first!)
                 }
-                collectionViewMock.deleteItemsAtIndexPathsStub.on(any()) { indexPaths in
+                collectionViewMock.deleteItemsAtIndexPathsStub.on(any()) { (indexPaths:[IndexPath]) in
                     capturedDeletedItemsIndexPaths!.append(indexPaths.first!)
                 }
                 collectionViewMock.performBatchUpdatesStub.on(any()) { updates, completion in
@@ -47,9 +47,9 @@ class ShotsAnimatorSpec: QuickSpec {
                 }
                 
                 let delegateMock = ShotsAnimatorDelegateMock()
-                delegateMock.collectionViewForShotsAnimatorStub.on(any(), returnValue: collectionViewMock)
+                delegateMock.collectionViewForShotsAnimatorStub.on(any(), return: collectionViewMock)
                 let shot = Shot.fixtureShot()
-                delegateMock.itemsForShotsAnimatorStub.on(any(), returnValue: [shot, shot, shot])
+                delegateMock.itemsForShotsAnimatorStub.on(any(), return: [shot, shot, shot])
                 sut!.delegate = delegateMock
 
                 let asyncWrapperMock = AsyncWrapperMock()
@@ -74,7 +74,7 @@ class ShotsAnimatorSpec: QuickSpec {
 
                 describe("first added item") {
 
-                    var addedItemIndexPath: NSIndexPath?
+                    var addedItemIndexPath: IndexPath?
                     var addedItemDelay: Double?
 
                     beforeEach {
@@ -83,7 +83,7 @@ class ShotsAnimatorSpec: QuickSpec {
                     }
 
                     it("should add item for proper index path") {
-                        expect(addedItemIndexPath!).to(equal(NSIndexPath(forItem: 0, inSection: 0)))
+                        expect(addedItemIndexPath!).to(equal(IndexPath(item: 0, section: 0)))
                     }
 
                     it("should add item with proper delay") {
@@ -93,7 +93,7 @@ class ShotsAnimatorSpec: QuickSpec {
 
                 describe("second added item") {
 
-                    var addedItemIndexPath: NSIndexPath?
+                    var addedItemIndexPath: IndexPath?
                     var addedItemDelay: Double?
 
                     beforeEach {
@@ -102,7 +102,7 @@ class ShotsAnimatorSpec: QuickSpec {
                     }
 
                     it("should add item for proper index path") {
-                        expect(addedItemIndexPath!).to(equal(NSIndexPath(forItem: 1, inSection: 0)))
+                        expect(addedItemIndexPath!).to(equal(IndexPath(item: 1, section: 0)))
                     }
 
                     it("should add item with proper delay") {
@@ -112,7 +112,7 @@ class ShotsAnimatorSpec: QuickSpec {
 
                 describe("third added item") {
 
-                    var addedItemIndexPath: NSIndexPath?
+                    var addedItemIndexPath: IndexPath?
                     var addedItemDelay: Double?
 
                     beforeEach {
@@ -121,7 +121,7 @@ class ShotsAnimatorSpec: QuickSpec {
                     }
 
                     it("should add item for proper index path") {
-                        expect(addedItemIndexPath!).to(equal(NSIndexPath(forItem: 2, inSection: 0)))
+                        expect(addedItemIndexPath!).to(equal(IndexPath(item: 2, section: 0)))
                     }
 
                     it("should add item with proper delay") {
@@ -142,7 +142,7 @@ class ShotsAnimatorSpec: QuickSpec {
 
                 describe("first deleted item") {
 
-                    var deletedItemIndexPath: NSIndexPath?
+                    var deletedItemIndexPath: IndexPath?
                     var deletedItemDelay: Double?
 
                     beforeEach {
@@ -151,7 +151,7 @@ class ShotsAnimatorSpec: QuickSpec {
                     }
 
                     it("should delete item for proper index path") {
-                        expect(deletedItemIndexPath!).to(equal(NSIndexPath(forItem: 2, inSection: 0)))
+                        expect(deletedItemIndexPath!).to(equal(IndexPath(item: 2, section: 0)))
                     }
 
                     it("should delete item with proper delay") {
@@ -161,7 +161,7 @@ class ShotsAnimatorSpec: QuickSpec {
 
                 describe("second deleted item") {
 
-                    var deletedItemIndexPath: NSIndexPath?
+                    var deletedItemIndexPath: IndexPath?
                     var deletedItemDelay: Double?
 
                     beforeEach {
@@ -170,7 +170,7 @@ class ShotsAnimatorSpec: QuickSpec {
                     }
 
                     it("should delete item for proper index path") {
-                        expect(deletedItemIndexPath!).to(equal(NSIndexPath(forItem: 1, inSection: 0)))
+                        expect(deletedItemIndexPath!).to(equal(IndexPath(item: 1, section: 0)))
                     }
 
                     it("should delete item with proper delay") {

@@ -12,14 +12,14 @@ import CoreData
 extension NSManagedObject {
 
     class var entityName: String {
-        return String(self)
+        return String(describing: self)
     }
 
-    func addObject(value: NSManagedObject, forKey: String) {
-        mutableSetValueForKey(forKey).addObject(value)
+    func addObject(_ value: NSManagedObject, forKey: String) {
+        mutableSetValue(forKey: forKey).add(value)
     }
 
-    func removeObject(value: NSManagedObject, forKey: String) {
-        mutableSetValueForKey(forKey).removeObject(value)
+    func removeObject(_ value: NSManagedObject, forKey: String) {
+        mutableSetValue(forKey: forKey).remove(value)
     }
 }

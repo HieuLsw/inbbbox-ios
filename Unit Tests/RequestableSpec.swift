@@ -19,7 +19,7 @@ class RequestableSpec: QuickSpec {
         describe("when initializaing request to be used as POST") {
             
             beforeEach {
-                sut = RequestableMock(encoding: .JSON)
+                sut = RequestableMock(encoding: .json)
             }
             
             afterEach {
@@ -35,24 +35,24 @@ class RequestableSpec: QuickSpec {
             }
             
             it("request should have url") {
-                expect(sut.foundationRequest.URL).toNot(beNil())
+                expect(sut.foundationRequest.url).toNot(beNil())
             }
             
             it("request should have proper url") {
-                let expectedURL = NSURL(string: "https://fixture.host/v1/query.fixture/path")
-                expect(sut.foundationRequest.URL).to(equal(expectedURL))
+                let expectedURL = URL(string: "https://fixture.host/v1/query.fixture/path")
+                expect(sut.foundationRequest.url).to(equal(expectedURL))
             }
             
             it("request body should be properly set") {
-                let expectedData = try! NSJSONSerialization.dataWithJSONObject(["fixture.key" : "fixture.value"], options: .PrettyPrinted)
-                expect(sut.foundationRequest.HTTPBody).to(equal(expectedData))
+                let expectedData = try! JSONSerialization.data(withJSONObject: ["fixture.key" : "fixture.value"], options: .prettyPrinted)
+                expect(sut.foundationRequest.httpBody).to(equal(expectedData))
             }
         }
         
         describe("when initializaing request to be used as GET") {
             
             beforeEach {
-                sut = RequestableMock(encoding: .URL)
+                sut = RequestableMock(encoding: .url)
             }
             
             afterEach {
@@ -67,16 +67,16 @@ class RequestableSpec: QuickSpec {
             }
             
             it("request should have url") {
-                expect(sut.foundationRequest.URL).toNot(beNil())
+                expect(sut.foundationRequest.url).toNot(beNil())
             }
             
             it("request should have proper url") {
-                let expectedURL = NSURL(string: "https://fixture.host/v1/query.fixture/path?fixture.key=fixture.value")
-                expect(sut.foundationRequest.URL).to(equal(expectedURL))
+                let expectedURL = URL(string: "https://fixture.host/v1/query.fixture/path?fixture.key=fixture.value")
+                expect(sut.foundationRequest.url).to(equal(expectedURL))
             }
             
             it("request body should be nil") {
-                expect(sut.foundationRequest.HTTPBody).to(beNil())
+                expect(sut.foundationRequest.httpBody).to(beNil())
             }
         }
     }
@@ -88,14 +88,14 @@ private struct RequestableMock: Requestable {
     
     init(encoding: Parameters.Encoding) {
         query.parameters = Parameters(encoding: encoding)
-        query.parameters["fixture.key"] = "fixture.value"
+        query.parameters["fixture.key"] = "fixture.value" as AnyObject?
     }
 }
 
 private struct QueryMock: Query {
     
     let path = "/query.fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
     let method = Method.POST
     
     var service: SecureNetworkService {
@@ -109,7 +109,7 @@ private struct ServiceMock: SecureNetworkService {
     let host = "fixture.host"
     let version = "/v1"
     
-    func authorizeRequest(request: NSMutableURLRequest) {
+    func authorizeRequest(_ request: NSMutableURLRequest) {
         request.setValue("fixture.header", forHTTPHeaderField: "fixture.http.header.field")
     }
 }

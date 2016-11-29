@@ -23,5 +23,5 @@ protocol NetworkService {
     /// Authorize given request.
     ///
     /// - parameter request: Request to authorize.
-    func authorizeRequest(request: NSMutableURLRequest)
+    func authorizeRequest(_ request: NSMutableURLRequest)
 }

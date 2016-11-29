@@ -15,16 +15,16 @@ class Authenticator {
 
     var networkService: OAuthAuthorizable?
 
-    private let interactionHandler: (SFSafariViewController -> Void)
-    private let success: (Void -> Void)
-    private let failure: (ErrorType -> Void)
+    fileprivate let interactionHandler: ((SFSafariViewController) -> Void)
+    fileprivate let success: ((Void) -> Void)
+    fileprivate let failure: ((Error) -> Void)
 
     enum Service {
-        case Dribbble
+        case dribbble
 
         var instance: NetworkService {
             switch self {
-                case .Dribbble: return DribbbleNetworkService()
+                case .dribbble: return DribbbleNetworkService()
             }
         }
     }
@@ -32,9 +32,9 @@ class Authenticator {
     // MARK: Init
 
     init(service: Service,
-         interactionHandler: (SFSafariViewController -> Void),
-         success: (() -> Void),
-         failure: (ErrorType -> Void)) {
+         interactionHandler: @escaping ((SFSafariViewController) -> Void),
+         success: @escaping (() -> Void),
+         failure: @escaping ((Error) -> Void)) {
         self.networkService = service.instance as? OAuthAuthorizable
         self.interactionHandler = interactionHandler
         self.success = success
@@ -45,15 +45,15 @@ class Authenticator {
 
     func login() {
         if let networkService = networkService {
-            let controller = SFSafariViewController(URL: networkService.requestTokenURLRequest().URL!)
+            let controller = SFSafariViewController(url: networkService.requestTokenURLRequest().url!)
             controller.view.tintColor = .pinkColor()
             interactionHandler(controller)
         } else {
-            self.failure(AuthenticatorError.RequestTokenURLFailure)
+            self.failure(AuthenticatorError.requestTokenURLFailure)
         }
     }
 
-    func loginWithOAuthURLCallback(url: NSURL) {
+    func loginWithOAuthURLCallback(_ url: URL) {
         login(url)
     }
 
@@ -68,7 +68,7 @@ class Authenticator {
 
 private extension Authenticator {
 
-    func login(url: NSURL) {
+    func login(_ url: URL) {
         firstly {
             decodeRequestTokenFromCallback(url)
         }.then { requestToken in
@@ -80,51 +80,51 @@ private extension Authenticator {
         }.then { user in
             self.persistUser(user)
         }.then { () -> Void in
-            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.LoginSucceeded)
+            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.loginSucceeded)
             self.success()
-        }.error { error in
-            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.LoginFailed)
+        }.catch { error in
+            AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.loginFailed)
             self.failure(error)
         }
     }
 
-    func decodeRequestTokenFromCallback(url: NSURL) -> Promise<String> {
+    func decodeRequestTokenFromCallback(_ url: URL) -> Promise<String> {
         return Promise { fulfill, reject in
             var code: String?
-            let components = url.query?.componentsSeparatedByString("&")
+            let components = url.query?.components(separatedBy: "&")
             if let components = components {
                 for component in components {
-                    if component.rangeOfString("code=") != nil {
-                        code = component.componentsSeparatedByString("=").last
+                    if component.range(of: "code=") != nil {
+                        code = component.components(separatedBy: "=").last
                     }
                 }
-                code != nil ? fulfill(code!) : reject(AuthenticatorError.AuthTokenMissing)
+                code != nil ? fulfill(code!) : reject(AuthenticatorError.authTokenMissing as Error)
             } else {
-                reject(AuthenticatorError.AuthTokenMissing)
+                reject(AuthenticatorError.authTokenMissing as Error)
             }
         }
     }
 
-    func gainAccessTokenWithRequestToken(token: String) -> Promise<String> {
+    func gainAccessTokenWithRequestToken(_ token: String) -> Promise<String> {
         return Promise<String> { fulfill, reject in
 
             guard let request = self.networkService?.accessTokenURLRequestWithRequestToken(token) else {
-                return reject(AuthenticatorError.AuthTokenMissing)
+                return reject(AuthenticatorError.authTokenMissing as Error)
             }
 
             firstly {
-                return NSURLSession.POST(request.URL!.absoluteString)
+                return URLSession.shared.dataTask(with: request)
             }.then { data -> Void in
-                guard let json = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) else {
-                    throw AuthenticatorError.DataDecodingFailure
+                guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, Any> else {
+                    throw AuthenticatorError.dataDecodingFailure
                 }
 
-                guard let accessToken = json["access_token"] as? String else {
-                    throw AuthenticatorError.AccessTokenMissing
+                guard let accessToken = json?["access_token"] as? String else {
+                    throw AuthenticatorError.accessTokenMissing
                 }
                 fulfill(accessToken)
 
-            }.error { error in
+            }.catch { error in
                 reject(error)
             }
         }
@@ -140,21 +140,21 @@ private extension Authenticator {
                 request.resume()
             }.then { json -> Void in
                 guard let json = json else {
-                    throw AuthenticatorError.UnableToFetchUser
+                    throw AuthenticatorError.unableToFetchUser
                 }
                 fulfill(User.map(json))
 
-            }.error { error in
+            }.catch { error in
                 reject(error)
             }
         }
     }
 
-    func persistToken(token: String) {
+    func persistToken(_ token: String) {
         TokenStorage.storeToken(token)
     }
 
-    func persistUser(user: User) {
+    func persistUser(_ user: User) {
         UserStorage.storeUser(user)
         UserStorage.clearGuestUser()
     }

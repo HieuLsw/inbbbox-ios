@@ -53,7 +53,7 @@ class ShotsProviderSpec: QuickSpec {
                     let managedShotsProviderMock = ManagedShotsProviderMock()
                     let managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: inMemoryManagedObjectContext)
                     let managedShot = managedObjectsProvider.managedShot(Shot.fixtureShotWithIdentifier("fixture managed shot identifier"))
-                    managedShotsProviderMock.provideMyLikedShotsStub.on(any(), returnValue: Promise<[ShotType]?> { fulfill, _ in fulfill([managedShot]) })
+                    managedShotsProviderMock.provideMyLikedShotsStub.on(any(), return: Promise<[ShotType]?> { fulfill, _ in fulfill([managedShot]) })
                     sut.managedShotsProvider = managedShotsProviderMock
 
                     firstly {
@@ -74,12 +74,12 @@ class ShotsProviderSpec: QuickSpec {
 
                 beforeEach {
                     let userStorageClassMock = UserStorageMock.self
-                    userStorageClassMock.userIsSignedInStub.on(any(), returnValue: true)
+                    userStorageClassMock.userIsSignedInStub.on(any(), return: true)
                     sut.userStorageClass = userStorageClassMock
 
                     let apiShotsProviderMock = APIShotsProviderMock()
                     let apiShot = Shot.fixtureShotWithIdentifier("fixture api shot identifier")
-                    apiShotsProviderMock.provideMyLikedShotsStub.on(any(), returnValue: Promise<[ShotType]?> { fulfill, _ in fulfill([apiShot]) })
+                    apiShotsProviderMock.provideMyLikedShotsStub.on(any(), return: Promise<[ShotType]?> { fulfill, _ in fulfill([apiShot]) })
                     sut.apiShotsProvider = apiShotsProviderMock
 
                     firstly {

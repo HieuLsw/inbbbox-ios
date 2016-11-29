@@ -14,17 +14,17 @@ protocol ModalByDraggingClosable {
 
 class CustomTransitions {
 
-    class func pullDownToCloseTransitionForModalViewController<T: UIViewController
-            where T: ModalByDraggingClosable>(modalViewController: T) -> ZFModalTransitionAnimator {
+    class func pullDownToCloseTransitionForModalViewController<T: UIViewController>(_ modalViewController: T) -> ZFModalTransitionAnimator
+            where T: ModalByDraggingClosable {
 
         let modalTransitionAnimator =
                 ZFModalTransitionAnimator(modalViewController: modalViewController)
-        modalTransitionAnimator.dragable = true
-        modalTransitionAnimator.direction = ZFModalTransitonDirection.Bottom
-        modalTransitionAnimator.setContentScrollView(modalViewController.scrollViewToObserve)
-        modalTransitionAnimator.bounces = false
-        modalTransitionAnimator.transitionDuration = 0.4
+        modalTransitionAnimator?.isDragable = true
+        modalTransitionAnimator?.direction = ZFModalTransitonDirection.bottom
+        modalTransitionAnimator?.setContentScrollView(modalViewController.scrollViewToObserve)
+        modalTransitionAnimator?.bounces = false
+        modalTransitionAnimator?.transitionDuration = 0.4
 
-        return modalTransitionAnimator
+        return modalTransitionAnimator!
     }
 }

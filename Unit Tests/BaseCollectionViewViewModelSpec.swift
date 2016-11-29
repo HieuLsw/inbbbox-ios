@@ -29,19 +29,19 @@ class BaseCollectionViewViewModelSpec: QuickSpec {
             }
 
             it("should be able to call delegate for PageableProviderError errors") {
-                sut.mockDownloadItemsFailure(PageableProviderError.BehaviourUndefined)
+                sut.mockDownloadItemsFailure(PageableProviderError.behaviourUndefined)
 
                 expect(fakeDelegate.didCallDelegate).toEventually(beTrue())
             }
 
             it("should not be able to call delegate if error = DidReachLastPage") {
-                sut.mockDownloadItemsFailure(PageableProviderError.DidReachLastPage)
+                sut.mockDownloadItemsFailure(PageableProviderError.didReachLastPage)
 
                 expect(fakeDelegate.didCallDelegate).toEventually(beFalse())
             }
 
             it("should be able to call delegate for other errors") {
-                sut.mockDownloadItemsFailure(APIRateLimitKeeperError.DidExceedRateLimitPerDay(1))
+                sut.mockDownloadItemsFailure(APIRateLimitKeeperError.didExceedRateLimitPerDay(1))
 
                 expect(fakeDelegate.didCallDelegate).toEventually(beTrue())
             }
@@ -52,7 +52,7 @@ class BaseCollectionViewViewModelSpec: QuickSpec {
 class ViewModelDelegate: BaseCollectionViewViewModelDelegate {
     var didCallDelegate = false
 
-    func viewModelDidFailToLoadItems(error: ErrorType) {
+    func viewModelDidFailToLoadItems(_ error: Error) {
         self.didCallDelegate = true
     }
 
@@ -60,15 +60,15 @@ class ViewModelDelegate: BaseCollectionViewViewModelDelegate {
         // Just conforming to protocol
     }
 
-    func viewModelDidFailToLoadInitialItems(error: ErrorType) {
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
         // Just conforming to protocol
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
         // Just conforming to protocol
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
         // Just conforming to protocol
     }
 }
@@ -78,7 +78,7 @@ class ViewModelDelegate: BaseCollectionViewViewModelDelegate {
 
 private class ViewModelMock: LikesViewModel {
 
-    func mockDownloadItemsFailure(error: ErrorType) {
+    func mockDownloadItemsFailure(_ error: Error) {
         notifyDelegateAboutFailure(error)
     }
 }

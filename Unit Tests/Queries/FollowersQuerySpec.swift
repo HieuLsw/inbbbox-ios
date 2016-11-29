@@ -26,7 +26,7 @@ class FollowersQuerySpec: QuickSpec {
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 return FollowersQuery()
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/user/followers")
+                return (method: .GET, encoding: .url, path: "/user/followers")
             }
             
             beforeEach {
@@ -43,7 +43,7 @@ class FollowersQuerySpec: QuickSpec {
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 return FollowersQuery(followersOfUser: self.fixtureUser)
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/users/fixture.username/followers")
+                return (method: .GET, encoding: .url, path: "/users/fixture.username/followers")
             }
             
             beforeEach {

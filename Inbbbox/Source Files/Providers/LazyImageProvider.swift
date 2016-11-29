@@ -17,10 +17,10 @@ final class LazyImageProvider {
     /// - parameter teaserImageCompletion: Completion called after downloading teaser image.
     /// - parameter normalImageCompletion: Optional completion called after downloading normal image.
     /// - parameter hidpiImageCompletion:  Optional completion called after downloading hidpi image.
-    class func lazyLoadImageFromURLs(urls: (teaserURL: NSURL, normalURL: NSURL?, hidpiURL: NSURL?),
-                                     teaserImageCompletion: UIImage -> Void,
-                                     normalImageCompletion: (UIImage -> Void)? = nil,
-                                     hidpiImageCompletion: (UIImage -> Void)? = nil) {
+    class func lazyLoadImageFromURLs(_ urls: (teaserURL: URL, normalURL: URL?, hidpiURL: URL?),
+                                     teaserImageCompletion: @escaping (UIImage) -> Void,
+                                     normalImageCompletion: ((UIImage) -> Void)? = nil,
+                                     hidpiImageCompletion: ((UIImage) -> Void)? = nil) {
         
         firstly {
             loadImageFromURL(urls.teaserURL)
@@ -46,9 +46,9 @@ final class LazyImageProvider {
 
 private extension LazyImageProvider {
 
-    class func loadImageFromURL(url: NSURL?) -> Promise<UIImage?> {
+    class func loadImageFromURL(_ url: URL?) -> Promise<UIImage?> {
 
-        guard let url = url else { return Promise<UIImage?>(nil) }
+        guard let url = url else { return Promise<UIImage?>(value: nil) }
 
         return Promise<UIImage?> { fulfill, reject in
             Shared.imageCache.fetch(

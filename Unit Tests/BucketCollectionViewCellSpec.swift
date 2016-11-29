@@ -22,11 +22,11 @@ class BucketCollectionViewCellSpec: QuickSpec {
                 var reuseIdentifier: String?
                 
                 beforeEach {
-                    reuseIdentifier = BucketCollectionViewCell.reuseIdentifier
+                    reuseIdentifier = BucketCollectionViewCell.identifier
                 }
                 
                 it("should have proper reuse identifier") {
-                    expect(reuseIdentifier).to(equal("BucketCollectionViewCellIdentifier"))
+                    expect(reuseIdentifier).to(equal("BucketCollectionViewCell.Type"))
                 }
             }
         }

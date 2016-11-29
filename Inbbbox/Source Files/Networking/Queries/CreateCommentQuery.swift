@@ -12,7 +12,7 @@ struct CreateCommentQuery: Query {
 
     let method = Method.POST
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for posting comment.
     ///
@@ -20,6 +20,6 @@ struct CreateCommentQuery: Query {
     /// - parameter body: Comment's body.
     init(shot: ShotType, body: String) {
         path = "/shots/" + shot.identifier + "/comments"
-        parameters["body"] = body
+        parameters["body"] = body as AnyObject?
     }
 }

@@ -15,17 +15,17 @@ struct Dribbble {
      /// `ClientID` is used to communicate with dribbble API.
      /// Value is set during project setup, after typing `pod install`,
      /// then securely stored in OSX Keychain.
-    static let ClientID: String = SecretKeysProvider.secretValueForKey("ClientID")!
+    static let ClientID: String = SecretKeysProvider.secretValue(forKey: "ClientID")!
 
     /// `ClientSecret` is used to communicate with dribbble API.
     /// Value is set during project setup, after typing `pod install`,
     /// then securely stored in OSX Keychain.
-    static let ClientSecret: String = SecretKeysProvider.secretValueForKey("ClientSecret")!
+    static let ClientSecret: String = SecretKeysProvider.secretValue(forKey: "ClientSecret")!
 
      /// `ClientAccessToken` is used to communicate with dribbble API.
      /// Value is set during project setup, after typing `pod install`,
      /// then securely stored in OSX Keychain.
-    static let ClientAccessToken: String = SecretKeysProvider.secretValueForKey("ClientAccessToken")!
+    static let ClientAccessToken: String = SecretKeysProvider.secretValue(forKey: "ClientAccessToken")!
     static let CallbackURLString = "inbbbox://oauth"
 
     static let RequestTokenURLString = "https://dribbble.com/oauth/authorize"
@@ -47,7 +47,7 @@ struct Dribbble {
             return trackingId
         }
 #else
-        if let trackingId = SecretKeysProvider.secretValueForKey("StagingGATrackingId") {
+        if let trackingId = SecretKeysProvider.secretValue(forKey: "StagingGATrackingId") {
             return trackingId
         }
 #endif
@@ -60,7 +60,7 @@ struct Dribbble {
             return identifier
         }
 #else
-        if let identifier = SecretKeysProvider.secretValueForKey("HockeySDKStaging") {
+        if let identifier = SecretKeysProvider.secretValue(forKey: "HockeySDKStaging") {
             return identifier
         }
 #endif

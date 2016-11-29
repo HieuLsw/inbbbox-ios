@@ -9,5 +9,5 @@
 import Foundation
 
 protocol SafariAuthorizable {
-    func handleOpenURL(url: NSURL)
+    func handleOpenURL(_ url: URL)
 }

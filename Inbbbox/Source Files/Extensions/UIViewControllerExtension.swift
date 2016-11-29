@@ -15,11 +15,11 @@ extension UIViewController {
     /// - parameter viewType: Type of UIView to be loaded.
     ///
     /// - returns: View based on given class.
-    func loadViewWithClass<T: UIView>(viewType: T.Type) -> T {
+    func loadViewWithClass<T: UIView>(_ viewType: T.Type) -> T {
 
-        view = T(frame: UIScreen.mainScreen().bounds)
-        view.autoresizingMask = [.FlexibleRightMargin, .FlexibleLeftMargin,
-                                 .FlexibleBottomMargin, .FlexibleTopMargin]
+        view = T(frame: UIScreen.main.bounds)
+        view.autoresizingMask = [.flexibleRightMargin, .flexibleLeftMargin,
+                                 .flexibleBottomMargin, .flexibleTopMargin]
         return (view as? T)!
     }
 }
@@ -33,10 +33,10 @@ extension UIViewController {
     /// - parameter view: UIView to be registered as a source
     ///
     /// - returns: Boolean value which describes if a registration succeeded
-    func registerTo3DTouch(view: UIView) -> Bool {
-        if traitCollection.forceTouchCapability == .Available {
+    func registerTo3DTouch(_ view: UIView) -> Bool {
+        if traitCollection.forceTouchCapability == .available {
             if let previewingSelf = self as? UIViewControllerPreviewingDelegate {
-                registerForPreviewingWithDelegate(previewingSelf, sourceView: view)
+                registerForPreviewing(with: previewingSelf, sourceView: view)
                 return true
             }
         }

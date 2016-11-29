@@ -14,12 +14,12 @@ import MessageUI
 
 class SettingsViewController: UITableViewController {
 
-    private var viewModel: SettingsViewModel!
-    private var authenticator: Authenticator?
-    private var currentColorMode =  ColorModeProvider.current()
+    fileprivate var viewModel: SettingsViewModel!
+    fileprivate var authenticator: Authenticator?
+    fileprivate var currentColorMode =  ColorModeProvider.current()
     
     convenience init() {
-        self.init(style: UITableViewStyle.Grouped)
+        self.init(style: UITableViewStyle.grouped)
         viewModel = SettingsViewModel(delegate: self)
         viewModel.settingsViewController = self
         title = viewModel.title
@@ -39,15 +39,15 @@ class SettingsViewController: UITableViewController {
         provideDataForHeader()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshViewAccordingToAuthenticationStatus()
         viewModel.updateStatus()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AnalyticsManager.trackScreen(.SettingsView)
+        AnalyticsManager.trackScreen(.settingsView)
     }
 }
 
@@ -55,9 +55,9 @@ class SettingsViewController: UITableViewController {
 
 extension SettingsViewController: ModelUpdatable {
 
-    func didChangeItemsAtIndexPaths(indexPaths: [NSIndexPath]) {
+    func didChangeItemsAtIndexPaths(_ indexPaths: [IndexPath]) {
         indexPaths.forEach {
-            if let cell = tableView?.cellForRowAtIndexPath($0) {
+            if let cell = tableView?.cellForRow(at: $0) {
                 let item = viewModel[$0.section][$0.row]
                 configureSettingCell(cell, forItem: item)
             }
@@ -67,13 +67,13 @@ extension SettingsViewController: ModelUpdatable {
 
 extension SettingsViewController: AlertDisplayable {
 
-    func displayAlert(alert: AOAlertController) {
-        tabBarController?.presentViewController(alert, animated: true, completion: nil)
+    func displayAlert(_ alert: AOAlertController) {
+        tabBarController?.present(alert, animated: true, completion: nil)
     }
 }
 
 extension SettingsViewController: FlashMessageDisplayable {
-    func displayFlashMessage(model: FlashMessageViewModel) {
+    func displayFlashMessage(_ model: FlashMessageViewModel) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true)
     }
 }
@@ -82,15 +82,15 @@ extension SettingsViewController: FlashMessageDisplayable {
 
 extension SettingsViewController {
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.sectionsCount()
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel[section].count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel[indexPath.section][indexPath.row]
         let cell = tableView.cellForItemCategory(item.category)
 
@@ -104,31 +104,31 @@ extension SettingsViewController {
 
 extension SettingsViewController {
 
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell,
-                            forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,
+                            forRowAt indexPath: IndexPath) {
         let item = viewModel[indexPath.section][indexPath.row]
 
-        if let item = item as? SwitchItem, cell = cell as? SwitchCell {
+        if let item = item as? SwitchItem, let cell = cell as? SwitchCell {
             item.bindSwitchControl(cell.switchControl)
         }
     }
 
-    override func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell,
-                            forRowAtIndexPath indexPath: NSIndexPath) {
-        let cellIndexPath = tableView.indexPathForCell(cell) ?? indexPath
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
+                            forRowAt indexPath: IndexPath) {
+        let cellIndexPath = tableView.indexPath(for: cell) ?? indexPath
         let section = cellIndexPath.section
         let row = cellIndexPath.row
         if section < viewModel.sectionsCount() && row < viewModel[section].count {
             let item = viewModel[section][row]
 
-            if let item = item as? SwitchItem where cell is SwitchCell {
+            if let item = item as? SwitchItem, cell is SwitchCell {
                 item.unbindSwitchControl()
             }
         }
 
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
         let notificationsTitle = NSLocalizedString("SettingsViewController.Notifications",
                                                    comment: "Title of group of buttons for notifications settings")
@@ -140,22 +140,22 @@ extension SettingsViewController {
                                                    comment: "Title of group of buttons for sending feedback")
 
         switch section {
-            case 0: return viewModel.userMode == .LoggedUser ? notificationsTitle : nil
-            case 1: return viewModel.userMode == .LoggedUser ? streamSourcesTitle : notificationsTitle
-            case 2: return viewModel.userMode == .LoggedUser ? customizationTitle : streamSourcesTitle
-            case 3: return viewModel.userMode == .LoggedUser ? feedbackTitle : customizationTitle
-            case 4: return viewModel.userMode == .LoggedUser ? nil : feedbackTitle
+            case 0: return viewModel.userMode == .loggedUser ? notificationsTitle : nil
+            case 1: return viewModel.userMode == .loggedUser ? streamSourcesTitle : notificationsTitle
+            case 2: return viewModel.userMode == .loggedUser ? customizationTitle : streamSourcesTitle
+            case 3: return viewModel.userMode == .loggedUser ? feedbackTitle : customizationTitle
+            case 4: return viewModel.userMode == .loggedUser ? nil : feedbackTitle
             default: return nil
         }
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         let item = viewModel[indexPath.section][indexPath.row]
 
         if let item = item as? DateItem {
 
-            let completion: (NSDate -> Void) = { date in
+            let completion: ((Date) -> Void) = { date in
                 item.date = date
                 item.update()
                 self.didChangeItemsAtIndexPaths([indexPath])
@@ -175,30 +175,30 @@ extension SettingsViewController {
 
 private extension SettingsViewController {
 
-    func configureSettingCell(cell: UITableViewCell, forItem item: GroupItem) {
-        if let item = item as? SwitchItem, switchCell = cell as? SwitchCell {
+    func configureSettingCell(_ cell: UITableViewCell, forItem item: GroupItem) {
+        if let item = item as? SwitchItem, let switchCell = cell as? SwitchCell {
             configureSwitchCell(switchCell, forItem: item, withMode: currentColorMode)
-        } else if let item = item as? DateItem, dateCell = cell as? DateCell {
+        } else if let item = item as? DateItem, let dateCell = cell as? DateCell {
             configureDateCell(dateCell, forItem: item, withMode: currentColorMode)
-        } else if let item = item as? LabelItem, labelCell = cell as? LabelCell {
+        } else if let item = item as? LabelItem, let labelCell = cell as? LabelCell {
             configureLabelCell(labelCell, forItem: item, withMode: currentColorMode)
         }
     }
 
-    func configureSwitchCell(cell: SwitchCell, forItem item: SwitchItem, withMode mode:ColorModeType) {
+    func configureSwitchCell(_ cell: SwitchCell, forItem item: SwitchItem, withMode mode:ColorModeType) {
         cell.titleLabel.text = item.title
-        cell.switchControl.on = item.enabled
-        cell.selectionStyle = .None
+        cell.switchControl.isOn = item.enabled
+        cell.selectionStyle = .none
         cell.adaptColorMode(mode)
     }
 
-    func configureDateCell(cell: DateCell, forItem item: DateItem, withMode mode:ColorModeType) {
+    func configureDateCell(_ cell: DateCell, forItem item: DateItem, withMode mode:ColorModeType) {
         cell.titleLabel.text = item.title
         cell.setDateText(item.dateString)
         cell.adaptColorMode(mode)
     }
 
-    func configureLabelCell(cell: LabelCell, forItem item: LabelItem, withMode mode: ColorModeType) {
+    func configureLabelCell(_ cell: LabelCell, forItem item: LabelItem, withMode mode: ColorModeType) {
         cell.titleLabel.text = item.title
         cell.titleLabel.adjustsFontSizeToFitWidth = true
         cell.adaptColorMode(mode)
@@ -213,7 +213,7 @@ private extension SettingsViewController {
     func configureLogoutButton() {
         navigationItem.rightBarButtonItem = viewModel.loggedInUser != nil ? UIBarButtonItem(
             title: NSLocalizedString("SettingsViewController.LogOut", comment: "Log out button"),
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(didTapLogOutButton(_:))
         ) : nil
@@ -230,9 +230,9 @@ private extension SettingsViewController {
             header.usernameLabel.text = NSLocalizedString("SettingsViewController.Guest",
                     comment: "Is user a guest without account?")
         }
-        var avatarUrl: NSURL? = nil
-        if let url = viewModel.loggedInUser?.avatarURL where !url.absoluteString.containsString("avatar-default-") {
-            avatarUrl = url
+        var avatarUrl: URL? = nil
+        if let url = viewModel.loggedInUser?.avatarURL, !(url.absoluteString.contains("avatar-default-")) {
+            avatarUrl = url as URL
         }
         header.avatarView.imageView.loadImageFromURL(avatarUrl,
                 placeholderImage: UIImage(named: "ic-guest-avatar"))
@@ -242,7 +242,7 @@ private extension SettingsViewController {
 // MARK: SafariAuthorizable
 
 extension SettingsViewController: SafariAuthorizable {
-    func handleOpenURL(url: NSURL) {
+    func handleOpenURL(_ url: URL) {
         authenticator?.loginWithOAuthURLCallback(url)
     }
 }
@@ -252,20 +252,20 @@ extension SettingsViewController: SafariAuthorizable {
 extension SettingsViewController {
 
     func authenticateUser() {
-        let interactionHandler: (SFSafariViewController -> Void) = { controller in
-            self.presentViewController(controller, animated: true, completion: nil)
+        let interactionHandler: ((SFSafariViewController) -> Void) = { controller in
+            self.present(controller, animated: true, completion: nil)
         }
 
-        let success: (Void -> Void) = {
-            self.dismissViewControllerAnimated(true, completion: nil)
+        let success: ((Void) -> Void) = {
+            self.dismiss(animated: true, completion: nil)
             self.refreshViewAccordingToAuthenticationStatus()
         }
 
-        let failure: (ErrorType -> Void) = { error in
-            self.dismissViewControllerAnimated(true, completion: nil)
+        let failure: ((Error) -> Void) = { error in
+            self.dismiss(animated: true, completion: nil)
         }
 
-        authenticator = Authenticator(service: .Dribbble,
+        authenticator = Authenticator(service: .dribbble,
                                       interactionHandler: interactionHandler,
                                       success: success,
                                       failure: failure)
@@ -273,7 +273,7 @@ extension SettingsViewController {
     }
 
     func refreshViewAccordingToAuthenticationStatus() {
-        let userMode = UserStorage.isUserSignedIn ? UserMode.LoggedUser : .DemoUser
+        let userMode = UserStorage.isUserSignedIn ? UserMode.loggedUser : .demoUser
         if userMode != viewModel.userMode {
             viewModel = SettingsViewModel(delegate: self)
             viewModel.settingsViewController = self
@@ -290,14 +290,14 @@ extension SettingsViewController {
 
     func didTapLogOutButton(_: UIBarButtonItem) {
         Authenticator.logout()
-        let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        let delegate = UIApplication.shared.delegate as? AppDelegate
         delegate?.rollbackToLoginViewController()
     }
 
     func presentAcknowledgements() {
         let acknowledgementsNavigationController =
         UINavigationController(rootViewController: AcknowledgementsViewController())
-        presentViewController(acknowledgementsNavigationController, animated: true, completion: nil)
+        present(acknowledgementsNavigationController, animated: true, completion: nil)
     }
 }
 
@@ -305,9 +305,9 @@ extension SettingsViewController {
 
 extension SettingsViewController: MFMailComposeViewControllerDelegate {
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        controller.dismissViewControllerAnimated(true) { [unowned self] in
-            if (result == MFMailComposeResultSent) {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true) { [unowned self] in
+            if (result == MFMailComposeResult.sent) {
                 let message = FlashMessageViewModel(title: NSLocalizedString("SettingsViewModel.FeedbackSent", comment: "User Settings, feedback sent."))
                 self.displayFlashMessage(message)
             }
@@ -317,24 +317,24 @@ extension SettingsViewController: MFMailComposeViewControllerDelegate {
 
 private extension UITableView {
 
-    func cellForItemCategory(category: GroupItem.Category) -> UITableViewCell {
+    func cellForItemCategory(_ category: GroupItem.Category) -> UITableViewCell {
 
         switch category {
-            case .Date: return dequeueReusableCell(DateCell)
-            case .Boolean: return dequeueReusableCell(SwitchCell)
-            case .String: return dequeueReusableCell(LabelCell)
+            case .date: return dequeueReusableCell(DateCell)
+            case .boolean: return dequeueReusableCell(SwitchCell)
+            case .string: return dequeueReusableCell(LabelCell)
         }
     }
 }
 
 extension SettingsViewController: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         currentColorMode = mode
         tableView.reloadData()
         updateUsernameColorForMode(mode)
     }
     
-    private func updateUsernameColorForMode(mode: ColorModeType) {
+    fileprivate func updateUsernameColorForMode(_ mode: ColorModeType) {
         guard let header = tableView?.tableHeaderView as? SettingsTableHeaderView else {
             return
         }

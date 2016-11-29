@@ -18,7 +18,7 @@ struct HTTPHeader {
 
 /// Use this protocol to authorize with header
 protocol HeaderAuthorizable {
-    func authorizationHeader(token: String) -> HTTPHeader
+    func authorizationHeader(_ token: String) -> HTTPHeader
 }
 
 extension HeaderAuthorizable {
@@ -28,7 +28,7 @@ extension HeaderAuthorizable {
     /// - parameter token: Token used to authorize request.
     ///
     /// - returns: Header that should be attached to authorized request.
-    func authorizationHeader(token: String) -> HTTPHeader {
+    func authorizationHeader(_ token: String) -> HTTPHeader {
         return HTTPHeader(name: "Authorization", value: "Bearer " + token)
     }
 }

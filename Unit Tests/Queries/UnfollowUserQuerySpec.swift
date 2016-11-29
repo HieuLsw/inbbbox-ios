@@ -18,7 +18,7 @@ class UnfollowUserQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return UnfollowUserQuery(user: User.fixtureUser())
         }) { Void -> QueryExpectation in
-            return (method: .DELETE, encoding: .URL, path: "/users/fixture.identifier/follow")
+            return (method: .DELETE, encoding: .url, path: "/users/fixture.identifier/follow")
         }
         
         describe("when newly initialized with user") {

@@ -10,25 +10,25 @@ import UIKit
 
 class DatePickerViewController: UIViewController {
 
-    private weak var aView: DatePickerView?
-    private var initialDate: NSDate!
+    fileprivate weak var aView: DatePickerView?
+    fileprivate var initialDate: Date!
 
-    private var completion: NSDate -> Void
+    fileprivate var completion: (Date) -> Void
 
-    init(date: NSDate, completion: NSDate -> Void) {
+    init(date: Date, completion: @escaping (Date) -> Void) {
         initialDate = date
         self.completion = completion
 
         super.init(nibName: nil, bundle: nil)
     }
 
-    @available(*, unavailable, message="Use init(date:completion:) method instead")
+    @available(*, unavailable, message: "Use init(date:completion:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @available(*, unavailable, message="Use init(date:completion:) instead")
-    override init(nibName: String?, bundle: NSBundle?) {
+    @available(*, unavailable, message: "Use init(date:completion:) instead")
+    override init(nibName: String?, bundle: Bundle?) {
         fatalError("init(nibName:bundle:) has not been implemented")
     }
 
@@ -42,14 +42,14 @@ class DatePickerViewController: UIViewController {
         title = NSLocalizedString("DatePickerViewController.SetReminder",
                 comment: "Button title when users accepts selected date for reminder.")
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,
                 target: self, action: #selector(didTapSaveButton(_:)))
 
         aView?.datePicker.date = initialDate
     }
 
-    func didTapSaveButton(sender: UIBarButtonItem) {
+    func didTapSaveButton(_ sender: UIBarButtonItem) {
         completion(aView!.datePicker.date)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
 }

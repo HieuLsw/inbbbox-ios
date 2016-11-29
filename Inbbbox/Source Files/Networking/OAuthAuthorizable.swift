@@ -21,78 +21,78 @@ protocol OAuthAuthorizable {
     /// Provide `NSURLRequest` that should be used to receive token from API.
     ///
     /// - returns: Request needed to get token.
-    func requestTokenURLRequest() -> NSURLRequest
+    func requestTokenURLRequest() -> URLRequest
 
     /// Provide `NSURLRequest` that should be used to receive access token from API based on request token.
     ///
     /// - parameter token: Request token.
     ///
     /// - returns: Request needed to get access token.
-    func accessTokenURLRequestWithRequestToken(token: String) -> NSURLRequest
+    func accessTokenURLRequestWithRequestToken(_ token: String) -> URLRequest
 
     /// Check if URL is redirection URL.
     ///
     /// - parameter url: URL to check.
     ///
     /// - returns: `true` if given URL is redirection URL, `false` otherwise.
-    func isRedirectionURL(url: NSURL?) -> Bool
+    func isRedirectionURL(_ url: URL?) -> Bool
 
     /// Check if URL is silent authentication URL.
     ///
     /// - parameter url: URL to check.
     ///
     /// - returns: `true` if given URL is silent authentication URL, `false` otherwise.
-    func isSilentAuthenticationURL(url: NSURL?) -> Bool
+    func isSilentAuthenticationURL(_ url: URL?) -> Bool
 }
 
 extension OAuthAuthorizable {
 
-    func requestTokenURLRequest() -> NSURLRequest {
+    func requestTokenURLRequest() -> URLRequest {
 
-        var parameters = Parameters(encoding: .URL)
-        parameters["client_id"] = clientID
-        parameters["redirect_uri"] = redirectURI
-        parameters["scope"] = scope
+        var parameters = Parameters(encoding: .url)
+        parameters["client_id"] = clientID as AnyObject?
+        parameters["redirect_uri"] = redirectURI as AnyObject?
+        parameters["scope"] = scope as AnyObject?
 
         return requestForURLString(requestTokenURLString, HTTPMethod: .GET, parameters: parameters)
     }
 
-    func accessTokenURLRequestWithRequestToken(token: String) -> NSURLRequest {
+    func accessTokenURLRequestWithRequestToken(_ token: String) -> URLRequest {
 
-        var parameters = Parameters(encoding: .URL)
-        parameters["client_id"] = clientID
-        parameters["client_secret"] = clientSecret
-        parameters["redirect_uri"] = redirectURI
-        parameters["code"] = token
+        var parameters = Parameters(encoding: .url)
+        parameters["client_id"] = clientID as AnyObject?
+        parameters["client_secret"] = clientSecret as AnyObject?
+        parameters["redirect_uri"] = redirectURI as AnyObject?
+        parameters["code"] = token as AnyObject?
 
         return requestForURLString(accessTokenURLString, HTTPMethod: .POST, parameters: parameters)
     }
 
-    func isRedirectionURL(url: NSURL?) -> Bool {
+    func isRedirectionURL(_ url: URL?) -> Bool {
 
-        if let url = url, host = url.host {
-            return redirectURI == (url.scheme + "://" + host)
+        if let url = url, let host = url.host {
+            return redirectURI == (url.scheme! + "://" + host)
         }
         return false
     }
 
-    func isSilentAuthenticationURL(url: NSURL?) -> Bool {
-        return !(url != nil && url!.absoluteString.containsString("login?"))
+    func isSilentAuthenticationURL(_ url: URL?) -> Bool {
+        return !(url != nil && url!.absoluteString.contains("login?"))
     }
 }
 
 private extension OAuthAuthorizable {
 
-    func requestForURLString(url: String, HTTPMethod: Method, parameters: Parameters) -> NSURLRequest {
+    func requestForURLString(_ url: String, HTTPMethod: Method, parameters: Parameters) -> URLRequest {
 
-        let components = NSURLComponents(string: url)
-        components?.queryItems = parameters.queryItems
+        var components = URLComponents(string: url)
+        components?.queryItems = parameters.queryItems as [URLQueryItem]?
 
-        let mutableRequest = NSMutableURLRequest(URL: components!.URL!)
-        mutableRequest.HTTPMethod = HTTPMethod.rawValue
+        let mutableRequest = NSMutableURLRequest(url: components!.url!)
+        mutableRequest.httpMethod = HTTPMethod.rawValue
 
-        guard let immutableRequest = mutableRequest.copy() as? NSURLRequest else {
-            return NSURLRequest()
+        guard let immutableRequest = mutableRequest.copy() as? URLRequest else {
+            return URLRequest(url: components!.url!)
         }
         return immutableRequest
     }

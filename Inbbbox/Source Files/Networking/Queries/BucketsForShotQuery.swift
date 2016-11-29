@@ -12,7 +12,7 @@ struct BucketsForShotQuery: Query {
 
     let method = Method.GET
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for list of buckets that contain given shot.
     ///

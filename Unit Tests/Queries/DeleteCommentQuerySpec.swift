@@ -18,7 +18,7 @@ class DeleteCommentQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return DeleteCommentQuery(shot: Shot.fixtureShot(), comment:  Comment.fixtureComment())
         }) { Void -> QueryExpectation in
-            return (method: .DELETE, encoding: .URL, path: "/shots/fixture.identifier/comments/fixture.identifier")
+            return (method: .DELETE, encoding: .url, path: "/shots/fixture.identifier/comments/fixture.identifier")
         }
         
         describe("when newly initialized with comment") {

@@ -17,11 +17,11 @@ struct NightMode: ColorModeType {
 
     // MARK: Tab Bar
     var tabBarTint: UIColor {
-        return .blackColor()
+        return .black
     }
     
     var tabBarNormalItemTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var tabBarSelectedItemTextColor: UIColor {
@@ -29,7 +29,7 @@ struct NightMode: ColorModeType {
     }
     
     var tabBarCenterButtonBackground: UIColor {
-        return .blackColor()
+        return .black
     }
     
     var tabBarCenterButtonShadowOffset: CGSize {
@@ -78,7 +78,7 @@ struct NightMode: ColorModeType {
 
     // MARK: Navigation Bar
     var navigationBarTint: UIColor {
-        return .blackColor()
+        return .black
     }
 
     // MARK: Shots Collection
@@ -106,12 +106,12 @@ struct NightMode: ColorModeType {
     }
     
     var tableViewCellTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     // MARK: Swich Cell
     var switchCellTintColor: UIColor {
-        return .blackColor()
+        return .black
     }
 
     var shotBucketsAddCollectionViewCellBackground: UIColor {
@@ -155,7 +155,7 @@ struct NightMode: ColorModeType {
     }
 
     var profileHeaderViewBackground: UIColor {
-        return .blackColor()
+        return .black
     }
 
     // MARK: TwoLayout Collection View Controller
@@ -165,7 +165,7 @@ struct NightMode: ColorModeType {
     
     // MARK: Shot Detail
     var shotDetailsHeaderViewTitleLabelTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDummySpaceBackground: UIColor {
@@ -173,7 +173,7 @@ struct NightMode: ColorModeType {
     }
     
     var shotDetailsHeaderViewOverlappingTitleLabelTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDetailsHeaderViewAuthorNotLinkColor: UIColor {
@@ -189,7 +189,7 @@ struct NightMode: ColorModeType {
     }
     
     var shotDetailsCommentAuthorTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDetailsCommentContentTextColor: UIColor {
@@ -213,7 +213,7 @@ struct NightMode: ColorModeType {
     }
     
     var shotDetailsBucketTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDetailsSeparatorColor: UIColor {
@@ -221,7 +221,7 @@ struct NightMode: ColorModeType {
     }
     
     var shotDetailsEditViewBackground: UIColor {
-        return .greenColor()
+        return .green
     }
     
     var shotBucketsActionCellBackground: UIColor {
@@ -243,7 +243,7 @@ struct NightMode: ColorModeType {
     }
     
     var datePickerTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     // MARK: Date Picker View
@@ -262,16 +262,16 @@ struct NightMode: ColorModeType {
     
     // MARK: Status Bar
     var preferredStatusBarStyle: UIStatusBarStyle {
-        return .LightContent
+        return .lightContent
     }
     
     // MARK: Comment Composer
     var commentComposerViewBackground: UIColor {
-        return .blackColor()
+        return .black
     }
     
     //MARK: Flash Message
-    var flashMessageTextColor: UIColor = .blackColor()
+    var flashMessageTextColor: UIColor = .black
     var flashMessageBackgroundColor: UIColor = DayMode().windowBackgroundColor
     
     // MARK: Common
@@ -280,18 +280,18 @@ struct NightMode: ColorModeType {
     }
     
     var cellSeparator: UIColor {
-        return .blackColor()
+        return .black
     }
     
     var activityIndicatorViewStyle: UIActivityIndicatorViewStyle {
-        return .White
+        return .white
     }
     
     var visualEffectBlurType: UIBlurEffectStyle {
-        return .Dark
+        return .dark
     }
     
-    func isEqualTo(other: ColorModeType) -> Bool {
+    func isEqualTo(_ other: ColorModeType) -> Bool {
         return other is NightMode
     }
 }

@@ -9,22 +9,22 @@
 import UIKit
 
 public enum FlashMessageNotificationPosition {
-    case Top
-    case NavigationBarOverlay
-    case Bottom
+    case top
+    case navigationBarOverlay
+    case bottom
 }
 
 public enum FlashMessageDuration  {
-    case Automatic
-    case Endless
-    case Custom(NSTimeInterval)
+    case automatic
+    case endless
+    case custom(TimeInterval)
 }
 
 public func == (a: FlashMessageDuration, b: FlashMessageDuration) -> Bool {
     switch (a, b) {
-        case (.Automatic, .Automatic): return true
-        case (.Endless, .Endless): return true
-        case (.Custom(let a), .Custom(let b)): return a == b
+        case (.automatic, .automatic): return true
+        case (.endless, .endless): return true
+        case (.custom(let a), .custom(let b)): return a == b
         default: return false
     }
 }

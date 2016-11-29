@@ -19,7 +19,7 @@ extension UIColor {
     /// - parameter alpha:  Float value of alpha. Needs to be between 0 and 1.
     ///
     /// - returns: Instance of UIColor.
-    class func RGBA(red: Int, _ green: Int, _ blue: Int, _ alpha: CGFloat) -> UIColor {
+    class func RGBA(_ red: Int, _ green: Int, _ blue: Int, _ alpha: CGFloat) -> UIColor {
         return UIColor(red: CGFloat(red) / 255.0,
                      green: CGFloat(green) / 255.0,
                       blue: CGFloat(blue) / 255.0,
@@ -38,7 +38,7 @@ extension UIColor {
     /// - parameter alpha: float value of alpha. Needs to be between 0 and 1.
     ///
     /// - returns: pink color with set level of transparency.
-    class func pinkColor(alpha alpha: CGFloat) -> UIColor {
+    class func pinkColor(alpha: CGFloat) -> UIColor {
         return RGBA(240, 55, 126, alpha)
     }
 

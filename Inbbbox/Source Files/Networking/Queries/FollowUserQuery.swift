@@ -12,7 +12,7 @@ struct FollowUserQuery: Query {
 
     let method = Method.PUT
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for following a given user.
     ///

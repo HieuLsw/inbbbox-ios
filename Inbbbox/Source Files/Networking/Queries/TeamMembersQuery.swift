@@ -12,7 +12,7 @@ struct TeamMembersQuery: Query {
 
     let method = Method.GET
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for list of given team's members.
     ///

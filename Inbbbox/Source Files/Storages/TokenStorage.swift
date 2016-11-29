@@ -11,8 +11,8 @@ import KeychainAccess
 
 final class TokenStorage {
 
-    private static let KeychainService = "co.netguru.inbbbox.keychain.token"
-    private static let keychain = Keychain(service: KeychainService)
+    fileprivate static let KeychainService = "co.netguru.inbbbox.keychain.token"
+    fileprivate static let keychain = Keychain(service: KeychainService)
 
     /// Token for currently logged in user.
     class var currentToken: String? {
@@ -22,7 +22,7 @@ final class TokenStorage {
     /// Store token for current user.
     ///
     /// - parameter token: Current user's token.
-    class func storeToken(token: String) {
+    class func storeToken(_ token: String) {
         keychain[Key.Token.rawValue] = token
     }
 
@@ -31,7 +31,7 @@ final class TokenStorage {
         keychain[Key.Token.rawValue] = nil
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Token = "co.netguru.inbbbox.keychain.token.key"
     }
 }

@@ -11,7 +11,7 @@ import Foundation
 struct PageableComponent {
 
     let path: String
-    let queryItems: [NSURLQueryItem]?
+    let queryItems: [URLQueryItem]?
 
     init(path: String, query: String?) {
         self.path = path
@@ -21,11 +21,11 @@ struct PageableComponent {
 
 private extension String {
 
-    var queryItems: [NSURLQueryItem]? {
+    var queryItems: [URLQueryItem]? {
 
-        return componentsSeparatedByString("&").map { component -> NSURLQueryItem in
-            let components = component.componentsSeparatedByString("=")
-            return NSURLQueryItem(name: components[0], value: components[1])
+        return components(separatedBy: "&").map { component -> URLQueryItem in
+            let components = component.components(separatedBy: "=")
+            return URLQueryItem(name: components[0], value: components[1])
         }
     }
 }
@@ -36,7 +36,7 @@ extension PageableComponent: CustomDebugStringConvertible {
 
         let items = queryItems?
             .map { "\($0.name)=\($0.value)" }
-            .reduce("", combine: { $0 == "" ? $1 : $0 + "&" + $1 })
+            .reduce("", { $0 == "" ? $1 : $0 + "&" + $1 })
 
         return path + "?" + (items ?? "")
     }

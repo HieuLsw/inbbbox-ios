@@ -18,7 +18,7 @@ class FollowUserQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return FollowUserQuery(user: User.fixtureUser())
         }) { Void -> QueryExpectation in
-            return (method: .PUT, encoding: .URL, path: "/users/fixture.identifier/follow")
+            return (method: .PUT, encoding: .url, path: "/users/fixture.identifier/follow")
         }
         
         describe("when newly initialized with user") {

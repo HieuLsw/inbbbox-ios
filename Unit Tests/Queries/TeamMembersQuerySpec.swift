@@ -18,7 +18,7 @@ class TeamMembersQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return TeamMembersQuery(team: Team.fixtureTeam())
         }) { Void -> QueryExpectation in
-            return (method: .GET, encoding: .URL, path: "/teams/fixture.identifier/members")
+            return (method: .GET, encoding: .url, path: "/teams/fixture.identifier/members")
         }
         
         describe("when newly initialized with team") {

@@ -15,26 +15,26 @@ class LikesViewModel: SimpleShotsViewModel {
     weak var delegate: BaseCollectionViewViewModelDelegate?
     let title = NSLocalizedString("LikesViewModel.Title", comment:"Title of Likes screen")
     var shots = [ShotType]()
-    private let shotsProvider = ShotsProvider()
-    private var userMode: UserMode
+    fileprivate let shotsProvider = ShotsProvider()
+    fileprivate var userMode: UserMode
 
     var itemsCount: Int {
         return shots.count
     }
 
     init() {
-        userMode = UserStorage.isUserSignedIn ? .LoggedUser : .DemoUser
+        userMode = UserStorage.isUserSignedIn ? .loggedUser : .demoUser
     }
 
     func downloadInitialItems() {
         firstly {
             shotsProvider.provideMyLikedShots()
         }.then { shots -> Void in
-            if let shots = shots where shots != self.shots || shots.count == 0 {
+            if let shots = shots, shots != self.shots || shots.count == 0 {
                 self.shots = shots
                 self.delegate?.viewModelDidLoadInitialItems()
             }
-        }.error { error in
+        }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
@@ -46,17 +46,17 @@ class LikesViewModel: SimpleShotsViewModel {
         firstly {
             shotsProvider.nextPage()
         }.then { shots -> Void in
-            if let shots = shots where shots.count > 0 {
-                let indexes = shots.enumerate().map { index, _ in
+            if let shots = shots, shots.count > 0 {
+                let indexes = shots.enumerated().map { index, _ in
                     return index + self.shots.count
                 }
-                self.shots.appendContentsOf(shots)
+                self.shots.append(contentsOf: shots)
                 let indexPaths = indexes.map {
-                    NSIndexPath(forRow:($0), inSection: 0)
+                    IndexPath(row:($0), section: 0)
                 }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
             }
-        }.error { error in
+        }.catch { error in
             self.notifyDelegateAboutFailure(error)
         }
     }
@@ -73,14 +73,14 @@ class LikesViewModel: SimpleShotsViewModel {
         return description
     }
 
-    func shotCollectionViewCellViewData(indexPath: NSIndexPath) -> (shotImage: ShotImageType, animated: Bool) {
+    func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool) {
         let shotImage = shots[indexPath.row].shotImage
         let animated = shots[indexPath.row].animated
         return (shotImage, animated)
     }
 
     func clearViewModelIfNeeded() {
-        let currentUserMode = UserStorage.isUserSignedIn ? UserMode.LoggedUser : .DemoUser
+        let currentUserMode = UserStorage.isUserSignedIn ? UserMode.loggedUser : .demoUser
         if userMode != currentUserMode {
             shots = []
             userMode = currentUserMode

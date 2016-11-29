@@ -14,7 +14,7 @@ struct CommentDisplayableData {
     let author: NSAttributedString
     let comment: NSAttributedString?
     let date: NSAttributedString
-    let avatarURL: NSURL?
+    let avatarURL: URL?
     var likesCount: NSAttributedString
     var likedByMe: Bool
 }
@@ -22,7 +22,7 @@ struct CommentDisplayableData {
 final class ShotDetailsViewModel {
 
     let shot: ShotType
-    private(set) var isFetchingComments = false
+    fileprivate(set) var isFetchingComments = false
 
     var commentsProvider = APICommentsProvider(page: 1, pagination: 30)
     var commentsRequester = APICommentsRequester()
@@ -45,29 +45,29 @@ final class ShotDetailsViewModel {
         return counter
     }
 
-    private var cachedFormattedComments = [CommentDisplayableData]()
-    private var cachedFormattedTitle: NSAttributedString?
-    private var cachedFormattedDescription: NSAttributedString?
+    fileprivate var cachedFormattedComments = [CommentDisplayableData]()
+    fileprivate var cachedFormattedTitle: NSAttributedString?
+    fileprivate var cachedFormattedDescription: NSAttributedString?
     
     var comments = [CommentType]()
     var attachments = [Attachment]()
-    private var userBucketsForShot = [BucketType]()
-    private var isShotLikedByMe: Bool?
-    private var userBucketsForShotCount: Int?
+    fileprivate var userBucketsForShot = [BucketType]()
+    fileprivate var isShotLikedByMe: Bool?
+    fileprivate var userBucketsForShotCount: Int?
 
     init(shot: ShotType) {
         self.shot = shot
     }
 
-    func isDescriptionIndex(index: Int) -> Bool {
+    func isDescriptionIndex(_ index: Int) -> Bool {
         return hasDescription && index == 1
     }
 
-    func isShotOperationIndex(index: Int) -> Bool {
+    func isShotOperationIndex(_ index: Int) -> Bool {
         return index == 0
     }
 
-    func shouldDisplaySeparatorAtIndex(index: Int) -> Bool {
+    func shouldDisplaySeparatorAtIndex(_ index: Int) -> Bool {
 
         guard isAllowedToDisplaySeparator else {
             return false
@@ -82,7 +82,7 @@ final class ShotDetailsViewModel {
         return false
     }
 
-    func isCurrentUserOwnerOfCommentAtIndex(index: Int) -> Bool {
+    func isCurrentUserOwnerOfCommentAtIndex(_ index: Int) -> Bool {
 
         let comment = comments[indexInCommentArrayBasedOnItemIndex(index)]
         return UserStorage.currentUser?.identifier == comment.user.identifier
@@ -112,7 +112,7 @@ extension ShotDetailsViewModel {
     }
 
     var hasDescription: Bool {
-        if let description = shot.attributedDescription where description.length > 0 {
+        if let description = shot.attributedDescription, description.length > 0 {
             return true
         }
         return false
@@ -128,7 +128,7 @@ extension ShotDetailsViewModel {
             NSRange(location: 0, length: 0)
     }
 
-    func displayableDataForCommentAtIndex(index: Int) -> CommentDisplayableData {
+    func displayableDataForCommentAtIndex(_ index: Int) -> CommentDisplayableData {
 
         let indexWithOffset = indexInCommentArrayBasedOnItemIndex(index)
 
@@ -144,11 +144,11 @@ extension ShotDetailsViewModel {
         return cachedFormattedComments[indexWithOffset]
     }
 
-    func userForCommentAtIndex(index: Int) -> UserType {
+    func userForCommentAtIndex(_ index: Int) -> UserType {
         return comments[self.indexInCommentArrayBasedOnItemIndex(index)].user
     }
 
-    private func createDisplayableData(withComment comment: CommentType) -> CommentDisplayableData {
+    fileprivate func createDisplayableData(withComment comment: CommentType) -> CommentDisplayableData {
         let displayableData = CommentDisplayableData(
             author: ShotDetailsFormatter.commentAuthorForComment(comment),
             comment: ShotDetailsFormatter.attributedCommentBodyForComment(comment),
@@ -176,7 +176,7 @@ extension ShotDetailsViewModel {
                 }.then { _ -> Void in
                     self.isShotLikedByMe = !shotLiked
                     fulfill(!shotLiked)
-                }.error(reject)
+                }.catch(execute: reject)
             }
         }
     }
@@ -184,7 +184,7 @@ extension ShotDetailsViewModel {
     func checkLikeStatusOfShot() -> Promise<Bool> {
 
         if let isShotLikedByMe = isShotLikedByMe {
-            return Promise(isShotLikedByMe)
+            return Promise(value: isShotLikedByMe)
         }
 
         return Promise<Bool> { fulfill, reject in
@@ -194,7 +194,7 @@ extension ShotDetailsViewModel {
             }.then { isShotLikedByMe -> Void in
                 self.isShotLikedByMe = isShotLikedByMe
                 fulfill(isShotLikedByMe)
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -213,15 +213,15 @@ extension ShotDetailsViewModel {
             firstly {
                 checkNumberOfUserBucketsForShot()
             }.then { number -> Void in
-                fulfill(Bool(number))
-            }.error(reject)
+                fulfill(number != 0)
+            }.catch(execute: reject)
         }
     }
 
     func checkNumberOfUserBucketsForShot() -> Promise<Int> {
 
         if let userBucketsForShotCount = userBucketsForShotCount {
-            return Promise(userBucketsForShotCount)
+            return Promise(value: userBucketsForShotCount)
         }
 
         return Promise<Int> { fulfill, reject in
@@ -229,10 +229,12 @@ extension ShotDetailsViewModel {
             firstly {
                 shotsRequester.userBucketsForShot(shot)
             }.then { buckets -> Void in
-                self.userBucketsForShot = buckets
-                self.userBucketsForShotCount = self.userBucketsForShot.count
+                if let buckets = buckets {
+                    self.userBucketsForShot = buckets
+                    self.userBucketsForShotCount = self.userBucketsForShot.count
+                }
                 fulfill(self.userBucketsForShotCount!)
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -260,7 +262,7 @@ extension ShotDetailsViewModel {
                 } else {
                     fulfill((removed: false, bucketsNumber: numberOfBuckets))
                 }
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }
@@ -280,7 +282,7 @@ extension ShotDetailsViewModel {
         return comments.count > 0
     }
 
-    private var hasMoreCommentsToFetch: Bool {
+    fileprivate var hasMoreCommentsToFetch: Bool {
         return UInt(comments.count) < shot.commentsCount
     }
 
@@ -296,7 +298,7 @@ extension ShotDetailsViewModel {
                     self.comments = comments ?? []
                 }.always {
                     self.isFetchingComments = false
-                }.then(fulfill).error(reject)
+                }.then(execute: fulfill).catch(execute: reject)
 
             } else {
 
@@ -304,11 +306,11 @@ extension ShotDetailsViewModel {
                     commentsProvider.nextPage()
                 }.then { comments -> Void in
                     if let comments = comments {
-                        self.comments.appendContentsOf(comments)
+                        self.comments.append(contentsOf: comments)
                     }
                 }.always {
                     self.isFetchingComments = false
-                }.then(fulfill).error(reject)
+                }.then(execute: fulfill).catch(execute: reject)
             }
         }
     }
@@ -322,25 +324,25 @@ extension ShotDetailsViewModel {
             }.then {
                 if !self.hasMoreCommentsToFetch {
                     fulfill()
-                    return Promise()
+                    return Promise<Void>(value: Void())
                 }
                 return self.loadAllComments()
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func postComment(message: String) -> Promise<Void> {
+    func postComment(_ message: String) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             firstly {
                 commentsRequester.postCommentForShot(shot, withText: message)
             }.then { comment in
                 self.comments.append(comment)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func deleteCommentAtIndex(index: Int) -> Promise<Void> {
+    func deleteCommentAtIndex(_ index: Int) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             let comment = comments[indexInCommentArrayBasedOnItemIndex(index)]
@@ -349,15 +351,15 @@ extension ShotDetailsViewModel {
                 commentsRequester.deleteComment(comment, forShot: shot)
             }.then { comment -> Void in
                 let indexOfCommentToRemove = self.indexInCommentArrayBasedOnItemIndex(index)
-                self.comments.removeAtIndex(indexOfCommentToRemove)
-                self.cachedFormattedComments.removeAtIndex(indexOfCommentToRemove)
+                self.comments.remove(at: indexOfCommentToRemove)
+                self.cachedFormattedComments.remove(at: indexOfCommentToRemove)
 
                 fulfill()
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
-    func reportBodyForAbusiveComment(indexPath: NSIndexPath) -> String {
+    func reportBodyForAbusiveComment(_ indexPath: IndexPath) -> String {
 
         let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         let comment = comments[index]
@@ -375,7 +377,7 @@ extension ShotDetailsViewModel {
         return report
     }
 
-    func performLikeOperationForComment(atIndexPath indexPath: NSIndexPath) -> Promise<Void> {
+    func performLikeOperationForComment(atIndexPath indexPath: IndexPath) -> Promise<Void> {
 
         let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         let comment = comments[index]
@@ -384,11 +386,11 @@ extension ShotDetailsViewModel {
 
             firstly {
                 commentsRequester.likeComment(comment, forShot: shot)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func performUnlikeOperationForComment(atIndexPath indexPath: NSIndexPath) -> Promise<Void> {
+    func performUnlikeOperationForComment(atIndexPath indexPath: IndexPath) -> Promise<Void> {
 
         let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         let comment = comments[index]
@@ -397,11 +399,11 @@ extension ShotDetailsViewModel {
 
             firstly {
                 commentsRequester.unlikeComment(comment, forShot: shot)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func checkLikeStatusForComment(atIndexPath indexPath: NSIndexPath, force: Bool) -> Promise<Bool> {
+    func checkLikeStatusForComment(atIndexPath indexPath: IndexPath, force: Bool) -> Promise<Bool> {
 
         let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         let comment = comments[index]
@@ -411,14 +413,14 @@ extension ShotDetailsViewModel {
 
                 firstly {
                     commentsRequester.checkIfLikeComment(comment, forShot: shot)
-                }.then(fulfill).error(reject)
+                }.then(execute: fulfill).catch(execute: reject)
             }
         }
 
-        return Promise(comment.likedByMe)
+        return Promise(value: comment.likedByMe)
     }
 
-    func setLikeStatusForComment(atIndexPath indexPath: NSIndexPath, withValue isLiked: Bool) {
+    func setLikeStatusForComment(atIndexPath indexPath: IndexPath, withValue isLiked: Bool) {
 
         let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
         var comment = comments[index]
@@ -440,12 +442,12 @@ extension ShotDetailsViewModel {
 
 extension ShotDetailsViewModel {
 
-    func shouldOpenUserDetailsFromUrl(url: NSURL) -> Bool {
+    func shouldOpenUserDetailsFromUrl(_ url: URL) -> Bool {
         let userUrlPattern = "^https://dribbble.com/[0-9]{1,9}$"
-        return url.absoluteString.rangeOfString(userUrlPattern, options: .RegularExpressionSearch) != nil
+        return url.absoluteString.range(of: userUrlPattern, options: .regularExpression) != nil
     }
 
-    func indexInCommentArrayBasedOnItemIndex(index: Int) -> Int {
+    func indexInCommentArrayBasedOnItemIndex(_ index: Int) -> Int {
         return comments.count - itemsCount + index
     }
 
@@ -465,13 +467,13 @@ extension ShotDetailsViewModel {
 
 extension ShotDetailsViewModel: URLToUserProvider, UserToURLProvider {
 
-    func userForURL(url: NSURL) -> UserType? {
+    func userForURL(_ url: URL) -> UserType? {
         return shot.user.identifier == url.absoluteString ? shot.user : comments.filter {
             $0.user.identifier == url.absoluteString
         }.first?.user
     }
 
-    func userForId(identifier: String) -> Promise<UserType> {
+    func userForId(_ identifier: String) -> Promise<UserType> {
         return userProvider.provideUser(identifier)
     }
 }
@@ -504,7 +506,7 @@ extension ShotDetailsViewModel {
                     self.attachments = attachments
                 }
                 fulfill()
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
     

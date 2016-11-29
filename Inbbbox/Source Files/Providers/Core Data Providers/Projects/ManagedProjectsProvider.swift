@@ -16,11 +16,11 @@ class ManagedProjectsProvider {
     let managedObjectsProvider: ManagedObjectsProvider
 
     init() {
-        managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)!.managedObjectContext
+        managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext
         managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: managedObjectContext)
     }
 
-    func provideProjectsForShot(shot: ShotType) -> Promise<[ProjectType]?> {
+    func provideProjectsForShot(_ shot: ShotType) -> Promise<[ProjectType]?> {
         return Promise<[ProjectType]?> { fulfill, reject in
             let managedShot = managedObjectsProvider.managedShot(shot)
             let managedProjects = managedShot.projects?.allObjects as? [ManagedProject]

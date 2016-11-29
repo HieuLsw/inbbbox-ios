@@ -11,10 +11,10 @@ import PureLayout
 
 class LoginView: UIView {
 
-    private let cornerRadius = CGFloat(28)
+    fileprivate let cornerRadius = CGFloat(28)
 
-    let loginButton = UIButton(type: .System)
-    let loginAsGuestButton = UIButton(type: .System)
+    let loginButton = UIButton(type: .system)
+    let loginAsGuestButton = UIButton(type: .system)
     let shotsView = AutoScrollableShotsView(numberOfColumns: 4)
     let dribbbleLogoImageView = UIImageView(image: UIImage(named: "ic-ball"))
     let orLabel = ORLoginLabel()
@@ -38,47 +38,47 @@ class LoginView: UIView {
         addSubview(dribbbleLogoImageView)
 
         loginButton.setTitle(NSLocalizedString("LoginView.LoginButtonTitle", comment: "Title of log in button"),
-                             forState: .Normal)
-        loginButton.backgroundColor = UIColor.whiteColor()
+                             for: .normal)
+        loginButton.backgroundColor = UIColor.white
         loginButton.layer.cornerRadius = cornerRadius
-        loginButton.setTitleColor(UIColor.pinkColor(), forState: .Normal)
-        loginButton.titleLabel?.font = UIFont.helveticaFont(.NeueMedium, size: 14)
-        loginButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        loginButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        loginButton.setTitleColor(UIColor.pinkColor(), for: .normal)
+        loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
+        loginButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        loginButton.titleLabel?.textAlignment = NSTextAlignment.center
         loginButton.titleEdgeInsets.left = 2.5 * cornerRadius
         loginButton.titleEdgeInsets.right = cornerRadius
         insertSubview(loginButton, belowSubview: dribbbleLogoImageView)
 
         loginAsGuestButton.setTitle(NSLocalizedString("LoginView.GuestButtonTitle", comment: "Title of guest button"),
-                                    forState: .Normal)
-        loginAsGuestButton.backgroundColor = UIColor.clearColor()
+                                    for: .normal)
+        loginAsGuestButton.backgroundColor = UIColor.clear
         loginAsGuestButton.layer.cornerRadius = cornerRadius
         loginAsGuestButton.layer.borderWidth = 1
-        loginAsGuestButton.layer.borderColor = UIColor.whiteColor().CGColor
-        loginAsGuestButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        loginButton.titleLabel?.font = UIFont.helveticaFont(.NeueMedium, size: 14)
+        loginAsGuestButton.layer.borderColor = UIColor.white.cgColor
+        loginAsGuestButton.setTitleColor(UIColor.white, for: .normal)
+        loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
         addSubview(loginAsGuestButton)
 
         sloganLabel.text = NSLocalizedString("LoginView.Slogan", comment: "Slogan")
-        sloganLabel.textAlignment = .Center
+        sloganLabel.textAlignment = .center
         sloganLabel.textColor = defaultWhiteColor
-        sloganLabel.font = UIFont.helveticaFont(.NeueLight, size: 25)
+        sloganLabel.font = UIFont.helveticaFont(.neueLight, size: 25)
         addSubview(sloganLabel)
 
         loadingLabel.text = NSLocalizedString("LoginView.Loading", comment: "")
-        loadingLabel.textAlignment = .Center
+        loadingLabel.textAlignment = .center
         loadingLabel.textColor = defaultWhiteColor
-        loadingLabel.font = UIFont.helveticaFont(.Neue, size: 12)
+        loadingLabel.font = UIFont.helveticaFont(.neue, size: 12)
         addSubview(loadingLabel)
 
         copyrightlabel.text = NSLocalizedString("LoginView.Copyright", comment:"Describes copyright holder")
-        copyrightlabel.textAlignment = .Center
+        copyrightlabel.textAlignment = .center
         copyrightlabel.textColor = defaultWhiteColor
-        copyrightlabel.font = UIFont.helveticaFont(.NeueMedium, size: 12)
+        copyrightlabel.font = UIFont.helveticaFont(.neueMedium, size: 12)
         addSubview(copyrightlabel)
     }
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -96,38 +96,38 @@ class LoginView: UIView {
 
             let inset = CGFloat(30)
             let height = 2 * cornerRadius
-            loginButton.frame = CGRect(x: inset, y: CGRectGetMaxY(frame) - height - 132,
-                width: CGRectGetWidth(frame) - 2 * inset, height: height
+            loginButton.frame = CGRect(x: inset, y: frame.maxY - height - 132,
+                width: frame.width - 2 * inset, height: height
             )
 
             let size = dribbbleLogoImageView.image?.size ?? CGSize.zero
-            dribbbleLogoImageView.frame = CGRect(x: CGRectGetMinX(loginButton.frame) + 30,
-                y: CGRectGetMidY(loginButton.frame) - size.height * 0.5,
+            dribbbleLogoImageView.frame = CGRect(x: loginButton.frame.minX + 30,
+                y: loginButton.frame.midY - size.height * 0.5,
                 width: size.width, height: size.height
             )
 
-            loginAsGuestButton.frame = CGRect(x: inset, y: CGRectGetMaxY(frame) - 56 - height + 200,
-                width: CGRectGetWidth(frame) - 2 * inset, height: height
+            loginAsGuestButton.frame = CGRect(x: inset, y: frame.maxY - 56 - height + 200,
+                width: frame.width - 2 * inset, height: height
             )
 
             let width = CGFloat(150)
-            orLabel.frame = CGRect(x: CGRectGetMidX(frame) - width * 0.5,
-                y: CGRectGetMinY(loginAsGuestButton.frame) - height,
+            orLabel.frame = CGRect(x: frame.midX - width * 0.5,
+                y: loginAsGuestButton.frame.minY - height,
                 width: width, height: 60
             )
 
-            loadingLabel.frame = CGRect(x: 0, y: CGRectGetMaxY(frame) - 65,
-                width: CGRectGetWidth(frame), height: 20
+            loadingLabel.frame = CGRect(x: 0, y: frame.maxY - 65,
+                width: frame.width, height: 20
             )
 
             let sloganHeight = CGFloat(40)
-            sloganLabel.frame = CGRect(x: 0, y: CGRectGetMidY(frame) - sloganHeight * 0.5,
-                width: CGRectGetWidth(frame), height: sloganHeight
+            sloganLabel.frame = CGRect(x: 0, y: frame.midY - sloganHeight * 0.5,
+                width: frame.width, height: sloganHeight
             )
 
             let imageSize = logoImageView.image!.size ?? CGSize.zero
-            logoImageView.frame = CGRect(x: CGRectGetMidX(frame) - imageSize.width * 0.5,
-                y: CGRectGetMinY(sloganLabel.frame) - 30 - imageSize.height,
+            logoImageView.frame = CGRect(x: frame.midX - imageSize.width * 0.5,
+                y: sloganLabel.frame.minY - 30 - imageSize.height,
                 width: imageSize.width, height: imageSize.height
             )
 
@@ -135,10 +135,10 @@ class LoginView: UIView {
             pinkOverlayView.frame = frame
 
             let standardSpacing: CGFloat = 20
-            copyrightlabel.autoPinEdgeToSuperviewEdge(.Bottom, withInset: standardSpacing)
-            copyrightlabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: standardSpacing)
-            copyrightlabel.autoSetDimension(.Height, toSize: 14.5)
-            copyrightlabel.autoAlignAxisToSuperviewAxis(.Vertical)
+            copyrightlabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: standardSpacing)
+            copyrightlabel.autoPinEdge(toSuperviewEdge: .leading, withInset: standardSpacing)
+            copyrightlabel.autoSetDimension(.height, toSize: 14.5)
+            copyrightlabel.autoAlignAxis(toSuperviewAxis: .vertical)
         }
     }
 }

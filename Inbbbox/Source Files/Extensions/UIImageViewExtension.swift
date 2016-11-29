@@ -15,7 +15,7 @@ extension UIImageView {
     ///
     /// - parameter url:                URL where image is located
     /// - parameter placeholderImage:   optional placeholder image
-    func loadImageFromURL(url: NSURL?, placeholderImage: UIImage? = nil) {
+    func loadImageFromURL(_ url: URL?, placeholderImage: UIImage? = nil) {
         image = placeholderImage
         guard let url = url else { return }
         Shared.imageCache.fetch(URL: url,

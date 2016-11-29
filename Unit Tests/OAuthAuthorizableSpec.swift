@@ -13,7 +13,7 @@ import Nimble
 
 class OAuthAuthorizableSpec: QuickSpec {
     
-    private struct MockOAuthAuthorizableService : OAuthAuthorizable {
+    fileprivate struct MockOAuthAuthorizableService : OAuthAuthorizable {
         
         let requestTokenURLString = "https://fixturerequest/requesttokenurl"
         let accessTokenURLString = "https://fixturerequest/accesstokenurl"
@@ -37,7 +37,7 @@ class OAuthAuthorizableSpec: QuickSpec {
         
         describe("when creating request token url request") {
             
-            var requestTokenURLRequest: NSURLRequest!
+            var requestTokenURLRequest: URLRequest!
             
             beforeEach {
                 requestTokenURLRequest = sut?.requestTokenURLRequest()
@@ -49,28 +49,28 @@ class OAuthAuthorizableSpec: QuickSpec {
                     "?" +
                     "scope=fixture.scope" +
                     "&" +
-                    "client_id=fixture.clientID" +
+                    "redirect_uri=https://redirecturi" +
                     "&" +
-                    "redirect_uri=https://redirecturi"
+                    "client_id=fixture.clientID"
                 }()
-                expect(requestTokenURLRequest.URL?.absoluteString).to(equal(absoluteString))
+                expect(requestTokenURLRequest.url?.absoluteString).to(equal(absoluteString))
             }
             
             it("should use GET method") {
-                expect(requestTokenURLRequest.HTTPMethod).to(equal("GET"))
+                expect(requestTokenURLRequest.httpMethod).to(equal("GET"))
             }
         }
         
         describe("when creating access token url request") {
             
-            var accessTokenURLRequest: NSURLRequest!
+            var accessTokenURLRequest: URLRequest!
             
             beforeEach {
                 accessTokenURLRequest = sut?.accessTokenURLRequestWithRequestToken("fixture.request.token")
             }
 
             it("should use POST method") {
-                expect(accessTokenURLRequest.HTTPMethod).to(equal("POST"))
+                expect(accessTokenURLRequest.httpMethod).to(equal("POST"))
             }
         }
         
@@ -81,7 +81,7 @@ class OAuthAuthorizableSpec: QuickSpec {
             describe("with wrong url") {
                 
                 beforeEach {
-                    let url = NSURL(string: "https://wrongredirecturi")
+                    let url = URL(string: "https://wrongredirecturi")
                     isRedirectionURL = sut?.isRedirectionURL(url)
                 }
                 
@@ -93,7 +93,7 @@ class OAuthAuthorizableSpec: QuickSpec {
             describe("with correct url") {
                 
                 beforeEach {
-                    let url = NSURL(string: "https://redirecturi")
+                    let url = URL(string: "https://redirecturi")
                     isRedirectionURL = sut?.isRedirectionURL(url)
                 }
                 
@@ -110,7 +110,7 @@ class OAuthAuthorizableSpec: QuickSpec {
             describe("with wrong url") {
                 
                 beforeEach {
-                    let url = NSURL(string: "https://anyurl/")
+                    let url = URL(string: "https://anyurl/")
                     isSilentAuthenticationURL = sut?.isSilentAuthenticationURL(url)
                 }
                 
@@ -122,7 +122,7 @@ class OAuthAuthorizableSpec: QuickSpec {
             describe("with correct url") {
                 
                 beforeEach {
-                    let url = NSURL(string: "https://anyurl/login?")
+                    let url = URL(string: "https://anyurl/login?")
                     isSilentAuthenticationURL = sut?.isSilentAuthenticationURL(url)
                 }
                 

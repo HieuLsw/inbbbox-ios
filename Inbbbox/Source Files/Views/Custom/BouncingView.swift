@@ -20,7 +20,7 @@ class BouncingView: UIView, DefaultImage {
     var jumpHeight: Int
 
     /// Defines duration between jumps.
-    var jumpDuration: NSTimeInterval
+    var jumpDuration: TimeInterval
 
     /// Defines whether view is hidden when the animation is stopped.
     var hidesWhenStopped = true
@@ -29,13 +29,13 @@ class BouncingView: UIView, DefaultImage {
     /// Set to true after invoking `startAnimating()`.
     /// Set to false after invoking `stopAnimating()`
     /// - SeeAlso: startAnimating(), stopAnimating()
-    private(set) var shouldAnimate = false
+    fileprivate(set) var shouldAnimate = false
 
-    private var didSetupConstraints = false
+    fileprivate var didSetupConstraints = false
 
     // MARK: Life Cycle
 
-    init(frame: CGRect, jumpHeight: Int, jumpDuration: NSTimeInterval, image: UIImage? = nil) {
+    init(frame: CGRect, jumpHeight: Int, jumpDuration: TimeInterval, image: UIImage? = nil) {
         self.jumpHeight = jumpHeight
         self.jumpDuration = jumpDuration
         super.init(frame: frame)
@@ -47,21 +47,21 @@ class BouncingView: UIView, DefaultImage {
         addSubview(imageView)
     }
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: UI
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     override func updateConstraints() {
         if !didSetupConstraints {
-            imageView.autoPinEdgeToSuperviewEdge(.Top)
-            imageView.autoAlignAxisToSuperviewAxis(.Vertical)
+            imageView.autoPinEdge(toSuperviewEdge: .top)
+            imageView.autoAlignAxis(toSuperviewAxis: .vertical)
             didSetupConstraints = true
         }
 
@@ -74,7 +74,7 @@ class BouncingView: UIView, DefaultImage {
     /// - SeeAlso: shouldAnimate, hidesWhenStopped
     func startAnimating() {
         shouldAnimate = true
-        hidden = false
+        isHidden = false
         animateBall()
     }
 
@@ -82,23 +82,23 @@ class BouncingView: UIView, DefaultImage {
     /// - SeeAlso: shouldAnimate, hidesWhenStopped
     func stopAnimating() {
         shouldAnimate = false
-        hidden = true
+        isHidden = true
     }
 
     // MARK: Private
 
-    private func animateBall() {
+    fileprivate func animateBall() {
 
         guard shouldAnimate else { return }
 
-        Async.main(after: NSTimeInterval(jumpDuration)) {
+        Async.main(after: TimeInterval(jumpDuration)) {
             self.animateBall()
         }
 
         let animations = CAKeyframeAnimation.ballBounceAnimations(jumpHeight, duration: jumpDuration)
 
         animations.forEach { animation in
-            imageView.layer.addAnimation(animation, forKey: nil)
+            imageView.layer.add(animation, forKey: nil)
         }
     }
 }

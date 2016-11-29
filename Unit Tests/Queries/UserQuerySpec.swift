@@ -25,7 +25,7 @@ class UserQuerySpec: QuickSpec {
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 return UserQuery(identifier: "fixture.identifier")
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/users/fixture.identifier")
+                return (method: .GET, encoding: .url, path: "/users/fixture.identifier")
             }
             
             beforeEach {
@@ -42,7 +42,7 @@ class UserQuerySpec: QuickSpec {
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 return UserQuery()
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/user")
+                return (method: .GET, encoding: .url, path: "/user")
             }
             
             beforeEach {

@@ -9,20 +9,20 @@ import SwiftyUserDefaults
 class ShotsCollectionViewController: UICollectionViewController {
 
     enum State {
-        case Onboarding, InitialAnimations, Normal
+        case onboarding, initialAnimations, normal
     }
 
-    let initialState: State = Defaults[.onboardingPassed] ? .InitialAnimations : .Onboarding
+    let initialState: State = Defaults[.onboardingPassed] ? .initialAnimations : .onboarding
     var stateHandler: ShotsStateHandler
     var backgroundAnimator: MainScreenStreamSourcesAnimator?
     let shotsProvider = ShotsProvider()
     var shots = [ShotType]()
-    private var onceTokenForInitialShotsAnimation = dispatch_once_t(0)
-    private var emptyShotsView: UIView?
+    fileprivate var emptyShotsView: UIView?
+    fileprivate var didSetupAnimation = false
 
     // MARK: Life cycle
 
-    @available(*, unavailable, message = "Use init() method instead")
+    @available(*, unavailable, message: "Use init() method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -38,7 +38,7 @@ class ShotsCollectionViewController: UICollectionViewController {
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -49,7 +49,7 @@ extension ShotsCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView?.pagingEnabled = true
+        collectionView?.isPagingEnabled = true
         // NGRTodo: iOS 10 only API. Remove after updating project.
         #if swift(>=2.3)
         if #available(iOS 10.0, *) {
@@ -59,7 +59,7 @@ extension ShotsCollectionViewController {
         let backgroundView = ShotsCollectionBackgroundView()
         collectionView?.backgroundView = backgroundView
         backgroundAnimator = MainScreenStreamSourcesAnimator(view: backgroundView)
-        collectionView?.registerClass(ShotCollectionViewCell.self, type: .Cell)
+        collectionView?.registerClass(ShotCollectionViewCell.self, type: .cell)
 
         configureForCurrentStateHandler()
         registerToSettingsNotifications()
@@ -67,51 +67,50 @@ extension ShotsCollectionViewController {
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         stateHandler.prepareForPresentingData()
-        stateHandler.collectionViewLayout.prepareLayout()
+        stateHandler.collectionViewLayout.prepare()
         handleEmptyShotsView()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        AnalyticsManager.trackScreen(.ShotsView)
+        AnalyticsManager.trackScreen(.shotsView)
 
-        if(onceTokenForInitialShotsAnimation != 0) {
-            AsyncWrapper().main(after: 1) { [unowned self] in
-                self.showStreamSources()
-            }
-        }
-        dispatch_once(&onceTokenForInitialShotsAnimation) {
+        if (!didSetupAnimation) {
             firstly {
                 self.refreshShotsData()
             }.then {
                 self.stateHandler.presentData()
-            }.error { error in
+            }.catch { error in
                 let alertController = UIAlertController.willSignOutUser()
-                self.tabBarController?.presentViewController(alertController, animated: true, completion: nil)
+                self.tabBarController?.present(alertController, animated: true, completion: nil)
+            }
+        } else {
+            AsyncWrapper().main(after: 1) { [unowned self] in
+                self.showStreamSources()
             }
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hideStreamSources()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle : UIStatusBarStyle {
         return ColorModeProvider.current().preferredStatusBarStyle
     }
     
-    private func handleEmptyShotsView() {
+    fileprivate func handleEmptyShotsView() {
         if (stateHandler.shouldShowNoShotsView && emptyShotsView == nil) {
             let empty = EmptyShotsCollectionView()
             view.addSubview(empty)
             empty.autoPinEdgesToSuperviewEdges()
             emptyShotsView = empty
-        } else if let emptyShotsView = emptyShotsView where !stateHandler.shouldShowNoShotsView {
+        } else if let emptyShotsView = emptyShotsView, !stateHandler.shouldShowNoShotsView {
             emptyShotsView.removeFromSuperview()
             self.emptyShotsView = nil
         }
@@ -122,13 +121,13 @@ extension ShotsCollectionViewController {
 
 extension ShotsCollectionViewController {
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return stateHandler.collectionView(collectionView, numberOfItemsInSection: section)
     }
 
-    override func collectionView(collectionView: UICollectionView,
-                                 cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if let cell = stateHandler.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as? ShotCollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = stateHandler.collectionView(collectionView, cellForItemAt: indexPath) as? ShotCollectionViewCell {
             if !cell.isRegisteredTo3DTouch {
                 cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
             }
@@ -142,21 +141,21 @@ extension ShotsCollectionViewController {
 
 extension ShotsCollectionViewController {
 
-    override func collectionView(collectionView: UICollectionView,
-                                 didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        stateHandler.collectionView?(collectionView, didSelectItemAtIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didSelectItemAt indexPath: IndexPath) {
+        stateHandler.collectionView?(collectionView, didSelectItemAt: indexPath)
     }
 
-    override func collectionView(collectionView: UICollectionView,
-                                 willDisplayCell cell: UICollectionViewCell,
-                                 forItemAtIndexPath indexPath: NSIndexPath) {
-        stateHandler.collectionView?(collectionView, willDisplayCell: cell, forItemAtIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView,
+                                 willDisplay cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
+        stateHandler.collectionView?(collectionView, willDisplay: cell, forItemAt: indexPath)
     }
 
-    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
-                                 forItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
         if stateHandler is ShotsNormalStateHandler {
-            stateHandler.collectionView?(collectionView, didEndDisplayingCell: cell, forItemAtIndexPath: indexPath)
+            stateHandler.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
         }
     }
 }
@@ -164,15 +163,16 @@ extension ShotsCollectionViewController {
 // NGRTodo: iOS 10 only API. Remove after updating project.
 #if swift(>=2.3)
 extension ShotsCollectionViewController: UICollectionViewDataSourcePrefetching {
-    func collectionView(collectionView: UICollectionView, prefetchItemsAtIndexPaths indexPaths: [NSIndexPath]) {
+    @available(iOS 10.0, *)
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         if let stateHandler = stateHandler as? ShotsNormalStateHandler {
-            stateHandler.collectionView(collectionView, prefetchItemsAtIndexPaths: indexPaths)
+            stateHandler.collectionView(collectionView, prefetchItemsAt: indexPaths)
         }
     }
-
-    func collectionView(collectionView: UICollectionView, cancelPrefetchingForItemsAtIndexPaths indexPaths: [NSIndexPath]) {
+    @available(iOS 10.0, *)
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         if let stateHandler = stateHandler as? ShotsNormalStateHandler {
-            stateHandler.collectionView(collectionView, cancelPrefetchingForItemsAtIndexPaths: indexPaths)
+            stateHandler.collectionView(collectionView, cancelPrefetchingForItemsAt: indexPaths)
         }
     }
 }
@@ -181,22 +181,22 @@ extension ShotsCollectionViewController: UICollectionViewDataSourcePrefetching {
 // MARK: UIScrollViewDelegate
 
 extension ShotsCollectionViewController {
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         stateHandler.scrollViewDidEndDecelerating?(scrollView)
     }
 
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         stateHandler.scrollViewDidScroll?(scrollView)
     }
 
-    override func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         stateHandler.scrollViewDidEndScrollingAnimation?(scrollView)
     }
 }
 
 extension ShotsCollectionViewController: ShotsStateHandlerDelegate {
 
-    func shotsStateHandlerDidInvalidate(shotsStateHandler: ShotsStateHandler) {
+    func shotsStateHandlerDidInvalidate(_ shotsStateHandler: ShotsStateHandler) {
         if shotsStateHandler is ShotsInitialAnimationsStateHandler {
             AsyncWrapper().main(after: 1) { [unowned self] in
                 self.showStreamSources()
@@ -210,7 +210,7 @@ extension ShotsCollectionViewController: ShotsStateHandlerDelegate {
         }
     }
 
-    func shotsStateHandlerDidFailToFetchItems(error: ErrorType) {
+    func shotsStateHandlerDidFailToFetchItems(_ error: Error) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 }
@@ -222,19 +222,19 @@ private extension ShotsCollectionViewController {
     func configureForCurrentStateHandler() {
         stateHandler.shotsCollectionViewController = self
         stateHandler.delegate = self
-        tabBarController?.tabBar.userInteractionEnabled = stateHandler.tabBarInteractionEnabled
+        tabBarController?.tabBar.isUserInteractionEnabled = stateHandler.tabBarInteractionEnabled
         tabBarController?.tabBar.alpha = stateHandler.tabBarAlpha
-        collectionView?.userInteractionEnabled = stateHandler.collectionViewInteractionEnabled
-        collectionView?.scrollEnabled = stateHandler.collectionViewScrollEnabled
+        collectionView?.isUserInteractionEnabled = stateHandler.collectionViewInteractionEnabled
+        collectionView?.isScrollEnabled = stateHandler.collectionViewScrollEnabled
         collectionView?.setCollectionViewLayout(stateHandler.collectionViewLayout, animated: false)
         collectionView?.setContentOffset(CGPoint.zero, animated: false)
 
-        if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
+        if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, let centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
             normalStateHandler.didLikeShotCompletionHandler = {
-                centerButtonTabBarController.animateTabBarItem(.Likes)
+                centerButtonTabBarController.animateTabBarItem(.likes)
             }
             normalStateHandler.didAddShotToBucketCompletionHandler = {
-                centerButtonTabBarController.animateTabBarItem(.Buckets)
+                centerButtonTabBarController.animateTabBarItem(.buckets)
             }
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)
@@ -243,17 +243,17 @@ private extension ShotsCollectionViewController {
     }
 
     func registerToSettingsNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didChangeStreamSourceSettings(_:)),
-        name: InbbboxNotificationKey.UserDidChangeStreamSourceSettings.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didChangeStreamSourceSettings(_:)),
+        name: NSNotification.Name(rawValue: InbbboxNotificationKey.UserDidChangeStreamSourceSettings.rawValue), object: nil)
     }
 
-    dynamic func didChangeStreamSourceSettings(notification: NSNotification) {
+    dynamic func didChangeStreamSourceSettings(_ notification: Notification) {
         firstly {
             refreshShotsData()
         }.then { () -> Void in
             self.collectionView?.reloadData()
-            self.collectionView?.setContentOffset(CGPointZero, animated: true)
-        }.error { error in
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
+        }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
         }
     }
@@ -264,12 +264,12 @@ private extension ShotsCollectionViewController {
                 self.shotsProvider.provideShots()
             }.then { shots -> Void in
                 self.shots = shots ?? []
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
     
-    private func scrollToShotAtIndex(index: Int, animated: Bool = true) {
-        collectionView?.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredVertically, animated: animated)
+    func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
+        collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
     }
 }
 
@@ -277,12 +277,12 @@ private extension ShotsCollectionViewController {
 
 extension ShotsCollectionViewController: UIViewControllerPreviewingDelegate {
 
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
-            let visibleCell = collectionView?.visibleCells().first,
+            let visibleCell = collectionView?.visibleCells.first,
             let normalStateHandler = stateHandler as? ShotsNormalStateHandler,
-            let indexPath = collectionView?.indexPathsForVisibleItems().first
+            let indexPath = collectionView?.indexPathsForVisibleItems.first
         else { return nil }
         
         previewingContext.sourceRect = visibleCell.contentView.bounds
@@ -290,7 +290,7 @@ extension ShotsCollectionViewController: UIViewControllerPreviewingDelegate {
         return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         if let normalStateHandler = stateHandler as? ShotsNormalStateHandler {
             normalStateHandler.popViewController(viewControllerToCommit)
         }
@@ -305,12 +305,12 @@ private extension ShotsCollectionViewController {
         // Invisible button on top of collection view is used to not block touch events 
         // on collection view and simplify dealing with clicking on logo 
         let invisibleButton = UIButton()
-        invisibleButton.addTarget(self, action: #selector(logoTapped), forControlEvents: .TouchUpInside)
+        invisibleButton.addTarget(self, action: #selector(logoTapped), for: .touchUpInside)
         view.addSubview(invisibleButton)
-        invisibleButton.autoPinEdgeToSuperviewEdge(.Top, withInset: ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset)
-        invisibleButton.autoSetDimension(.Height, toSize: ShotsCollectionBackgroundViewSpacing.logoHeight)
-        invisibleButton.autoPinEdgeToSuperviewEdge(.Left)
-        invisibleButton.autoPinEdgeToSuperviewEdge(.Right)
+        invisibleButton.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset)
+        invisibleButton.autoSetDimension(.height, toSize: ShotsCollectionBackgroundViewSpacing.logoHeight)
+        invisibleButton.autoPinEdge(toSuperviewEdge: .left)
+        invisibleButton.autoPinEdge(toSuperviewEdge: .right)
         
     }
     
@@ -329,7 +329,7 @@ private extension ShotsCollectionViewController {
     }
     
     @objc func logoTapped() {
-        if let condition = backgroundAnimator?.areStreamSourcesShown where condition == true {
+        if let condition = backgroundAnimator?.areStreamSourcesShown, condition == true {
             hideStreamSources()
         } else {
             showStreamSources()

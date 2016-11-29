@@ -17,33 +17,33 @@ private var footerBottomEdgeSpace: CGFloat {
     return 20
 }
 
-class ShotDetailsFooterView: UICollectionReusableView {
+class ShotDetailsFooterView: UICollectionReusableView, Reusable {
 
     class var minimumRequiredHeight: CGFloat {
         return cornerRadius + footerBottomEdgeSpace
     }
 
-    private var didUpdateConstraints = false
-    private let activityIndicatorView: BouncingView
-    private let cornerWrapperView = UIView.newAutoLayoutView()
+    fileprivate var didUpdateConstraints = false
+    fileprivate let activityIndicatorView: BouncingView
+    fileprivate let cornerWrapperView = UIView.newAutoLayout()
 
     override init(frame: CGRect) {
         let height = Int(cornerRadius)
-        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height, jumpDuration: NSTimeInterval(1))
+        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height, jumpDuration: TimeInterval(1))
         super.init(frame: frame)
 
-        backgroundColor = .clearColor()
+        backgroundColor = .clear
 
         activityIndicatorView.configureForAutoLayout()
 
-        cornerWrapperView.backgroundColor = .whiteColor()
+        cornerWrapperView.backgroundColor = .white
         cornerWrapperView.addSubview(activityIndicatorView)
         addSubview(cornerWrapperView)
 
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message = "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -52,10 +52,10 @@ class ShotDetailsFooterView: UICollectionReusableView {
         super.layoutSubviews()
 
         let radii = CGSize(width: cornerRadius, height: cornerRadius)
-        let path = UIBezierPath(roundedRect: cornerWrapperView.bounds, byRoundingCorners: [.BottomLeft, .BottomRight],
+        let path = UIBezierPath(roundedRect: cornerWrapperView.bounds, byRoundingCorners: [.bottomLeft, .bottomRight],
                 cornerRadii: radii)
         let mask = CAShapeLayer()
-        mask.path = path.CGPath
+        mask.path = path.cgPath
         layer.mask = mask
     }
 
@@ -63,8 +63,8 @@ class ShotDetailsFooterView: UICollectionReusableView {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            cornerWrapperView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            cornerWrapperView.autoSetDimension(.Height, toSize: cornerRadius)
+            cornerWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            cornerWrapperView.autoSetDimension(.height, toSize: cornerRadius)
 
             activityIndicatorView.autoPinEdgesToSuperviewEdges()
         }
@@ -80,15 +80,8 @@ class ShotDetailsFooterView: UICollectionReusableView {
         activityIndicatorView.stopAnimating()
     }
 
-    func grayOutBackground(grayOut: Bool) {
+    func grayOutBackground(_ grayOut: Bool) {
         let currentMode = ColorModeProvider.current()
         cornerWrapperView.backgroundColor = grayOut ? currentMode.tableViewBackground : currentMode.shotBucketsFooterViewBackground
-    }
-}
-
-extension ShotDetailsFooterView: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotDetailsFooterView)
     }
 }

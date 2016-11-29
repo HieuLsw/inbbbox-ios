@@ -10,23 +10,23 @@ import UIKit
 
 class DateItem: GroupItem {
 
-    var date: NSDate
-    var dateString: String { return dateFormatter.stringFromDate(date) }
+    var date: Date
+    var dateString: String { return dateFormatter.string(from: date) }
 
-    var onValueChanged: ((date: NSDate) -> Void)?
+    var onValueChanged: ((_ date: Date) -> Void)?
 
     var highlighted = false
 
-    init(title: String, date: NSDate? = NSDate()) {
-        self.date = date ?? NSDate()
+    init(title: String, date: Date? = Date()) {
+        self.date = date ?? Date()
 
-        dateFormatter.timeStyle = .ShortStyle
-        dateFormatter.dateStyle = .NoStyle
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .none
 
-        super.init(title: title, category: .Date)
+        super.init(title: title, category: .date)
     }
 
-    private let dateFormatter = NSDateFormatter()
+    fileprivate let dateFormatter = DateFormatter()
 }
 
 // MARK: Updatable
@@ -34,6 +34,6 @@ class DateItem: GroupItem {
 extension DateItem: Updatable {
 
     func update() {
-        onValueChanged?(date: date)
+        onValueChanged?(date)
     }
 }

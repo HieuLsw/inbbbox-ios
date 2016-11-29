@@ -8,9 +8,9 @@ class DoubleImageView: UIView {
 
 //    MARK: - Life cycle
 
-    let firstImageView = UIImageView.newAutoLayoutView()
-    let secondImageView = UIImageView.newAutoLayoutView()
-    private var didSetupConstraints = false
+    let firstImageView = UIImageView.newAutoLayout()
+    let secondImageView = UIImageView.newAutoLayout()
+    fileprivate var didSetupConstraints = false
 
     convenience init(firstImage: UIImage?, secondImage: UIImage?) {
         self.init(frame: CGRect.zero)
@@ -48,7 +48,7 @@ class DoubleImageView: UIView {
 
 //     MARK: - UIView
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -63,9 +63,9 @@ class DoubleImageView: UIView {
         super.updateConstraints()
     }
 
-    override func intrinsicContentSize() -> CGSize {
-        let width = max(firstImageView.intrinsicContentSize().width, secondImageView.intrinsicContentSize().width)
-        let height = max(firstImageView.intrinsicContentSize().height, secondImageView.intrinsicContentSize().height)
+    override var intrinsicContentSize: CGSize {
+        let width = max(firstImageView.intrinsicContentSize.width, secondImageView.intrinsicContentSize.width)
+        let height = max(firstImageView.intrinsicContentSize.height, secondImageView.intrinsicContentSize.height)
         return CGSize(width: width, height: height)
     }
 }

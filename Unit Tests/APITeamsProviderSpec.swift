@@ -33,7 +33,7 @@ class APITeamsProviderSpec: QuickSpec {
             it("members should be properly returned") {
                 sut.provideMembersForTeam(Team.fixtureTeam()).then { _users -> Void in
                     users = _users
-                }.error { _ in fail("This should not be invoked") }
+                }.catch { _ in fail("This should not be invoked") }
                 
                 expect(users).toNotEventually(beNil())
                 expect(users).toEventually(haveCount(3))
@@ -46,7 +46,7 @@ class APITeamsProviderSpec: QuickSpec {
             it("members should be properly returned") {
                 sut.nextPage().then { _users -> Void in
                     users = _users
-                }.error { _ in fail("This should not be invoked") }
+                }.catch { _ in fail("This should not be invoked") }
                 
                 expect(users).toNotEventually(beNil())
                 expect(users).toEventually(haveCount(3))
@@ -58,7 +58,7 @@ class APITeamsProviderSpec: QuickSpec {
             it("members should be properly returned") {
                 sut.previousPage().then { _users -> Void in
                     users = _users
-                }.error { _ in fail("This should not be invoked") }
+                }.catch { _ in fail("This should not be invoked") }
                 
                 expect(users).toNotEventually(beNil())
                 expect(users).toEventually(haveCount(3))
@@ -70,19 +70,19 @@ class APITeamsProviderSpec: QuickSpec {
 //Explanation: Create APITeamsProviderPrivateMock to override methods from PageableProvider.
 private class APITeamsProviderPrivateMock: APITeamsProvider {
     
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
             
             let json = JSONSpecLoader.sharedInstance.fixtureUsersJSON(withCount: 3)

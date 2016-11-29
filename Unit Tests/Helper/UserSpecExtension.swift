@@ -18,7 +18,7 @@ extension User {
         return User.map(json)
     }
     
-    static func fixtureUserForAccountType(type: UserAccountType) -> User {
+    static func fixtureUserForAccountType(_ type: UserAccountType) -> User {
         var json = JSONSpecLoader.sharedInstance.jsonWithResourceName("User")
         json["type"].stringValue = type.rawValue
         

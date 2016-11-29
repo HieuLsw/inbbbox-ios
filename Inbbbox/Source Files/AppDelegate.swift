@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case Followees = "co.netguru.inbbbox.followees"
     }
 
-    func application(application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [NSObject:AnyObject]?) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         AnalyticsManager.setupAnalytics()
         CrashManager.setup()
@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerButtonTabBarController = CenterButtonTabBarController()
         loginViewController = LoginViewController(tabBarController: centerButtonTabBarController!)
         let rootViewController = UserStorage.isUserSignedIn ? centerButtonTabBarController! : loginViewController!
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
         window!.rootViewController = rootViewController
         window!.makeKeyAndVisible()
         
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ColorModeProvider.setup()
 
         var shouldPerformAdditionalDelegateHandling = true
-        if let shortcut = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+        if let shortcut = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             launchedShortcut = shortcut
             shouldPerformAdditionalDelegateHandling = false
         }
@@ -51,54 +51,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(application: UIApplication, handleActionWithIdentifier identifier: String?,
-                     forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {
+    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?,
+                     for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
         // NGRTodo: start loading images from Dribbble,
         // but first, check if notificationID == currentUserID
     }
 
-    func application(application: UIApplication,
-                     didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+    func application(_ application: UIApplication,
+                     didRegister notificationSettings: UIUserNotificationSettings) {
         let notificationName = NotificationKey.UserNotificationSettingsRegistered.rawValue
-        NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: notificationName), object: nil)
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         guard let shortcut = launchedShortcut else { return }
 
         handleShortcutItem(shortcut)
         launchedShortcut = nil
     }
 
-    func application(application: UIApplication,
-                     performActionForShortcutItem shortcutItem: UIApplicationShortcutItem,
-                                                  completionHandler: (Bool) -> Void) {
+    func application(_ application: UIApplication,
+                     performActionFor shortcutItem: UIApplicationShortcutItem,
+                                                  completionHandler: @escaping (Bool) -> Void) {
         let handledShortcutItem = handleShortcutItem(shortcutItem)
         completionHandler(handledShortcutItem)
     }
 
     // MARK: - Core Data stack
 
-    lazy var applicationDocumentsDirectory: NSURL? = {
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory,
-                inDomains: .UserDomainMask)
+    lazy var applicationDocumentsDirectory: URL? = {
+        let urls = FileManager.default.urls(for: .documentDirectory,
+                in: .userDomainMask)
         return urls.last
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = NSBundle.mainBundle().URLForResource("StoreData", withExtension: "momd")!
-        return NSManagedObjectModel(contentsOfURL: modelURL)!
+        let modelURL = Bundle.main.url(forResource: "StoreData", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
 
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
 
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory?.URLByAppendingPathComponent("StoreData.sqlite")
+        let url = self.applicationDocumentsDirectory?.appendingPathComponent("StoreData.sqlite")
 
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
-                configuration: nil,
-                URL: url,
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                configurationName: nil,
+                at: url,
                 options: [NSMigratePersistentStoresAutomaticallyOption: true,
                           NSInferMappingModelAutomaticallyOption: true])
         } catch {
@@ -109,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     lazy var managedObjectContext: NSManagedObjectContext = {
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
         return managedObjectContext
     }()
@@ -131,11 +131,11 @@ private extension AppDelegate {
 // MARK: Safari OAuth
 
 extension AppDelegate {
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
 
-        if let sourceApplication = options["UIApplicationOpenURLOptionsSourceApplicationKey"] {
+        if let sourceApplication = options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String {
 
-            if String(sourceApplication) == "com.apple.SafariViewService" {
+            if (sourceApplication == "com.apple.SafariViewService") {
 
                 if UserStorage.isGuestUser {
                     let settingsViewController = centerButtonTabBarController?.settingsViewController
@@ -155,7 +155,7 @@ extension AppDelegate {
 
 extension AppDelegate {
 
-    func handleShortcutItem(shortcutItem: UIApplicationShortcutItem) -> Bool {
+    func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
 
         guard UserStorage.isUserSignedIn else { return false }
 
@@ -164,13 +164,13 @@ extension AppDelegate {
             typealias index = CenterButtonTabBarController.CenterButtonViewControllers
             switch shortcut {
             case .Likes:
-                centerButtonTabBarController?.selectedIndex = index.Likes.rawValue
+                centerButtonTabBarController?.selectedIndex = index.likes.rawValue
             case .Buckets:
-                centerButtonTabBarController?.selectedIndex = index.Buckets.rawValue
+                centerButtonTabBarController?.selectedIndex = index.buckets.rawValue
             case .Shots:
-                centerButtonTabBarController?.selectedIndex = index.Shots.rawValue
+                centerButtonTabBarController?.selectedIndex = index.shots.rawValue
             case .Followees:
-                centerButtonTabBarController?.selectedIndex = index.Followees.rawValue
+                centerButtonTabBarController?.selectedIndex = index.followees.rawValue
             }
             centerButtonTabBarController?.configureForLaunchingWithForceTouchShortcut()
             handled = true

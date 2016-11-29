@@ -16,11 +16,11 @@ class ParametersSpec: QuickSpec {
         
         describe("when newly initialized") {
             
-            var sut = Parameters(encoding: .URL)
+            var sut = Parameters(encoding: .url)
             
             context("with URL encoding") {
                 beforeEach {
-                    sut = Parameters(encoding: .URL)
+                    sut = Parameters(encoding: .url)
                 }
                 
                 it("should not be nil") {
@@ -28,7 +28,7 @@ class ParametersSpec: QuickSpec {
                 }
                 
                 it("should have URL encoding") {
-                    expect(sut.encoding).to(equal(Parameters.Encoding.URL))
+                    expect(sut.encoding).to(equal(Parameters.Encoding.url))
                 }
                 
                 it("should have empty query items") {
@@ -41,8 +41,8 @@ class ParametersSpec: QuickSpec {
                 
                 context("when storing values") {
                     beforeEach {
-                        sut["fixture.key.1"] = "fixture.value.1"
-                        sut["fixture.key.2"] = 123
+                        sut["fixture.key.1"] = "fixture.value.1" as AnyObject?
+                        sut["fixture.key.2"] = 123 as AnyObject?
                     }
                 
                     it("should return correct value") {
@@ -62,7 +62,7 @@ class ParametersSpec: QuickSpec {
                         ]
                         
                         beforeEach {
-                            queryItems = sut.queryItems
+                            queryItems = sut.queryItems as [NSURLQueryItem]!
                         }
                         
                         it("should have correct query items") {
@@ -91,7 +91,7 @@ class ParametersSpec: QuickSpec {
             
             context("with JSON encoding") {
                 beforeEach {
-                    sut = Parameters(encoding: .JSON)
+                    sut = Parameters(encoding: .json)
                 }
                 
                 it("should not be nil") {
@@ -99,7 +99,7 @@ class ParametersSpec: QuickSpec {
                 }
                 
                 it("should have JSON encoding") {
-                    expect(sut.encoding).to(equal(Parameters.Encoding.JSON))
+                    expect(sut.encoding).to(equal(Parameters.Encoding.json))
                 }
                 
                 it("should have empty query items") {
@@ -112,15 +112,15 @@ class ParametersSpec: QuickSpec {
                 
                 context("when storing values") {
                     beforeEach {
-                        sut["fixture.key.1"] = "fixture.value.1"
-                        sut["fixture.key.2"] = 123
+                        sut["fixture.key.1"] = "fixture.value.1" as AnyObject?
+                        sut["fixture.key.2"] = 123 as AnyObject?
                     }
                     
                     it("should have correct JSON by serializing body") {
-                        let json = try! NSJSONSerialization.JSONObjectWithData(sut.body!, options: .AllowFragments) as! [String: AnyObject]
+                        let json = try! JSONSerialization.jsonObject(with: sut.body!, options: .allowFragments) as! [String: AnyObject]
                         let expectedJSON = [
-                            "fixture.key.1": "fixture.value.1",
-                            "fixture.key.2": 123
+                            "fixture.key.1": "fixture.value.1" as AnyObject,
+                            "fixture.key.2": 123 as AnyObject
                         ] as [String: AnyObject]
                         
                         expect(json == expectedJSON).to(beTrue())
@@ -132,5 +132,5 @@ class ParametersSpec: QuickSpec {
 }
 
 private func ==(lhs: [String: AnyObject], rhs: [String: AnyObject]) -> Bool {
-    return NSDictionary(dictionary: lhs).isEqualToDictionary(rhs)
+    return NSDictionary(dictionary: lhs).isEqual(to: rhs)
 }

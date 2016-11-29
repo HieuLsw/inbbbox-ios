@@ -17,7 +17,7 @@ private var margin: CGFloat {
     return 10
 }
 
-class ShotBucketsHeaderView: UICollectionReusableView {
+class ShotBucketsHeaderView: UICollectionReusableView, Reusable {
 
     var availableWidthForTitle: CGFloat {
         return avatarSize.width + 3 * margin
@@ -30,22 +30,22 @@ class ShotBucketsHeaderView: UICollectionReusableView {
     var imageDidTap: (() -> Void)?
     let avatarView = AvatarView(size: avatarSize, bordered: false)
 
-    let closeButtonView = CloseButtonView.newAutoLayoutView()
-    private let headerTitleLabel = UILabel.newAutoLayoutView()
-    private let titleLabel = TTTAttributedLabel.newAutoLayoutView()
+    let closeButtonView = CloseButtonView.newAutoLayout()
+    fileprivate let headerTitleLabel = UILabel.newAutoLayout()
+    fileprivate let titleLabel = TTTAttributedLabel.newAutoLayout()
 
-    private let gradientView = UIView.newAutoLayoutView()
-    private let dimView = UIView.newAutoLayoutView()
-    private let imageViewCenterWrapperView = UIView.newAutoLayoutView()
+    fileprivate let gradientView = UIView.newAutoLayout()
+    fileprivate let dimView = UIView.newAutoLayout()
+    fileprivate let imageViewCenterWrapperView = UIView.newAutoLayout()
 
-    private var imageViewCenterWrapperBottomConstraint: NSLayoutConstraint?
+    fileprivate var imageViewCenterWrapperBottomConstraint: NSLayoutConstraint?
 
-    private var didUpdateConstraints = false
-    private var collapseProgress: CGFloat {
+    fileprivate var didUpdateConstraints = false
+    fileprivate var collapseProgress: CGFloat {
         return 1 - (frame.size.height - minHeight) / (maxHeight - minHeight)
     }
 
-    private lazy var imageTapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
+    fileprivate lazy var imageTapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
         return UITapGestureRecognizer(target: self, action: #selector(shotImageDidTap(_:)))
     }()
 
@@ -54,7 +54,7 @@ class ShotBucketsHeaderView: UICollectionReusableView {
 
         clipsToBounds = true
 
-        titleLabel.backgroundColor = .clearColor()
+        titleLabel.backgroundColor = .clear
         titleLabel.numberOfLines = 0
         addSubview(titleLabel)
         addSubview(avatarView)
@@ -62,7 +62,7 @@ class ShotBucketsHeaderView: UICollectionReusableView {
         imageViewCenterWrapperView.clipsToBounds = true
         addSubview(imageViewCenterWrapperView)
 
-        gradientView.backgroundColor = .clearColor()
+        gradientView.backgroundColor = .clear
         imageViewCenterWrapperView.addSubview(gradientView)
 
         dimView.backgroundColor = UIColor(white: 0.3, alpha: 0.5)
@@ -70,9 +70,9 @@ class ShotBucketsHeaderView: UICollectionReusableView {
         dimView.addGestureRecognizer(imageTapGestureRecognizer)
         imageViewCenterWrapperView.addSubview(dimView)
 
-        headerTitleLabel.backgroundColor = .clearColor()
-        headerTitleLabel.textColor = .whiteColor()
-        headerTitleLabel.font = .helveticaFont(.NeueMedium, size: 16)
+        headerTitleLabel.backgroundColor = .clear
+        headerTitleLabel.textColor = .white
+        headerTitleLabel.font = .helveticaFont(.neueMedium, size: 16)
         addSubview(headerTitleLabel)
 
         addSubview(closeButtonView)
@@ -81,12 +81,12 @@ class ShotBucketsHeaderView: UICollectionReusableView {
     deinit {
         // NGRHack: animation has to be invalidated to release AnimatableShotImageView object
         if let imageView = imageView as? AnimatableShotImageView {
-            let displayLink = imageView.valueForKey("displayLink") as? CADisplayLink
+            let displayLink = imageView.value(forKey: "displayLink") as? CADisplayLink
             displayLink?.invalidate()
         }
     }
 
-    @available(*, unavailable, message = "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -108,79 +108,79 @@ class ShotBucketsHeaderView: UICollectionReusableView {
             didUpdateConstraints = true
 
             let topHeaderLabelInset = CGFloat(10)
-            headerTitleLabel.autoAlignAxisToSuperviewAxis(.Vertical)
-            headerTitleLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: topHeaderLabelInset)
+            headerTitleLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            headerTitleLabel.autoPinEdge(toSuperviewEdge: .top, withInset: topHeaderLabelInset)
 
-            avatarView.autoSetDimensionsToSize(avatarSize)
-            avatarView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: minHeight * 0.5 - avatarSize.height * 0.5)
-            avatarView.autoPinEdgeToSuperviewEdge(.Left, withInset: margin)
+            avatarView.autoSetDimensions(to: avatarSize)
+            avatarView.autoPinEdge(toSuperviewEdge: .bottom, withInset: minHeight * 0.5 - avatarSize.height * 0.5)
+            avatarView.autoPinEdge(toSuperviewEdge: .left, withInset: margin)
 
-            titleLabel.autoPinEdge(.Left, toEdge: .Right, ofView: avatarView, withOffset: margin)
-            titleLabel.autoPinEdgeToSuperviewEdge(.Right, withInset: margin)
-            titleLabel.autoPinEdgeToSuperviewEdge(.Bottom)
-            titleLabel.autoSetDimension(.Height, toSize: minHeight)
+            titleLabel.autoPinEdge(.left, to: .right, of: avatarView, withOffset: margin)
+            titleLabel.autoPinEdge(toSuperviewEdge: .right, withInset: margin)
+            titleLabel.autoPinEdge(toSuperviewEdge: .bottom)
+            titleLabel.autoSetDimension(.height, toSize: minHeight)
 
-            imageViewCenterWrapperView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            imageViewCenterWrapperBottomConstraint = imageViewCenterWrapperView.autoPinEdgeToSuperviewEdge(.Bottom,
+            imageViewCenterWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            imageViewCenterWrapperBottomConstraint = imageViewCenterWrapperView.autoPinEdge(toSuperviewEdge: .bottom,
                     withInset: minHeight)
 
             gradientView.autoPinEdgesToSuperviewEdges()
             dimView.autoPinEdgesToSuperviewEdges()
 
-            closeButtonView.autoPinEdge(.Right, toEdge: .Right, ofView: imageViewCenterWrapperView, withOffset: -5)
-            closeButtonView.autoPinEdge(.Top, toEdge: .Top, ofView: imageViewCenterWrapperView, withOffset: 5)
+            closeButtonView.autoPinEdge(.right, to: .right, of: imageViewCenterWrapperView, withOffset: -5)
+            closeButtonView.autoPinEdge(.top, to: .top, of: imageViewCenterWrapperView, withOffset: 5)
         }
 
         super.updateConstraints()
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
 
-        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.TopLeft, .TopRight],
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.topLeft, .topRight],
                 cornerRadii: CGSize(width: 15, height: 15))
         let mask = CAShapeLayer()
-        mask.path = path.CGPath
+        mask.path = path.cgPath
         layer.mask = mask
 
         let gradient = CAGradientLayer()
-        gradient.colors = [UIColor(white: 0, alpha: 0.3).CGColor, UIColor(white: 1, alpha: 0).CGColor]
+        gradient.colors = [UIColor(white: 0, alpha: 0.3).cgColor, UIColor(white: 1, alpha: 0).cgColor]
         gradient.locations = [0.0, 0.7]
         gradient.frame = gradientView.bounds
-        gradientView.layer.insertSublayer(gradient, atIndex: 0)
+        gradientView.layer.insertSublayer(gradient, at: 0)
     }
 
-    func setAttributedTitle(title: NSAttributedString?) {
+    func setAttributedTitle(_ title: NSAttributedString?) {
         titleLabel.setText(title)
     }
 
-    func setHeaderTitle(title: String) {
+    func setHeaderTitle(_ title: String) {
         headerTitleLabel.text = title
     }
 
-    func setLinkInTitle(URL: NSURL, range: NSRange, delegate: TTTAttributedLabelDelegate) {
+    func setLinkInTitle(_ URL: URL, range: NSRange, delegate: TTTAttributedLabelDelegate) {
         let linkAttributes = [
                 NSForegroundColorAttributeName: UIColor.pinkColor(),
-                NSFontAttributeName: UIFont.systemFontOfSize(14)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 14)
         ]
         titleLabel.linkAttributes = linkAttributes
         titleLabel.activeLinkAttributes = linkAttributes
         titleLabel.inactiveLinkAttributes = linkAttributes
         titleLabel.extendsLinkTouchArea = false
-        titleLabel.addLinkToURL(URL, withRange: range)
+        titleLabel.addLink(to: URL, with: range)
         titleLabel.delegate = delegate
     }
 }
 
 extension ShotBucketsHeaderView {
 
-    func setImageWithShotImage(shotImage: ShotImageType) {
+    func setImageWithShotImage(_ shotImage: ShotImageType) {
         if imageView == nil {
-            imageView = ShotImageView.newAutoLayoutView()
+            imageView = ShotImageView.newAutoLayout()
             setupImageView()
         }
 
-        let imageCompletion: UIImage -> Void = {
+        let imageCompletion: (UIImage) -> Void = {
             [weak self] image in
             if let imageView = self?.imageView {
                 imageView.image = image
@@ -195,16 +195,16 @@ extension ShotBucketsHeaderView {
         )
     }
 
-    func setAnimatedImageWithUrl(url: NSURL) {
+    func setAnimatedImageWithUrl(_ url: URL) {
         if imageView == nil {
-            imageView = AnimatableShotImageView.newAutoLayoutView()
+            imageView = AnimatableShotImageView.newAutoLayout()
             setupImageView()
         }
         let iv = imageView as? AnimatableShotImageView
         iv?.loadAnimatableShotFromUrl(url)
     }
 
-    private func setupImageView() {
+    fileprivate func setupImageView() {
         imageViewCenterWrapperView.insertSubview(imageView!, belowSubview: gradientView)
         imageView!.autoPinEdgesToSuperviewEdges()
     }
@@ -214,12 +214,5 @@ private extension ShotBucketsHeaderView {
 
     dynamic func shotImageDidTap(_: UITapGestureRecognizer) {
         imageDidTap?()
-    }
-}
-
-extension ShotBucketsHeaderView: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotBucketsHeaderView)
     }
 }

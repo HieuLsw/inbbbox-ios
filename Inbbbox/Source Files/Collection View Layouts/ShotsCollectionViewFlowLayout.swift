@@ -10,20 +10,20 @@ class ShotsCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     let spacings = CollectionViewLayoutSpacings()
 
-    override func prepareLayout() {
+    override func prepare() {
         if let collectionView = collectionView {
             let fixedLeftMargin = CGFloat(28)
             let fixedRightMargin = CGFloat(27)
-            let calculatedItemWidth = round(CGRectGetWidth(collectionView.bounds)) - fixedLeftMargin - fixedRightMargin
+            let calculatedItemWidth = round(collectionView.bounds.width) - fixedLeftMargin - fixedRightMargin
 
             let bigger = spacings.biggerShotHeightToWidthRatio
             let smaller = spacings.smallerShotHeightToWidthRatio
             let heightToWidthRatio: CGFloat = Settings.Customization.ShowAuthor ? bigger : smaller
 
             let calculatedItemHeight = calculatedItemWidth * heightToWidthRatio
-            let calculatedVerticalSpacing = round(CGRectGetHeight(collectionView.bounds) / 2 - calculatedItemHeight / 2)
+            let calculatedVerticalSpacing = round(collectionView.bounds.height / 2 - calculatedItemHeight / 2)
             itemSize = CGSize(width: calculatedItemWidth, height: calculatedItemHeight)
-            minimumLineSpacing = CGFloat(CGRectGetHeight(collectionView.bounds) - calculatedItemHeight)
+            minimumLineSpacing = CGFloat(collectionView.bounds.height - calculatedItemHeight)
             sectionInset = UIEdgeInsets(top: calculatedVerticalSpacing,
                                         left: 0,
                                         bottom: calculatedVerticalSpacing,

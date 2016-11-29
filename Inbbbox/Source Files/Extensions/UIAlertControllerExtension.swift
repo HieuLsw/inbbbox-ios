@@ -19,17 +19,16 @@ extension UIAlertController {
         AOAlertSettings.sharedSettings.defaultActionColor = .pinkColor()
         AOAlertSettings.sharedSettings.cancelActionColor = .pinkColor()
 
-        AOAlertSettings.sharedSettings.messageFont = UIFont.helveticaFont(.NeueMedium, size: 17)
-        AOAlertSettings.sharedSettings.defaultActionFont = UIFont.helveticaFont(.Neue, size: 16)
-        AOAlertSettings.sharedSettings.cancelActionFont = UIFont.helveticaFont(.Neue, size: 16)
-        AOAlertSettings.sharedSettings.destructiveActionFont = UIFont.helveticaFont(.Neue, size: 16)
+        AOAlertSettings.sharedSettings.messageFont = UIFont.helveticaFont(.neueMedium, size: 17)
+        AOAlertSettings.sharedSettings.defaultActionFont = UIFont.helveticaFont(.neue, size: 16)
+        AOAlertSettings.sharedSettings.cancelActionFont = UIFont.helveticaFont(.neue, size: 16)
+        AOAlertSettings.sharedSettings.destructiveActionFont = UIFont.helveticaFont(.neue, size: 16)
 
-        AOAlertSettings.sharedSettings.blurredBackground = true
     }
 
     // MARK: Buckets
 
-    class func provideBucketName(createHandler: (bucketName: String) -> Void)
+    class func provideBucketName(_ createHandler: @escaping (_ bucketName: String) -> Void)
                     -> AlertViewController {
         let alertTitle = NSLocalizedString("UIAlertControllerExtension.NewBucket",
                                   comment: "Allows user to create new bucket.")
@@ -37,20 +36,20 @@ extension UIAlertController {
                                     comment: "Provide name for new bucket")
         let alert = AlertViewController(title: alertTitle,
                                     message: alertMessage,
-                             preferredStyle: .Alert)
+                             preferredStyle: .alert)
 
         let cancelActionTitle = NSLocalizedString("UIAlertControllerExtension.Cancel",
                                          comment: "Cancel creating new bucket.")
-        alert.addAction(UIAlertAction(title: cancelActionTitle, style: .Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: cancelActionTitle, style: .cancel, handler: nil))
 
         let createActionTitle = NSLocalizedString("UIAlertControllerExtension.Create",
                                          comment: "Create new bucket.")
-        alert.addAction(UIAlertAction(title: createActionTitle, style: .Default) { _ in
+        alert.addAction(UIAlertAction(title: createActionTitle, style: .default) { _ in
             if let bucketName = alert.textFields?[0].text {
-                createHandler(bucketName: bucketName)
+                createHandler(bucketName)
             }
         })
-        alert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+        alert.addTextField(configurationHandler: {(textField: UITextField!) in
             textField.placeholder = NSLocalizedString("UIAlertControllerExtension.BucketName",
                                              comment: "Asks user to enter bucket name.")
         })
@@ -64,7 +63,7 @@ extension UIAlertController {
         let message = NSLocalizedString("UIAlertControllerExtension.InappropriateContentReported", comment: "nil")
 
         let okActionTitle = NSLocalizedString("UIAlertControllerExtension.OK", comment: "OK")
-        let okAction = AOAlertAction(title: okActionTitle, style: .Default, handler: nil)
+        let okAction = AOAlertAction(title: okActionTitle, style: .default, handler: nil)
 
         return UIAlertController.createAlert(message, action: okAction)
     }
@@ -79,13 +78,13 @@ extension UIAlertController {
     class func willSignOutUser() -> AOAlertController {
         let message = NSLocalizedString("ShotsCollectionViewController.SignOut",
                 comment: "Message informing user will be logged out because of an error.")
-        let alert = AOAlertController(title: nil, message: message, style: .Alert)
+        let alert = AOAlertController(title: nil, message: message, style: .alert)
 
         let dismissActionTitle = NSLocalizedString("ShotsCollectionViewController.Dismiss",
                 comment: "Dismiss error alert.")
-        let dismissAction = AOAlertAction(title: dismissActionTitle, style: .Default) { _ in
+        let dismissAction = AOAlertAction(title: dismissActionTitle, style: .default) { _ in
             Authenticator.logout()
-            if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
                 delegate.rollbackToLoginViewController()
             }
         }
@@ -103,16 +102,15 @@ extension UIAlertController {
 
     // MARK: Private
 
-    private class func defaultDismissAction(style: AOAlertActionStyle = .Default) -> AOAlertAction {
+    fileprivate class func defaultDismissAction(_ style: AOAlertActionStyle = .default) -> AOAlertAction {
         let title = NSLocalizedString("UIAlertControllerExtension.Dismiss", comment: "Dismiss")
-        let action = AOAlertAction(title: title, style: style, handler: nil)
 
-        return action
+        return AOAlertAction(title: title, style: style, handler: nil)
     }
 
-    private class func createAlert(message: String,
+    fileprivate class func createAlert(_ message: String,
                                    action: AOAlertAction = UIAlertController.defaultDismissAction(),
-                                   style: AOAlertControllerStyle = .Alert) -> AOAlertController {
+                                   style: AOAlertControllerStyle = .alert) -> AOAlertController {
         let alert = AOAlertController(title: nil, message: message, style: style)
         alert.addAction(action)
 

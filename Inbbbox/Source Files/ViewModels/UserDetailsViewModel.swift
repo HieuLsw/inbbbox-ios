@@ -17,8 +17,8 @@ class UserDetailsViewModel: ProfileViewModel {
         return user.name ?? user.username
     }
 
-    var avatarURL: NSURL? {
-        return user.avatarURL
+    var avatarURL: URL? {
+        return user.avatarURL as URL?
     }
 
     var collectionIsEmpty: Bool {
@@ -26,7 +26,7 @@ class UserDetailsViewModel: ProfileViewModel {
     }
 
     var shouldShowFollowButton: Bool {
-        if let currentUser = UserStorage.currentUser where currentUser.identifier != user.identifier {
+        if let currentUser = UserStorage.currentUser, currentUser.identifier != user.identifier {
             return true
         }
         return false
@@ -39,8 +39,8 @@ class UserDetailsViewModel: ProfileViewModel {
     var userShots = [ShotType]()
     var connectionsRequester = APIConnectionsRequester()
 
-    private(set) var user: UserType
-    private let shotsProvider = ShotsProvider()
+    fileprivate(set) var user: UserType
+    fileprivate let shotsProvider = ShotsProvider()
 
     init(user: UserType) {
         self.user = user
@@ -52,11 +52,11 @@ class UserDetailsViewModel: ProfileViewModel {
         firstly {
             shotsProvider.provideShotsForUser(user)
         }.then { shots -> Void in
-            if let shots = shots where shots != self.userShots {
+            if let shots = shots, shots != self.userShots {
                 self.userShots = shots
                 self.delegate?.viewModelDidLoadInitialItems()
             }
-        }.error { error in
+        }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
@@ -65,17 +65,17 @@ class UserDetailsViewModel: ProfileViewModel {
         firstly {
             shotsProvider.nextPage()
         }.then { shots -> Void in
-            if let shots = shots where shots.count > 0 {
-                let indexes = shots.enumerate().map { index, _ in
+            if let shots = shots, shots.count > 0 {
+                let indexes = shots.enumerated().map { index, _ in
                     return index + self.userShots.count
                 }
-                self.userShots.appendContentsOf(shots)
+                self.userShots.append(contentsOf: shots)
                 let indexPaths = indexes.map {
-                    NSIndexPath(forRow:($0), inSection: 0)
+                    IndexPath(row:($0), section: 0)
                 }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
             }
-        }.error { error in
+        }.catch { error in
             self.notifyDelegateAboutFailure(error)
         }
     }
@@ -90,7 +90,7 @@ class UserDetailsViewModel: ProfileViewModel {
                 connectionsRequester.isUserFollowedByMe(user)
             }.then { followed in
                 fulfill(followed)
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -100,7 +100,7 @@ class UserDetailsViewModel: ProfileViewModel {
 
             firstly {
                 connectionsRequester.followUser(user)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -110,13 +110,13 @@ class UserDetailsViewModel: ProfileViewModel {
 
             firstly {
                 connectionsRequester.unfollowUser(user)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
     // MARK: Cell data section
 
-    func shotCollectionViewCellViewData(indexPath: NSIndexPath) -> (shotImage: ShotImageType, animated: Bool) {
+    func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool) {
         let shotImage = userShots[indexPath.row].shotImage
         let animated = userShots[indexPath.row].animated
         return (shotImage, animated)
@@ -127,7 +127,7 @@ class UserDetailsViewModel: ProfileViewModel {
 
 extension UserDetailsViewModel {
 
-    func shotWithSwappedUser(shot: ShotType) -> ShotType {
+    func shotWithSwappedUser(_ shot: ShotType) -> ShotType {
         return Shot(
             identifier: shot.identifier,
             title: shot.title,

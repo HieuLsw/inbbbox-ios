@@ -50,7 +50,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
                 }
                 
                 it("shouldn't return disabled source") {
-                    expect(sut.sources).toNot(contain(APIShotsProviderConfiguration.ShotsSource.NewToday))
+                    expect(sut.sources).toNot(contain(APIShotsProviderConfiguration.ShotsSource.newToday))
                 }
             }
         }
@@ -66,7 +66,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
             context("with NewToday source") {
                 
                 beforeEach {
-                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .List), source: .NewToday)
+                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .list), source: .newToday)
                 }
                 
                 it("should query have proper parameters") {
@@ -80,7 +80,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
             context("with PopularToday source") {
                 
                 beforeEach {
-                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .List), source: .PopularToday)
+                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .list), source: .popularToday)
                 }
                 
                 it("should query have proper parameters") {
@@ -93,7 +93,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
             context("with Debuts source") {
                 
                 beforeEach {
-                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .List), source: .Debuts)
+                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .list), source: .debuts)
                 }
                 
                 it("should query have proper parameters") {
@@ -107,7 +107,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
             context("with Following source") {
                 
                 beforeEach {
-                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .List), source: .Following)
+                    query = sut.queryByConfigurationForQuery(ShotsQuery(type: .list), source: .following)
                 }
                 
                 it("should query have proper parameters") {
@@ -143,10 +143,10 @@ private extension ShotsProviderConfigurationSpec {
         }
     }
     
-    var todayDate: NSDate {
-        let formatter = NSDateFormatter()
+    var todayDate: Date {
+        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
-        return formatter.dateFromString(formatter.stringFromDate(NSDate()))!
+        return formatter.date(from: formatter.string(from: Date()))!
     }
 }

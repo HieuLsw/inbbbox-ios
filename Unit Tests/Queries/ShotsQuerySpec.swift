@@ -18,7 +18,7 @@ class ShotsQuerySpec: QuickSpec {
         var sut: ShotsQuery!
         
         beforeEach {
-            sut = ShotsQuery(type: .List)
+            sut = ShotsQuery(type: .list)
         }
         
         afterEach {
@@ -28,9 +28,9 @@ class ShotsQuerySpec: QuickSpec {
         describe("when newly initiliazed") {
             
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
-                return ShotsQuery(type: .List)
+                return ShotsQuery(type: .list)
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/shots")
+                return (method: .GET, encoding: .url, path: "/shots")
             }
             
             it("should have nil list parameter") {
@@ -185,16 +185,16 @@ class ShotsQuerySpec: QuickSpec {
             
             describe("changing date parameter") {
                 
-                var date: NSDate!
+                var date: Date!
                 
                 beforeEach {
                     let components = NSDateComponents()
-                    components.calendar = NSCalendar.currentCalendar()
+                    components.calendar = NSCalendar.current
                     components.day = 3
                     components.month = 3
                     components.year = 2015
-                    date = components.date
-                    sut.date = date
+                    date = components.date as Date!
+                    sut.date = date as Date?
                 }
                 
                 afterEach {
@@ -244,9 +244,9 @@ class ShotsQuerySpec: QuickSpec {
             
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 let user = User.fixtureUser()
-                return ShotsQuery(type: .UserShots(user))
+                return ShotsQuery(type: .userShots(user))
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/users/fixture.username/shots")
+                return (method: .GET, encoding: .url, path: "/users/fixture.username/shots")
             }
         }
         
@@ -255,9 +255,9 @@ class ShotsQuerySpec: QuickSpec {
             
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 let bucket = Bucket.fixtureBucket()
-                return ShotsQuery(type: .BucketShots(bucket))
+                return ShotsQuery(type: .bucketShots(bucket))
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/buckets/fixture.identifier/shots")
+                return (method: .GET, encoding: .url, path: "/buckets/fixture.identifier/shots")
             }
         }
         
@@ -265,9 +265,9 @@ class ShotsQuerySpec: QuickSpec {
             
             SharedQuerySpec.performSpecForQuery( { Void -> Query in
                 let user = User.fixtureUser()
-                return ShotsQuery(type: .UserLikedShots(user))
+                return ShotsQuery(type: .userLikedShots(user))
             }) { Void -> QueryExpectation in
-                return (method: .GET, encoding: .URL, path: "/users/fixture.username/likes")
+                return (method: .GET, encoding: .url, path: "/users/fixture.username/likes")
             }
         }
     }

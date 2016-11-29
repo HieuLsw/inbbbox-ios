@@ -8,14 +8,14 @@
 
 import UIKit
 
-class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
+class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell, Reusable {
 
-    private let cellHeight = CGFloat(20)
+    fileprivate let cellHeight = CGFloat(20)
 
-    private let topSeparatorLine = UIView.newAutoLayoutView()
-    private let bottomSeparatorLine = UIView.newAutoLayoutView()
+    fileprivate let topSeparatorLine = UIView.newAutoLayout()
+    fileprivate let bottomSeparatorLine = UIView.newAutoLayout()
 
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +35,7 @@ class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,11 +47,11 @@ class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
 
             let separatorLineHeight = CGFloat(0.5)
 
-            topSeparatorLine.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            topSeparatorLine.autoSetDimension(.Height, toSize: separatorLineHeight)
+            topSeparatorLine.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            topSeparatorLine.autoSetDimension(.height, toSize: separatorLineHeight)
 
-            bottomSeparatorLine.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Top)
-            bottomSeparatorLine.autoSetDimension(.Height, toSize: separatorLineHeight)
+            bottomSeparatorLine.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
+            bottomSeparatorLine.autoSetDimension(.height, toSize: separatorLineHeight)
 
             contentView.autoPinEdgesToSuperviewEdges()
         }
@@ -59,7 +59,7 @@ class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
     }
 
-    override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes)
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)
                     -> UICollectionViewLayoutAttributes {
 
         layoutAttributes.frame = {
@@ -67,16 +67,9 @@ class ShotBucketsSeparatorCollectionViewCell: UICollectionViewCell {
             var frame = layoutAttributes.frame
             frame.size.height = cellHeight
 
-            return CGRectIntegral(frame)
+            return frame.integral
         }()
 
         return layoutAttributes
-    }
-}
-
-extension ShotBucketsSeparatorCollectionViewCell: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotBucketsSeparatorCollectionViewCell)
     }
 }

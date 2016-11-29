@@ -9,19 +9,19 @@
 import CoreData
 
 func setUpInMemoryManagedObjectContext() -> NSManagedObjectContext {
-    let modelPath = NSBundle.mainBundle().pathForResource("StoreData", ofType: "momd")
+    let modelPath = Bundle.main.path(forResource: "StoreData", ofType: "momd")
     
-    let managedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath!))!
+    let managedObjectModel = NSManagedObjectModel(contentsOf: URL(fileURLWithPath: modelPath!))!
     
     let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
     
     do {
-        try persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+        try persistentStoreCoordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
     } catch {
         // This class is only used for tesing. No need to elevate error here, test will fail.
     }
     
-    let managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+    let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
     
     return managedObjectContext

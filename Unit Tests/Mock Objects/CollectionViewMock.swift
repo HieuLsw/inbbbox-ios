@@ -10,31 +10,31 @@ import Dobby
 class CollectionViewMock: UICollectionView {
 
     let numberOfItemsInSectionStub = Stub<Int, Int>()
-    let insertItemsAtIndexPathsStub = Stub<[NSIndexPath], Void>()
-    let deleteItemsAtIndexPathsStub = Stub<[NSIndexPath], Void>()
-    let performBatchUpdatesStub = Stub<((() -> Void)?, (Bool -> Void)?), Void>()
+    let insertItemsAtIndexPathsStub = Stub<[IndexPath], Void>()
+    let deleteItemsAtIndexPathsStub = Stub<[IndexPath], Void>()
+    let performBatchUpdatesStub = Stub<((() -> Void)?, ((Bool) -> Void)?), Void>()
     let reloadDataStub = Stub<Void, Void>()
-    let dequeueReusableCellWithReuseIdentifierStub = Stub<(String, NSIndexPath), UICollectionViewCell>()
+    let dequeueReusableCellWithReuseIdentifierStub = Stub<(String, IndexPath), UICollectionViewCell>()
     let visibleCellsStub = Stub<Void, [UICollectionViewCell]>()
-    let indexPathForCellStub = Stub<UICollectionViewCell, NSIndexPath>()
+    let indexPathForCellStub = Stub<UICollectionViewCell, IndexPath>()
 
     convenience init() {
-        self.init(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        self.init(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     }
 
-    override func numberOfItemsInSection(section: Int) -> Int {
+    override func numberOfItems(inSection section: Int) -> Int {
         return try! numberOfItemsInSectionStub.invoke(section)
     }
 
-    override func insertItemsAtIndexPaths(indexPaths: [NSIndexPath]) {
+    override func insertItems(at indexPaths: [IndexPath]) {
         try! insertItemsAtIndexPathsStub.invoke(indexPaths)
     }
 
-    override func deleteItemsAtIndexPaths(indexPaths: [NSIndexPath]) {
+    override func deleteItems(at indexPaths: [IndexPath]) {
         try! deleteItemsAtIndexPathsStub.invoke(indexPaths)
     }
 
-    override func performBatchUpdates(updates: (() -> Void)?, completion: (Bool -> Void)?) {
+    override func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         try! performBatchUpdatesStub.invoke(updates, completion)
     }
 
@@ -42,15 +42,15 @@ class CollectionViewMock: UICollectionView {
         try! reloadDataStub.invoke()
     }
 
-    override func dequeueReusableCellWithReuseIdentifier(identifier: String, forIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func dequeueReusableCell(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> UICollectionViewCell {
         return try! dequeueReusableCellWithReuseIdentifierStub.invoke(identifier, indexPath)
     }
 
-    override func visibleCells() -> [UICollectionViewCell] {
+    override var visibleCells : [UICollectionViewCell] {
         return try! visibleCellsStub.invoke()
     }
 
-    override func indexPathForCell(cell: UICollectionViewCell) -> NSIndexPath? {
+    override func indexPath(for cell: UICollectionViewCell) -> IndexPath? {
         return try! indexPathForCellStub.invoke(cell)
     }
 }

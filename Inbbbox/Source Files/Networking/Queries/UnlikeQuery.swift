@@ -12,7 +12,7 @@ struct UnlikeQuery: Query {
 
     let method = Method.DELETE
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for unliking a shot.
     ///

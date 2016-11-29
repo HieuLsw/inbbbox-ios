@@ -12,7 +12,7 @@ struct CommentUnlikeQuery: Query {
 
     let method = Method.DELETE
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for unmarking comment as liked.
     ///

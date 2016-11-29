@@ -13,8 +13,8 @@ import Async
 
 let networkErrorDomain = "co.netguru.inbbbox.error.network"
 
-enum ResponseError: ErrorType {
-    case UnexpectedResponse
+enum ResponseError: Error {
+    case unexpectedResponse
 }
 
 typealias Response = (json: JSON?, header: [String: AnyObject]?)
@@ -29,12 +29,12 @@ protocol Responsable {
     /// - parameter response: `NSURLResponse` received from server
     ///
     /// - returns: Promise which resolves with `Response`
-    func responseWithData(data: NSData?, response: NSURLResponse?) -> Promise<Response>
+    func responseWithData(_ data: Data?, response: URLResponse?) -> Promise<Response>
 }
 
 extension Responsable {
 
-    func responseWithData(data: NSData?, response: NSURLResponse?) -> Promise<Response> {
+    func responseWithData(_ data: Data?, response: URLResponse?) -> Promise<Response> {
 
         return Promise<Response> { fulfill, reject in
 
@@ -44,7 +44,7 @@ extension Responsable {
                 throw error
             }
 
-            let header = (response as? NSHTTPURLResponse)?.allHeaderFields as? [String: AnyObject]
+            let header = (response as? HTTPURLResponse)?.allHeaderFields as? [String: AnyObject]
 
             APIRateLimitKeeper.sharedKeeper.setCurrentLimitFromHeader(header ?? [:])
 
@@ -52,13 +52,13 @@ extension Responsable {
                 throw error
             } else if let error = self.checkResponseForError(response) {
                 throw error
-            } else if let responseData = data where data?.length > 0 {
+            } else if let responseData = data, (data?.count)! > 0 {
 
                 var swiftyJSON: JSON? = nil
                 var serializationError: NSError?
 
                 Async.background {
-                    swiftyJSON = JSON(data: responseData, options: .AllowFragments, error: &serializationError)
+                    swiftyJSON = JSON(data: responseData, options: .allowFragments, error: &serializationError)
                 }.main {
                     if let serializationError = serializationError {
                         reject(serializationError)
@@ -67,7 +67,7 @@ extension Responsable {
                     }
                 }
 
-            } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 204 {
+            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
                 fulfill((json: nil, header: header))
             } else {
                 let message = NSLocalizedString("Responsable.RetrievingFailed",
@@ -82,9 +82,9 @@ extension Responsable {
 // MARK: - Private extension of Responsable
 private extension Responsable {
 
-    func checkDataForError(data: NSData?, response: NSURLResponse?) -> NSError? {
+    func checkDataForError(_ data: Data?, response: URLResponse?) -> NSError? {
 
-        guard let response = response as? NSHTTPURLResponse where response.statusCode >= 400 else {
+        guard let response = response as? HTTPURLResponse, response.statusCode >= 400 else {
             return nil
         }
 
@@ -92,7 +92,7 @@ private extension Responsable {
             return nil
         }
 
-        let swiftyJSON = JSON(data: data, options: .AllowFragments, error: nil)
+        let swiftyJSON = JSON(data: data, options: .allowFragments, error: nil)
         guard let message = swiftyJSON["errors"].array?.first?["message"].string else {
             return nil
         }
@@ -100,9 +100,9 @@ private extension Responsable {
         return NSError(domain: networkErrorDomain, code: response.statusCode, message: message)
     }
 
-    func checkResponseForError(response: NSURLResponse?) -> NSError? {
+    func checkResponseForError(_ response: URLResponse?) -> NSError? {
 
-        guard let response = response as? NSHTTPURLResponse where response.statusCode >= 400 else {
+        guard let response = response as? HTTPURLResponse, response.statusCode >= 400 else {
             return nil
         }
 

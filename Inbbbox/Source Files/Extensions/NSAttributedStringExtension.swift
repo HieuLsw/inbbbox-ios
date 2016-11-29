@@ -11,14 +11,13 @@ import UIKit
 extension NSAttributedString {
 
     convenience init?(htmlString: String) {
-
-        guard let encodedData = htmlString.dataUsingEncoding(NSUTF8StringEncoding) else {
+        guard let encodedData = htmlString.data(using: String.Encoding.utf8) else {
             return nil
         }
 
         let attributedOptions: [String:AnyObject] = [
-                NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-                NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding
+                NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType as AnyObject,
+                NSCharacterEncodingDocumentAttribute: NSNumber(value: String.Encoding.utf8.rawValue)
         ]
 
         var attributedString: NSAttributedString?
@@ -36,10 +35,10 @@ extension NSAttributedString {
     /// - returns: Attributed string by removing new line character at the end.
     func attributedStringByTrimingTrailingNewLine() -> NSAttributedString {
 
-        let possibleNewLineCharacter = string.substringFromIndex(string.endIndex.advancedBy(-1))
+        let possibleNewLineCharacter = string.substring(from: string.characters.index(string.endIndex, offsetBy: -1))
         if possibleNewLineCharacter == "\n" {
             let range = NSRange(location: 0, length: length - 1)
-            return attributedSubstringFromRange(range).attributedStringByTrimingTrailingNewLine()
+            return attributedSubstring(from: range).attributedStringByTrimingTrailingNewLine()
         }
 
         return self
@@ -55,11 +54,11 @@ extension NSAttributedString {
     /// - parameter width: Available width.
     ///
     /// - returns: Bounding height.
-    func boundingHeightUsingAvailableWidth(width: CGFloat) -> CGFloat {
+    func boundingHeightUsingAvailableWidth(_ width: CGFloat) -> CGFloat {
 
-        let options: NSStringDrawingOptions = [.UsesLineFragmentOrigin]
-        let size = CGSize(width: width, height: CGFloat.max)
+        let options: NSStringDrawingOptions = [.usesLineFragmentOrigin]
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
 
-        return ceil(boundingRectWithSize(size, options:options, context: nil).size.height)
+        return ceil(boundingRect(with: size, options:options, context: nil).size.height)
     }
 }

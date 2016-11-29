@@ -19,7 +19,7 @@ class APITeamsProvider: PageableProvider {
 
      - returns: Promise which resolves with users or nil.
      */
-    func provideMembersForTeam(team: TeamType) -> Promise<[UserType]?> {
+    func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
 
         let query = TeamMembersQuery(team: team)
         return Promise<[UserType]?> { fulfill, reject in
@@ -27,7 +27,7 @@ class APITeamsProvider: PageableProvider {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (users: [User]?) -> Void in
                 fulfill(users.flatMap { $0.map { $0 as UserType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -45,7 +45,7 @@ class APITeamsProvider: PageableProvider {
                 nextPageFor(User)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as UserType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -63,7 +63,7 @@ class APITeamsProvider: PageableProvider {
                 previousPageFor(User)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as UserType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

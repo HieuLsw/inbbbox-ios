@@ -27,7 +27,7 @@ extension AutoSizable {
     }
 
     static var contentInsets: UIEdgeInsets {
-        return UIEdgeInsetsZero
+        return UIEdgeInsets.zero
     }
 
     static var verticalInteritemSpacing: CGFloat {

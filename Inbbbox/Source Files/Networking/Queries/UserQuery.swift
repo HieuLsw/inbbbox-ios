@@ -12,7 +12,7 @@ struct UserQuery: Query {
 
     let method = Method.GET
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for getting currently signed in user.
     init() {

@@ -15,30 +15,30 @@ extension UINavigationController {
     /// - returns: instance of UIProgressView
     func progressViewByEmbedingInNavigationBar() -> UIProgressView {
 
-        let progressView = UIProgressView(progressViewStyle: .Bar)
+        let progressView = UIProgressView(progressViewStyle: .bar)
         navigationBar.addSubview(progressView)
 
         let bottomConstraint = NSLayoutConstraint(item: navigationBar,
-                                             attribute: .Bottom,
-                                             relatedBy: .Equal,
+                                             attribute: .bottom,
+                                             relatedBy: .equal,
                                                 toItem: progressView,
-                                             attribute: .Bottom,
+                                             attribute: .bottom,
                                             multiplier: 1,
                                               constant: 1)
 
         let leftConstraint = NSLayoutConstraint(item: navigationBar,
-                                           attribute: .Leading,
-                                           relatedBy: .Equal,
+                                           attribute: .leading,
+                                           relatedBy: .equal,
                                               toItem: progressView,
-                                           attribute: .Leading,
+                                           attribute: .leading,
                                           multiplier: 1,
                                             constant: 0)
 
         let rightConstraint = NSLayoutConstraint(item: navigationBar,
-                                            attribute: .Trailing,
-                                            relatedBy: .Equal,
+                                            attribute: .trailing,
+                                            relatedBy: .equal,
                                                toItem: progressView,
-                                            attribute: .Trailing,
+                                            attribute: .trailing,
                                            multiplier: 1,
                                              constant: 0)
 

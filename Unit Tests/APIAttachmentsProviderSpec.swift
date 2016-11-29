@@ -38,7 +38,7 @@ class APIAttachmentsProviderSpec: QuickSpec {
                 it("attachments should be properly returned") {
                     sut.provideAttachmentsForShot(Shot.fixtureShot()).then { _attachments -> Void in
                         attachments = _attachments
-                        }.error { _ in fail() }
+                        }.catch { _ in fail() }
                     
                     expect(attachments).toNotEventually(beNil())
                     expect(attachments).toEventually(haveCount(3))
@@ -52,19 +52,19 @@ class APIAttachmentsProviderSpec: QuickSpec {
 //Explanation: Create APIAttachmentsProviderPrivateMock to override methods from PageableProvider.
 private class APIAttachmentsProviderPrivateMock: APIAttachmentsProvider {
     
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return mockResult(T)
     }
     
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
             
             let json = JSONSpecLoader.sharedInstance.fixtureAttachmentsJSON(withCount: 3)

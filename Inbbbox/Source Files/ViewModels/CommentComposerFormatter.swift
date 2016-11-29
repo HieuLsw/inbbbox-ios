@@ -9,9 +9,9 @@
 import UIKit
 
 final class CommentComposerFormatter {
-    class func placeholderForMode(mode: ColorModeType) -> NSAttributedString {
+    class func placeholderForMode(_ mode: ColorModeType) -> NSAttributedString {
         let textColor = mode.shotDetailsCommentContentTextColor
-        let attributes = [NSForegroundColorAttributeName: textColor.colorWithAlphaComponent(0.7)]
+        let attributes = [NSForegroundColorAttributeName: textColor.withAlphaComponent(0.7)]
         let placehoder = NSLocalizedString("CommentComposerView.TypeComment",
                                            comment: "Placeholder text, for comment text field.")
         return NSAttributedString(string: placehoder, attributes: attributes)

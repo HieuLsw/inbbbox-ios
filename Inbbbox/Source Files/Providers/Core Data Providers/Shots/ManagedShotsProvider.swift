@@ -8,15 +8,15 @@ import CoreData
 
 class ManagedShotsProvider {
 
-    var managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)!.managedObjectContext
+    var managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext
 
     func provideMyLikedShots() -> Promise<[ShotType]?> {
-        let fetchRequest = NSFetchRequest(entityName: ManagedShot.entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedShot.entityName)
         fetchRequest.predicate = NSPredicate(format: "liked == true")
 
         return Promise<[ShotType]?> { fulfill, reject in
             do {
-                if let managedShots = try managedObjectContext.executeFetchRequest(fetchRequest) as? [ManagedShot] {
+                if let managedShots = try managedObjectContext.fetch(fetchRequest) as? [ManagedShot] {
                     fulfill(managedShots.map { $0 as ShotType })
                 }
             } catch {
@@ -25,14 +25,14 @@ class ManagedShotsProvider {
         }
     }
 
-    func provideShotsForBucket(bucket: BucketType) -> Promise<[ShotType]?> {
+    func provideShotsForBucket(_ bucket: BucketType) -> Promise<[ShotType]?> {
 
-        let fetchRequest = NSFetchRequest(entityName: ManagedShot.entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedShot.entityName)
         fetchRequest.predicate = NSPredicate(format: "ANY buckets.mngd_identifier == %@", bucket.identifier)
 
         return Promise<[ShotType]?> { fulfill, reject in
             do {
-                if let managedShots = try managedObjectContext.executeFetchRequest(fetchRequest) as? [ManagedShot] {
+                if let managedShots = try managedObjectContext.fetch(fetchRequest) as? [ManagedShot] {
                     fulfill(managedShots.map { $0 as ShotType })
                 }
             } catch {

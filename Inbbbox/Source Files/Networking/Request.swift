@@ -17,9 +17,9 @@ struct Request: Requestable, Responsable {
     let query: Query
 
     // Session for request.
-    let session: NSURLSession
+    let session: URLSession
 
-    init(query: Query, urlSession: NSURLSession = NSURLSession.inbbboxDefaultSession()) {
+    init(query: Query, urlSession: URLSession = URLSession.inbbboxDefaultSession()) {
         self.query = query
         session = urlSession
     }
@@ -36,7 +36,7 @@ struct Request: Requestable, Responsable {
                 throw error
             }
 
-            let dataTask = session.dataTaskWithRequest(foundationRequest) { data, response, error in
+            let dataTask = session.dataTask(with: foundationRequest as URLRequest) { data, response, error in
 
                 if let error = error {
                     reject(error)
@@ -48,7 +48,7 @@ struct Request: Requestable, Responsable {
                     }.then { response -> Void in
                         fulfill(response.json)
 
-                    }.error(reject)
+                    }.catch(execute: reject)
                 }
             }
 

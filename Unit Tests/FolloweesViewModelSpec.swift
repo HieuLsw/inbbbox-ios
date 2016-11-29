@@ -16,11 +16,11 @@ class FolloweesViewModelSpec: QuickSpec {
     override func spec() {
 
         var sut: FolloweesViewModelMock!
-        let fixtureImageURL = NSURL(string: "https://fixture.domain/fixture.image.teaser.png")
-        let fixtureImagesURLs: [NSURL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
+        let fixtureImageURL = URL(string: "https://fixture.domain/fixture.image.teaser.png")
+        let fixtureImagesURLs: [URL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
         let fixtureFolloweeName = "fixture.name"
         let fixtureNumberOfShots = "1 shot"
-        let fixtureAvatarURL = NSURL(string:"fixture.avatar.url")
+        let fixtureAvatarURL = URL(string:"fixture.avatar.url")
 
         beforeEach {
             sut = FolloweesViewModelMock()
@@ -48,7 +48,7 @@ class FolloweesViewModelSpec: QuickSpec {
             }
 
             it("should return proper cell data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.followeeCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureFolloweeName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
@@ -68,7 +68,7 @@ class FolloweesViewModelSpec: QuickSpec {
             }
 
             it("should return proper shot data for index path") {
-                let indexPath = NSIndexPath(forRow: 1, inSection: 0)
+                let indexPath = IndexPath(row: 1, section: 0)
                 let cellData = sut.followeeCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureFolloweeName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
@@ -117,7 +117,7 @@ private class FolloweesViewModelMock: FolloweesViewModel {
         }
     }
 
-    override func downloadShots(followees: [Followee]) {
+    override func downloadShots(_ followees: [Followee]) {
         for index in 0...followees.count - 1 {
             followeesIndexedShots[index] = [Shot.fixtureShot()]
         }

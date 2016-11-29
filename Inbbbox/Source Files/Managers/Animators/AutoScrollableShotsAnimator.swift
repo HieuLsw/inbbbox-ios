@@ -10,16 +10,16 @@ import UIKit.UICollectionView
 
 class AutoScrollableShotsAnimator {
 
-    private let animationPointsPerSecond = CGFloat(50)
-    private let dataSources: [AutoScrollableShotsDataSource]
-    private var collectionViewsToAnimate: [UICollectionView] {
+    fileprivate let animationPointsPerSecond = CGFloat(50)
+    fileprivate let dataSources: [AutoScrollableShotsDataSource]
+    fileprivate var collectionViewsToAnimate: [UICollectionView] {
         return dataSources.map { $0.collectionView }
     }
 
-    private var displayLink: CADisplayLink?
-    private var lastRunLoopTimestamp = CFTimeInterval(0)
-    private var isAnimating = false
-    private var extendedScrollableItemsCount = 0
+    fileprivate var displayLink: CADisplayLink?
+    fileprivate var lastRunLoopTimestamp = CFTimeInterval(0)
+    fileprivate var isAnimating = false
+    fileprivate var extendedScrollableItemsCount = 0
 
     init(bindForAnimation array: [(collectionView: UICollectionView, shots: [UIImage])]) {
 
@@ -47,7 +47,7 @@ class AutoScrollableShotsAnimator {
 
             let contentOffset = CGPoint(
                 x: 0,
-                y: collectionView.contentSize.height * 0.5 - CGRectGetHeight(collectionView.superview!.bounds) * 0.5
+                y: collectionView.contentSize.height * 0.5 - collectionView.superview!.bounds.height * 0.5
             )
             collectionView.setContentOffset(contentOffset, animated: false)
         }
@@ -63,7 +63,7 @@ class AutoScrollableShotsAnimator {
             dataSource.prepareForAnimation()
         }
 
-        displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink?.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
         lastRunLoopTimestamp = displayLink?.timestamp ?? 0
         isAnimating = true
     }
@@ -89,7 +89,7 @@ private extension AutoScrollableShotsAnimator {
         let deltaY = CGFloat(animationPointsPerSecond) * CGFloat(displayLink.timestamp - lastRunLoopTimestamp)
 
 
-        for (index, dataSource) in dataSources.enumerate() {
+        for (index, dataSource) in dataSources.enumerated() {
 
             let isEvenColumn = (index % 2 == 0)
             let direction = isEvenColumn ? 1 : -1 as CGFloat

@@ -22,15 +22,15 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
     var positionShift = 0
     let rotationDuration = 1.25
 
-    let firstShotImageView = UIImageView.newAutoLayoutView()
-    let secondShotImageView = UIImageView.newAutoLayoutView()
-    let thirdShotImageView = UIImageView.newAutoLayoutView()
-    let fourthShotImageView = UIImageView.newAutoLayoutView()
+    let firstShotImageView = UIImageView.newAutoLayout()
+    let secondShotImageView = UIImageView.newAutoLayout()
+    let thirdShotImageView = UIImageView.newAutoLayout()
+    let fourthShotImageView = UIImageView.newAutoLayout()
 
     override var shotsViewHeightToWidthRatio: CGFloat {
         return 1
     }
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     func makeRotationOnImages() {
         
@@ -40,9 +40,9 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
             positionShift=3
         }
         
-        if let animatableConstraints = animatableConstraints, valuesConstants = imagesConstants {
+        if let animatableConstraints = animatableConstraints, let valuesConstants = imagesConstants {
         
-            for (index, constraints) in animatableConstraints.enumerate() {
+            for (index, constraints) in animatableConstraints.enumerated() {
             
                 // index of values in constraints array, shifted by animation state
                 let valsIndex = (index + positionShift) % animatableConstraints.count
@@ -50,12 +50,12 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
                 // views z-index repositions, for last and first animation frame
                 if valsIndex == 3 {
                     if let view = constraints.top.firstItem as? UIView {
-                        shotsView.sendSubviewToBack(view)
+                        shotsView.sendSubview(toBack: view)
                     }
                 }
                 if valsIndex == 0 {
                     if let view = constraints.top.firstItem as? UIView {
-                        shotsView.bringSubviewToFront(view)
+                        shotsView.bringSubview(toFront: view)
                     }
                 }
                 
@@ -64,7 +64,7 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
             }
         }
         
-        UIView.animateWithDuration(rotationDuration, delay: 0, options: .CurveEaseInOut, animations: { [weak self] in
+        UIView.animate(withDuration: rotationDuration, delay: 0, options: UIViewAnimationOptions(), animations: { [weak self] in
             
             self?.shotsView.layoutIfNeeded()
             
@@ -115,22 +115,17 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
     }
 
     func setInfoViewConstraints() {
-        nameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: numberOfShotsLabel)
-        nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: infoView, withOffset: 6.5)
-        nameLabel.autoPinEdge(.Left, toEdge: .Left, ofView: infoView)
-        nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: infoView)
-        numberOfShotsLabel.autoPinEdge(.Left, toEdge: .Left, ofView: nameLabel)
+        nameLabel.autoPinEdge(.bottom, to: .top, of: numberOfShotsLabel)
+        nameLabel.autoPinEdge(.top, to: .top, of: infoView, withOffset: 6.5)
+        nameLabel.autoPinEdge(.left, to: .left, of: infoView)
+        nameLabel.autoPinEdge(.right, to: .right, of: infoView)
+        numberOfShotsLabel.autoPinEdge(.left, to: .left, of: nameLabel)
     }
 
     func clearImages() {
         for imageView in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView] {
             imageView.image = nil
         }
-    }
-
-    // MARK: - Reusable
-    static var reuseIdentifier: String {
-        return "BucketCollectionViewCellIdentifier"
     }
 
     // MARK: - Width dependent height
@@ -140,11 +135,11 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
 }
 
 extension BucketCollectionViewCell: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         updateBackgroundColorsForMode(mode)
     }
     
-    private func updateBackgroundColorsForMode(mode: ColorModeType) {
+    fileprivate func updateBackgroundColorsForMode(_ mode: ColorModeType) {
         for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView, shotsView] {
             view.backgroundColor = ColorModeProvider.current().shotViewCellBackground
         }
@@ -167,16 +162,16 @@ private extension BucketCollectionViewCell {
                 ConstantValues(top: largeHeight, left: 2 * subimageWidth, width: subimageWidth, height: subimageHeight)]
     }
     
-    func setupAndReturnConstraints(view:UIView, withValues values:ConstantValues) -> PositionsConstraints {
-        let topConstr = view.autoPinEdge(.Top, toEdge: .Top, ofView: shotsView, withOffset: values.top)
-        let leftConstr = view.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView, withOffset: values.left)
-        let widthConstr = view.autoSetDimension(.Width, toSize: values.width)
-        let heightConstr = view.autoSetDimension(.Height, toSize: values.height)
+    func setupAndReturnConstraints(_ view:UIView, withValues values:ConstantValues) -> PositionsConstraints {
+        let topConstr = view.autoPinEdge(.top, to: .top, of: shotsView, withOffset: values.top)
+        let leftConstr = view.autoPinEdge(.left, to: .left, of: shotsView, withOffset: values.left)
+        let widthConstr = view.autoSetDimension(.width, toSize: values.width)
+        let heightConstr = view.autoSetDimension(.height, toSize: values.height)
         
         return PositionsConstraints(top: topConstr, left: leftConstr, width: widthConstr, height: heightConstr)
     }
     
-    func updateConstraints(constraints:PositionsConstraints, withValues values:ConstantValues) {
+    func updateConstraints(_ constraints:PositionsConstraints, withValues values:ConstantValues) {
         constraints.top.constant = values.top
         constraints.left.constant = values.left
         constraints.width.constant = values.width

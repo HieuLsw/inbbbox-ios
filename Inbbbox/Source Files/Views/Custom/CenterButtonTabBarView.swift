@@ -6,30 +6,30 @@ import UIKit
 
 class CenterButtonTabBarView: UITabBar {
 
-    private var didSetConstraints = false
-    private var dummyItemScreenSizeDependentWidth: CGFloat {
-        switch CGRectGetWidth(frame) {
+    fileprivate var didSetConstraints = false
+    fileprivate var dummyItemScreenSizeDependentWidth: CGFloat {
+        switch frame.width {
             case 0 ..< 375: return 60
             case 376 ..< CGFloat.infinity: return 76
             default: return 70
         }
     }
 
-    private(set) var likesItemViewVerticalConstraint: NSLayoutConstraint?
-    private(set) var bucketsItemViewVerticalConstraint: NSLayoutConstraint?
-    private(set) var followingItemViewVerticalConstraint: NSLayoutConstraint?
-    private(set) var accountItemViewVerticalConstraint: NSLayoutConstraint?
+    fileprivate(set) var likesItemViewVerticalConstraint: NSLayoutConstraint?
+    fileprivate(set) var bucketsItemViewVerticalConstraint: NSLayoutConstraint?
+    fileprivate(set) var followingItemViewVerticalConstraint: NSLayoutConstraint?
+    fileprivate(set) var accountItemViewVerticalConstraint: NSLayoutConstraint?
 
-    private let likesItemView: CustomTabBarItemView
-    private let bucketsItemView: CustomTabBarItemView
-    private let followingItemView: CustomTabBarItemView
-    private let accountItemView: CustomTabBarItemView
-    private let dummyItemView = CustomTabBarItemView(name: "", icon: nil)
-    private let itemViewDefaultInset: CGFloat = 14
+    fileprivate let likesItemView: CustomTabBarItemView
+    fileprivate let bucketsItemView: CustomTabBarItemView
+    fileprivate let followingItemView: CustomTabBarItemView
+    fileprivate let accountItemView: CustomTabBarItemView
+    fileprivate let dummyItemView = CustomTabBarItemView(name: "", icon: nil)
+    fileprivate let itemViewDefaultInset: CGFloat = 14
 
 //    MARK: - Life cycle
 
-    @available(*, unavailable, message = "Use init() or init(frame:) instead")
+    @available(*, unavailable, message: "Use init() or init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -42,14 +42,14 @@ class CenterButtonTabBarView: UITabBar {
 
         super.init(frame: frame)
 
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
 
         _ = { // these two lines hide top border line of tabBar - can't be separated, so I packed them into closure
             shadowImage = UIImage()
             backgroundImage = UIImage()
         }()
 
-        translucent = false
+        isTranslucent = false
 
         likesItemView.configureForAutoLayout()
         addSubview(likesItemView)
@@ -72,26 +72,26 @@ class CenterButtonTabBarView: UITabBar {
         if !didSetConstraints {
             didSetConstraints = true
 
-            likesItemViewVerticalConstraint = likesItemView.autoPinEdgeToSuperviewEdge(.Top, withInset: itemViewDefaultInset)
-            likesItemView.autoPinEdgeToSuperviewEdge(.Left)
-            likesItemView.autoPinEdge(.Right, toEdge: .Left, ofView: bucketsItemView)
+            likesItemViewVerticalConstraint = likesItemView.autoPinEdge(toSuperviewEdge: .top, withInset: itemViewDefaultInset)
+            likesItemView.autoPinEdge(toSuperviewEdge: .left)
+            likesItemView.autoPinEdge(.right, to: .left, of: bucketsItemView)
 
-            bucketsItemViewVerticalConstraint = bucketsItemView.autoPinEdgeToSuperviewEdge(.Top, withInset: itemViewDefaultInset)
-            bucketsItemView.autoPinEdge(.Right, toEdge: .Left, ofView: dummyItemView, withOffset: -3)
-            bucketsItemView.autoMatchDimension(.Width, toDimension: .Width, ofView: likesItemView)
+            bucketsItemViewVerticalConstraint = bucketsItemView.autoPinEdge(toSuperviewEdge: .top, withInset: itemViewDefaultInset)
+            bucketsItemView.autoPinEdge(.right, to: .left, of: dummyItemView, withOffset: -3)
+            bucketsItemView.autoMatch(.width, to: .width, of: likesItemView)
 
-            dummyItemView.autoPinEdgeToSuperviewEdge(.Top, withInset: 7)
-            dummyItemView.autoPinEdgeToSuperviewEdge(.Bottom)
-            dummyItemView.autoAlignAxisToSuperviewAxis(.Vertical)
-            dummyItemView.autoSetDimension(.Width, toSize: dummyItemScreenSizeDependentWidth)
+            dummyItemView.autoPinEdge(toSuperviewEdge: .top, withInset: 7)
+            dummyItemView.autoPinEdge(toSuperviewEdge: .bottom)
+            dummyItemView.autoAlignAxis(toSuperviewAxis: .vertical)
+            dummyItemView.autoSetDimension(.width, toSize: dummyItemScreenSizeDependentWidth)
 
-            followingItemViewVerticalConstraint = followingItemView.autoPinEdgeToSuperviewEdge(.Top, withInset: itemViewDefaultInset)
-            followingItemView.autoPinEdge(.Left, toEdge: .Right, ofView: dummyItemView, withOffset: 2.5)
-            followingItemView.autoMatchDimension(.Width, toDimension: .Width, ofView: accountItemView)
+            followingItemViewVerticalConstraint = followingItemView.autoPinEdge(toSuperviewEdge: .top, withInset: itemViewDefaultInset)
+            followingItemView.autoPinEdge(.left, to: .right, of: dummyItemView, withOffset: 2.5)
+            followingItemView.autoMatch(.width, to: .width, of: accountItemView)
 
-            accountItemViewVerticalConstraint = accountItemView.autoPinEdgeToSuperviewEdge(.Top, withInset: itemViewDefaultInset)
-            accountItemView.autoPinEdge(.Left, toEdge: .Right, ofView: followingItemView)
-            accountItemView.autoPinEdgeToSuperviewEdge(.Right)
+            accountItemViewVerticalConstraint = accountItemView.autoPinEdge(toSuperviewEdge: .top, withInset: itemViewDefaultInset)
+            accountItemView.autoPinEdge(.left, to: .right, of: followingItemView)
+            accountItemView.autoPinEdge(toSuperviewEdge: .right)
         }
 
         super.updateConstraints()

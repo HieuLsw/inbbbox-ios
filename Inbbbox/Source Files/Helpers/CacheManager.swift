@@ -17,7 +17,7 @@ class CacheManager {
     class func setupCache() {
         let dataCache = Shared.dataCache
 
-        let gifFormat = Format<NSData>(name: gifFormatName, diskCapacity: 10 * 1024 * 1024)
+        let gifFormat = Format<Data>(name: gifFormatName, diskCapacity: 10 * 1024 * 1024)
         dataCache.addFormat(gifFormat)
 
         let imageCache = Shared.imageCache

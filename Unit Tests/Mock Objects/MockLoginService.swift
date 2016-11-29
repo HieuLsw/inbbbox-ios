@@ -18,8 +18,8 @@ struct MockLoginService: OAuthAuthorizable {
     let clientSecret = "fixture.clientSecret"
     let scope = "fixture.scope"
     
-    func isRedirectionURL(url: NSURL?) -> Bool {
-        let absoluteURL = (url!.scheme + "://" + url!.host!)
+    func isRedirectionURL(_ url: URL?) -> Bool {
+        let absoluteURL = (url!.scheme! + "://" + url!.host!)
         return absoluteURL == "http://mock.redirection.url"
     }
 }

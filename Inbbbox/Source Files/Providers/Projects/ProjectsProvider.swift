@@ -14,7 +14,7 @@ class ProjectsProvider {
     let apiProjectsProvider = APIProjectsProvider()
     let managedProjectsProvider = ManagedProjectsProvider()
 
-    func provideProjectsForShot(shot: ShotType) -> Promise<[ProjectType]?> {
+    func provideProjectsForShot(_ shot: ShotType) -> Promise<[ProjectType]?> {
         if UserStorage.isUserSignedIn {
             return apiProjectsProvider.provideProjectsForShot(shot)
         }

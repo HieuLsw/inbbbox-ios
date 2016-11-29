@@ -9,9 +9,9 @@ import Dobby
 
 class AsyncWrapperMock: AsyncWrapper {
 
-    let mainStub = Stub<(Double?, dispatch_block_t), AsyncWrapper>()
+    let mainStub = Stub<(Double?, ()->()), AsyncWrapper>()
 
-    override func main(after after: Double?, block: dispatch_block_t) -> AsyncWrapper {
+    override func main(after: Double?, block: @escaping () -> ()) -> AsyncWrapper {
         return try! mainStub.invoke(after, block)
     }
 }

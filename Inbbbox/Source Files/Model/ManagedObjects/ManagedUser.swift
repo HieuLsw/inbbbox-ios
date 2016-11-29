@@ -23,12 +23,12 @@ extension ManagedUser: UserType {
     var name: String? { return mngd_name }
     var username: String { return mngd_username }
 
-    var avatarURL: NSURL? {
-        guard let encodedString = mngd_avatarURL?.stringByAddingPercentEncodingWithAllowedCharacters(
-                NSCharacterSet.URLQueryAllowedCharacterSet()) else {
+    var avatarURL: URL? {
+        guard let encodedString = mngd_avatarURL?.addingPercentEncoding(
+                withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             return nil
         }
-        return NSURL(string: encodedString)
+        return URL(string: encodedString)
     }
 
     var shotsCount: UInt { return mngd_shotsCount }

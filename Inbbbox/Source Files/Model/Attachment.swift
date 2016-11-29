@@ -11,13 +11,13 @@ import SwiftyJSON
 
 struct Attachment {
     let identifier: String
-    let thumbnailURL: NSURL?
-    let imageURL: NSURL?
+    let thumbnailURL: URL?
+    let imageURL: URL?
 }
 
 extension Attachment: Mappable {
     
-    static var map: JSON -> Attachment {
+    static var map: (JSON) -> Attachment {
         return { json in
             
             return Attachment(identifier: json[Key.Identifier.rawValue].stringValue,
@@ -26,7 +26,7 @@ extension Attachment: Mappable {
         }
     }
     
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Identifier = "id"
         case ThumbnailURL = "thumbnail_url"
         case ImageURL = "url"

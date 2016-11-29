@@ -39,10 +39,10 @@ class ShotBucketsViewModel {
 
     var titleForHeader: String {
         switch shotBucketsViewControllerMode {
-        case .AddToBucket:
+        case .addToBucket:
             return NSLocalizedString("ShotBucketsViewModel.AddToBucket",
                     comment: "Allows user to add shot to bucket")
-        case .RemoveFromBucket:
+        case .removeFromBucket:
             return NSLocalizedString("ShotBucketsViewModel.RemoveFromBucket",
                     comment: "Allows user to remove shot from bucket")
         }
@@ -50,10 +50,10 @@ class ShotBucketsViewModel {
 
     var titleForActionItem: String {
         switch shotBucketsViewControllerMode {
-        case .AddToBucket:
+        case .addToBucket:
             return NSLocalizedString("ShotBucketsViewModel.NewBucket",
                     comment: "Allows user to create new bucket")
-        case .RemoveFromBucket:
+        case .removeFromBucket:
             return NSLocalizedString("ShotBucketsViewModel.RemoveFromSelectedBuckets",
                     comment: "Allows user to remove from multiple backets")
         }
@@ -67,9 +67,9 @@ class ShotBucketsViewModel {
     var bucketsRequester = BucketsRequester()
     var shotsRequester = APIShotsRequester()
 
-    private(set) var buckets = [BucketType]()
-    private(set) var selectedBucketsIndexes = [Int]()
-    private var didDownloadBuckets = false
+    fileprivate(set) var buckets = [BucketType]()
+    fileprivate(set) var selectedBucketsIndexes = [Int]()
+    fileprivate var didDownloadBuckets = false
 
     init(shot: ShotType, mode: ShotBucketsViewControllerMode) {
         self.shot = shot
@@ -82,16 +82,16 @@ class ShotBucketsViewModel {
 
             switch shotBucketsViewControllerMode {
 
-            case .AddToBucket:
+            case .addToBucket:
                 firstly {
                     bucketsProvider.provideMyBuckets()
                 }.then { buckets in
                     self.buckets = buckets ?? []
                 }.then {
                     self.didDownloadBuckets = true
-                }.then(fulfill).error(reject)
+                }.then(execute: fulfill).catch(execute: reject)
 
-            case .RemoveFromBucket:
+            case .removeFromBucket:
                 firstly {
                     shotsRequester.userBucketsForShot(shot)
                 }.then {
@@ -99,12 +99,12 @@ class ShotBucketsViewModel {
                     self.buckets = buckets ?? []
                 }.then { _ in
                     self.didDownloadBuckets = true
-                }.then(fulfill).error(reject)
+                }.then(execute: fulfill).catch(execute: reject)
             }
         }
     }
 
-    func createBucket(name: String, description: NSAttributedString? = nil) -> Promise<Void> {
+    func createBucket(_ name: String, description: NSAttributedString? = nil) -> Promise<Void> {
         return Promise<Void> {
             fulfill, reject in
             firstly {
@@ -112,17 +112,17 @@ class ShotBucketsViewModel {
             }.then {
                 bucket in
                 self.buckets.append(bucket)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func addShotToBucketAtIndex(index: Int) -> Promise<Void> {
+    func addShotToBucketAtIndex(_ index: Int) -> Promise<Void> {
         return Promise<Void> {
             fulfill, reject in
 
             firstly {
                 bucketsRequester.addShot(shot, toBucket: buckets[index])
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -135,30 +135,30 @@ class ShotBucketsViewModel {
                 bucketsToRemoveShot.append(buckets[$0])
             }
 
-            when(bucketsToRemoveShot.map {
+            when(fulfilled: bucketsToRemoveShot.map {
                 bucketsRequester.removeShot(shot, fromBucket: $0)
-            }).then(fulfill).error(reject)
+            }).then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func selectBucketAtIndex(index: Int) -> Bool {
+    func selectBucketAtIndex(_ index: Int) -> Bool {
         toggleBucketSelectionAtIndex(index)
         return selectedBucketsIndexes.contains(index)
     }
 
-    func bucketShouldBeSelectedAtIndex(index: Int) -> Bool {
+    func bucketShouldBeSelectedAtIndex(_ index: Int) -> Bool {
         return selectedBucketsIndexes.contains(index)
     }
 
-    func showBottomSeparatorForBucketAtIndex(index: Int) -> Bool {
+    func showBottomSeparatorForBucketAtIndex(_ index: Int) -> Bool {
         return index != buckets.count - 1
     }
 
-    func isSeparatorAtIndex(index: Int) -> Bool {
+    func isSeparatorAtIndex(_ index: Int) -> Bool {
         return index == itemsCount - 2
     }
 
-    func isActionItemAtIndex(index: Int) -> Bool {
+    func isActionItemAtIndex(_ index: Int) -> Bool {
         return index == itemsCount - 1
     }
 
@@ -166,7 +166,7 @@ class ShotBucketsViewModel {
         return itemsCount - 1
     }
 
-    func displayableDataForBucketAtIndex(index: Int) -> (bucketName: String, shotsCountText: String) {
+    func displayableDataForBucketAtIndex(_ index: Int) -> (bucketName: String, shotsCountText: String) {
         let bucket = buckets[index]
         let localizedString = NSLocalizedString("%d shots", comment: "How many shots in collection?")
         let shotsCountText = String.localizedStringWithFormat(localizedString, bucket.shotsCount)
@@ -179,20 +179,20 @@ class ShotBucketsViewModel {
 
 extension ShotBucketsViewModel: URLToUserProvider, UserToURLProvider {
 
-    func userForURL(url: NSURL) -> UserType? {
+    func userForURL(_ url: URL) -> UserType? {
         return shot.user.identifier == url.absoluteString ? shot.user : nil
     }
 
-    func userForId(identifier: String) -> Promise<UserType> {
+    func userForId(_ identifier: String) -> Promise<UserType> {
         return userProvider.provideUser(identifier)
     }
 }
 
 private extension ShotBucketsViewModel {
 
-    func toggleBucketSelectionAtIndex(index: Int) {
-        if let elementIndex = selectedBucketsIndexes.indexOf(index) {
-            selectedBucketsIndexes.removeAtIndex(elementIndex)
+    func toggleBucketSelectionAtIndex(_ index: Int) {
+        if let elementIndex = selectedBucketsIndexes.index(of: index) {
+            selectedBucketsIndexes.remove(at: elementIndex)
         } else {
             selectedBucketsIndexes.append(index)
         }

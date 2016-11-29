@@ -15,15 +15,15 @@ class EmptyDataSetLoadingView: UIView {
     let label = UILabel()
     let animator = LoginViewAnimations()
 
-    private var shouldAnimate = false
-    private let animationDuration = NSTimeInterval(1)
-    private let ballJumpHeight = 50
+    fileprivate var shouldAnimate = false
+    fileprivate let animationDuration = TimeInterval(1)
+    fileprivate let ballJumpHeight = 50
 
     override init(frame: CGRect) {
         var frame = frame
         frame = CGRect(
-            x: CGRectGetMinX(frame),
-            y: CGRectGetMinY(frame),
+            x: frame.minX,
+            y: frame.minY,
             width: 200,
             height: 200
         )
@@ -34,13 +34,13 @@ class EmptyDataSetLoadingView: UIView {
 
         label.text = NSLocalizedString("EmptyDataSetLoadingView.Loading", comment: "Loading view, when empty data")
         label.textColor = .cellBackgroundColor()
-        label.font = UIFont.helveticaFont(.NeueMedium, size: 25)
-        label.textAlignment = .Center
+        label.font = UIFont.helveticaFont(.neueMedium, size: 25)
+        label.textAlignment = .center
         label.alpha = 0.5
         addSubview(label)
 
     }
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -50,16 +50,16 @@ class EmptyDataSetLoadingView: UIView {
         // made on Rects because of complex animation of jumping ball, same comment as in LoginView
         let labelSize = CGSize(width: frame.width, height: 30)
         label.frame = CGRect(
-            x: CGRectGetMaxX(frame) / 2 - labelSize.width / 2,
-            y: CGRectGetMaxY(frame) / 2,
+            x: frame.maxX / 2 - labelSize.width / 2,
+            y: frame.maxY / 2,
             width: labelSize.width,
             height: labelSize.height
         )
 
         let size = ballView.imageView.image?.size ?? CGSize.zero
         ballView.frame = CGRect(
-            x: CGRectGetMaxX(frame) / 2 - size.width / 2,
-            y: CGRectGetMinY(label.frame) - size.height - CGFloat(ballJumpHeight),
+            x: frame.maxX / 2 - size.width / 2,
+            y: label.frame.minY - size.height - CGFloat(ballJumpHeight),
             width: size.width,
             height: size.height
         )
@@ -75,7 +75,7 @@ class EmptyDataSetLoadingView: UIView {
         shouldAnimate = false
     }
 
-    private func blinkLoadingLabel() {
+    fileprivate func blinkLoadingLabel() {
 
         guard shouldAnimate else { return }
 
@@ -83,10 +83,10 @@ class EmptyDataSetLoadingView: UIView {
             self.blinkLoadingLabel()
         }
 
-        UIView.animateWithDuration(animationDuration * 0.5, animations: {
+        UIView.animate(withDuration: animationDuration * 0.5, animations: {
             self.label.alpha = 1.0
         }, completion: { _ in
-            UIView.animateWithDuration(self.animationDuration * 0.5) { self.label.alpha = 0.5 }
+            UIView.animate(withDuration: self.animationDuration * 0.5, animations: { self.label.alpha = 0.5 }) 
         })
     }
 }

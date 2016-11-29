@@ -10,14 +10,14 @@ import Foundation
 import ZFDragableModalTransition
 
 class ShotDetailsPageViewController: UIPageViewController {
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: ColorModeProvider.current().visualEffectBlurType))
-    private var modalTransitionAnimator: ZFModalTransitionAnimator?
+    fileprivate let blurView = UIVisualEffectView(effect: UIBlurEffect(style: ColorModeProvider.current().visualEffectBlurType))
+    fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
     var pageDataSource: ShotDetailsPageViewControllerDataSource
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
     
     // MARK: Life cycle
     
-    @available(*, unavailable, message = "Use init() method instead")
+    @available(*, unavailable, message: "Use init() method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -25,7 +25,7 @@ class ShotDetailsPageViewController: UIPageViewController {
     init(shotDetailsPageDataSource: ShotDetailsPageViewControllerDataSource) {
         pageDataSource = shotDetailsPageDataSource
         
-        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
 }
 
@@ -39,7 +39,7 @@ extension ShotDetailsPageViewController {
         
         if let controller = pageDataSource.initialViewController {
             setViewControllers([controller],
-                                   direction: .Forward,
+                                   direction: .forward,
                                    animated: true,
                                    completion: nil)
         }
@@ -51,13 +51,13 @@ extension ShotDetailsPageViewController {
             view.backgroundColor = currentColorMode.tableViewBlurColor
             blurView.configureForAutoLayout()
             view.addSubview(blurView)
-            view.sendSubviewToBack(blurView)
+            view.sendSubview(toBack: blurView)
         }
         
         updateConstraints()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return ColorModeProvider.current().preferredStatusBarStyle
     }
     
@@ -78,7 +78,7 @@ extension ShotDetailsPageViewController {
 extension ShotDetailsPageViewController: ModalByDraggingClosable {
     var scrollViewToObserve: UIScrollView {
         for v in view.subviews{
-            if v.isKindOfClass(UIScrollView){
+            if v.isKind(of: UIScrollView.self){
                 return v as! UIScrollView
             }
         }

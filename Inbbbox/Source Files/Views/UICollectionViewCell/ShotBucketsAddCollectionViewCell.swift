@@ -8,19 +8,19 @@
 
 import UIKit
 
-class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
+class ShotBucketsAddCollectionViewCell: UICollectionViewCell, Reusable {
 
-    let bucketNameLabel = UILabel.newAutoLayoutView()
-    let shotsCountLabel = UILabel.newAutoLayoutView()
-    private let arrowImageView = UIImageView.newAutoLayoutView()
-    private let separatorLine = UIView.newAutoLayoutView()
+    let bucketNameLabel = UILabel.newAutoLayout()
+    let shotsCountLabel = UILabel.newAutoLayout()
+    fileprivate let arrowImageView = UIImageView.newAutoLayout()
+    fileprivate let separatorLine = UIView.newAutoLayout()
 
     // Size properties
-    private let minimumCellHeight = CGFloat(44)
-    private let contentLeftAndRightInset = CGFloat(15)
-    private var elementsOffset = CGFloat(10)
+    fileprivate let minimumCellHeight = CGFloat(44)
+    fileprivate let contentLeftAndRightInset = CGFloat(15)
+    fileprivate var elementsOffset = CGFloat(10)
 
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,13 +32,13 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
         bucketNameLabel.configureForAutoLayout()
         bucketNameLabel.numberOfLines = 0
         bucketNameLabel.textColor = currentMode.shotDetailsBucketTextColor
-        bucketNameLabel.font = UIFont.helveticaFont(.Neue, size: 17)
+        bucketNameLabel.font = UIFont.helveticaFont(.neue, size: 17)
         contentView.addSubview(bucketNameLabel)
 
         shotsCountLabel.configureForAutoLayout()
         shotsCountLabel.numberOfLines = 1
         shotsCountLabel.textColor = .followeeTextGrayColor()
-        shotsCountLabel.font = UIFont.helveticaFont(.Neue, size: 17)
+        shotsCountLabel.font = UIFont.helveticaFont(.neue, size: 17)
         contentView.addSubview(shotsCountLabel)
 
         arrowImageView.image = UIImage(named: "ic-indicator-right")
@@ -46,12 +46,12 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
 
         separatorLine.backgroundColor = currentMode.cellSeparator
         contentView.addSubview(separatorLine)
-        separatorLine.hidden = true
+        separatorLine.isHidden = true
 
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -76,22 +76,22 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
 
             let contentTopAndBottomInset = CGFloat(10)
 
-            bucketNameLabel.autoPinEdgeToSuperviewEdge(.Left, withInset: contentLeftAndRightInset)
-            bucketNameLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: contentTopAndBottomInset)
-            bucketNameLabel.autoPinEdgeToSuperviewEdge(.Bottom, withInset: contentTopAndBottomInset)
-            bucketNameLabel.autoAlignAxisToSuperviewAxis(.Horizontal)
+            bucketNameLabel.autoPinEdge(toSuperviewEdge: .left, withInset: contentLeftAndRightInset)
+            bucketNameLabel.autoPinEdge(toSuperviewEdge: .top, withInset: contentTopAndBottomInset)
+            bucketNameLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: contentTopAndBottomInset)
+            bucketNameLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            shotsCountLabel.autoPinEdge(.Right, toEdge: .Left, ofView: arrowImageView, withOffset: -elementsOffset)
-            shotsCountLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: contentTopAndBottomInset)
-            shotsCountLabel.autoPinEdgeToSuperviewEdge(.Bottom, withInset: contentTopAndBottomInset)
-            shotsCountLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: bucketNameLabel)
+            shotsCountLabel.autoPinEdge(.right, to: .left, of: arrowImageView, withOffset: -elementsOffset)
+            shotsCountLabel.autoPinEdge(toSuperviewEdge: .top, withInset: contentTopAndBottomInset)
+            shotsCountLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: contentTopAndBottomInset)
+            shotsCountLabel.autoAlignAxis(.horizontal, toSameAxisOf: bucketNameLabel)
 
-            arrowImageView.autoPinEdgeToSuperviewEdge(.Trailing, withInset: contentLeftAndRightInset)
-            arrowImageView.autoSetDimensionsToSize(CGSize(width: 8, height: 13))
-            arrowImageView.autoAlignAxis(.Horizontal, toSameAxisOfView: bucketNameLabel)
+            arrowImageView.autoPinEdge(toSuperviewEdge: .trailing, withInset: contentLeftAndRightInset)
+            arrowImageView.autoSetDimensions(to: CGSize(width: 8, height: 13))
+            arrowImageView.autoAlignAxis(.horizontal, toSameAxisOf: bucketNameLabel)
 
-            separatorLine.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Top)
-            separatorLine.autoSetDimension(.Height, toSize: 0.5)
+            separatorLine.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
+            separatorLine.autoSetDimension(.height, toSize: 0.5)
 
             contentView.autoPinEdgesToSuperviewEdges()
         }
@@ -99,16 +99,16 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
     }
 
-    override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes)
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)
                     -> UICollectionViewLayoutAttributes {
 
         layoutAttributes.frame = {
 
             var frame = layoutAttributes.frame
-            let height = contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+            let height = contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
             frame.size.height = (height > minimumCellHeight) ? height : minimumCellHeight
 
-            return CGRectIntegral(frame)
+            return frame.integral
         }()
 
         return layoutAttributes
@@ -119,17 +119,10 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell {
 
         bucketNameLabel.text = nil
         shotsCountLabel.text = nil
-        separatorLine.hidden = true
+        separatorLine.isHidden = true
     }
 
-    func showBottomSeparator(show: Bool) {
-        separatorLine.hidden = !show
-    }
-}
-
-extension ShotBucketsAddCollectionViewCell: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotBucketsAddCollectionViewCell)
+    func showBottomSeparator(_ show: Bool) {
+        separatorLine.isHidden = !show
     }
 }

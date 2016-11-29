@@ -9,37 +9,47 @@
 import Foundation
 
 protocol IndexPathsGettable {
-    func indexPathsForItems(items: [GroupItem]) -> [NSIndexPath]?
-    func indexPathsForItemOfType(itemType: GroupItem.Type) -> [NSIndexPath]?
+    func indexPathsForItems(_ items: [GroupItem]) -> [IndexPath]?
+    func indexPathsForItemOfType(_ itemType: GroupItem.Type) -> [IndexPath]?
 }
 
 class GroupedListViewModel: ListViewModel<GroupItem> {
+    typealias T = GroupItem
 
     init(items: [[GroupItem]]) {
         super.init(sections: items.map { Section($0) })
     }
+
+    required init(_ items: [T]) {
+        fatalError("init has not been implemented")
+    }
+
+    required init(sections: [Section<T>]) {
+        fatalError("init(sections:) has not been implemented")
+    }
+    
 }
 
 extension GroupedListViewModel: IndexPathsGettable {
 
-    func indexPathsForItems(items: [GroupItem]) -> [NSIndexPath]? {
-        var indexPaths: [NSIndexPath] = []
+    func indexPathsForItems(_ items: [GroupItem]) -> [IndexPath]? {
+        var indexPaths: [IndexPath] = []
 
         itemize { (path, item) -> () in
             if items.contains(item) {
-                indexPaths.append(NSIndexPath(forRow: path.row, inSection: path.section))
+                indexPaths.append(IndexPath(row: path.row, section: path.section))
             }
         }
 
         return indexPaths.isEmpty ? nil : indexPaths
     }
 
-    func indexPathsForItemOfType<T>(itemType: T.Type) -> [NSIndexPath]? {
-        var indexPaths: [NSIndexPath] = []
+    func indexPathsForItemOfType<T>(_ itemType: T.Type) -> [IndexPath]? {
+        var indexPaths: [IndexPath] = []
 
         itemize { path, item in
             if item is T {
-                indexPaths.append(NSIndexPath(forRow: path.row, inSection: path.section))
+                indexPaths.append(IndexPath(row: path.row, section: path.section))
             }
         }
         return indexPaths.isEmpty ? nil : indexPaths

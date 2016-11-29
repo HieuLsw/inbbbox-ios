@@ -12,6 +12,6 @@ extension AppDelegate {
         loginViewController = LoginViewController(tabBarController: centerTabBarController)
         let rootViewController = loginViewController!
         centerButtonTabBarController = rootViewController.centerButtonTabBarController
-        UIApplication.sharedApplication().keyWindow?.setRootViewController(rootViewController, transition: nil)
+        UIApplication.shared.keyWindow?.setRootViewController(rootViewController, transition: nil)
     }
 }

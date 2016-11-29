@@ -23,26 +23,26 @@ class ShotsProvider {
         return managedShotsProvider.provideMyLikedShots()
     }
 
-    func provideShotsForUser(user: UserType) -> Promise<[ShotType]?> {
+    func provideShotsForUser(_ user: UserType) -> Promise<[ShotType]?> {
         return apiShotsProvider.provideShotsForUser(user)
     }
 
-    func provideLikedShotsForUser(user: UserType) -> Promise<[ShotType]?> {
+    func provideLikedShotsForUser(_ user: UserType) -> Promise<[ShotType]?> {
         assert(userStorageClass.isUserSignedIn, "Cannot provide shots for user when user is not signed in")
         return Promise<[ShotType]?> { fulfill, reject in
             firstly {
                 apiShotsProvider.provideLikedShotsForUser(user)
             }.then { shots -> Void in
-                let shotsSorted = shots?.sort {
-                    return $0.createdAt.compare($1.createdAt) == NSComparisonResult.OrderedAscending
+                let shotsSorted = shots?.sorted {
+                    return $0.createdAt.compare($1.createdAt) == ComparisonResult.orderedAscending
                 }
                 fulfill(shotsSorted)
-            }.error(reject)
+            }.catch(execute: reject)
         }
 
     }
 
-    func provideShotsForBucket(bucket: BucketType) -> Promise<[ShotType]?> {
+    func provideShotsForBucket(_ bucket: BucketType) -> Promise<[ShotType]?> {
         if userStorageClass.isUserSignedIn {
             return apiShotsProvider.provideShotsForBucket(bucket)
         }

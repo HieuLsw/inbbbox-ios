@@ -11,15 +11,15 @@ import KeychainAccess
 
 class UserStorage {
 
-    private static let KeychainService = "co.netguru.inbbbox.keychain.user"
-    private static let keychain = Keychain(service: KeychainService)
+    fileprivate static let KeychainService = "co.netguru.inbbbox.keychain.user"
+    fileprivate static let keychain = Keychain(service: KeychainService)
 
     /// Currently signed in user. If there isn't any then returns *nil*.
     class var currentUser: User? {
         guard let data = keychain[data: Key.UserToken.rawValue] else {
             return nil
         }
-        return NSKeyedUnarchiver.unarchiveObjectWithData(data) as? User
+        return NSKeyedUnarchiver.unarchiveObject(with: data) as? User
     }
 
     /// Indicates if there is any signed in user.
@@ -35,13 +35,13 @@ class UserStorage {
     /// Store given user.
     ///
     /// - parameter user: User that should be stored.
-    class func storeUser(user: User) {
-        keychain[data: Key.UserToken.rawValue] = NSKeyedArchiver.archivedDataWithRootObject(user)
+    class func storeUser(_ user: User) {
+        keychain[data: Key.UserToken.rawValue] = NSKeyedArchiver.archivedData(withRootObject: user)
     }
 
     /// Store bool flag indicating guest mode on.
     class func storeGuestUser() {
-        keychain[data: Key.GuestToken.rawValue] = NSKeyedArchiver.archivedDataWithRootObject(true)
+        keychain[data: Key.GuestToken.rawValue] = NSKeyedArchiver.archivedData(withRootObject: true)
     }
 
     /// Clear stored user.

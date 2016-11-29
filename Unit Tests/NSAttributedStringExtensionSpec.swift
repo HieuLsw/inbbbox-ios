@@ -38,7 +38,7 @@ class NSAttributedStringExtensionSpec: QuickSpec {
             }
             
             it("attributed string should be properly constructed") {
-                expect(String(sut).rangeOfString("font-weight: bold")).toNot(beNil())
+                expect(String(describing: sut).range(of: "font-weight: bold")).toNot(beNil())
             }
         }
     }

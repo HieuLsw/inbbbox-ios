@@ -10,19 +10,19 @@ import UIKit
 
 class BaseInfoShotsCollectionViewCell: UICollectionViewCell {
 
-    let shotsView = UIImageView.newAutoLayoutView()
-    let infoView = UIView.newAutoLayoutView()
-    let nameLabel = UILabel.newAutoLayoutView()
-    let numberOfShotsLabel = UILabel.newAutoLayoutView()
+    let shotsView = UIImageView.newAutoLayout()
+    let infoView = UIView.newAutoLayout()
+    let nameLabel = UILabel.newAutoLayout()
+    let numberOfShotsLabel = UILabel.newAutoLayout()
     var shotsViewHeightToWidthRatio: CGFloat {
         return 0.75
     }
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
     var isRegisteredTo3DTouch = false
 
     // MARK: Life cycle
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -37,11 +37,11 @@ class BaseInfoShotsCollectionViewCell: UICollectionViewCell {
      func commonInit() {
 
         nameLabel.textColor = UIColor.pinkColor()
-        nameLabel.font = UIFont.systemFontOfSize(13, weight:UIFontWeightMedium)
+        nameLabel.font = UIFont.systemFont(ofSize: 13, weight:UIFontWeightMedium)
         infoView.addSubview(nameLabel)
 
         numberOfShotsLabel.textColor = UIColor.followeeTextGrayColor()
-        numberOfShotsLabel.font = UIFont.systemFontOfSize(10)
+        numberOfShotsLabel.font = UIFont.systemFont(ofSize: 10)
         infoView.addSubview(numberOfShotsLabel)
 
         shotsView.layer.cornerRadius = 5
@@ -53,17 +53,17 @@ class BaseInfoShotsCollectionViewCell: UICollectionViewCell {
 
     // MARK: UIView
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     override func updateConstraints() {
 
         if !didSetConstraints {
-            shotsView.autoMatchDimension(.Height, toDimension: .Width, ofView: shotsView, withMultiplier: shotsViewHeightToWidthRatio)
-            shotsView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            infoView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Top)
-            infoView.autoPinEdge(.Top, toEdge: .Bottom, ofView: shotsView)
+            shotsView.autoMatch(.height, to: .width, of: shotsView, withMultiplier: shotsViewHeightToWidthRatio)
+            shotsView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            infoView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
+            infoView.autoPinEdge(.top, to: .bottom, of: shotsView)
             didSetConstraints = true
         }
         super.updateConstraints()

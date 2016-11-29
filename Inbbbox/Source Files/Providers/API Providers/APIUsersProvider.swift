@@ -20,7 +20,7 @@ class APIUsersProvider: PageableProvider {
 
      - returns: Promise which resolves with User or nil.
      */
-    func provideUser(identifier: String) -> Promise<UserType> {
+    func provideUser(_ identifier: String) -> Promise<UserType> {
 
         let query = UserQuery(identifier: identifier)
         return Promise<UserType> { fulfill, reject in
@@ -30,11 +30,11 @@ class APIUsersProvider: PageableProvider {
             firstly {
                 request.resume()
             }.then { json -> Void in
-                guard let json = json else { throw AuthenticatorError.UnableToFetchUser }
+                guard let json = json else { throw AuthenticatorError.unableToFetchUser }
 
                 fulfill(User.map(json) as UserType)
 
-            }.error { error in
+            }.catch { error in
                 reject(error)
             }
         }

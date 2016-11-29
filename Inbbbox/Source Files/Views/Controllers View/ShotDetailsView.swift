@@ -12,34 +12,34 @@ import PureLayout
 class ShotDetailsView: UIView {
 
     let collectionView: UICollectionView
-    let commentComposerView = CommentComposerView.newAutoLayoutView()
+    let commentComposerView = CommentComposerView.newAutoLayout()
 
     var shouldShowCommentComposerView = true {
         willSet(newValue) {
-            commentComposerView.hidden = !newValue
+            commentComposerView.isHidden = !newValue
         }
     }
     var topLayoutGuideOffset = CGFloat(0)
 
-    private let collectionViewCornerWrapperView = UIView.newAutoLayoutView()
-    let keyboardResizableView = KeyboardResizableView.newAutoLayoutView()
-    private var didSetConstraints = false
+    fileprivate let collectionViewCornerWrapperView = UIView.newAutoLayout()
+    let keyboardResizableView = KeyboardResizableView.newAutoLayout()
+    fileprivate var didSetConstraints = false
 
     override init(frame: CGRect) {
 
         collectionView = UICollectionView(frame: CGRect.zero,
                 collectionViewLayout: ShotDetailsCollectionCollapsableHeader())
-        collectionView.backgroundColor = .clearColor()
-        collectionView.layer.shadowColor = UIColor.grayColor().CGColor
+        collectionView.backgroundColor = .clear
+        collectionView.layer.shadowColor = UIColor.gray.cgColor
         collectionView.layer.shadowOffset = CGSize(width: 0, height: 0.1)
         collectionView.layer.shadowOpacity = 0.3
         collectionView.clipsToBounds = true
 
         super.init(frame: frame)
         
-        backgroundColor = .clearColor()
+        backgroundColor = .clear
 
-        collectionViewCornerWrapperView.backgroundColor = .clearColor()
+        collectionViewCornerWrapperView.backgroundColor = .clear
         collectionViewCornerWrapperView.clipsToBounds = true
         collectionViewCornerWrapperView.addSubview(collectionView)
 
@@ -49,7 +49,7 @@ class ShotDetailsView: UIView {
         addSubview(keyboardResizableView)
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,17 +60,17 @@ class ShotDetailsView: UIView {
             didSetConstraints = true
 
             let commentComposerViewHeight = CGFloat(61)
-            keyboardResizableView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            let constraint = keyboardResizableView.autoPinEdgeToSuperviewEdge(.Bottom)
+            keyboardResizableView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            let constraint = keyboardResizableView.autoPinEdge(toSuperviewEdge: .bottom)
             keyboardResizableView.setReferenceBottomConstraint(constraint)
 
-            commentComposerView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Top)
-            commentComposerView.autoSetDimension(.Height, toSize: commentComposerViewHeight)
+            commentComposerView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
+            commentComposerView.autoSetDimension(.height, toSize: commentComposerViewHeight)
 
             let insets = UIEdgeInsets(top: topLayoutGuideOffset + 10, left: 10, bottom: 0, right: 10)
             let commentComposerInset = shouldShowCommentComposerView ? commentComposerViewHeight : 0
-            collectionViewCornerWrapperView.autoPinEdgesToSuperviewEdgesWithInsets(insets, excludingEdge: .Bottom)
-            collectionViewCornerWrapperView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: commentComposerInset)
+            collectionViewCornerWrapperView.autoPinEdgesToSuperviewEdges(with: insets, excludingEdge: .bottom)
+            collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .bottom, withInset: commentComposerInset)
 
             collectionView.autoPinEdgesToSuperviewEdges()
         }
@@ -78,19 +78,19 @@ class ShotDetailsView: UIView {
         super.updateConstraints()
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
 
         let path = UIBezierPath(roundedRect: collectionViewCornerWrapperView.bounds,
-                byRoundingCorners: [.TopLeft, .TopRight], cornerRadii: CGSize(width: 15, height: 15))
+                byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 15, height: 15))
         let mask = CAShapeLayer()
-        mask.path = path.CGPath
+        mask.path = path.cgPath
         collectionViewCornerWrapperView.layer.mask = mask
     }
     
     // MARK: public
     
-    func customizeFor3DTouch(hidden: Bool) {
-        backgroundColor = hidden ? .backgroundGrayColor() : .clearColor()
+    func customizeFor3DTouch(_ hidden: Bool) {
+        backgroundColor = hidden ? .backgroundGrayColor() : .clear
     }
 }

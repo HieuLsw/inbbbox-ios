@@ -11,8 +11,8 @@ import Foundation
 struct BucketQuery: Query {
 
     let method = Method.GET
-    var parameters = Parameters(encoding: .URL)
-    private(set) var path: String
+    var parameters = Parameters(encoding: .url)
+    fileprivate(set) var path: String
 
     /// Initialize query for list of the authenticated user's buckets.
     init() {

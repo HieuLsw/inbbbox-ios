@@ -10,5 +10,5 @@ import Foundation
 import SwiftyJSON
 
 protocol Mappable {
-    static var map: JSON -> Self { get }
+    static var map: (JSON) -> Self { get }
 }
