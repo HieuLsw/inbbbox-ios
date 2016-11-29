@@ -36,13 +36,18 @@ class APIAttachmentsProviderSpec: QuickSpec {
                 }
                 
                 it("attachments should be properly returned") {
-                    sut.provideAttachmentsForShot(Shot.fixtureShot()).then { _attachments -> Void in
-                        attachments = _attachments
-                        }.catch { _ in fail() }
-                    
-                    expect(attachments).toNotEventually(beNil())
-                    expect(attachments).toEventually(haveCount(3))
-                    expect(attachments?.first?.identifier).toEventually(equal("1"))
+                    waitUntil { done in
+                        sut.provideAttachmentsForShot(Shot.fixtureShot()).then { _attachments -> Void in
+                            attachments = _attachments
+
+                            expect(attachments).toNot(beNil())
+                            expect(attachments).to(haveCount(3))
+                            expect(attachments?.first?.identifier).to(equal("1"))
+
+                            done()
+
+                            }.catch { _ in fail() }
+                    }
                 }
             }
         }
