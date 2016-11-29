@@ -537,7 +537,7 @@ class ShotCollectionViewCellSpec: QuickSpec {
                 }
                 
                 it("should have proper reuse identifier") {
-                    expect(reuseIdentifier).to(equal("ShotCollectionViewCellIdentifier"))
+                    expect(reuseIdentifier).to(equal("ShotCollectionViewCell.Type"))
                 }
             }
         }

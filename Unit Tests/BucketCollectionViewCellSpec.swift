@@ -26,7 +26,7 @@ class BucketCollectionViewCellSpec: QuickSpec {
                 }
                 
                 it("should have proper reuse identifier") {
-                    expect(reuseIdentifier).to(equal("BucketCollectionViewCellIdentifier"))
+                    expect(reuseIdentifier).to(equal("BucketCollectionViewCell.Type"))
                 }
             }
         }
