@@ -36,7 +36,7 @@ class APIAttachmentsProviderSpec: QuickSpec {
                 }
                 
                 it("attachments should be properly returned") {
-                    waitUntil { done in
+                    waitUntil(timeout: 5) { done in
                         sut.provideAttachmentsForShot(Shot.fixtureShot()).then { _attachments -> Void in
                             attachments = _attachments
 
