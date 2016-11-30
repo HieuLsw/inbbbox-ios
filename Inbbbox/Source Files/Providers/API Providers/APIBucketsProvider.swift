@@ -60,7 +60,7 @@ class APIBucketsProvider: PageableProvider {
     func nextPage() -> Promise<[BucketType]?> {
         return Promise <[BucketType]?> { fulfill, reject in
             firstly {
-                nextPageFor(Bucket)
+                nextPageFor(Bucket.self)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as BucketType } })
             }.catch(execute: reject)
@@ -78,7 +78,7 @@ class APIBucketsProvider: PageableProvider {
     func previousPage() -> Promise<[BucketType]?> {
         return Promise <[BucketType]?> { fulfill, reject in
             firstly {
-                previousPageFor(Bucket)
+                previousPageFor(Bucket.self)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as BucketType } })
             }.catch(execute: reject)

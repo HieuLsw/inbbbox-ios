@@ -105,7 +105,7 @@ class APIConnectionsProvider: PageableProvider {
      - returns: Promise which resolves with shots or nil.
      */
     func nextPage() -> Promise<[UserType]?> {
-        return fetchPage(nextPageFor(User))
+        return fetchPage(nextPageFor(User.self))
     }
 
     /**
@@ -117,7 +117,7 @@ class APIConnectionsProvider: PageableProvider {
      - returns: Promise which resolves with shots or nil.
      */
     func previousPage() -> Promise<[UserType]?> {
-        return fetchPage(previousPageFor(User))
+        return fetchPage(previousPageFor(User.self))
     }
 }
 

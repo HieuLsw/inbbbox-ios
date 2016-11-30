@@ -47,7 +47,7 @@ class ShotBucketsViewController: UIViewController {
     }
 
     override func loadView() {
-        view = loadViewWithClass(ShotBucketsView)
+        view = loadViewWithClass(ShotBucketsView.self)
     }
 
     override func viewDidLoad() {

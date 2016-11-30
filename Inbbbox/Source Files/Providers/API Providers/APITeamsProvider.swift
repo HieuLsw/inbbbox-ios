@@ -42,7 +42,7 @@ class APITeamsProvider: PageableProvider {
     func nextPage() -> Promise<[UserType]?> {
         return Promise <[UserType]?> { fulfill, reject in
             firstly {
-                nextPageFor(User)
+                nextPageFor(User.self)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as UserType } })
             }.catch(execute: reject)
@@ -60,7 +60,7 @@ class APITeamsProvider: PageableProvider {
     func previousPage() -> Promise<[UserType]?> {
         return Promise <[UserType]?> { fulfill, reject in
             firstly {
-                previousPageFor(User)
+                previousPageFor(User.self)
             }.then { buckets -> Void in
                 fulfill(buckets.flatMap { $0.map { $0 as UserType } })
             }.catch(execute: reject)
