@@ -51,12 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?,
-                     for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
-        // NGRTodo: start loading images from Dribbble,
-        // but first, check if notificationID == currentUserID
-    }
-
     func application(_ application: UIApplication,
                      didRegister notificationSettings: UIUserNotificationSettings) {
         let notificationName = NotificationKey.UserNotificationSettingsRegistered.rawValue

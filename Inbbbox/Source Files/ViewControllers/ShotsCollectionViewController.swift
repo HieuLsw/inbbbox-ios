@@ -50,12 +50,9 @@ extension ShotsCollectionViewController {
         super.viewDidLoad()
 
         collectionView?.isPagingEnabled = true
-        // NGRTodo: iOS 10 only API. Remove after updating project.
-        #if swift(>=2.3)
         if #available(iOS 10.0, *) {
             collectionView?.prefetchDataSource = self
         }
-        #endif
         let backgroundView = ShotsCollectionBackgroundView()
         collectionView?.backgroundView = backgroundView
         backgroundAnimator = MainScreenStreamSourcesAnimator(view: backgroundView)
@@ -160,8 +157,6 @@ extension ShotsCollectionViewController {
     }
 }
 
-// NGRTodo: iOS 10 only API. Remove after updating project.
-#if swift(>=2.3)
 extension ShotsCollectionViewController: UICollectionViewDataSourcePrefetching {
     @available(iOS 10.0, *)
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
@@ -176,7 +171,6 @@ extension ShotsCollectionViewController: UICollectionViewDataSourcePrefetching {
         }
     }
 }
-#endif
 
 // MARK: UIScrollViewDelegate
 

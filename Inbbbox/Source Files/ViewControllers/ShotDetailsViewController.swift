@@ -415,7 +415,7 @@ private extension ShotDetailsViewController {
             view.selected = selected
         }.always {
             view.stopAnimating()
-        }
+        }.catch { _ in }
     }
 
     func likeSelectableViewDidTap(_ view: ActivityIndicatorSelectableView) {
@@ -429,7 +429,7 @@ private extension ShotDetailsViewController {
         }.always {
             self.refreshLikesBucketsCounter()
             view.stopAnimating()
-        }
+        }.catch { _ in }
     }
 
     func bucketSelectableViewDidTap(_ view: ActivityIndicatorSelectableView) {
