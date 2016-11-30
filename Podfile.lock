@@ -4,7 +4,6 @@ PODS:
   - DeviceKit (1.0.0)
   - Dobby (0.7.0)
   - DZNEmptyDataSet (1.8.1)
-  - EasyAnimation (1.1.1)
   - FLAnimatedImage (1.0.12)
   - GoogleAnalytics (3.17.0)
   - GPUImage (0.1.7)
@@ -48,7 +47,6 @@ DEPENDENCIES:
   - DeviceKit (~> 1.0)
   - Dobby (from `https://github.com/trivago/Dobby.git`, tag `0.7.0`)
   - DZNEmptyDataSet (~> 1.7)
-  - EasyAnimation (~> 1.1)
   - FLAnimatedImage (~> 1.0)
   - GoogleAnalytics (~> 3.14)
   - GPUImage (~> 0.1)
@@ -102,7 +100,6 @@ SPEC CHECKSUMS:
   DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
   Dobby: efe7dca1c2bca412034dc909d350b2409193bf99
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  EasyAnimation: e67601df3eb57e86c570948a250ce162a5665b8a
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
@@ -122,6 +119,6 @@ SPEC CHECKSUMS:
   URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: cbef962cd6f6cb2593b423a2a5d0f70bb9659589
+PODFILE CHECKSUM: 01fd102d49ff68d60e7f77ac348139d3095e59ab
 
 COCOAPODS: 1.0.0

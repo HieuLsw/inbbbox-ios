@@ -34,7 +34,6 @@ target 'Inbbbox' do
   #for older swift version 
   pod 'DeviceKit', '~> 1.0'
   pod 'GPUImage', '~> 0.1'
-  pod 'EasyAnimation', '~> 1.1'
   pod 'FLAnimatedImage', '~> 1.0'
   pod 'ZFDragableModalTransition', '~> 0.6'
   pod 'HanekeSwift', :git => 'https://github.com/Haneke/HanekeSwift.git', :branch => 'feature/swift-3'

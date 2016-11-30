@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EasyAnimation
 import Async
 
 class LoginViewAnimations {
@@ -33,10 +32,12 @@ class LoginViewAnimations {
 
         let endValue = view.frame.height * 0.5
 
-        UIView.animateAndChain(withDuration: 0.2, delay: 0, options: [], animations: {
+        UIView.promise(animateWithDuration: 0.2) { 
             view.layer.cornerRadius = 4
-        }, completion: nil).animate(withDuration: 0.5) {
-            view.layer.cornerRadius = endValue
+        }.then { _ in
+            UIView.animate(withDuration: 0.5, animations: { 
+                view.layer.cornerRadius = endValue
+            })
         }
     }
 
@@ -51,7 +52,7 @@ class LoginViewAnimations {
 
         UIView.animate(withDuration: 1.5, delay: 0.0,
                 usingSpringWithDamping: 0.25, initialSpringVelocity: 0.0,
-                options: [.fillModeForwards], animations: {
+                options: [], animations: {
 
             button.layer.position.x += deltaX
             button.layer.frame.size.width = dimension
@@ -65,7 +66,7 @@ class LoginViewAnimations {
     func animateSpringExtendingToButton(_ button: UIView, logo: UIView, completion: @escaping () -> Void) {
 
         UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 0.25,
-                initialSpringVelocity: 0.0, options: [.fillModeForwards], animations: {
+                initialSpringVelocity: 0.0, options: [], animations: {
 
             button.layer.position.x -= self.buttonPositionDelta.x
             button.layer.frame.size.width = self.buttonPositionDelta.width
