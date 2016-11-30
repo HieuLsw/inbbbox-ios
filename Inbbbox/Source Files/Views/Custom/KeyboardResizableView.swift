@@ -111,14 +111,14 @@ extension KeyboardResizableView {
 
     func keyboardWillAppear(_ notification: Notification) {
         if !isKeyboardPresent {
-            relayoutViewWithParameters(notification.userInfo! as NSDictionary, keyboardPresence: true)
+            relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: true)
         }
         isKeyboardPresent = true
     }
 
     func keyboardWillDisappear(_ notification: Notification) {
         if isKeyboardPresent {
-            relayoutViewWithParameters(notification.userInfo! as NSDictionary, keyboardPresence: false)
+            relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: false)
         }
         isKeyboardPresent = false
     }
@@ -134,35 +134,16 @@ private extension KeyboardResizableView {
         return superview?.window?.convert(rawKeyboardRect, to: superview) ?? CGRect.zero
     }
 
-    func relayoutViewWithParameters(_ parameters: NSDictionary, keyboardPresence: Bool) {
-
-        let properlyRotatedCoords = calculateCorrectKeyboardRectWithParameters(parameters)
-
-        let height = properlyRotatedCoords.size.height
-
-        guard let animationDuration = parameters[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber else {
+    func relayoutViewWithParameters(parameters: NSDictionary, keyboardPresence: Bool) {
+        
+        guard let
+            bottomConstraint = bottomConstraint,
+            let animationDuration = parameters[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber else {
             return
         }
 
-        if automaticallySnapToKeyboardTopEdge && !isKeyboardPresent {
-
-            let rectInSuperviewCoordinateSpace = superview!.convert(bounds, to: self)
-            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = superview!.frame.height -
-                    rectInSuperviewCoordinateSpace.height + rectInSuperviewCoordinateSpace.minY
-
-            snapOffset = keyboardTopEdgeAndSelfBottomEdgeOffsetY
-        }
-
-        var addition = height - snapOffset
-
-        if !automaticallySnapToKeyboardTopEdge {
-            addition += bottomEdgeOffset
-        }
-
-        let constant = keyboardPresence ? initialBottomConstraintConstant - addition :
-                bottomConstraint.constant + addition
-        bottomConstraint.constant = constant
-
+        bottomConstraint.constant = calculateConstantIn(bottomConstraint: bottomConstraint, basedOnParameters: parameters, andKeyboardPresence: keyboardPresence)
+        
         let state: KeyboardState = keyboardPresence ? .willAppear : .willDisappear
         delegate?.keyboardResizableView(self, willRelayoutSubviewsWithState: state)
 
@@ -173,5 +154,29 @@ private extension KeyboardResizableView {
             let state: KeyboardState = keyboardPresence ? .didAppear : .didDisappear
             self.delegate?.keyboardResizableView(self, didRelayoutSubviewsWithState: state)
         }) 
+    }
+    
+    func calculateConstantIn(bottomConstraint: NSLayoutConstraint, basedOnParameters parameters: NSDictionary, andKeyboardPresence keyboardPresence: Bool) -> CGFloat {
+        
+        if automaticallySnapToKeyboardTopEdge && !isKeyboardPresent {
+            let rectInSuperviewCoordinateSpace = superview!.convert(bounds, to: self)
+            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = superview!.frame.height - rectInSuperviewCoordinateSpace.height + rectInSuperviewCoordinateSpace.minY
+            
+            snapOffset = keyboardTopEdgeAndSelfBottomEdgeOffsetY
+        }
+        
+        let properlyRotatedCoords = calculateCorrectKeyboardRectWithParameters(parameters)
+        
+        let height = properlyRotatedCoords.size.height
+        
+        var addition = height - snapOffset
+        
+        if !automaticallySnapToKeyboardTopEdge {
+            addition += bottomEdgeOffset
+        }
+        
+        let constant = keyboardPresence ? initialBottomConstraintConstant - addition : bottomConstraint.constant + addition
+
+        return min(0.0, constant)
     }
 }

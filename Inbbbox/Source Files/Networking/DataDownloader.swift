@@ -25,9 +25,9 @@ class DataDownloader: NSObject {
     func fetchData(_ url: URL, progress:@escaping (_ progress: Float) -> Void, completion:@escaping (_ data: Data) -> Void) {
         self.progress = progress
         self.completion = completion
-        self.session = URLSession.init(configuration: URLSessionConfiguration.default,
-                                         delegate: self,
-                                         delegateQueue: nil)
+        self.session = URLSession(configuration: URLSessionConfiguration.default,
+                                  delegate: self,
+                                  delegateQueue: nil)
         let task = session!.dataTask(with: url)
 
         task.resume()
@@ -42,17 +42,15 @@ extension DataDownloader: URLSessionDataDelegate {
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        self.data.append(data) //NGRFixme: During test this line cause crashes once or twice with memory allocation, better remember about it.
-        let progress = Float(self.data.length) / totalSize
-        if progress != 1 {
-            if self.progress != nil {
-                self.progress!(progress)
-                return
-            }
+        let percentOfProgress = Float(self.data.length) / totalSize
+        
+        guard percentOfProgress < 1 else {
+            completion?(self.data as Data)
+            session.invalidateAndCancel()
+            return
         }
-        if let completion = self.completion {
-            completion(NSData(data: self.data as Data) as Data)
-            self.session?.finishTasksAndInvalidate()
-        }
+        
+        self.data.append(data)
+        progress?(percentOfProgress)
     }
 }

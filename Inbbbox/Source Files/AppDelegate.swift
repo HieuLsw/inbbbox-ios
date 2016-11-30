@@ -30,7 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AnalyticsManager.setupAnalytics()
         CrashManager.setup()
         UserStorage.clearGuestUser()
+        CacheManager.setupCache()
         UIAlertController.setupSharedSettings()
+        configureInitialSettings()
+        
         centerButtonTabBarController = CenterButtonTabBarController()
         loginViewController = LoginViewController(tabBarController: centerButtonTabBarController!)
         let rootViewController = UserStorage.isUserSignedIn ? centerButtonTabBarController! : loginViewController!
@@ -38,8 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.rootViewController = rootViewController
         window!.makeKeyAndVisible()
         
-        configureInitialSettings()
-        CacheManager.setupCache()
         ColorModeProvider.setup()
 
         var shouldPerformAdditionalDelegateHandling = true

@@ -96,10 +96,13 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
         }
         /*
          Hack for ticket: https://netguru.atlassian.net/browse/IOS-441
-         reloadData() was not always causing refreshing visible cells, this do the work
+         reloadData() was not always causing refreshing visible cells, this do the work.
+         Please note that scrollToTop have to be called before reloading cells because 
+         otherwise we will have this glitch:
+         https://netguru.atlassian.net/browse/IOS-500
          */
-        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
         scrollToTop(collectionView)
+        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
         updateBarButtons(collectionView.collectionViewLayout)
     }
 

@@ -14,13 +14,15 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
     
     var shots = [ShotType]()
     fileprivate var shotDetailsViewControllersDictionary = [Int : ShotDetailsViewController]()
+    let containsLikesData: Bool?
     var initialViewController: ShotDetailsViewController? {
         return shotDetailsViewControllersDictionary.values.first
     }
     
     // MARK: Life cycle
     
-    init(shots: [ShotType], initialViewController: ShotDetailsViewController) {
+    init(shots: [ShotType], initialViewController: ShotDetailsViewController, likesData: Bool? = nil) {
+        self.containsLikesData = likesData
         super.init()
         
         self.shots = shots
@@ -35,7 +37,7 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         if let controller = shotDetailsViewControllersDictionary[indexPath.row] { return controller }
         
         let shot = shots[indexPath.row]
-        let shotDetailsViewController = ShotDetailsViewController(shot: shot)
+        let shotDetailsViewController = ShotDetailsViewController(shot: shot, isLiked: containsLikesData)
         shotDetailsViewController.shotIndex = indexPath.row
         shotDetailsViewControllersDictionary[indexPath.row] = shotDetailsViewController
         shotDetailsViewController.customizeFor3DTouch(false)
@@ -54,6 +56,7 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let currentController = viewController as? ShotDetailsViewController,
             currentController.shotIndex > 0 {
+
             return getShotDetailsViewController(atIndexPath: IndexPath(item: currentController.shotIndex - 1, section: 0)) as? ShotDetailsViewController
         }
         return nil

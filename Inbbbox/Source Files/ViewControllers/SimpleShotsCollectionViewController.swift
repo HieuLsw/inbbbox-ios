@@ -150,9 +150,10 @@ extension SimpleShotsCollectionViewController {
             return
         }
 
-        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        let initializedFromLikesView: Bool? = viewModel is LikesViewModel ? true : nil
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item], isLiked: initializedFromLikesView)
         detailsViewController.shotIndex = indexPath.item
-        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController, likesData: initializedFromLikesView)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
         
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)

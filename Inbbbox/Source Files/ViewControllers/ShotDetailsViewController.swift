@@ -46,8 +46,12 @@ final class ShotDetailsViewController: UIViewController {
     var willDismissDetailsCompletionHandler: ((Int) -> Void)?
     var updatedShotInfo: ((ShotType) -> ())?
 
-    init(shot: ShotType) {
-        self.viewModel = ShotDetailsViewModel(shot: shot)
+    /// Initialize ShotDetailsViewController.
+    ///
+    /// - parameter shot:   Shot to display.
+    /// - parameter isLked: Nil if status unknown, ViewModel will fetch it.
+    init(shot: ShotType, isLiked: Bool? = nil) {
+        self.viewModel = ShotDetailsViewModel(shot: shot, isLiked: isLiked)
         super.init(nibName: nil, bundle: nil)
     }
 

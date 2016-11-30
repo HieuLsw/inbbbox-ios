@@ -24,7 +24,7 @@ class ShotDetailsViewModelSpec: QuickSpec {
         
         beforeEach {
             shot = Shot.fixtureShot()
-            sut = ShotDetailsViewModel(shot: shot)
+            sut = ShotDetailsViewModel(shot: shot, isLiked: nil)
             commentsProviderMock = APICommentsProviderMock()
             commentsRequesterMock = APICommentsRequesterMock()
             sut.commentsProvider = commentsProviderMock
