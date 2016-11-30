@@ -163,7 +163,7 @@ extension LoginViewController: SFSafariViewControllerDelegate {
         after(interval: 0.5).then { result -> Void in
             self.aView?.loadingLabel.alpha = 0
             self.viewAnimator?.stopAnimationWithType(.undo)
-        }
+        }.catch { _ in }
     }
 }
 

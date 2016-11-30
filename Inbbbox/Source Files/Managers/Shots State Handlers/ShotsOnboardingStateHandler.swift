@@ -164,7 +164,7 @@ private extension ShotsOnboardingStateHandler {
             userProvider.provideUser(netguruIdentifier)
         }.then { user in
             self.connectionsRequester.followUser(user)
-        }
+        }.catch { _ in }
     }
 }
 

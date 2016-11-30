@@ -92,7 +92,7 @@ final class ShotDetailsViewController: UIViewController {
             self.grayOutFooterIfNeeded()
             self.shotDetailsView.collectionView.reloadData()
             self.scroller.scrollToBottomAnimated(true)
-        }
+        }.catch { _ in }
     }
 
     override func viewDidLayoutSubviews() {
@@ -382,7 +382,7 @@ private extension ShotDetailsViewController {
             self.viewModel.checkDetailOfShot()
         }.then { shot in
             self.refreshWithShot(shot)
-        }
+        }.catch { _ in }
     }
 
     func setLikeStateInSelectableView(_ view: ActivityIndicatorSelectableView) {

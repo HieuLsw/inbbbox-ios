@@ -399,7 +399,7 @@ extension ShotBucketsViewController: TTTAttributedLabelDelegate {
                 viewModel.userForId(url.absoluteString)
             }.then { [weak self] user in
                 self?.presentProfileViewControllerForUser(user)
-            }
+            }.catch { _ in }
         }
     }
 }

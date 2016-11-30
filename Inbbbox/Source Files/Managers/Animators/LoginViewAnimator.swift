@@ -50,7 +50,7 @@ class LoginViewAnimator {
             return when(fulfilled: [self.ballBounce(), self.loadingFade(fade: .fadeIn)])
         }.then {
             self.loadingBlink()
-        }
+        }.catch { _ in }
 
     }
 
@@ -65,7 +65,7 @@ class LoginViewAnimator {
             }.then { _ -> Void in
                 self.restoreInitialState()
                 completion?()
-            }
+            }.catch { _ in }
 
         } else {
             firstly {
@@ -77,7 +77,7 @@ class LoginViewAnimator {
                         self.addInbbboxLogo(fromTop: 60)])
             }.then {
                 completion?()
-            }
+            }.catch { _ in }
         }
     }
 
