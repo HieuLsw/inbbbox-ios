@@ -297,7 +297,7 @@ private extension ShotBucketsViewController {
 
     func setEstimatedSizeIfNeeded() {
 
-        let width = shotBucketsView.collectionView.frame.size.width ?? 0
+        let width = shotBucketsView.collectionView.frame.size.width
 
         if let layout = shotBucketsView.collectionView.collectionViewLayout as?
             UICollectionViewFlowLayout, layout.estimatedItemSize.width != width {

@@ -125,7 +125,7 @@ class LoginView: UIView {
                 width: frame.width, height: sloganHeight
             )
 
-            let imageSize = logoImageView.image!.size ?? CGSize.zero
+            let imageSize = logoImageView.image!.size
             logoImageView.frame = CGRect(x: frame.midX - imageSize.width * 0.5,
                 y: sloganLabel.frame.minY - 30 - imageSize.height,
                 width: imageSize.width, height: imageSize.height

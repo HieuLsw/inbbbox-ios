@@ -458,7 +458,7 @@ private extension ShotDetailsViewController {
     var heightForCollapsedCollectionViewHeader: CGFloat {
 
         let margin = CGFloat(20)
-        let maxWidth = abs((shotDetailsView.collectionView.frame.size.width ?? 0) -
+        let maxWidth = abs((shotDetailsView.collectionView.frame.size.width) -
                 (header?.availableWidthForTitle ?? 0))
         let height = viewModel.attributedShotTitleForHeader.boundingHeightUsingAvailableWidth(maxWidth) + 2 * margin
 

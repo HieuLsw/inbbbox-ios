@@ -96,7 +96,7 @@ extension SettingsViewController {
 
         configureSettingCell(cell, forItem: item)
 
-        return cell ?? UITableViewCell()
+        return cell
     }
 }
 
