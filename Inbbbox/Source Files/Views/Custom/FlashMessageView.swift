@@ -131,7 +131,7 @@ final class FlashMessageView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateHeightOfMessageView()
+        _ = updateHeightOfMessageView()
     }
     
     override func didMoveToWindow() {

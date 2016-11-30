@@ -7,7 +7,7 @@ import Async
 
 class AsyncWrapper {
 
-    func main(after: Double? = nil, block: @escaping ()->()) -> AsyncWrapper {
+    @discardableResult func main(after: Double? = nil, block: @escaping ()->()) -> AsyncWrapper {
         Async.main(after: after, block)
         return self
     }

@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         guard let shortcut = launchedShortcut else { return }
 
-        handleShortcutItem(shortcut)
+        _ = handleShortcutItem(shortcut)
         launchedShortcut = nil
     }
 
