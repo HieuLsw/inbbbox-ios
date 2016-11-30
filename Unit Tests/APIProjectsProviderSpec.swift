@@ -46,15 +46,15 @@ class APIProjectsProviderSpec: QuickSpec {
 private class APIProjectsProviderMock: APIProjectsProvider {
     
     override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
-        return mockResult(T)
+        return mockResult(T.self)
     }
     
     override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+        return mockResult(T.self)
     }
     
     override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+        return mockResult(T.self)
     }
     
     func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
