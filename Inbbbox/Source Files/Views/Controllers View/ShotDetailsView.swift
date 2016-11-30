@@ -34,6 +34,9 @@ class ShotDetailsView: UIView {
         collectionView.layer.shadowOffset = CGSize(width: 0, height: 0.1)
         collectionView.layer.shadowOpacity = 0.3
         collectionView.clipsToBounds = true
+        if #available(iOS 10.0, *) {
+            collectionView.isPrefetchingEnabled = false
+        }
 
         super.init(frame: frame)
         
