@@ -96,7 +96,7 @@ extension SettingsViewController {
 
         configureSettingCell(cell, forItem: item)
 
-        return cell ?? UITableViewCell()
+        return cell
     }
 }
 
@@ -320,9 +320,9 @@ private extension UITableView {
     func cellForItemCategory(_ category: GroupItem.Category) -> UITableViewCell {
 
         switch category {
-            case .date: return dequeueReusableCell(DateCell)
-            case .boolean: return dequeueReusableCell(SwitchCell)
-            case .string: return dequeueReusableCell(LabelCell)
+            case .date: return dequeueReusableCell(DateCell.self)
+            case .boolean: return dequeueReusableCell(SwitchCell.self)
+            case .string: return dequeueReusableCell(LabelCell.self)
         }
     }
 }

@@ -94,7 +94,7 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.nextPageFor(ModelMock)
+                        sut.nextPageFor(ModelMock.self)
                     }.then { _ -> Void in
                         fail()
                     }.catch { _error in
@@ -109,7 +109,7 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.previousPageFor(ModelMock)
+                        sut.previousPageFor(ModelMock.self)
                     }.then { _ -> Void in
                         fail()
                     }.catch { _error in
@@ -132,7 +132,7 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.nextPageFor(ModelMock)
+                        sut.nextPageFor(ModelMock.self)
                     }.then { _result -> Void in
                         result = _result
                     }.catch { _ in fail() }
@@ -146,7 +146,7 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.previousPageFor(ModelMock)
+                        sut.previousPageFor(ModelMock.self)
                     }.then { _result -> Void in
                         result = _result
                     }.catch { _ in fail() }
@@ -192,7 +192,7 @@ class PageableProviderSpec: QuickSpec {
             }
             
             it("error should appear") {
-                sut.nextPageFor(ModelMock).then { _ in
+                sut.nextPageFor(ModelMock.self).then { _ in
                     fail()
                 }.catch { _error in
                     error = _error
@@ -202,7 +202,7 @@ class PageableProviderSpec: QuickSpec {
             }
             
             it("error should appear") {
-                sut.previousPageFor(ModelMock).then { _ in
+                sut.previousPageFor(ModelMock.self).then { _ in
                     fail()
                 }.catch { _error in
                     error = _error

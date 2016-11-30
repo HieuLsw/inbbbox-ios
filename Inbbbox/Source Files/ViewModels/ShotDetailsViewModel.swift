@@ -253,7 +253,7 @@ extension ShotDetailsViewModel {
             }.then { number -> Void in
                 numberOfBuckets = number
                 if numberOfBuckets == 1 {
-                    self.bucketsRequester.removeShot(self.shot, fromBucket: self.userBucketsForShot[0])
+                    _ = self.bucketsRequester.removeShot(self.shot, fromBucket: self.userBucketsForShot[0])
                 }
             }.then { () -> Void in
                 if numberOfBuckets == 1 {
@@ -316,7 +316,7 @@ extension ShotDetailsViewModel {
     }
 
     func loadAllComments() -> Promise<Void> {
-        loadAttachments()
+        _ = loadAttachments()
         return Promise<Void> { fulfill, reject in
 
             firstly {

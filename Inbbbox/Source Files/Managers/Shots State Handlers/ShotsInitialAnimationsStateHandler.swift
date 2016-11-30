@@ -134,8 +134,7 @@ extension ShotsInitialAnimationsStateHandler: DZNEmptyDataSetSource {
 
 private extension ShotsInitialAnimationsStateHandler {
 
-    // NGRHack: DZNEmptyDataSet does not react on `insertItemsAtIndexPaths`
-    // so we need to manually hide loading view
+    // DZNEmptyDataSet does not react on `insertItemsAtIndexPaths` so we need to manually hide loading view
     func hideEmptyDataSetLoadingView() {
         emptyDataSetLoadingView.isHidden = true
         emptyDataSetLoadingView.stopAnimating()

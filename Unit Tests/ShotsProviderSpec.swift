@@ -58,9 +58,9 @@ class ShotsProviderSpec: QuickSpec {
 
                     firstly {
                         sut.provideMyLikedShots()
-                        }.then { shots in
-                            likedShots = shots
-                    }
+                    }.then { shots in
+                        likedShots = shots
+                    }.catch { _ in }
                 }
 
                 it("should return proper shots") {
@@ -86,7 +86,7 @@ class ShotsProviderSpec: QuickSpec {
                         sut.provideMyLikedShots()
                     }.then { shots in
                         likedShots = shots
-                    }
+                    }.catch { _ in }
                 }
 
                 it("should return proper shots") {

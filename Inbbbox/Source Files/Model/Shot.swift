@@ -38,7 +38,7 @@ extension Shot: Mappable {
             }()
 
             let team: Team? = {
-                guard json[Key.Team.rawValue] != nil else {
+                guard json[Key.Team.rawValue] != JSON.null else {
                     return nil
                 }
                 return Team.map(json[Key.Team.rawValue])

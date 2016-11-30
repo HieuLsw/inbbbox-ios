@@ -92,7 +92,7 @@ final class ShotDetailsViewController: UIViewController {
             self.grayOutFooterIfNeeded()
             self.shotDetailsView.collectionView.reloadData()
             self.scroller.scrollToBottomAnimated(true)
-        }
+        }.catch { _ in }
     }
 
     override func viewDidLayoutSubviews() {
@@ -382,7 +382,7 @@ private extension ShotDetailsViewController {
             self.viewModel.checkDetailOfShot()
         }.then { shot in
             self.refreshWithShot(shot)
-        }
+        }.catch { _ in }
     }
 
     func setLikeStateInSelectableView(_ view: ActivityIndicatorSelectableView) {
@@ -415,7 +415,7 @@ private extension ShotDetailsViewController {
             view.selected = selected
         }.always {
             view.stopAnimating()
-        }
+        }.catch { _ in }
     }
 
     func likeSelectableViewDidTap(_ view: ActivityIndicatorSelectableView) {
@@ -429,7 +429,7 @@ private extension ShotDetailsViewController {
         }.always {
             self.refreshLikesBucketsCounter()
             view.stopAnimating()
-        }
+        }.catch { _ in }
     }
 
     func bucketSelectableViewDidTap(_ view: ActivityIndicatorSelectableView) {
@@ -458,7 +458,7 @@ private extension ShotDetailsViewController {
     var heightForCollapsedCollectionViewHeader: CGFloat {
 
         let margin = CGFloat(20)
-        let maxWidth = abs((shotDetailsView.collectionView.frame.size.width ?? 0) -
+        let maxWidth = abs((shotDetailsView.collectionView.frame.size.width) -
                 (header?.availableWidthForTitle ?? 0))
         let height = viewModel.attributedShotTitleForHeader.boundingHeightUsingAvailableWidth(maxWidth) + 2 * margin
 

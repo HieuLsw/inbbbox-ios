@@ -132,7 +132,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
             self.header?.userFollowed = followed
         }.then { _ in
             self.header?.stopActivityIndicator()
-        }
+        }.catch { _ in }
     }
 }
 

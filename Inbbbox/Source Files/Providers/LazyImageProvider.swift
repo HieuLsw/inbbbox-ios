@@ -40,7 +40,7 @@ final class LazyImageProvider {
             if let image = image {
                 hidpiImageCompletion?(image)
             }
-        }
+        }.catch { _ in }
     }
 }
 
@@ -51,10 +51,7 @@ private extension LazyImageProvider {
         guard let url = url else { return Promise<UIImage?>(value: nil) }
 
         return Promise<UIImage?> { fulfill, reject in
-            Shared.imageCache.fetch(
-                URL: url,
-                formatName: CacheManager.imageFormatName,
-                failure: { error in
+            _ = Shared.imageCache.fetch(URL: url, formatName: CacheManager.imageFormatName, failure: { error in
                     if let error = error {
                         reject(error)
                     }

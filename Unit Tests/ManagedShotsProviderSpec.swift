@@ -47,7 +47,7 @@ class ManagedShotsProviderSpec: QuickSpec {
                     sut.provideMyLikedShots()
                 }.then { shots in
                     returnedShots = shots!.map { $0 as! ManagedShot }
-                }
+                }.catch { _ in }
             }
 
             it("should return 1 liked shot") {

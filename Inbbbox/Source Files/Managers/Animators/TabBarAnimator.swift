@@ -55,7 +55,7 @@ class TabBarAnimator {
                 when(fulfilled: [self.slideTabBar(), self.slideTabBarItemsSubsequently(), self.positionCenterButton()])
             }.then {
                 fulfill()
-            }
+            }.catch { _ in }
         }
     }
 }

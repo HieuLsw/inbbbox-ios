@@ -117,7 +117,7 @@ class ShotDetailsHeaderView: UICollectionReusableView, Reusable {
     }
 
     deinit {
-        // NGRHack: animation has to be invalidated to release AnimatableShotImageView object
+        // Animation has to be invalidated to release AnimatableShotImageView object
         if let imageView = imageView as? AnimatableShotImageView {
             let displayLink = imageView.value(forKey: "displayLink") as? CADisplayLink
             displayLink?.invalidate()

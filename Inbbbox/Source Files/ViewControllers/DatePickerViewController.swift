@@ -50,6 +50,6 @@ class DatePickerViewController: UIViewController {
 
     func didTapSaveButton(_ sender: UIBarButtonItem) {
         completion(aView!.datePicker.date)
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
 }

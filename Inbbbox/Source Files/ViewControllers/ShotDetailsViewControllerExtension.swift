@@ -101,7 +101,7 @@ extension ShotDetailsViewController: UIScrollViewDelegate {
                     if isLiked {
                         self.shotDetailsView.collectionView.reloadItems(at: [indexPath])
                     }
-                }
+                }.catch { _ in }
             }
         }
     }
@@ -139,7 +139,7 @@ extension ShotDetailsViewController: TTTAttributedLabelDelegate {
                 viewModel.userForId(url.absoluteString)
             }.then { [weak self] user in
                 self?.presentProfileViewControllerForUser(user)
-            }
+            }.catch { _ in }
         }
     }
 }
@@ -192,7 +192,7 @@ extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClic
                     viewModel.userForId(identifier)
                     }.then { [weak self] user in
                         self?.presentProfileViewControllerForUser(user)
-                }
+                }.catch { _ in }
             }
         } else {
             UIApplication.shared.openURL(url)

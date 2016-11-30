@@ -72,7 +72,7 @@ extension ListViewModel: IndexPathOperatable {
     }
 
     func removeAtIndexPath(_ indexPath: IndexPath) {
-        sections[indexPath.section].remove(indexPath.row)
+        _ = sections[indexPath.section].remove(indexPath.row)
     }
 
     func removeItemsAtIndexPaths(_ indexPaths: [IndexPath]) {

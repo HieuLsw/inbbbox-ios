@@ -114,7 +114,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { _ in
                             done()
-                        }
+                        }.catch { _ in }
                     }
 
                     expect(sut.itemsCount >= 2).to(beTruthy())
@@ -258,7 +258,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { _ in
                             done()
-                        }
+                        }.catch { _ in }
                     }
 
                     expect(sut.itemsCount >= 2).to(beTruthy())
@@ -310,8 +310,8 @@ class ShotBucketsViewModelSpec: QuickSpec {
                         }.catch { _ in fail("This should not be invoked") }
                     }
                     
-                    sut.selectBucketAtIndex(0)
-                    sut.selectBucketAtIndex(1)
+                    _ = sut.selectBucketAtIndex(0)
+                    _ = sut.selectBucketAtIndex(1)
                     
                     waitUntil { done in
                         sut.removeShotFromSelectedBuckets().then { result -> Void in

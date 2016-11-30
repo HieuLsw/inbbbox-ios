@@ -173,7 +173,7 @@ final class APIRateLimitKeeper {
                 timerToResetDailyLimitIsSet = true
             }
 
-            throw APIRateLimitKeeperError.didExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit ?? 0)
+            throw APIRateLimitKeeperError.didExceedRateLimitPerDay(timeIntervalRemainingToResetDailyLimit)
         }
 
         if let limit = rateLimitRemainingPerMinute, limit <= 1 {

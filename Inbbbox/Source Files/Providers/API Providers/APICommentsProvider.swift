@@ -43,7 +43,7 @@ class APICommentsProvider: PageableProvider {
     func nextPage() -> Promise<[CommentType]?> {
         return Promise <[CommentType]?> { fulfill, reject in
             firstly {
-                nextPageFor(Comment)
+                nextPageFor(Comment.self)
             }.then { comments -> Void in
                 fulfill(comments.flatMap { $0.map { $0 as CommentType } })
             }.catch(execute: reject)
@@ -61,7 +61,7 @@ class APICommentsProvider: PageableProvider {
     func previousPage() -> Promise<[CommentType]?> {
         return Promise <[CommentType]?> { fulfill, reject in
             firstly {
-                previousPageFor(Comment)
+                previousPageFor(Comment.self)
             }.then { comments -> Void in
                 fulfill(comments.flatMap { $0.map { $0 as CommentType } })
             }.catch(execute: reject)
