@@ -12,9 +12,9 @@ We at Netguru strongly believe in open-source software. Inbbbox isn’t our only
 
 ### Tools & requirements
 
-* Xcode 7.2.1 with iOS 9.2 SDK
+* Xcode 8.1 with iOS 9.2 SDK
 * Carthage 0.11 or newer
-* CocoaPods 0.39 or newer
+* CocoaPods 1.1.1 or newer
 * RVM (recommended)
 * Bundler
 
