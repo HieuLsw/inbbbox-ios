@@ -117,6 +117,7 @@ final class ShotDetailsViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        header?.cancelAllAnimatedImageSettings()
         willDismissDetailsCompletionHandler?(shotIndex)
     }
 
@@ -556,7 +557,7 @@ private extension ShotDetailsViewController {
 
     func presentShotFullscreen() {
 
-        guard let header = header else { return }
+        guard let header = header where header.isDoneFetchingImage  else { return }
 
         var imageViewer: ImageViewer {
             if viewModel.shot.animated {

@@ -47,6 +47,14 @@ class ShotDetailsHeaderView: UICollectionReusableView {
     let avatarView = AvatarView(size: avatarSize, bordered: false)
 
     let closeButtonView = CloseButtonView.newAutoLayoutView()
+    
+    // Return state of fetching in imageView if it is a gif
+    var isDoneFetchingImage: Bool {
+        guard let imageView = imageView as? AnimatableShotImageView else { return true }
+        
+        return imageView.hiddenProgressView
+    }
+    
     private let titleLabel = TTTAttributedLabel.newAutoLayoutView()
     private let overlapingTitleLabel = UILabel.newAutoLayoutView()
     private let dimView = UIView.newAutoLayoutView()
@@ -218,6 +226,7 @@ class ShotDetailsHeaderView: UICollectionReusableView {
         titleLabel.addLinkToURL(URL, withRange: range)
         titleLabel.delegate = delegate
     }
+    
 }
 
 extension ShotDetailsHeaderView {
@@ -255,6 +264,12 @@ extension ShotDetailsHeaderView {
     private func setupImageView() {
         imageViewCenterWrapperView.insertSubview(imageView, belowSubview: dimView)
         imageView.autoPinEdgesToSuperviewEdges()
+    }
+    
+    func cancelAllAnimatedImageSettings() {
+        guard let imageView = imageView as? AnimatableShotImageView else { return }
+        
+        imageView.cancelLoadingImage()
     }
 }
 

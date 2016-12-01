@@ -46,21 +46,32 @@ class ProgressAnimator {
     ///                         locked to 1.0 value
     /// - parameter complete:   Block that is called when currentFrameIndex reache maximumFrameIndex
     func updateProgress(progress: Float, onComplete complete: (()->Void)? = nil) {
+        onDidCompleteAnimation = complete
         
-        let newFrameLimit = interpolateProgress(min(1.0, progress))
-        guard maximumFrameIndex < newFrameLimit  else {
+        guard progress < 1.0 else {
+            maximumFrameIndex = maximumImageCount
+            if (!timer.valid) {
+                recreateTimer()
+            }
             return
         }
         
+        let newFrameLimit = interpolateProgress(min(1.0, progress))
+        
+        guard maximumFrameIndex < newFrameLimit else { return }
+        
         maximumFrameIndex = newFrameLimit
-        onDidCompleteAnimation = complete
         if !timer.valid && currentFrameIndex < maximumImageCount  {
-            timer = NSTimer.scheduledTimerWithTimeInterval(timeTick, target: self, selector: #selector(self.updateFrame(_:)), userInfo: nil, repeats: true)
+            recreateTimer()
         }
     }
 }
 
 private extension ProgressAnimator {
+    
+    func recreateTimer() {
+        timer = NSTimer.scheduledTimerWithTimeInterval(timeTick, target: self, selector: #selector(self.updateFrame(_:)), userInfo: nil, repeats: true)
+    }
     
     @objc func updateFrame(timer: NSTimer) {
         guard currentFrameIndex <= maximumFrameIndex && isFrameInBounds() else {
