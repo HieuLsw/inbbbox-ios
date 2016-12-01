@@ -26,9 +26,7 @@ class DataDownloader: NSObject {
     /// - parameter completion: Block called when fetching is complete. It returns fetched data as parameter.
     func fetchData(url: NSURL, progress:(progress: Float) -> Void, completion:(data: NSData) -> Void) {
         
-        guard !isTaskWithUrlAlreadyInProgress(url) else {
-            return
-        }
+        guard !isTaskWithUrlAlreadyInProgress(url) else { return }
         
         self.progress = progress
         self.completion = completion
@@ -44,9 +42,7 @@ class DataDownloader: NSObject {
     /// Cancel all NSURLSessionDataTask that are in progress
     ///
     func cancelAllFetching() {
-        for task in tasks {
-            task.cancel()
-        }
+        tasks.forEach() { $0.cancel() }
     }
 }
 
@@ -79,9 +75,8 @@ extension DataDownloader: NSURLSessionDataDelegate {
 private extension DataDownloader {
     
     func isTaskWithUrlAlreadyInProgress(url: NSURL) -> Bool {
-        for task in tasks where task.currentRequest?.URL?.absoluteString == url.absoluteString {
-            return true
+        return tasks.contains() { task in
+            return task.currentRequest?.URL?.absoluteString == url.absoluteString
         }
-        return false
     }
 }

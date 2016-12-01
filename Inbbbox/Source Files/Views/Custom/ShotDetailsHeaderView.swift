@@ -48,7 +48,7 @@ class ShotDetailsHeaderView: UICollectionReusableView {
 
     let closeButtonView = CloseButtonView.newAutoLayoutView()
     
-    // Return state of fetching in imageView if it is a gif
+    /// Return state of fetching in imageView if it is a gif
     var isDoneFetchingImage: Bool {
         guard let imageView = imageView as? AnimatableShotImageView else { return true }
         
@@ -226,7 +226,6 @@ class ShotDetailsHeaderView: UICollectionReusableView {
         titleLabel.addLinkToURL(URL, withRange: range)
         titleLabel.delegate = delegate
     }
-    
 }
 
 extension ShotDetailsHeaderView {

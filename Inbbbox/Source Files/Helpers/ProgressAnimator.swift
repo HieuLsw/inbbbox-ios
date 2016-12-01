@@ -23,7 +23,7 @@ class ProgressAnimator {
     /// Time span between frame updates
     private var timeTick = 0.01
     /// Completion handler when currentFrameIndex reach maximumFrameIndex
-    private var onDidCompleteAnimation: (()->Void)?
+    private var onDidCompleteAnimation: (() -> Void)?
     /// Timer that swaps images
     private var timer: NSTimer!
     // MARK: Public
@@ -45,12 +45,12 @@ class ProgressAnimator {
     /// - parameter progress:   Progress value between 0.0 - 1.0. If you pass higher value than 1.0 it will be
     ///                         locked to 1.0 value
     /// - parameter complete:   Block that is called when currentFrameIndex reache maximumFrameIndex
-    func updateProgress(progress: Float, onComplete complete: (()->Void)? = nil) {
+    func updateProgress(progress: Float, onComplete complete: (() -> Void)? = nil) {
         onDidCompleteAnimation = complete
         
         guard progress < 1.0 else {
             maximumFrameIndex = maximumImageCount
-            if (!timer.valid) {
+            if !timer.valid {
                 recreateTimer()
             }
             return

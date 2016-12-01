@@ -22,7 +22,7 @@ extension Array where Element : Equatable {
         return uniqueValues
     }
     
-    /// Removes element from array if element is in array
+    /// Removes element from array if element is in array.
     /// Contents of Array must conform to `Equatable` protocol.
     mutating func removeIfContains(element: Element) {
         if let i = indexOf(element) {
