@@ -75,8 +75,6 @@ extension DataDownloader: NSURLSessionDataDelegate {
 private extension DataDownloader {
     
     func isTaskWithUrlAlreadyInProgress(url: NSURL) -> Bool {
-        return tasks.contains() { task in
-            return task.currentRequest?.URL?.absoluteString == url.absoluteString
-        }
+        return tasks.contains { $0.currentRequest?.URL?.absoluteString == url.absoluteString }
     }
 }
