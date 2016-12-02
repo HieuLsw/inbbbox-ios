@@ -42,4 +42,21 @@ extension UIViewController {
         }
         return false
     }
+
+    /// Checks if force touch is available on specific device
+    ///
+    /// - returns: Boolean value which describes if force touch is available
+
+    func isForceTouchAvailable() -> Bool {
+        if #available(iOS 9.0, *) {
+            if traitCollection.forceTouchCapability == .available {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+    
 }

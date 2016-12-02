@@ -22,6 +22,7 @@ PODS:
   - Mockingjay/XCTest (2.0.0):
     - Mockingjay/Core
   - Nimble (5.1.1)
+  - PeekView (1.1.1)
   - PromiseKit (4.0.5):
     - PromiseKit/Foundation (= 4.0.5)
     - PromiseKit/QuartzCore (= 4.0.5)
@@ -57,6 +58,7 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mockingjay (~> 2.0)
   - Nimble (~> 5.0)
+  - PeekView (~> 1.1.1)
   - PromiseKit (~> 4.0)
   - PureLayout (~> 3.0)
   - Quick (~> 0.10)
@@ -110,6 +112,7 @@ SPEC CHECKSUMS:
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mockingjay: 7122a3fc0597aa63438e4cd9b71b7bc8aac05b87
   Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
+  PeekView: cef76e2f56031af35935dd674350f9e2b70c788d
   PromiseKit: 593b5e24ded6cbb1ebc708bc2c3428a8a5632d91
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
   Quick: 5d290df1c69d5ee2f0729956dcf0fd9a30447eaa
@@ -119,6 +122,6 @@ SPEC CHECKSUMS:
   URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 01fd102d49ff68d60e7f77ac348139d3095e59ab
+PODFILE CHECKSUM: 3e4c2c0956fc01707c0321f1272d1b84ece5156c
 
 COCOAPODS: 1.1.1
