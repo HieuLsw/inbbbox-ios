@@ -9,6 +9,7 @@
 import UIKit
 import PromiseKit
 import DZNEmptyDataSet
+import PeekView
 
 class BucketsCollectionViewController: UICollectionViewController {
 
@@ -94,6 +95,11 @@ class BucketsCollectionViewController: UICollectionViewController {
                    forItemAt indexPath: IndexPath) {
         if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
+        }
+        if !isForceTouchAvailable() {
+            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(applyArtificial3DTouch(_:)))
+            gesture.minimumPressDuration = 0.5
+            cell.addGestureRecognizer(gesture)
         }
     }
 
@@ -229,5 +235,24 @@ extension BucketsCollectionViewController: ColorModeAdaptable {
     func adaptColorMode(_ mode: ColorModeType) {
         currentColorMode = mode
         collectionView?.reloadData()
+    }
+}
+
+// MARK: ForceTouchApplicapable
+
+extension BucketsCollectionViewController : ForceTouchApplicapable {
+    func applyArtificial3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard let
+            cell = gestureRecognizer.view as? UICollectionViewCell,
+            let indexPath = collectionView?.indexPath(for: cell)
+            else {
+                return
+        }
+
+        let height =  self.view.frame.height * 0.8
+        let controller  = SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
+        let frame = CGRect(x: 15, y: (self.view.frame.height - height) / 2 , width: self.view.frame.width - 30, height: self.view.frame.height)
+        PeekView().viewForController(parentViewController: self, contentViewController: controller, expectedContentViewFrame: frame, fromGesture: gestureRecognizer, shouldHideStatusBar: true, withOptions: nil, completionHandler: nil)
+        
     }
 }

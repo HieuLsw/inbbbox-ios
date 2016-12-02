@@ -150,7 +150,7 @@ extension ShotsCollectionViewController {
         stateHandler.collectionView?(collectionView, willDisplay: cell, forItemAt: indexPath)
 
         if !isForceTouchAvailable() {
-            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(apply3DTouch(_:)))
+            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(applyArtificial3DTouch(_:)))
             gesture.minimumPressDuration = 0.5
             cell.addGestureRecognizer(gesture)
         }
@@ -339,8 +339,10 @@ private extension ShotsCollectionViewController {
 
 }
 
+// MARK: ForceTouchApplicapable
+
 extension ShotsCollectionViewController : ForceTouchApplicapable {
-    func apply3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
+    func applyArtificial3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
         guard let
             cell = gestureRecognizer.view as? UICollectionViewCell,
             let indexPath = collectionView?.indexPath(for: cell),

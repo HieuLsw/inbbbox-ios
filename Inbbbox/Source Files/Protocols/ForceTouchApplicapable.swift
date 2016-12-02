@@ -9,11 +9,5 @@
 import UIKit
 
 protocol ForceTouchApplicapable {
-
-}
-
-extension ForceTouchApplicapable {
-    func apply3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
-
-    }
+    func applyArtificial3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer)
 }
