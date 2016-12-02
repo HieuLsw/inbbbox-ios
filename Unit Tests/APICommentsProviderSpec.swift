@@ -33,7 +33,7 @@ class APICommentsProviderSpec: QuickSpec {
             it("comments should be properly returned") {
                 sut.provideCommentsForShot(Shot.fixtureShot()).then { _comments -> Void in
                     comments = _comments
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(comments).toNotEventually(beNil())
                 expect(comments).toEventually(haveCount(3))
@@ -46,7 +46,7 @@ class APICommentsProviderSpec: QuickSpec {
             it("comments should be properly returned") {
                 sut.nextPage().then { _comments -> Void in
                     comments = _comments
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(comments).toNotEventually(beNil())
                 expect(comments).toEventually(haveCount(3))
@@ -58,7 +58,7 @@ class APICommentsProviderSpec: QuickSpec {
             it("comments should be properly returned") {
                 sut.previousPage().then { _comments -> Void in
                     comments = _comments
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(comments).toNotEventually(beNil())
                 expect(comments).toEventually(haveCount(3))
@@ -70,19 +70,19 @@ class APICommentsProviderSpec: QuickSpec {
 //Explanation: Create APICommentsProviderPrivateMock to override methods from PageableProvider.
 private class APICommentsProviderPrivateMock: APICommentsProvider {
 
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
-        return mockResult(T)
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
 
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
 
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
 
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
 
             let json = JSONSpecLoader.sharedInstance.fixtureCommentsJSON(withCount: 3)

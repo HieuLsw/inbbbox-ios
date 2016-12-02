@@ -14,6 +14,6 @@ class LabelItem: GroupItem {
     var onSelect: (() -> Void)?
 
     init(title: String) {
-        super.init(title: title, category: .String)
+        super.init(title: title, category: .string)
     }
 }

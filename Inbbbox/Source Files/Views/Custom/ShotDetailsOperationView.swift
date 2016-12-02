@@ -19,27 +19,27 @@ class ShotDetailsOperationView: UIView {
         return selectableViewSize.height + 2 * margin
     }
 
-    let likeSelectableView = ActivityIndicatorSelectableView.newAutoLayoutView()
-    let bucketSelectableView = ActivityIndicatorSelectableView.newAutoLayoutView()
-    let likeCounterLabel = UILabel.newAutoLayoutView()
-    let bucketCounterLabel = UILabel.newAutoLayoutView()
+    let likeSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
+    let bucketSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
+    let likeCounterLabel = UILabel.newAutoLayout()
+    let bucketCounterLabel = UILabel.newAutoLayout()
 
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        likeSelectableView.setImage(UIImage(named: "ic-like-details-active"), forState: .Selected)
-        likeSelectableView.setImage(UIImage(named: "ic-like-details"), forState: .Deselected)
+        likeSelectableView.setImage(UIImage(named: "ic-like-details-active"), forState: .selected)
+        likeSelectableView.setImage(UIImage(named: "ic-like-details"), forState: .deselected)
         addSubview(likeSelectableView)
 
-        bucketSelectableView.setImage(UIImage(named: "ic-bucket-details-active"), forState: .Selected)
-        bucketSelectableView.setImage(UIImage(named: "ic-bucket-details"), forState: .Deselected)
+        bucketSelectableView.setImage(UIImage(named: "ic-bucket-details-active"), forState: .selected)
+        bucketSelectableView.setImage(UIImage(named: "ic-bucket-details"), forState: .deselected)
         addSubview(bucketSelectableView)
 
         for label in [likeCounterLabel, bucketCounterLabel] {
             
-            label.font = UIFont.helveticaFont(.Neue, size: 12)
+            label.font = UIFont.helveticaFont(.neue, size: 12)
             label.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
             
             addSubview(label)
@@ -47,13 +47,13 @@ class ShotDetailsOperationView: UIView {
         
     }
 
-    @available(*, unavailable, message = "Use init(withImage: UIImage) method instead")
+    @available(*, unavailable, message: "Use init(withImage: UIImage) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func intrinsicContentSize() -> CGSize {
-        return CGSize(width: 0, height: self.dynamicType.minimumRequiredHeight)
+    override var intrinsicContentSize : CGSize {
+        return CGSize(width: 0, height: type(of: self).minimumRequiredHeight)
     }
 
     override func updateConstraints() {
@@ -62,23 +62,23 @@ class ShotDetailsOperationView: UIView {
             didUpdateConstraints = true
 
             let offset = CGFloat(40)
-            likeSelectableView.autoAlignAxis(.Vertical, toSameAxisOfView: likeSelectableView.superview!,
+            likeSelectableView.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!,
                     withOffset: -offset)
-            bucketSelectableView.autoAlignAxis(.Vertical, toSameAxisOfView: likeSelectableView.superview!,
+            bucketSelectableView.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!,
                     withOffset: offset)
 
             [likeSelectableView, bucketSelectableView].forEach {
-                $0.autoAlignAxis(.Horizontal, toSameAxisOfView: self, withOffset: -5)
-                $0.autoSetDimensionsToSize(selectableViewSize)
+                $0.autoAlignAxis(.horizontal, toSameAxisOf: self, withOffset: -5)
+                $0.autoSetDimensions(to: selectableViewSize)
             }
 
-            likeCounterLabel.autoConstrainAttribute(.Left, toAttribute: .Right,
-                                                    ofView: likeSelectableView, withOffset: 0)
-            likeCounterLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: likeSelectableView)
+            likeCounterLabel.autoConstrainAttribute(.left, to: .right,
+                                                    of: likeSelectableView, withOffset: 0)
+            likeCounterLabel.autoAlignAxis(.horizontal, toSameAxisOf: likeSelectableView)
 
-            bucketCounterLabel.autoConstrainAttribute(.Left, toAttribute: .Right,
-                                                    ofView: bucketSelectableView, withOffset: 0)
-            bucketCounterLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: bucketSelectableView)
+            bucketCounterLabel.autoConstrainAttribute(.left, to: .right,
+                                                    of: bucketSelectableView, withOffset: 0)
+            bucketCounterLabel.autoAlignAxis(.horizontal, toSameAxisOf: bucketSelectableView)
         }
 
         super.updateConstraints()

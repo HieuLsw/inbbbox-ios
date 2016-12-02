@@ -15,18 +15,18 @@ class ShotBucketsView: UIView {
 
     weak var viewController: UIViewController?
 
-    private let offsetToTopLayoutGuide = CGFloat(10)
+    fileprivate let offsetToTopLayoutGuide = CGFloat(10)
 
-    private let collectionViewCornerWrapperView = UIView.newAutoLayoutView()
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: ColorModeProvider.current().visualEffectBlurType))
-    private var didSetConstraints = false
+    fileprivate let collectionViewCornerWrapperView = UIView.newAutoLayout()
+    fileprivate let blurView = UIVisualEffectView(effect: UIBlurEffect(style: ColorModeProvider.current().visualEffectBlurType))
+    fileprivate var didSetConstraints = false
 
     override init(frame: CGRect) {
 
         collectionView = UICollectionView(frame: CGRect.zero,
                 collectionViewLayout: ShotDetailsCollectionCollapsableHeader())
-        collectionView.backgroundColor = UIColor.clearColor()
-        collectionView.layer.shadowColor = UIColor.grayColor().CGColor
+        collectionView.backgroundColor = UIColor.clear
+        collectionView.layer.shadowColor = UIColor.gray.cgColor
         collectionView.layer.shadowOffset = CGSize(width: 0, height: 0.1)
         collectionView.layer.shadowOpacity = 0.3
         collectionView.clipsToBounds = true
@@ -42,14 +42,14 @@ class ShotBucketsView: UIView {
             addSubview(blurView)
         }
 
-        collectionViewCornerWrapperView.backgroundColor = .clearColor()
+        collectionViewCornerWrapperView.backgroundColor = .clear
         collectionViewCornerWrapperView.clipsToBounds = true
         collectionViewCornerWrapperView.addSubview(collectionView)
 
         addSubview(collectionViewCornerWrapperView)
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -64,14 +64,14 @@ class ShotBucketsView: UIView {
             }
 
             if let viewController = viewController {
-                collectionViewCornerWrapperView.autoPinToTopLayoutGuideOfViewController(viewController,
+                collectionViewCornerWrapperView.autoPin(toTopLayoutGuideOf: viewController,
                         withInset: offsetToTopLayoutGuide)
             } else {
-                collectionViewCornerWrapperView.autoPinEdgeToSuperviewEdge(.Top, withInset: offsetToTopLayoutGuide)
+                collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .top, withInset: offsetToTopLayoutGuide)
             }
-            collectionViewCornerWrapperView.autoPinEdgeToSuperviewEdge(.Left, withInset: 10)
-            collectionViewCornerWrapperView.autoPinEdgeToSuperviewEdge(.Right, withInset: 10)
-            collectionViewCornerWrapperView.autoPinEdgeToSuperviewEdge(.Bottom)
+            collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .left, withInset: 10)
+            collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .right, withInset: 10)
+            collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .bottom)
 
             collectionView.autoPinEdgesToSuperviewEdges()
         }
@@ -79,13 +79,13 @@ class ShotBucketsView: UIView {
         super.updateConstraints()
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
 
         let path = UIBezierPath(roundedRect: collectionViewCornerWrapperView.bounds,
-                byRoundingCorners: [.TopLeft, .TopRight], cornerRadii: CGSize(width: 15, height: 15))
+                byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 15, height: 15))
         let mask = CAShapeLayer()
-        mask.path = path.CGPath
+        mask.path = path.cgPath
         collectionViewCornerWrapperView.layer.mask = mask
     }
 }

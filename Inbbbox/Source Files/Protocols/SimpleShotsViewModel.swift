@@ -14,7 +14,7 @@ protocol SimpleShotsViewModel: BaseCollectionViewViewModel {
     var shots: [ShotType] { get set }
 
     func emptyCollectionDescriptionAttributes() -> EmptyCollectionViewDescription
-    func shotCollectionViewCellViewData(indexPath: NSIndexPath) -> (shotImage: ShotImageType, animated: Bool)
+    func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool)
     func clearViewModelIfNeeded()
 }
 

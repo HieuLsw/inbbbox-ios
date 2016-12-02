@@ -14,7 +14,7 @@ final class User: NSObject, UserType {
     let identifier: String
     let name: String?
     let username: String
-    let avatarURL: NSURL?
+    let avatarURL: URL?
     let shotsCount: UInt
     let accountType: UserAccountType?
 
@@ -29,26 +29,26 @@ final class User: NSObject, UserType {
     }
 
     required init(coder aDecoder: NSCoder) {
-        identifier = aDecoder.decodeObjectForKey(Key.Identifier.rawValue) as? String ?? ""
-        name = aDecoder.decodeObjectForKey(Key.Name.rawValue) as? String
-        username = aDecoder.decodeObjectForKey(Key.Username.rawValue) as? String ?? ""
-        avatarURL = aDecoder.decodeObjectForKey(Key.Avatar.rawValue) as? NSURL
-        shotsCount = aDecoder.decodeObjectForKey(Key.ShotsCount.rawValue) as? UInt ?? 0
+        identifier = aDecoder.decodeObject(forKey: Key.Identifier.rawValue) as? String ?? ""
+        name = aDecoder.decodeObject(forKey: Key.Name.rawValue) as? String
+        username = aDecoder.decodeObject(forKey: Key.Username.rawValue) as? String ?? ""
+        avatarURL = aDecoder.decodeObject(forKey: Key.Avatar.rawValue) as? URL
+        shotsCount = aDecoder.decodeObject(forKey: Key.ShotsCount.rawValue) as? UInt ?? 0
         accountType = {
-            if let key = aDecoder.decodeObjectForKey(Key.AccountType.rawValue) as? String {
+            if let key = aDecoder.decodeObject(forKey: Key.AccountType.rawValue) as? String {
                 return UserAccountType(rawValue: key)
             }
             return nil
         }()
     }
 
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(identifier, forKey: Key.Identifier.rawValue)
-        aCoder.encodeObject(name, forKey: Key.Name.rawValue)
-        aCoder.encodeObject(username, forKey: Key.Username.rawValue)
-        aCoder.encodeObject(avatarURL, forKey: Key.Avatar.rawValue)
-        aCoder.encodeObject(shotsCount, forKey: Key.ShotsCount.rawValue)
-        aCoder.encodeObject(accountType?.rawValue, forKey: Key.AccountType.rawValue)
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(identifier, forKey: Key.Identifier.rawValue)
+        aCoder.encode(name, forKey: Key.Name.rawValue)
+        aCoder.encode(username, forKey: Key.Username.rawValue)
+        aCoder.encode(avatarURL, forKey: Key.Avatar.rawValue)
+        aCoder.encode(shotsCount, forKey: Key.ShotsCount.rawValue)
+        aCoder.encode(accountType?.rawValue, forKey: Key.AccountType.rawValue)
     }
 }
 
@@ -66,13 +66,13 @@ private extension User {
 
 extension User: NSSecureCoding {
 
-    static func supportsSecureCoding() -> Bool {
+    static var supportsSecureCoding: Bool {
         return true
     }
 }
 
 extension User: Mappable {
-    static var map: JSON -> User {
+    static var map: (JSON) -> User {
         return { json in
             User(json: json)
         }
@@ -83,7 +83,7 @@ extension User {
 
     override var debugDescription: String {
         return
-            "<Class: " + String(self.dynamicType) + "> " +
+            "<Class: " + String(describing: type(of: self)) + "> " +
             "{ " +
                 "ID: " + identifier + ", " +
                 "Username: " + username + ", " +

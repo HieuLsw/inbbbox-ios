@@ -26,14 +26,14 @@ struct Parameters {
 
     // MARK: ParamatersEncoding declaration
     enum Encoding {
-        case URL
-        case JSON
+        case url
+        case json
     }
 
     /// encoding specifies the encoding type, URL or Body encoding
     let encoding: Encoding
 
-    private var underlyingDictionary = [String: AnyObject]()
+    fileprivate var underlyingDictionary = [String: AnyObject]()
 
     /// Initialize with encoding.
     ///
@@ -58,21 +58,21 @@ extension Parameters {
 
     /// Maps Parameters values conforming to URLQueryItemStringConvertible, to NSURLQueryItem.
     ///
-    /// This computed property will return empty array for parameters encoding different then .URL
+    /// This computed property will return empty array for parameters encoding different then .url
     ///
     /// If parameter's value is valid JSON object, it will be converted to NSData and then to String with UTF8 encoding,
     /// So you don't need to implement it on your JSON-valid types.
     ///
     /// Otherwise it will fallback to URLQueryItemStringConvertible implementation
-    var queryItems: [NSURLQueryItem] {
-        guard encoding == .URL else { return [] }
+    var queryItems: [URLQueryItem] {
+        guard encoding == .url else { return [] }
         return underlyingDictionary
             .filter { $1 is URLQueryItemStringConvertible }
             .map { (key, value) in
-                NSURLQueryItem(name: key, value: {
-                    if NSJSONSerialization.isValidJSONObject(value) {
-                        if let data = try? NSJSONSerialization.dataWithJSONObject(value, options: .PrettyPrinted),
-                            stringValue = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+                URLQueryItem(name: key, value: {
+                    if JSONSerialization.isValidJSONObject(value) {
+                        if let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted),
+                            let stringValue = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String {
                                 return stringValue
                         }
                     }
@@ -85,18 +85,18 @@ extension Parameters {
 // MARK: - Convert parameters into optional NSData
 extension Parameters {
 
-    /// Checks if encoding is .JSON and parameters are valid JSON object, then uses NSJSONSerialization
+    /// Checks if encoding is .json and parameters are valid JSON object, then uses NSJSONSerialization
     /// Otherwise returns nil
-    var body: NSData? {
-        guard encoding == .JSON && NSJSONSerialization.isValidJSONObject(underlyingDictionary) else { return nil }
-        return try? NSJSONSerialization.dataWithJSONObject(underlyingDictionary, options: .PrettyPrinted)
+    var body: Data? {
+        guard encoding == .json && JSONSerialization.isValidJSONObject(underlyingDictionary) else { return nil }
+        return try? JSONSerialization.data(withJSONObject: underlyingDictionary, options: .prettyPrinted)
     }
 }
 
 extension Parameters: CustomDebugStringConvertible {
 
     var debugDescription: String {
-        return String(underlyingDictionary)
+        return String(describing: underlyingDictionary)
     }
 }
 
@@ -104,7 +104,7 @@ extension Parameters: CustomDebugStringConvertible {
 extension URLQueryItemStringConvertible {
     /// Default implementation - should be handled by String.init
     /// Override for conforming type if String.init doesn't satisfies the requirements
-    var stringValue: String { return String(self) }
+    var stringValue: String { return String(describing: self) }
 }
 
 /**

@@ -17,7 +17,7 @@ struct DayMode: ColorModeType {
 
     // MARK: Tab Bar
     var tabBarTint: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var tabBarNormalItemTextColor: UIColor {
@@ -29,7 +29,7 @@ struct DayMode: ColorModeType {
     }
     
     var tabBarCenterButtonBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var tabBarCenterButtonShadowOffset: CGSize {
@@ -93,7 +93,7 @@ struct DayMode: ColorModeType {
     
     // MARK: Table View
     var tableViewBlurColor: UIColor {
-        return .clearColor()
+        return .clear
     }
 
     var tableViewBackground: UIColor {
@@ -102,11 +102,11 @@ struct DayMode: ColorModeType {
 
     // MARK: Table View Cell
     var tableViewCellBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var tableViewCellTextColor: UIColor {
-        return .blackColor()
+        return .black
     }
     
     // MARK: Swich Cell
@@ -115,7 +115,7 @@ struct DayMode: ColorModeType {
     }
 
     var shotBucketsAddCollectionViewCellBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
 
     var shotBucketsHeaderViewBackground: UIColor {
@@ -123,7 +123,7 @@ struct DayMode: ColorModeType {
     }
 
     var shotBucketsFooterViewBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
 
     var shotBucketsSeparatorCollectionViewCellBackground: UIColor {
@@ -147,11 +147,11 @@ struct DayMode: ColorModeType {
     }
 
     var shotDetailsDescriptionCollectionViewCellBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
 
     var shotDetailsCommentCollectionViewCellBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
 
     var profileHeaderViewBackground: UIColor {
@@ -165,19 +165,19 @@ struct DayMode: ColorModeType {
     
     // MARK: Shot Detail
     var shotDetailsHeaderViewTitleLabelTextColor: UIColor {
-        return .blackColor()
+        return .black
     }
     
     var shotDummySpaceBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDetailsHeaderViewOverlappingTitleLabelTextColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var shotDetailsHeaderViewAuthorNotLinkColor: UIColor {
-        return .grayColor()
+        return .gray
     }
     
     var shotDetailsHeaderViewAuthorLinkColor: UIColor {
@@ -185,11 +185,11 @@ struct DayMode: ColorModeType {
     }
     
     var shotDetailsCommentContentTextColor: UIColor {
-        return .grayColor()
+        return .gray
     }
     
     var shotDetailsDescriptionViewColorTextColor: UIColor {
-        return .grayColor()
+        return .gray
     }
     
     var shotDetailsCommentAuthorTextColor: UIColor {
@@ -221,11 +221,11 @@ struct DayMode: ColorModeType {
     }
     
     var shotDetailsEditViewBackground: UIColor {
-        return .clearColor()
+        return .clear
     }
     
     var shotBucketsActionCellBackground: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     // MARK: Settings
@@ -239,11 +239,11 @@ struct DayMode: ColorModeType {
     
     // MARK: Date Picker
     var datePickerBackgroundColor: UIColor {
-        return .whiteColor()
+        return .white
     }
     
     var datePickerTextColor: UIColor {
-        return .blackColor()
+        return .black
     }
     
     // MARK: Date Picker View
@@ -262,7 +262,7 @@ struct DayMode: ColorModeType {
 
     // MARK: Status Bar
     var preferredStatusBarStyle: UIStatusBarStyle {
-        return .Default
+        return .default
     }
 
     // MARK: Comment Composer
@@ -271,7 +271,7 @@ struct DayMode: ColorModeType {
     }
     
     //MARK: Flash Message
-    var flashMessageTextColor: UIColor = .whiteColor()
+    var flashMessageTextColor: UIColor = .white
     var flashMessageBackgroundColor: UIColor = UIColor.flashMessageBackgroundColor()
     
     // MARK: Common
@@ -284,14 +284,14 @@ struct DayMode: ColorModeType {
     }
     
     var activityIndicatorViewStyle: UIActivityIndicatorViewStyle {
-        return .Gray
+        return .gray
     }
     
     var visualEffectBlurType: UIBlurEffectStyle {
-        return .Light
+        return .light
     }
     
-    func isEqualTo(other: ColorModeType) -> Bool {
+    func isEqualTo(_ other: ColorModeType) -> Bool {
         return other is DayMode
     }
 }

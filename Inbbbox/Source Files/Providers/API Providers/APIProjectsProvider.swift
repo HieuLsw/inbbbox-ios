@@ -21,7 +21,7 @@ class APIProjectsProvider: PageableProvider {
      - returns: Promise which resolves with projects or nil.
      Theoretically should return 1 project only.
      */
-    func provideProjectsForShot(shot: ShotType) -> Promise<[ProjectType]?> {
+    func provideProjectsForShot(_ shot: ShotType) -> Promise<[ProjectType]?> {
 
         let query = ProjectsQuery(shot: shot)
 
@@ -30,7 +30,7 @@ class APIProjectsProvider: PageableProvider {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (projects: [Project]?) -> Void in
                 fulfill(projects.flatMap { $0.map { $0 as ProjectType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

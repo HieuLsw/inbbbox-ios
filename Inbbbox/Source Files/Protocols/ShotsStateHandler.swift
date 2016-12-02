@@ -13,15 +13,15 @@ protocol ShotsStateHandlerDelegate: class {
     /// This method is called to inform object conforming to this protocol to configure for next state
     ///
     /// - parameter shotsStateHandler: Instance of ShotsStateHandler2
-    func shotsStateHandlerDidInvalidate(shotsStateHandler: ShotsStateHandler)
+    func shotsStateHandlerDidInvalidate(_ shotsStateHandler: ShotsStateHandler)
 
     /// Optional method, called to inform delegate about failure.
     /// - parameter error: Describes failure.
-    func shotsStateHandlerDidFailToFetchItems(error: ErrorType)
+    func shotsStateHandlerDidFailToFetchItems(_ error: Error)
 }
 
 extension ShotsStateHandlerDelegate {
-    func shotsStateHandlerDidFailToFetchItems(error: ErrorType) {
+    func shotsStateHandlerDidFailToFetchItems(_ error: Error) {
         // Optional delegate method.
     }
 }

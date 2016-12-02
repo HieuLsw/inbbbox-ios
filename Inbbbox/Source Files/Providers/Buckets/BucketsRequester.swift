@@ -13,22 +13,22 @@ class BucketsRequester {
     let apiBucketsRequester = APIBucketsRequester()
     let managedBucketsRequester = ManagedBucketsRequester()
 
-    func postBucket(name: String, description: NSAttributedString?) -> Promise<BucketType> {
+    func postBucket(_ name: String, description: NSAttributedString?) -> Promise<BucketType> {
         if UserStorage.isUserSignedIn {
             return apiBucketsRequester.postBucket(name, description: description)
         }
         return managedBucketsRequester.addBucket(name, description: description)
     }
 
-    func addShot(shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
-        AnalyticsManager.trackUserActionEvent(.AddToBucket)
+    func addShot(_ shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
+        AnalyticsManager.trackUserActionEvent(.addToBucket)
         if UserStorage.isUserSignedIn {
             return apiBucketsRequester.addShot(shot, toBucket: bucket)
         }
         return managedBucketsRequester.addShot(shot, toBucket: bucket)
     }
 
-    func removeShot(shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
+    func removeShot(_ shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
         if UserStorage.isUserSignedIn {
             return apiBucketsRequester.removeShot(shot, fromBucket: bucket)
         }

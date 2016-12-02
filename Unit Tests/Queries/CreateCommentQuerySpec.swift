@@ -18,7 +18,7 @@ class CreateCommentQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return CreateCommentQuery(shot: Shot.fixtureShot(), body: "fixture.body")
         }) { Void -> QueryExpectation in
-            return (method: .POST, encoding: .JSON, path: "/shots/fixture.identifier/comments")
+            return (method: .POST, encoding: .json, path: "/shots/fixture.identifier/comments")
         }
         
         describe("when newly initialized with comment") {

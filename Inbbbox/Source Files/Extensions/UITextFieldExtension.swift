@@ -13,18 +13,18 @@ extension UITextField {
     /// Sets left padding in text field
     ///
     /// - parameter padding: float value of padding
-    func setLeftPadding(padding: CGFloat) {
+    func setLeftPadding(_ padding: CGFloat) {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: padding, height: frame.size.height))
         leftView = view
-        leftViewMode = .Always
+        leftViewMode = .always
     }
 
     /// Sets right padding in text field
     ///
     /// - parameter padding: float value of padding
-    func setRightPadding(padding: CGFloat) {
+    func setRightPadding(_ padding: CGFloat) {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: padding, height: frame.size.height))
         rightView = view
-        rightViewMode = .Always
+        rightViewMode = .always
     }
 }

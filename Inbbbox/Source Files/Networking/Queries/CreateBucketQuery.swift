@@ -12,7 +12,7 @@ struct CreateBucketQuery: Query {
 
     let method = Method.POST
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for creating new bucket.
     ///
@@ -20,7 +20,7 @@ struct CreateBucketQuery: Query {
     /// - parameter description: Bucket's description.
     init(name: String, description: NSAttributedString?) {
         path = "/buckets"
-        parameters["name"] = name
+        parameters["name"] = name as AnyObject?
         parameters["description"] = description
     }
 }

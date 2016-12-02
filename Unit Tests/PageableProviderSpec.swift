@@ -62,7 +62,7 @@ class PageableProviderSpec: QuickSpec {
             var result: [ModelMock]?
             
             beforeEach {
-                self.stub(everything, builder: json([self.fixtureJSON]))
+                self.stub(everything, json([self.fixtureJSON]))
             }
             
             afterEach {
@@ -74,7 +74,7 @@ class PageableProviderSpec: QuickSpec {
                 let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                 promise.then { _result in
                     result = _result
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(result).toEventuallyNot(beNil())
                 expect(result).toEventually(haveCount(1))
@@ -83,7 +83,7 @@ class PageableProviderSpec: QuickSpec {
             
             context("then next/previous page with unavailable pageable") {
                 
-                var error: ErrorType!
+                var error: Error!
                 
                 afterEach {
                     error = nil
@@ -94,10 +94,10 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.nextPageFor(ModelMock)
+                        sut.nextPageFor(ModelMock.self)
                     }.then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -109,10 +109,10 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.previousPageFor(ModelMock)
+                        sut.previousPageFor(ModelMock.self)
                     }.then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -124,7 +124,7 @@ class PageableProviderSpec: QuickSpec {
                 
                 beforeEach {
                     self.removeAllStubs()
-                    self.stub(everything, builder: json([self.fixtureJSON], headers: self.fixtureHeader))
+                    self.stub(everything, json([self.fixtureJSON], headers: self.fixtureHeader))
                 }
                 
                 it("results from next page should be properly returned") {
@@ -132,10 +132,10 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.nextPageFor(ModelMock)
+                        sut.nextPageFor(ModelMock.self)
                     }.then { _result -> Void in
                         result = _result
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(result).toEventuallyNot(beNil())
                     expect(result).toEventually(haveCount(1))
@@ -146,10 +146,10 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     
                     promise.then { _ in
-                        sut.previousPageFor(ModelMock)
+                        sut.previousPageFor(ModelMock.self)
                     }.then { _result -> Void in
                         result = _result
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(result).toEventuallyNot(beNil())
                     expect(result).toEventually(haveCount(1))
@@ -159,11 +159,11 @@ class PageableProviderSpec: QuickSpec {
         
         describe("when providing first page with network error") {
             
-            var error: ErrorType!
+            var error: Error!
             
             beforeEach {
-                let error = NSError(domain: "", code: 0, message: "")
-                self.stub(everything, builder: failure(error))
+                let error = NSError(domain: "", code: 0, userInfo: nil)
+                self.stub(everything, failure(error))
             }
             
             afterEach {
@@ -175,7 +175,7 @@ class PageableProviderSpec: QuickSpec {
                 let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                 promise.then { _ in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
                 
@@ -185,16 +185,16 @@ class PageableProviderSpec: QuickSpec {
         
         describe("when providing next/previous page without using firstPage method first") {
             
-            var error: ErrorType?
+            var error: Error?
             
             afterEach {
                 error = nil
             }
             
             it("error should appear") {
-                sut.nextPageFor(ModelMock).then { _ in
+                sut.nextPageFor(ModelMock.self).then { _ in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
                 
@@ -202,9 +202,9 @@ class PageableProviderSpec: QuickSpec {
             }
             
             it("error should appear") {
-                sut.previousPageFor(ModelMock).then { _ in
+                sut.previousPageFor(ModelMock.self).then { _ in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
                 
@@ -219,7 +219,7 @@ private struct ModelMock: Mappable {
     let identifier: String
     let title: String?
     
-    static var map: JSON -> ModelMock {
+    static var map: (JSON) -> ModelMock {
         return { json in
             return ModelMock(
                 identifier: json["identifier"].stringValue,
@@ -233,8 +233,8 @@ private extension PageableProviderSpec {
     
     var fixtureJSON: [String: AnyObject] {
         return [
-            "identifier" : "fixture.identifier",
-            "title" : "fixture.title"
+            "identifier" : "fixture.identifier" as AnyObject,
+            "title" : "fixture.title" as AnyObject
         ]
     }
     
@@ -249,6 +249,6 @@ private extension PageableProviderSpec {
 
 private struct QueryMock: Query {
     let path = "/fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
     let method = Method.POST
 }

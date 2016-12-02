@@ -14,13 +14,13 @@ struct Team: TeamType {
     let identifier: String
     let name: String
     let username: String
-    let avatarURL: NSURL?
-    let createdAt: NSDate
+    let avatarURL: URL?
+    let createdAt: Date
 
 }
 
 extension Team: Mappable {
-    static var map: JSON -> Team {
+    static var map: (JSON) -> Team {
         return { json in
 
             let stringDate = json[Key.CreatedAt.rawValue].stringValue
@@ -30,12 +30,12 @@ extension Team: Mappable {
                 name: json[Key.Name.rawValue].stringValue,
                 username: json[Key.Username.rawValue].stringValue,
                 avatarURL: json[Key.Avatar.rawValue].URL,
-                createdAt: Formatter.Date.Timestamp.dateFromString(stringDate)!
+                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!
             )
         }
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Identifier = "id"
         case Name = "name"
         case Username = "username"

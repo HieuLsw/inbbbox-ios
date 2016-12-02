@@ -13,35 +13,38 @@ import Haneke
 import Async
 
 class AnimatableShotImageView: FLAnimatedImageView {
-    private let downloader = DataDownloader()
-    private let progressAnimator = ProgressAnimator(imageBaseName: "loadgif_", imageCount: 59)
-    private var didSetupConstraints = false
+
+    let downloader = DataDownloader()
+
+    fileprivate let progressAnimator = ProgressAnimator(imageBaseName: "loadgif_", imageCount: 59)
+    fileprivate var didSetupConstraints = false
+    
     var hiddenProgressView: Bool {
         get {
-            return progressAnimator.progressImageView.hidden
+            return progressAnimator.progressImageView.isHidden
         }
         
         set {
-            progressAnimator.progressImageView.hidden = newValue
+            progressAnimator.progressImageView.isHidden = newValue
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .whiteColor()
-        contentMode = .ScaleAspectFill
+        backgroundColor = .white
+        contentMode = .scaleAspectFill
         progressAnimator.progressImageView.configureForAutoLayout()
-        progressAnimator.progressImageView.backgroundColor = .whiteColor()
+        progressAnimator.progressImageView.backgroundColor = .white
         addSubview(progressAnimator.progressImageView)
     }
 
-    @available(*, unavailable, message = "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -50,19 +53,19 @@ class AnimatableShotImageView: FLAnimatedImageView {
         if !didSetupConstraints {
             didSetupConstraints = true
 
-            progressAnimator.progressImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            progressAnimator.progressImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
             let progressInset = CGFloat(10)
-            progressAnimator.progressImageView.autoPinEdgeToSuperviewEdge(.Leading, withInset: progressInset)
-            progressAnimator.progressImageView.autoPinEdgeToSuperviewEdge(.Trailing, withInset: progressInset)
-            progressAnimator.progressImageView.autoMatchDimension(.Height, toDimension: .Width,
-                                                                  ofView: progressAnimator.progressImageView,
+            progressAnimator.progressImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: progressInset)
+            progressAnimator.progressImageView.autoPinEdge(toSuperviewEdge: .trailing, withInset: progressInset)
+            progressAnimator.progressImageView.autoMatch(.height, to: .width,
+                                                                  of: progressAnimator.progressImageView,
                                                                   withMultiplier: 0.3563218391)
         }
 
         super.updateConstraints()
     }
 
-    func loadAnimatableShotFromUrl(url: NSURL) {
+    func loadAnimatableShotFromUrl(_ url: URL) {
         Shared.dataCache.fetch(key: url.absoluteString, formatName: CacheManager.gifFormatName, failure: {
             _ in
             self.fetchWithURL(url)
@@ -76,7 +79,7 @@ class AnimatableShotImageView: FLAnimatedImageView {
         downloader.cancelAllFetching()
     }
 
-    private func fetchWithURL(url: NSURL) {
+    fileprivate func fetchWithURL(_ url: URL) {
         downloader.fetchData(url, progress: {
             [weak self] progress in
             self?.updateWithProgress(progress)
@@ -88,18 +91,18 @@ class AnimatableShotImageView: FLAnimatedImageView {
         }
     }
 
-    private func setImageWithData(data: NSData) {
+    fileprivate func setImageWithData(_ data: Data) {
         Async.main {
-            self.progressAnimator.updateProgress(1.0) { [weak self] in
-                self?.progressAnimator.progressImageView.hidden = true
+            self.progressAnimator.updateProgress(progress: 1.0) { [weak self] in
+                self?.progressAnimator.progressImageView.isHidden = true
                 self?.animatedImage = FLAnimatedImage(animatedGIFData: data)
             }
         }
     }
 
-    private func updateWithProgress(progress: Float) {
+    fileprivate func updateWithProgress(_ progress: Float) {
         Async.main {
-            self.progressAnimator.updateProgress(progress)
+            self.progressAnimator.updateProgress(progress: progress)
         }
     }
 }

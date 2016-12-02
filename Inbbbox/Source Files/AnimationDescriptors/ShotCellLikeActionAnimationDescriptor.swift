@@ -11,7 +11,7 @@ import UIKit
 struct ShotCellLikeActionAnimationDescriptor: AnimationDescriptor {
 
     weak var shotCell: ShotCollectionViewCell?
-    var animationType = AnimationType.Plain
+    var animationType = AnimationType.plain
     var delay = 0.0
     var options: UIViewAnimationOptions = []
     var animations: () -> Void
@@ -20,16 +20,16 @@ struct ShotCellLikeActionAnimationDescriptor: AnimationDescriptor {
     init(shotCell: ShotCollectionViewCell, swipeCompletion: (() -> ())?) {
         self.shotCell = shotCell
         animations = {
-            let contentViewWidht = CGRectGetWidth(shotCell.contentView.bounds)
+            let contentViewWidht = shotCell.contentView.bounds.width
             shotCell.likeImageViewLeftConstraint?.constant =
                     round(contentViewWidht / 2 -
-                    shotCell.likeImageView.intrinsicContentSize().width / 2)
+                    shotCell.likeImageView.intrinsicContentSize.width / 2)
             shotCell.likeImageViewWidthConstraint?.constant =
-                    shotCell.likeImageView.intrinsicContentSize().width
+                    shotCell.likeImageView.intrinsicContentSize.width
             shotCell.contentView.layoutIfNeeded()
             shotCell.likeImageView.alpha = 1.0
             shotCell.shotImageView.transform =
-                    CGAffineTransformTranslate(CGAffineTransformIdentity, contentViewWidht, 0)
+                    CGAffineTransform.identity.translatedBy(x: contentViewWidht, y: 0)
             shotCell.likeImageView.displaySecondImageView()
             shotCell.messageLabel.alpha = 1
         }

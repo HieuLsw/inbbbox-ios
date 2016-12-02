@@ -7,5 +7,5 @@
 //
 
 protocol ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType)
+    func adaptColorMode(_ mode: ColorModeType)
 }

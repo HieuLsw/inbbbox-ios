@@ -18,9 +18,9 @@ struct PageRequest: Requestable, Responsable {
     let query: Query
 
     // Session for page request.
-    let session: NSURLSession
+    let session: URLSession
 
-    init(query: Query, urlSession: NSURLSession = NSURLSession.inbbboxDefaultSession()) {
+    init(query: Query, urlSession: URLSession = URLSession.inbbboxDefaultSession()) {
         self.query = query
         session = urlSession
     }
@@ -39,7 +39,7 @@ struct PageRequest: Requestable, Responsable {
                 throw error
             }
 
-            let dataTask = session.dataTaskWithRequest(foundationRequest) { data, response, error in
+            let dataTask = session.dataTask(with: foundationRequest as URLRequest) { data, response, error in
 
                 if let error = error {
                     reject(error); return
@@ -67,7 +67,7 @@ struct PageRequest: Requestable, Responsable {
                             previous: previous)
                     ))
 
-                }.error(reject)
+                }.catch(execute: reject)
             }
 
             dataTask.resume()

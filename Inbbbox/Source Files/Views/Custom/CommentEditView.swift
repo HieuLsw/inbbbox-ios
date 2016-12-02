@@ -11,28 +11,28 @@ import UIKit
 class CommentEditView: UIView {
 
     // Private Properties
-    private var didUpdateConstraints = false
-    private let topInset = CGFloat(10)
-    private let bottomInset = CGFloat(10)
-    private let buttonSize = CGFloat(24)
-    private var isEditing = true {
+    fileprivate var didUpdateConstraints = false
+    fileprivate let topInset = CGFloat(10)
+    fileprivate let bottomInset = CGFloat(10)
+    fileprivate let buttonSize = CGFloat(24)
+    fileprivate var isEditing = true {
         didSet {
             deleteLabel.text = deleteLabelText
             let imageName = isEditing ? "ic-delete-comment" : "ic-report-comment"
-            deleteButton.setImage(UIImage(named: imageName), forState: .Normal)
-            likeButton.hidden = isEditing
-            likeLabel.hidden = isEditing
+            deleteButton.setImage(UIImage(named: imageName), for: .normal)
+            likeButton.isHidden = isEditing
+            likeLabel.isHidden = isEditing
             setUpConstraints()
         }
     }
-    private var isLiked = false {
+    fileprivate var isLiked = false {
         didSet {
             let imageName = isLiked ? "ic-like-details-active" : "ic-like-details"
-            likeButton.setImage(UIImage(named: imageName), forState: .Normal)
+            likeButton.setImage(UIImage(named: imageName), for: .normal)
         }
     }
 
-    private var deleteLabelText: String {
+    fileprivate var deleteLabelText: String {
         if isEditing {
             return NSLocalizedString("CommentEditView.Delete", comment: "Editing comment, delete.")
         } else {
@@ -41,7 +41,7 @@ class CommentEditView: UIView {
     }
 
     // Colors
-    private let viewBackgroundColor = UIColor.clearColor()
+    fileprivate let viewBackgroundColor = UIColor.clear
 
     // public UI Components
     let likeButton = UIButton()
@@ -54,7 +54,7 @@ class CommentEditView: UIView {
         if Settings.Customization.CurrentColorMode == .NightMode {
             return UIView.withColor(ColorModeProvider.current().shotDetailsCommentCollectionViewCellBackground)
         } else {
-            return UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            return UIVisualEffectView(effect: UIBlurEffect(style: .light))
         }
     }()
 
@@ -66,14 +66,14 @@ class CommentEditView: UIView {
         setupSubviews()
     }
 
-    @available(*, unavailable, message = "Use init(frame: CGRect) method instead")
+    @available(*, unavailable, message: "Use init(frame: CGRect) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: UI
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -92,33 +92,33 @@ class CommentEditView: UIView {
 
             contentView.autoPinEdgesToSuperviewEdges()
 
-            likeButton.autoAlignAxis(.Horizontal, toSameAxisOfView: likeButton.superview!,
+            likeButton.autoAlignAxis(.horizontal, toSameAxisOf: likeButton.superview!,
                 withOffset: buttonsCenterOffset)
-            likeButton.autoAlignAxis(.Vertical, toSameAxisOfView: likeButton.superview!,
+            likeButton.autoAlignAxis(.vertical, toSameAxisOf: likeButton.superview!,
                 withOffset: -(distanceBetweenButtons + buttonSize))
-            likeButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
+            likeButton.autoSetDimensions(to: CGSize(width: buttonSize, height: buttonSize))
 
-            likeLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: likeButton,
+            likeLabel.autoAlignAxis(.horizontal, toSameAxisOf: likeButton,
                 withOffset: buttonSize / 2 + buttonsToLabelsAdditionalOffset)
-            likeLabel.autoAlignAxis(.Vertical, toSameAxisOfView: likeButton)
+            likeLabel.autoAlignAxis(.vertical, toSameAxisOf: likeButton)
 
-            deleteButton.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton.superview!,
+            deleteButton.autoAlignAxis(.horizontal, toSameAxisOf: deleteButton.superview!,
                 withOffset: buttonsCenterOffset)
-            deleteButton.autoAlignAxis(.Vertical, toSameAxisOfView: deleteButton.superview!,
+            deleteButton.autoAlignAxis(.vertical, toSameAxisOf: deleteButton.superview!,
                 withOffset: deleteButtonOffset)
-            deleteButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
+            deleteButton.autoSetDimensions(to: CGSize(width: buttonSize, height: buttonSize))
 
-            deleteLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton,
+            deleteLabel.autoAlignAxis(.horizontal, toSameAxisOf: deleteButton,
                 withOffset: buttonSize / 2 + buttonsToLabelsAdditionalOffset)
-            deleteLabel.autoAlignAxis(.Vertical, toSameAxisOfView: deleteButton)
+            deleteLabel.autoAlignAxis(.vertical, toSameAxisOf: deleteButton)
 
-            cancelButton.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton)
-            cancelButton.autoAlignAxis(.Vertical, toSameAxisOfView: cancelButton.superview!,
+            cancelButton.autoAlignAxis(.horizontal, toSameAxisOf: deleteButton)
+            cancelButton.autoAlignAxis(.vertical, toSameAxisOf: cancelButton.superview!,
                 withOffset: cancelButtonOffset)
-            cancelButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
+            cancelButton.autoSetDimensions(to: CGSize(width: buttonSize, height: buttonSize))
 
-            cancelLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteLabel)
-            cancelLabel.autoAlignAxis(.Vertical, toSameAxisOfView: cancelButton)
+            cancelLabel.autoAlignAxis(.horizontal, toSameAxisOf: deleteLabel)
+            cancelLabel.autoAlignAxis(.vertical, toSameAxisOf: cancelButton)
 
             didUpdateConstraints = true
         }
@@ -139,7 +139,7 @@ class CommentEditView: UIView {
 
     // MARK: Private
 
-    private func setupSubviews() {
+    fileprivate func setupSubviews() {
         setupBlurView()
         setupCancelButton()
         setupDeleteButton()
@@ -149,45 +149,45 @@ class CommentEditView: UIView {
         setupLikeLabel()
     }
 
-    private func setupBlurView() {
+    fileprivate func setupBlurView() {
 
         addSubview(contentView)
     }
 
-    private func setupCancelButton() {
-        cancelButton.setImage(UIImage(named: "ic-cancel-comment"), forState: .Normal)
-        cancelButton.contentMode = .ScaleAspectFit
+    fileprivate func setupCancelButton() {
+        cancelButton.setImage(UIImage(named: "ic-cancel-comment"), for: .normal)
+        cancelButton.contentMode = .scaleAspectFit
         contentView.addSubview(cancelButton)
     }
 
-    private func setupDeleteButton() {
-        deleteButton.setImage(UIImage(named: "ic-delete-comment"), forState: .Normal)
-        deleteButton.contentMode = .ScaleAspectFit
+    fileprivate func setupDeleteButton() {
+        deleteButton.setImage(UIImage(named: "ic-delete-comment"), for: .normal)
+        deleteButton.contentMode = .scaleAspectFit
         contentView.addSubview(deleteButton)
     }
 
-    private func setupLikeButton() {
-        likeButton.setImage(UIImage(named: "ic-like-details"), forState: .Normal)
-        likeButton.contentMode = .ScaleAspectFit
+    fileprivate func setupLikeButton() {
+        likeButton.setImage(UIImage(named: "ic-like-details"), for: .normal)
+        likeButton.contentMode = .scaleAspectFit
         contentView.addSubview(likeButton)
     }
 
-    private func setupCancelLabel() {
-        cancelLabel.font = UIFont.helveticaFont(.Neue, size: 10)
+    fileprivate func setupCancelLabel() {
+        cancelLabel.font = UIFont.helveticaFont(.neue, size: 10)
         cancelLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
         cancelLabel.text = NSLocalizedString("CommentEditView.Cancel", comment: "Cancel editing comment.")
         contentView.addSubview(cancelLabel)
     }
 
-    private func setupDeleteLabel() {
-        deleteLabel.font = UIFont.helveticaFont(.Neue, size: 10)
+    fileprivate func setupDeleteLabel() {
+        deleteLabel.font = UIFont.helveticaFont(.neue, size: 10)
         deleteLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
         deleteLabel.text = deleteLabelText
         contentView.addSubview(deleteLabel)
     }
 
-    private func setupLikeLabel() {
-        likeLabel.font = UIFont.helveticaFont(.Neue, size: 10)
+    fileprivate func setupLikeLabel() {
+        likeLabel.font = UIFont.helveticaFont(.neue, size: 10)
         likeLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
         likeLabel.text = NSLocalizedString("CommentEditView.Like",
                                            comment: "Mark selected comment as liked.")

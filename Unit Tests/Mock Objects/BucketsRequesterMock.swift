@@ -17,15 +17,15 @@ class BucketsRequesterMock: BucketsRequester {
     let addShotStub = Stub<(ShotType, BucketType), Promise<Void>>()
     let removeShotStub = Stub<(ShotType, BucketType), Promise<Void>>()
     
-    override func postBucket(name: String, description: NSAttributedString?) -> Promise<BucketType> {
+    override func postBucket(_ name: String, description: NSAttributedString?) -> Promise<BucketType> {
         return try! postBucketStub.invoke(name, description)
     }
     
-    override func addShot(shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
+    override func addShot(_ shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
         return try! addShotStub.invoke(shot, bucket)
     }
     
-    override func removeShot(shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
+    override func removeShot(_ shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
         return try! removeShotStub.invoke(shot, bucket)
     }
 }

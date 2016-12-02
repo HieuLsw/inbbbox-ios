@@ -14,7 +14,7 @@ extension AcknowledgementsViewController {
 
         title = NSLocalizedString("AcknowledgementsView.Title", comment: "Acknowledgements view title")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("AcknowledgementsView.Back",
-                comment: "Back button"), style: .Plain, target: self, action: #selector(didTapBackButton(_:)))
+                comment: "Back button"), style: .plain, target: self, action: #selector(didTapBackButton(_:)))
         webView.loadHTMLString(acknowledgementsHTMLString(), baseURL: nil)
     }
 
@@ -26,7 +26,7 @@ extension AcknowledgementsViewController {
 // MARK: Actions
 extension AcknowledgementsViewController {
     func didTapBackButton(_: UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -34,9 +34,9 @@ extension AcknowledgementsViewController {
 private extension AcknowledgementsViewController {
     func acknowledgementsHTMLString() -> String {
         guard let
-            file = NSBundle.mainBundle().pathForResource("Acknowledgements", ofType:"html"),
-            data = NSData(contentsOfFile: file),
-            htmlString = String(data: data, encoding: NSUTF8StringEncoding)
+            file = Bundle.main.path(forResource: "Acknowledgements", ofType:"html"),
+            let data = try? Data(contentsOf: URL(fileURLWithPath: file)),
+            let htmlString = String(data: data, encoding: String.Encoding.utf8)
         else {
             return ""
         }

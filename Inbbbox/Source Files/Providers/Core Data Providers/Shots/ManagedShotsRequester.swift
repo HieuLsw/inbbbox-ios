@@ -12,12 +12,12 @@ class ManagedShotsRequester {
     let managedObjectsProvider: ManagedObjectsProvider
 
     init() {
-        managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)!.managedObjectContext
+        managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext
         managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: managedObjectContext)
     }
 
 
-    func likeShot(shot: ShotType) -> Promise<Void> {
+    func likeShot(_ shot: ShotType) -> Promise<Void> {
         let managedShot = managedObjectsProvider.managedShot(shot)
         managedShot.liked = true
         return Promise<Void> { fulfill, reject in
@@ -29,7 +29,7 @@ class ManagedShotsRequester {
         }
     }
 
-    func unlikeShot(shot: ShotType) -> Promise<Void> {
+    func unlikeShot(_ shot: ShotType) -> Promise<Void> {
         let managedShot = managedObjectsProvider.managedShot(shot)
         managedShot.liked = false
         return Promise<Void> { fulfill, reject in
@@ -41,13 +41,14 @@ class ManagedShotsRequester {
         }
     }
 
-    func isShotLikedByMe(shot: ShotType) -> Promise<Bool> {
+    func isShotLikedByMe(_ shot: ShotType) -> Promise<Bool> {
         let managedShot = managedObjectsProvider.managedShot(shot)
-        return Promise<Bool>(managedShot.liked)
+        return Promise<Bool>(value: managedShot.liked)
     }
 
-    func userBucketsForShot(shot: ShotType) -> Promise<[BucketType]!> {
+    func userBucketsForShot(_ shot: ShotType) -> Promise<[BucketType]?> {
         let managedShot = managedObjectsProvider.managedShot(shot)
-        return Promise<[BucketType]!>((managedShot.buckets?.allObjects as? [ManagedBucket])?.map { $0 as BucketType })
+        let buckets = managedShot.buckets?.allObjects as? [BucketType]
+        return Promise<[BucketType]?>(value: buckets)
     }
 }

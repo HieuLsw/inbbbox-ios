@@ -9,53 +9,73 @@
 import UIKit
 import PromiseKit
 import DZNEmptyDataSet
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
 
     // MARK: - Lifecycle
 
-    private let viewModel = FolloweesViewModel()
-    private var shouldShowLoadingView = true
-    private var indexPathsNeededImageUpdate = [NSIndexPath]()
+    fileprivate let viewModel = FolloweesViewModel()
+    fileprivate var shouldShowLoadingView = true
+    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let collectionView = collectionView else {
             return
         }
-        collectionView.registerClass(SmallUserCollectionViewCell.self, type: .Cell)
-        collectionView.registerClass(LargeUserCollectionViewCell.self, type: .Cell)
+        collectionView.registerClass(SmallUserCollectionViewCell.self, type: .cell)
+        collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
         navigationItem.title = viewModel.title
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.clearViewModelIfNeeded()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
-        AnalyticsManager.trackScreen(.FolloweesView)
+        AnalyticsManager.trackScreen(.followeesView)
     }
 
     // MARK: UICollectionViewDataSource
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
     }
 
-    override func collectionView(collectionView: UICollectionView,
-                                 cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cellData = viewModel.followeeCollectionViewCellViewData(indexPath)
 
         indexPathsNeededImageUpdate.append(indexPath)
 
-        if collectionView.collectionViewLayout.isKindOfClass(TwoColumnsCollectionViewFlowLayout) {
+        if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
             let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
-                    forIndexPath: indexPath, type: .Cell)
+                    forIndexPath: indexPath, type: .cell)
             cell.clearImages()
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
@@ -73,7 +93,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
             return cell
         } else {
             let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
-                    forIndexPath: indexPath, type: .Cell)
+                    forIndexPath: indexPath, type: .cell)
             cell.clearImages()
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
@@ -81,10 +101,9 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
             cell.shotImageView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
             if let shotImage = cellData.firstShotImage {
 
-                let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
+                let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
-                    guard let certainSelf = self
-                            where certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
+                    guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
 
                     cell.shotImageView.image = image
                 }
@@ -103,23 +122,23 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
 
     // MARK: UICollectionViewDelegate
 
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell,
-                                 forItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == viewModel.itemsCount - 1 {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
+        if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(profileViewController, animated: true)
     }
 
-    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
-                                 forItemAtIndexPath indexPath: NSIndexPath) {
-        if let index = indexPathsNeededImageUpdate.indexOf(indexPath) {
-            indexPathsNeededImageUpdate.removeAtIndex(index)
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
+        if let index = indexPathsNeededImageUpdate.index(of: indexPath) {
+            indexPathsNeededImageUpdate.remove(at: index)
         }
     }
 }
@@ -131,7 +150,7 @@ extension FolloweesCollectionViewController: BaseCollectionViewViewModelDelegate
         collectionView?.reloadData()
     }
 
-    func viewModelDidFailToLoadInitialItems(error: ErrorType) {
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
         self.shouldShowLoadingView = false
         collectionView?.reloadData()
 
@@ -140,29 +159,29 @@ extension FolloweesCollectionViewController: BaseCollectionViewViewModelDelegate
         }
     }
 
-    func viewModelDidFailToLoadItems(error: ErrorType) {
+    func viewModelDidFailToLoadItems(_ error: Error) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
-        collectionView?.insertItemsAtIndexPaths(indexPaths)
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        collectionView?.insertItems(at: indexPaths)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
-        collectionView?.reloadItemsAtIndexPaths([indexPath])
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        collectionView?.reloadItems(at: [indexPath])
     }
 }
 
 extension FolloweesCollectionViewController: DZNEmptyDataSetSource {
 
-    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
 
         if shouldShowLoadingView {
-            let loadingView = EmptyDataSetLoadingView.newAutoLayoutView()
+            let loadingView = EmptyDataSetLoadingView.newAutoLayout()
             loadingView.startAnimating()
             return loadingView
         } else {
-            let emptyDataSetView = EmptyDataSetView.newAutoLayoutView()
+            let emptyDataSetView = EmptyDataSetView.newAutoLayout()
             emptyDataSetView.setDescriptionText(
                 firstLocalizedString: NSLocalizedString("FolloweesCollectionView.EmptyData.FirstLocalizedString",
                         comment: "FolloweesCollectionView, empty data set view"),
@@ -177,7 +196,7 @@ extension FolloweesCollectionViewController: DZNEmptyDataSetSource {
 }
 
 extension FolloweesCollectionViewController: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         collectionView?.reloadData()
     }
 }
@@ -186,11 +205,11 @@ extension FolloweesCollectionViewController: ColorModeAdaptable {
 
 extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate {
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
-            let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)),
-            let cell = collectionView?.cellForItemAtIndexPath(indexPath)
+            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView?.cellForItem(at: indexPath)
         else { return nil }
         
         previewingContext.sourceRect = cell.contentView.bounds
@@ -202,7 +221,7 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
         return profileViewController
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }

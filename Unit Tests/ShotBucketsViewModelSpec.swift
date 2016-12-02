@@ -52,16 +52,16 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     resultBucketTypes.append(bucket)
                 }
                 
-                return Promise(resultBucketTypes.first!)
+                return Promise(value: resultBucketTypes.first!)
                 
             }
             
             bucketsRequesterMock.addShotStub.on(any()) { _ in
-                return Promise()
+                return Promise<Void>(value: Void())
             }
             
             bucketsRequesterMock.removeShotStub.on(any()) { _ in
-                return Promise()
+                return Promise<Void>(value: Void())
             }
             
             shotsRequesterMock.userBucketsForShotStub.on(any()) { _ in
@@ -89,11 +89,11 @@ class ShotBucketsViewModelSpec: QuickSpec {
         context("adding shot to bucket") {
             
             beforeEach {
-                sut = ShotBucketsViewModel(shot: shot, mode: .AddToBucket)
+                sut = ShotBucketsViewModel(shot: shot, mode: .addToBucket)
                 
                 sut.bucketsProvider = bucketsProviderMock
                 sut.bucketsRequester = bucketsRequesterMock
-                sut.bucketsProvider.provideMyBuckets()
+                _ = sut.bucketsProvider.provideMyBuckets()
             }
             
             afterEach {
@@ -114,7 +114,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { _ in
                             done()
-                        }
+                        }.catch { _ in }
                     }
 
                     expect(sut.itemsCount >= 2).to(beTruthy())
@@ -131,7 +131,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                         sut.loadBuckets().then { result -> Void in
                             didReceiveResponse = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                 }
                 
@@ -163,14 +163,14 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { result -> Void in
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                     
                     waitUntil { done in
                         sut.addShotToBucketAtIndex(0).then { result -> Void in
                             didReceiveResponse = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                 }
                 
@@ -196,21 +196,21 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { result -> Void in
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                     
                     waitUntil { done in
                         sut.createBucket("fixture.name").then { result -> Void in
                             didCreateBucket = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                     
                     waitUntil { done in
                         sut.addShotToBucketAtIndex(2).then { result -> Void in
                             didReceiveResponse = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                 }
                 
@@ -234,7 +234,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
         context("removing shot from buckets") {
             
             beforeEach {
-                sut = ShotBucketsViewModel(shot: shot, mode: .RemoveFromBucket)
+                sut = ShotBucketsViewModel(shot: shot, mode: .removeFromBucket)
                 
                 sut.shotsRequester = shotsRequesterMock
                 sut.bucketsRequester = bucketsRequesterMock
@@ -258,7 +258,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { _ in
                             done()
-                        }
+                        }.catch { _ in }
                     }
 
                     expect(sut.itemsCount >= 2).to(beTruthy())
@@ -275,7 +275,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                         sut.loadBuckets().then { result -> Void in
                             didReceiveResponse = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                 }
                 
@@ -307,17 +307,17 @@ class ShotBucketsViewModelSpec: QuickSpec {
                     waitUntil { done in
                         sut.loadBuckets().then { result -> Void in
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                     
-                    sut.selectBucketAtIndex(0)
-                    sut.selectBucketAtIndex(1)
+                    _ = sut.selectBucketAtIndex(0)
+                    _ = sut.selectBucketAtIndex(1)
                     
                     waitUntil { done in
                         sut.removeShotFromSelectedBuckets().then { result -> Void in
                             didReceiveResponse = true
                             done()
-                        }.error { _ in fail("This should not be invoked") }
+                        }.catch { _ in fail("This should not be invoked") }
                     }
                 }
                 

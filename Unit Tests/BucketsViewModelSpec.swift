@@ -16,8 +16,8 @@ class BucketsViewModelSpec: QuickSpec {
     override func spec() {
         
         var sut: BucketsViewModelMock!
-        let fixtureImageURL = NSURL(string: "https://fixture.domain/fixture.image.teaser.png")
-        let fixtureImagesURLs: [NSURL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
+        let fixtureImageURL = URL(string: "https://fixture.domain/fixture.image.teaser.png")
+        let fixtureImagesURLs: [URL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
         let fixtureBucketName = "fixture.name"
         let fixtureNumberOfShots = "250 shots"
         
@@ -47,7 +47,7 @@ class BucketsViewModelSpec: QuickSpec {
             }
             
             it("should return proper cell data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
@@ -66,7 +66,7 @@ class BucketsViewModelSpec: QuickSpec {
             }
             
             it("should return proper shot data for index path") {
-                let indexPath = NSIndexPath(forRow: 1, inSection: 0)
+                let indexPath = IndexPath(row: 1, section: 0)
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
@@ -114,7 +114,7 @@ private class BucketsViewModelMock: BucketsViewModel {
         }
     }
     
-    override func downloadShots(buckets: [BucketType]) {
+    override func downloadShots(_ buckets: [BucketType]) {
         for index in 0...buckets.count - 1 {
             bucketsIndexedShots[index] = [Shot.fixtureShot()]
         }

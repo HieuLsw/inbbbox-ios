@@ -17,7 +17,7 @@ struct FlashMessageViewModel {
     ///
     /// - parameter title: text that will be displayed in message
     /// - parameter duration: how long this message will be displayed. By default it's .Automatic
-    init(title: String, duration: FlashMessageDuration = .Automatic) {
+    init(title: String, duration: FlashMessageDuration = .automatic) {
         self.title = title
         self.duration = duration
     }

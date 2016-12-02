@@ -12,15 +12,19 @@ import SafariServices
 
 class LoginViewController: UIViewController {
 
+    fileprivate lazy var __once: () = {
+            self.shotsAnimator.scrollToMiddleInstantly()
+        }()
+
     var centerButtonTabBarController: CenterButtonTabBarController
 
-    private var shotsAnimator: AutoScrollableShotsAnimator!
-    private weak var aView: LoginView?
-    private var viewAnimator: LoginViewAnimator?
-    private var authenticator: Authenticator?
-    private var onceTokenForScrollToMiddleInstantly = dispatch_once_t(0)
-    private var logoTappedCount = 0
-    private var statusBarStyle: UIStatusBarStyle = .LightContent {
+    fileprivate var shotsAnimator: AutoScrollableShotsAnimator!
+    fileprivate weak var aView: LoginView?
+    fileprivate var viewAnimator: LoginViewAnimator?
+    fileprivate var authenticator: Authenticator?
+    fileprivate var onceTokenForScrollToMiddleInstantly = Int(0)
+    fileprivate var logoTappedCount = 0
+    fileprivate var statusBarStyle: UIStatusBarStyle = .lightContent {
         didSet {
             setNeedsStatusBarAppearanceUpdate()
         }
@@ -31,7 +35,7 @@ class LoginViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    @available(*, unavailable, message="Use init(tabBarController:) instead")
+    @available(*, unavailable, message: "Use init(tabBarController:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -51,31 +55,29 @@ class LoginViewController: UIViewController {
         shotsAnimator = AutoScrollableShotsAnimator(bindForAnimation: bindForAnimation)
         aView?.loginButton.addTarget(self,
                                      action: #selector(loginButtonDidTap(_:)),
-                                     forControlEvents: .TouchUpInside)
+                                     for: .touchUpInside)
         aView?.loginAsGuestButton.addTarget(self,
                                             action: #selector(loginAsGuestButtonDidTap(_:)),
-                                            forControlEvents: .TouchUpInside)
+                                            for: .touchUpInside)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(logoTapped(_:)))
         aView?.logoImageView.addGestureRecognizer(tapGesture)
-        aView?.logoImageView.userInteractionEnabled = true
+        aView?.logoImageView.isUserInteractionEnabled = true
         aView?.loadingLabel.alpha = 0
     }
 
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
-        dispatch_once(&onceTokenForScrollToMiddleInstantly) {
-            self.shotsAnimator.scrollToMiddleInstantly()
-        }
+        _ = self.__once
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         shotsAnimator.startScrollAnimationInfinitely()
-        AnalyticsManager.trackScreen(.LoginView)
+        AnalyticsManager.trackScreen(.loginView)
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return statusBarStyle
     }
 
@@ -92,14 +94,14 @@ extension LoginViewController {
 
         viewAnimator?.startLoginAnimation()
 
-        let interactionHandler: (SFSafariViewController -> Void) = { controller in
+        let interactionHandler: ((SFSafariViewController) -> Void) = { controller in
             controller.delegate = self
-            self.presentViewController(controller, animated: true, completion: nil)
+            self.present(controller, animated: true, completion: nil)
         }
 
-        let success: (Void -> Void) = {
-            self.dismissViewControllerAnimated(true) {
-                self.viewAnimator?.stopAnimationWithType(.Continue) {
+        let success: ((Void) -> Void) = {
+            self.dismiss(animated: true) {
+                self.viewAnimator?.stopAnimationWithType(.continue) {
                     self.aView?.loadingLabel.alpha = 0
                     self.aView?.copyrightlabel.alpha = 0
                     self.presentNextViewController()
@@ -107,12 +109,12 @@ extension LoginViewController {
             }
         }
 
-        let failure: (ErrorType -> Void) = { error in
-            self.viewAnimator?.stopAnimationWithType(.Undo)
-            self.dismissViewControllerAnimated(true, completion: nil)
+        let failure: ((Error) -> Void) = { error in
+            self.viewAnimator?.stopAnimationWithType(.undo)
+            self.dismiss(animated: true, completion: nil)
         }
 
-        authenticator = Authenticator(service: .Dribbble,
+        authenticator = Authenticator(service: .dribbble,
                                       interactionHandler: interactionHandler,
                                       success: success,
                                       failure: failure)
@@ -122,15 +124,15 @@ extension LoginViewController {
     func loginAsGuestButtonDidTap(_: UIButton) {
         Authenticator.logout()
         UserStorage.storeGuestUser()
-        AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.LoginAsGuest)
+        AnalyticsManager.trackLoginEvent(AnalyticsLoginEvent.loginAsGuest)
         viewAnimator?.startLoginAnimation(stopAfterShrink: true)
     }
 
-    func logoTapped(sender: UITapGestureRecognizer) {
+    func logoTapped(_ sender: UITapGestureRecognizer) {
         logoTappedCount += 1
         if logoTappedCount == 5 {
             viewAnimator?.showLoginAsGuest()
-            sender.enabled = false
+            sender.isEnabled = false
         }
     }
 }
@@ -138,37 +140,36 @@ extension LoginViewController {
 extension LoginViewController: LoginViewAnimatorDelegate {
 
     func tabBarWillAppear() {
-        statusBarStyle = .Default
+        statusBarStyle = .default
     }
 
     func shrinkAnimationDidFinish() {
-        self.viewAnimator?.stopAnimationWithType(.Continue) {
+        self.viewAnimator?.stopAnimationWithType(.continue) {
             self.presentNextViewController()
         }
     }
 }
 
 extension LoginViewController: SafariAuthorizable {
-    func handleOpenURL(url: NSURL) {
+    func handleOpenURL(_ url: URL) {
         authenticator?.loginWithOAuthURLCallback(url)
     }
 }
 
 extension LoginViewController: SFSafariViewControllerDelegate {
 
-    func safariViewControllerDidFinish(controller: SFSafariViewController) {
-        dismissViewControllerAnimated(true, completion: nil)
-
-        after(0.5).then { result -> Void in
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true, completion: nil)
+        after(interval: 0.5).then { result -> Void in
             self.aView?.loadingLabel.alpha = 0
-            self.viewAnimator?.stopAnimationWithType(.Undo)
-        }
+            self.viewAnimator?.stopAnimationWithType(.undo)
+        }.catch { _ in }
     }
 }
 
 private extension LoginViewController {
 
     func presentNextViewController() {
-        self.presentViewController(centerButtonTabBarController, animated: false, completion: nil)
+        self.present(centerButtonTabBarController, animated: false, completion: nil)
     }
 }

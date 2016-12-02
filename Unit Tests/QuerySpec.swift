@@ -17,7 +17,7 @@ class QuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return QueryMock()
         }) { Void -> QueryExpectation in
-            return (method: .POST, encoding: .JSON, path: "/fixture/path")
+            return (method: .POST, encoding: .json, path: "/fixture/path")
         }
         
         it("request-response protocols should be properly named") {
@@ -32,5 +32,5 @@ class QuerySpec: QuickSpec {
 private struct QueryMock: Query {
     let method = Method.POST
     let path = "/fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 }

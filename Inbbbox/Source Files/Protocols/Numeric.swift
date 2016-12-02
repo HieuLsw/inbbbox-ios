@@ -9,13 +9,13 @@ protocol Numeric {}
 
 extension Numeric {
     func currentLocaleDecimalStyle() -> String? {
-        let formatter = NSNumberFormatter()
-        formatter.locale = NSLocale.currentLocale()
-        formatter.numberStyle = .DecimalStyle
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
         guard let number = self as? NSNumber else {
             return nil
         }
-        return formatter.stringFromNumber(number)
+        return formatter.string(from: number)
     }
 }
 

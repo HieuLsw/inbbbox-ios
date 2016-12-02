@@ -12,7 +12,7 @@ struct LikeQuery: Query {
 
     let method = Method.POST
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for liking a shot.
     ///

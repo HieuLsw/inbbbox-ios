@@ -8,9 +8,9 @@ import PromiseKit
 
 class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
 
-    private let connectionsRequester = APIConnectionsRequester()
-    private let userProvider = APIUsersProvider()
-    private let netguruIdentifier = "netguru"
+    fileprivate let connectionsRequester = APIConnectionsRequester()
+    fileprivate let userProvider = APIUsersProvider()
+    fileprivate let netguruIdentifier = "netguru"
     
     weak var shotsCollectionViewController: ShotsCollectionViewController?
     weak var delegate: ShotsStateHandlerDelegate?
@@ -20,11 +20,11 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     var scrollViewAnimationsCompletion: (() -> Void)?
 
     var state: ShotsCollectionViewController.State {
-        return .Onboarding
+        return .onboarding
     }
 
     var nextState: ShotsCollectionViewController.State? {
-        return .Normal
+        return .normal
     }
 
     var tabBarInteractionEnabled: Bool {
@@ -66,11 +66,11 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
         let step4 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step4", comment: "")
         let step5 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step5", comment: "")
         onboardingSteps = [
-            (image: UIImage(named: step1), action: ShotCollectionViewCell.Action.Like),
-            (image: UIImage(named: step2), action: ShotCollectionViewCell.Action.Bucket),
-            (image: UIImage(named: step3), action: ShotCollectionViewCell.Action.Comment),
-            (image: UIImage(named: step4), action: ShotCollectionViewCell.Action.Follow),
-            (image: UIImage(named: step5), action: ShotCollectionViewCell.Action.DoNothing),
+            (image: UIImage(named: step1), action: ShotCollectionViewCell.Action.like),
+            (image: UIImage(named: step2), action: ShotCollectionViewCell.Action.bucket),
+            (image: UIImage(named: step3), action: ShotCollectionViewCell.Action.comment),
+            (image: UIImage(named: step4), action: ShotCollectionViewCell.Action.follow),
+            (image: UIImage(named: step5), action: ShotCollectionViewCell.Action.doNothing),
         ]
     }
 }
@@ -78,15 +78,15 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
 // MARK: UICollectionViewDataSource
 extension ShotsOnboardingStateHandler {
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let shotsCollectionViewController = shotsCollectionViewController else {
             return onboardingSteps.count
         }
         return onboardingSteps.count + shotsCollectionViewController.shots.count
     }
 
-    func collectionView(collectionView: UICollectionView,
-                        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row < onboardingSteps.count {
             return cellForOnboardingShot(collectionView, indexPath: indexPath)
         } else {
@@ -97,8 +97,8 @@ extension ShotsOnboardingStateHandler {
 
 // MARK: UICollectionViewDelegate
 extension ShotsOnboardingStateHandler {
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell,
-                        forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         if indexPath.row == onboardingSteps.count {
             scrollViewAnimationsCompletion = {
                 Defaults[.onboardingPassed] = true
@@ -107,7 +107,7 @@ extension ShotsOnboardingStateHandler {
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row == onboardingSteps.count - 1 else {
             return
         }
@@ -117,7 +117,7 @@ extension ShotsOnboardingStateHandler {
 
 // MARK: UIScrollViewDelegate
 extension ShotsOnboardingStateHandler {
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollViewAnimationsCompletion?()
         scrollViewAnimationsCompletion = nil
     }
@@ -126,32 +126,32 @@ extension ShotsOnboardingStateHandler {
 // MARK: Private methods
 private extension ShotsOnboardingStateHandler {
 
-    func cellForShot(collectionView: UICollectionView, indexPath: NSIndexPath) -> ShotCollectionViewCell {
+    func cellForShot(_ collectionView: UICollectionView, indexPath: IndexPath) -> ShotCollectionViewCell {
         guard let shotsCollectionViewController = shotsCollectionViewController else {
             return ShotCollectionViewCell()
         }
         let shot = shotsCollectionViewController.shots[0]
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
         cell.shotImageView.loadShotImageFromURL(shot.shotImage.normalURL)
         cell.displayAuthor(Settings.Customization.ShowAuthor, animated: false)
-        cell.gifLabel.hidden = !shot.animated
+        cell.gifLabel.isHidden = !shot.animated
         return cell
     }
 
-    func cellForOnboardingShot(collectionView: UICollectionView, indexPath: NSIndexPath) -> ShotCollectionViewCell {
+    func cellForOnboardingShot(_ collectionView: UICollectionView, indexPath: IndexPath) -> ShotCollectionViewCell {
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
         let stepImage = onboardingSteps[indexPath.row].image
         cell.shotImageView.image = stepImage
-        cell.gifLabel.hidden = true
+        cell.gifLabel.isHidden = true
         cell.enabledActions = [self.onboardingSteps[indexPath.row].action]
         cell.swipeCompletion = { [weak self] action in
-            guard let certainSelf = self where action == certainSelf.onboardingSteps[indexPath.row].action else {
+            guard let certainSelf = self, action == certainSelf.onboardingSteps[indexPath.row].action else {
                 return
             }
             collectionView.animateToNextCell()
-            if action == .Follow {
+            if action == .follow {
                 certainSelf.followNetguru()
             }
             
@@ -164,14 +164,14 @@ private extension ShotsOnboardingStateHandler {
             userProvider.provideUser(netguruIdentifier)
         }.then { user in
             self.connectionsRequester.followUser(user)
-        }
+        }.catch { _ in }
     }
 }
 
 private extension UICollectionView {
     func animateToNextCell() {
         var newContentOffset = contentOffset
-        newContentOffset.y += CGRectGetHeight(bounds)
+        newContentOffset.y += bounds.height
         setContentOffset(newContentOffset, animated: true)
     }
 }

@@ -17,7 +17,7 @@ class AddToBucketQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return AddToBucketQuery(shot: Shot.fixtureShot(), bucket: Bucket.fixtureBucket())
         }) { Void -> QueryExpectation in
-            return (method: .PUT, encoding: .JSON, path: "/buckets/fixture.identifier/shots")
+            return (method: .PUT, encoding: .json, path: "/buckets/fixture.identifier/shots")
         }
         
         describe("when newly initialized with shot and bucket identifiers") {
@@ -33,7 +33,7 @@ class AddToBucketQuerySpec: QuickSpec {
             }
             
             it("should have one parameter - shot_id") {
-                expect(sut.parameters.body).to(equal(try! NSJSONSerialization.dataWithJSONObject(["shot_id": "fixture.identifier"], options: .PrettyPrinted)))
+                expect(sut.parameters.body).to(equal(try! JSONSerialization.data(withJSONObject: ["shot_id": "fixture.identifier"], options: .prettyPrinted)))
             }
         }
     }

@@ -10,7 +10,7 @@ import UIKit
 
 final class LocalNotificationRegistrator {
 
-    private static let LocalNotificationUserIDKey = "notificationID"
+    fileprivate static let LocalNotificationUserIDKey = "notificationID"
 
     /// Registers user for local notifications.
     ///
@@ -18,13 +18,13 @@ final class LocalNotificationRegistrator {
     /// - parameter time:   Fire date of notification.
     ///
     /// - returns: Local Notification object.
-    class func registerNotification(forUserID userID: String, time: NSDate)
+    class func registerNotification(forUserID userID: String, time: Date)
                     -> UILocalNotification? {
 
         if let localNotificationSettings =
-                UIApplication.sharedApplication().currentUserNotificationSettings() {
+                UIApplication.shared.currentUserNotificationSettings {
 
-            guard localNotificationSettings.types == [.Alert, .Sound] else {
+            guard localNotificationSettings.types == [.alert, .sound] else {
                 return nil
             }
 
@@ -51,7 +51,7 @@ final class LocalNotificationRegistrator {
 
 private extension LocalNotificationRegistrator {
 
-    class func createNotification(forUserID userID: String, time: NSDate) -> UILocalNotification {
+    class func createNotification(forUserID userID: String, time: Date) -> UILocalNotification {
 
         let localNotification = UILocalNotification()
         localNotification.userInfo = [LocalNotificationUserIDKey: userID]
@@ -60,21 +60,21 @@ private extension LocalNotificationRegistrator {
                 comment: "Check Inbbbox for daily dose of design shots")
         localNotification.alertAction = NSLocalizedString("LocalNotificationRegistrator.Show",
                 comment: "Action for notification")
-        localNotification.repeatInterval = .Day
+        localNotification.repeatInterval = .day
 
-        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        UIApplication.shared.scheduleLocalNotification(localNotification)
 
         return localNotification
     }
 
     class func destroyNotification(notificationID notificationToDelete: UILocalNotification) {
-        UIApplication.sharedApplication().cancelLocalNotification(notificationToDelete)
+        UIApplication.shared.cancelLocalNotification(notificationToDelete)
     }
 
     class func registeredNotification(forUserID userID: String) -> UILocalNotification? {
 
         guard let scheduledLocalNotifications =
-                UIApplication.sharedApplication().scheduledLocalNotifications else {
+                UIApplication.shared.scheduledLocalNotifications else {
             return nil
         }
 

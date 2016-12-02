@@ -11,7 +11,7 @@ class ShotsAnimatorMock: ShotsAnimator {
 
     let startAnimationWithCompletionStub = Stub<(() -> Void)?, Void>()
 
-    override func startAnimationWithCompletion(completion: (() -> Void)?) {
+    override func startAnimationWithCompletion(_ completion: (() -> Void)?) {
         try! startAnimationWithCompletionStub.invoke(completion)
     }
 }

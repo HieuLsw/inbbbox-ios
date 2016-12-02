@@ -14,7 +14,7 @@ import Nimble
 class FormatterSpec: QuickSpec {
     override func spec() {
         
-        var dateComponents: NSDateComponents!
+        var dateComponents: DateComponents!
         
         afterEach {
             dateComponents = nil
@@ -23,8 +23,8 @@ class FormatterSpec: QuickSpec {
         describe("when formatting date with basic date formatter") {
             
             beforeEach {
-                let date = Formatter.Date.Basic.dateFromString("1970-01-01")!
-                dateComponents = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: date)
+                let date = Formatter.Date.Basic.date(from: "1970-01-01")!
+                dateComponents = NSCalendar.current.dateComponents([.year, .month, .day], from: date)
             }
             
             it("year should be properly decoded") {
@@ -43,10 +43,10 @@ class FormatterSpec: QuickSpec {
         describe("when formatting date with timestamp date formatter") {
             
             beforeEach {
-                let date = Formatter.Date.Timestamp.dateFromString("1970-01-01T08:19:14+00:00")!
-                let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-                calendar.timeZone = NSTimeZone(abbreviation: "GMT")!
-                dateComponents = calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+                let date = Formatter.Date.Timestamp.date(from: "1970-01-01T08:19:14+00:00")!
+                let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+                calendar.timeZone = NSTimeZone(abbreviation: "GMT")! as TimeZone
+                dateComponents = calendar.components([.year, .month, .day, .hour, .minute, .second], from: date)
             }
             
             it("year should be properly decoded") {

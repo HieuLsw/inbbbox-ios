@@ -18,31 +18,31 @@ class Settings {
         /// Indicates if streams' sources are initially set.
         static var IsSet: Bool {
             get { return Settings.boolForKey(.StreamSourceIsSet) }
-            set { Settings.setValue(newValue, forKey: .StreamSourceIsSet) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .StreamSourceIsSet) }
         }
 
         /// Indicates if stream's source for Following is on.
         static var Following: Bool {
             get { return Settings.boolForKey(.FollowingStreamSourceOn) }
-            set { Settings.setValue(newValue, forKey: .FollowingStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .FollowingStreamSourceOn) }
         }
 
         /// Indicates if stream's source for NewToday is on.
         static var NewToday: Bool {
             get { return Settings.boolForKey(.NewTodayStreamSourceOn) }
-            set { Settings.setValue(newValue, forKey: .NewTodayStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .NewTodayStreamSourceOn) }
         }
 
         /// Indicates if stream's source for PopularToday is on.
         static var PopularToday: Bool {
             get { return Settings.boolForKey(.PopularTodayStreamSourceOn) }
-            set { Settings.setValue(newValue, forKey: .PopularTodayStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .PopularTodayStreamSourceOn) }
         }
 
         /// Indicates if stream's source for Debuts is on.
         static var Debuts: Bool {
             get { return Settings.boolForKey(.DebutsStreamSourceOn) }
-            set { Settings.setValue(newValue, forKey: .DebutsStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .DebutsStreamSourceOn) }
         }
     }
 
@@ -52,19 +52,19 @@ class Settings {
         /// Indicates if reminder is enabled.
         static var Enabled: Bool {
             get { return Settings.boolForKey(.ReminderOn) }
-            set { Settings.setValue(newValue, forKey: .ReminderOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .ReminderOn) }
         }
 
         /// Indicates date that reminder should appear.
-        static var Date: NSDate? {
+        static var Date: Date? {
             get { return Settings.dateForKey(.ReminderDate) }
-            set { Settings.setValue(newValue, forKey: .ReminderDate) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .ReminderDate) }
         }
 
         /// Indicates if settings for local notifications are provided.
         static var LocalNotificationSettingsProvided: Bool {
             get { return Settings.boolForKey(.LocalNotificationSettingsProvided) }
-            set { Settings.setValue(newValue, forKey: .LocalNotificationSettingsProvided) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .LocalNotificationSettingsProvided) }
         }
     }
 
@@ -74,13 +74,13 @@ class Settings {
         /// Indicates if "showing author on homescreen" is enabled.
         static var ShowAuthor: Bool {
             get { return Settings.boolForKey(.ShowAuthorOnHomeScreen) }
-            set { Settings.setValue(newValue, forKey: .ShowAuthorOnHomeScreen) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .ShowAuthorOnHomeScreen) }
         }
         
         /// Indicates if "showing author on homescreen" is enabled.
         static var NightMode: Bool {
             get { return Settings.boolForKey(.NightMode) }
-            set { Settings.setValue(newValue, forKey: .NightMode) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .NightMode) }
         }
 
         /// Indicates what color mode is currently set.
@@ -91,7 +91,7 @@ class Settings {
                 let colorMode = ColorMode(rawValue: savedSetting)
                 return colorMode != nil ? colorMode! : .DayMode
             }
-            set { Settings.setValue(newValue.rawValue, forKey: .ColorMode) }
+            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .ColorMode) }
         }
     }
 }
@@ -100,53 +100,53 @@ private extension Settings {
 
     // MARK: NotificationKey
 
-    static func boolForKey(key: NotificationKey) -> Bool {
+    static func boolForKey(_ key: NotificationKey) -> Bool {
         return boolForKey(key.rawValue)
     }
 
-    static func dateForKey(key: NotificationKey) -> NSDate? {
+    static func dateForKey(_ key: NotificationKey) -> Date? {
         return Defaults[key.rawValue].date
     }
 
-    static func setValue(value: AnyObject?, forKey key: NotificationKey) {
+    static func setValue(_ value: AnyObject?, forKey key: NotificationKey) {
         Defaults[key.rawValue] = value
-        NSNotificationCenter.defaultCenter().postNotificationName(
-        InbbboxNotificationKey.UserDidChangeNotificationsSettings.rawValue, object: self)
+        NotificationCenter.default.post(
+        name: Notification.Name(rawValue: InbbboxNotificationKey.UserDidChangeNotificationsSettings.rawValue), object: self)
     }
 
     // MARK: StreamSourceKey
 
-    static func boolForKey(key: StreamSourceKey) -> Bool {
+    static func boolForKey(_ key: StreamSourceKey) -> Bool {
         return boolForKey(key.rawValue)
     }
 
-    static func setValue(value: AnyObject?, forKey key: StreamSourceKey) {
+    static func setValue(_ value: AnyObject?, forKey key: StreamSourceKey) {
         Defaults[key.rawValue] = value
-        NSNotificationCenter.defaultCenter().postNotificationName(
-        InbbboxNotificationKey.UserDidChangeStreamSourceSettings.rawValue, object: self)
+        NotificationCenter.default.post(
+        name: Notification.Name(rawValue: InbbboxNotificationKey.UserDidChangeStreamSourceSettings.rawValue), object: self)
     }
 
     // MARK: CusotmizationKey
 
-    static func boolForKey(key: CustomizationKey) -> Bool {
+    static func boolForKey(_ key: CustomizationKey) -> Bool {
         return boolForKey(key.rawValue)
     }
 
-    static func stringForKey(key: CustomizationKey) -> String {
+    static func stringForKey(_ key: CustomizationKey) -> String {
         return stringForKey(key.rawValue)
     }
 
-    static func setValue(value: AnyObject?, forKey key: CustomizationKey) {
+    static func setValue(_ value: AnyObject?, forKey key: CustomizationKey) {
         Defaults[key.rawValue] = value
     }
 
     // MARK: General
 
-    static func boolForKey(key: String) -> Bool {
+    static func boolForKey(_ key: String) -> Bool {
         return Defaults[key].bool ?? false
     }
 
-    static func stringForKey(key: String) -> String {
+    static func stringForKey(_ key: String) -> String {
         return Defaults[key].string ?? ""
     }
 }

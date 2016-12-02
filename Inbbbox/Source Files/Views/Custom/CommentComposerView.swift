@@ -7,21 +7,41 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 protocol CommentComposerViewDelegate: class {
-    func commentComposerViewDidBecomeActive(view: CommentComposerView)
+    func commentComposerViewDidBecomeActive(_ view: CommentComposerView)
 
-    func didTapSendButtonInComposerView(view: CommentComposerView, comment: String)
+    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String)
 }
 
 class CommentComposerView: UIView {
 
     weak var delegate: CommentComposerViewDelegate?
 
-    let textField = UITextField.newAutoLayoutView()
-    private let cornerWrapperView = UIView.newAutoLayoutView()
-    private var didUpdateConstraints = false
-    private var sendButton: UIButton? {
+    let textField = UITextField.newAutoLayout()
+    fileprivate let cornerWrapperView = UIView.newAutoLayout()
+    fileprivate var didUpdateConstraints = false
+    fileprivate var sendButton: UIButton? {
         return textField.rightView as? UIButton
     }
 
@@ -29,8 +49,8 @@ class CommentComposerView: UIView {
         super.init(frame: frame)
         
         let currentMode = ColorModeProvider.current()
-        backgroundColor = .clearColor()
-        layer.shadowColor = currentMode.shadowColor.CGColor
+        backgroundColor = .clear
+        layer.shadowColor = currentMode.shadowColor.cgColor
         layer.shadowRadius = 3
         layer.shadowOpacity = 1
 
@@ -44,19 +64,19 @@ class CommentComposerView: UIView {
         textField.tintColor = .RGBA(90, 90, 95, 1)
         textField.setLeftPadding(10)
         textField.delegate = self
-        textField.autocorrectionType = .No
-        textField.rightViewMode = .Always
+        textField.autocorrectionType = .no
+        textField.rightViewMode = .always
         textField.addTarget(self, action: #selector(textFieldValueDidChange(_:)),
-                        forControlEvents: .EditingChanged)
+                        for: .editingChanged)
         textField.rightView = button
         cornerWrapperView.addSubview(textField)
     }
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
-    @available(*, unavailable, message = "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -68,12 +88,12 @@ class CommentComposerView: UIView {
 
             let inset = CGFloat(20)
 
-            cornerWrapperView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero,
-                    excludingEdge: .Bottom)
-            cornerWrapperView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: -inset)
+            cornerWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero,
+                    excludingEdge: .bottom)
+            cornerWrapperView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -inset)
 
             let insets = UIEdgeInsets(top: 5, left: 5, bottom: 5 + inset, right: 5)
-            textField.autoPinEdgesToSuperviewEdgesWithInsets(insets)
+            textField.autoPinEdgesToSuperviewEdges(with: insets)
         }
 
         super.updateConstraints()
@@ -84,27 +104,27 @@ extension CommentComposerView {
 
     func addCommentButtonDidTap(_: UIButton) {
 
-        guard let text = textField.text where text.characters.count > 0 else {
+        guard let text = textField.text, text.characters.count > 0 else {
             return
         }
 
         delegate?.didTapSendButtonInComposerView(self, comment: text)
 
         textField.text = nil
-        sendButton?.enabled = false
+        sendButton?.isEnabled = false
     }
 
-    func textFieldValueDidChange(textField: UITextField) {
-        sendButton?.enabled = textField.text?.characters.count > 0
+    func textFieldValueDidChange(_ textField: UITextField) {
+        sendButton?.isEnabled = textField.text?.characters.count > 0
     }
 
     func startAnimation() {
-        textField.enabled = false
+        textField.isEnabled = false
         textField.rightView = activityIndicatorView
     }
 
     func stopAnimation() {
-        textField.enabled = true
+        textField.isEnabled = true
         textField.rightView = button
     }
 
@@ -116,7 +136,7 @@ extension CommentComposerView {
         textField.resignFirstResponder()
     }
 
-    func animateByRoundingCorners(round: Bool) {
+    func animateByRoundingCorners(_ round: Bool) {
 
         let fromValue: CGFloat = round ? 0 : 10
         let toValue: CGFloat = round ? 10 : 0
@@ -126,19 +146,19 @@ extension CommentComposerView {
 
 extension CommentComposerView: UITextFieldDelegate {
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
         textField.resignFirstResponder()
         return true
     }
 
-    func textFieldShouldClear(textField: UITextField) -> Bool {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
 
-        sendButton?.enabled = false
+        sendButton?.isEnabled = false
         return true
     }
 
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.commentComposerViewDidBecomeActive(self)
     }
 }
@@ -146,12 +166,12 @@ extension CommentComposerView: UITextFieldDelegate {
 private extension CommentComposerView {
 
     var button: UIButton {
-        let button = UIButton(type: .Custom)
-        button.enabled = false
+        let button = UIButton(type: .custom)
+        button.isEnabled = false
         button.frame = CGRect(x: 0, y: 0, width: 65, height: 40)
-        button.setImage(UIImage(named: "ic-sendmessage"), forState: .Normal)
+        button.setImage(UIImage(named: "ic-sendmessage"), for: .normal)
         button.addTarget(self, action: #selector(addCommentButtonDidTap(_:)),
-                forControlEvents: .TouchUpInside)
+                for: .touchUpInside)
 
         return button
     }
@@ -165,14 +185,14 @@ private extension CommentComposerView {
         return activityIndicatorView
     }
 
-    func addCornerRadiusAnimation(fromValue: CGFloat, toValue: CGFloat, duration: CFTimeInterval) {
+    func addCornerRadiusAnimation(_ fromValue: CGFloat, toValue: CGFloat, duration: CFTimeInterval) {
 
         let animation = CABasicAnimation(keyPath: "cornerRadius")
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         animation.fromValue = fromValue
         animation.toValue = toValue
         animation.duration = duration
-        cornerWrapperView.layer.addAnimation(animation, forKey: "cornerRadius")
+        cornerWrapperView.layer.add(animation, forKey: "cornerRadius")
         cornerWrapperView.layer.cornerRadius = toValue
     }
 }

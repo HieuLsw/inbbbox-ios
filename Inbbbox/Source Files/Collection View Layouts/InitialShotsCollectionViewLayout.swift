@@ -8,26 +8,29 @@ class InitialShotsCollectionViewLayout: UICollectionViewLayout {
 
 //    MARK: - UICollectionViewLayout
 
-    override func collectionViewContentSize() -> CGSize {
-        return collectionView!.bounds.size
+    override var collectionViewContentSize: CGSize {
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        return collectionView.bounds.size
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect)
+    override func layoutAttributesForElements(in rect: CGRect)
                     -> [UICollectionViewLayoutAttributes]? {
         return indexPathsOfItemsInRect(rect).map {
-            self.layoutAttributesForItemAtIndexPath($0)!
+            self.layoutAttributesForItem(at: $0)!
         }
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath)
+    override func layoutAttributesForItem(at indexPath: IndexPath)
                     -> UICollectionViewLayoutAttributes? {
-        let layoutAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+        let layoutAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         if let collectionView = collectionView {
             let spacings = CollectionViewLayoutSpacings()
             let fixedLeftMargin = CGFloat(28)
             let fixedRightMargin = CGFloat(27)
             let indexMultiplier = CGFloat(indexPath.item)
-            let calculatedItemWidth = round(CGRectGetWidth(collectionView.bounds)) -
+            let calculatedItemWidth = round(collectionView.bounds.width) -
                     (fixedLeftMargin + fixedRightMargin) * (indexMultiplier + 1)
 
             let calculatedItemHeight: CGFloat
@@ -47,32 +50,31 @@ class InitialShotsCollectionViewLayout: UICollectionViewLayout {
         return layoutAttributes
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         var boundsChanged = true
         if let collectionView = collectionView {
             let oldBounds = collectionView.bounds
-            boundsChanged = !CGSizeEqualToSize(oldBounds.size, newBounds.size)
+            boundsChanged = !oldBounds.size.equalTo(newBounds.size)
         }
         return boundsChanged
     }
 
-    override func initialLayoutAttributesForAppearingItemAtIndexPath(indexPath: NSIndexPath)
+    override func initialLayoutAttributesForAppearingItem(at indexPath: IndexPath)
                     -> UICollectionViewLayoutAttributes? {
-        let layoutAttributes = layoutAttributesForItemAtIndexPath(indexPath)
-        if let collectionView = collectionView, layoutAttributes = layoutAttributes {
+        let layoutAttributes = layoutAttributesForItem(at: indexPath)
+        if let collectionView = collectionView, let layoutAttributes = layoutAttributes {
             layoutAttributes.center = collectionView.center
             layoutAttributes.alpha = 0
         }
         return layoutAttributes
     }
 
-    override func finalLayoutAttributesForDisappearingItemAtIndexPath(indexPath: NSIndexPath)
+    override func finalLayoutAttributesForDisappearingItem(at indexPath: IndexPath)
                     -> UICollectionViewLayoutAttributes? {
-        let layoutAttributes = layoutAttributesForItemAtIndexPath(indexPath)
-        if let collectionView = collectionView, layoutAttributes = layoutAttributes {
-            layoutAttributes.center = CGPoint(x: CGRectGetMidX(collectionView.bounds),
-                    y: CGRectGetMaxY(collectionView.bounds) +
-                    CGRectGetMaxY(layoutAttributes.bounds))
+        let layoutAttributes = layoutAttributesForItem(at: indexPath)
+        if let collectionView = collectionView, let layoutAttributes = layoutAttributes {
+            layoutAttributes.center = CGPoint(x: collectionView.bounds.midX,
+                    y: collectionView.bounds.maxY + layoutAttributes.bounds.maxY)
             layoutAttributes.alpha = 0
         }
         return layoutAttributes
@@ -80,11 +82,11 @@ class InitialShotsCollectionViewLayout: UICollectionViewLayout {
 
 //    MARK: - Helpers
 
-    private func indexPathsOfItemsInRect(rect: CGRect) -> [NSIndexPath] {
-        var indexPaths: [NSIndexPath] = []
+    fileprivate func indexPathsOfItemsInRect(_ rect: CGRect) -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
         if let collectionView = collectionView {
-            for itemIndex in 0 ..< collectionView.numberOfItemsInSection(0) {
-                indexPaths.append(NSIndexPath(forItem: itemIndex, inSection: 0))
+            for itemIndex in 0 ..< collectionView.numberOfItems(inSection: 0) {
+                indexPaths.append(IndexPath(item: itemIndex, section: 0))
             }
         }
         return indexPaths

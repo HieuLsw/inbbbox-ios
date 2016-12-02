@@ -5,9 +5,9 @@
 import UIKit
 
 protocol ShotsAnimatorDelegate: class {
-    func collectionViewForShotsAnimator(animator: ShotsAnimator) -> UICollectionView?
+    func collectionViewForShotsAnimator(_ animator: ShotsAnimator) -> UICollectionView?
 
-    func itemsForShotsAnimator(animator: ShotsAnimator) -> [ShotType]
+    func itemsForShotsAnimator(_ animator: ShotsAnimator) -> [ShotType]
 }
 
 class ShotsAnimator {
@@ -18,9 +18,9 @@ class ShotsAnimator {
 
 //    Interface
 
-    func startAnimationWithCompletion(completion: (() -> Void)?) {
+    func startAnimationWithCompletion(_ completion: (() -> Void)?) {
         guard let collectionView = delegate?.collectionViewForShotsAnimator(self),
-                items = delegate?.itemsForShotsAnimator(self) where items.count != 0 else {
+                let items = delegate?.itemsForShotsAnimator(self), items.count != 0 else {
             completion?()
             return
         }
@@ -38,21 +38,21 @@ class ShotsAnimator {
 
 //    MARK: - Helpers
 
-    private func addItems(items: [ShotType], collectionView: UICollectionView,
+    fileprivate func addItems(_ items: [ShotType], collectionView: UICollectionView,
                     interval: Double, completion: (() -> Void)?) {
         let addItemAnimation = {
             let newItemIndex = self.visibleItems.count
             let newItem = items[newItemIndex]
             self.visibleItems.append(newItem)
-            collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: newItemIndex,
-                                                              inSection: 0)])
+            collectionView.insertItems(at: [IndexPath(item: newItemIndex,
+                                                              section: 0)])
         }
 
         updateItems(items, collectionView: collectionView, interval: interval,
                 animation: addItemAnimation, completion: completion)
     }
 
-    private func deleteItemsWithoutFirstItem(items: [ShotType], collectionView: UICollectionView,
+    fileprivate func deleteItemsWithoutFirstItem(_ items: [ShotType], collectionView: UICollectionView,
             interval: Double, completion: (() -> Void)?) {
         var reversedItemsWithoutFirstItem = items
         reversedItemsWithoutFirstItem.removeFirst()
@@ -60,20 +60,20 @@ class ShotsAnimator {
         let removeItemAnimation = {
             let lastItemIndex = self.visibleItems.count - 1
             self.visibleItems.removeLast()
-            collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: lastItemIndex,
-                                                              inSection: 0)])
+            collectionView.deleteItems(at: [IndexPath(item: lastItemIndex,
+                                                              section: 0)])
         }
 
         updateItems(reversedItemsWithoutFirstItem, collectionView: collectionView,
                 interval: interval, animation: removeItemAnimation, completion: completion)
     }
 
-    private func updateItems(items: [ShotType], collectionView: UICollectionView,
-            interval: Double, animation: () -> Void, completion: (() -> Void)?) {
-        for (index, _ ) in items.enumerate() {
+    fileprivate func updateItems(_ items: [ShotType], collectionView: UICollectionView,
+            interval: Double, animation: @escaping () -> Void, completion: (() -> Void)?) {
+        for (index, _ ) in items.enumerated() {
             var updateAnimation = animation
             if index == items.endIndex - 1 {
-                let batchUpdatesCompletion: (Bool -> Void) = { _ in
+                let batchUpdatesCompletion: ((Bool) -> Void) = { _ in
                     completion?()
                 }
                 updateAnimation = {

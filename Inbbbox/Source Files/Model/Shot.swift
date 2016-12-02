@@ -15,7 +15,7 @@ struct Shot: ShotType {
     let attributedDescription: NSAttributedString?
     let user: UserType
     let shotImage: ShotImageType
-    let createdAt: NSDate
+    let createdAt: Date
     let animated: Bool
     let likesCount: UInt
     let viewsCount: UInt
@@ -26,7 +26,7 @@ struct Shot: ShotType {
 }
 
 extension Shot: Mappable {
-    static var map: JSON -> Shot {
+    static var map: (JSON) -> Shot {
         return { json in
 
             let stringDate = json[Key.CreatedAt.rawValue].stringValue
@@ -38,7 +38,7 @@ extension Shot: Mappable {
             }()
 
             let team: Team? = {
-                guard json[Key.Team.rawValue] != nil else {
+                guard json[Key.Team.rawValue] != JSON.null else {
                     return nil
                 }
                 return Team.map(json[Key.Team.rawValue])
@@ -50,7 +50,7 @@ extension Shot: Mappable {
                 attributedDescription: attributedDescription,
                 user: User.map(json[Key.User.rawValue]),
                 shotImage: ShotImage.map(json[Key.Images.rawValue]),
-                createdAt: Formatter.Date.Timestamp.dateFromString(stringDate)!,
+                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
                 animated: json[Key.Animated.rawValue].boolValue,
                 likesCount: json[Key.LikesCount.rawValue].uIntValue,
                 viewsCount: json[Key.ViewsCount.rawValue].uIntValue,
@@ -62,7 +62,7 @@ extension Shot: Mappable {
         }
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Identifier = "id"
         case Title = "title"
         case Description = "description"

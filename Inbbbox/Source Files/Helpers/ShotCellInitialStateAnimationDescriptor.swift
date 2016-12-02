@@ -11,25 +11,25 @@ import UIKit
 struct ShotCellInitialStateAnimationDescriptor: AnimationDescriptor {
 
     weak var shotCell: ShotCollectionViewCell?
-    var animationType = AnimationType.Spring
+    var animationType = AnimationType.spring
     var delay = 0.0
     var springDamping = CGFloat(0.6)
     var springVelocity = CGFloat(0.9)
-    var options: UIViewAnimationOptions = .CurveEaseInOut
+    var options: UIViewAnimationOptions = UIViewAnimationOptions()
     var animations: () -> Void
     var completion: ((Bool) -> Void)?
 
     init(shotCell: ShotCollectionViewCell, swipeCompletion: (() -> ())?) {
         self.shotCell = shotCell
         animations = {
-            shotCell.shotImageView.transform = CGAffineTransformIdentity
+            shotCell.shotImageView.transform = CGAffineTransform.identity
         }
         completion = { _ in
-            shotCell.likeImageView.hidden = false
-            shotCell.bucketImageView.hidden = false
-            shotCell.plusImageView.hidden = false
-            shotCell.commentImageView.hidden = false
-            shotCell.followImageView.hidden = false
+            shotCell.likeImageView.isHidden = false
+            shotCell.bucketImageView.isHidden = false
+            shotCell.plusImageView.isHidden = false
+            shotCell.commentImageView.isHidden = false
+            shotCell.followImageView.isHidden = false
             shotCell.messageLabel.alpha = 0
             swipeCompletion?()
         }

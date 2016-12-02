@@ -17,11 +17,11 @@ class ShotsInitialAnimationsStateHandler: NSObject, ShotsStateHandler {
     weak var delegate: ShotsStateHandlerDelegate?
 
     var state: ShotsCollectionViewController.State {
-        return .InitialAnimations
+        return .initialAnimations
     }
 
     var nextState: ShotsCollectionViewController.State? {
-        return .Normal
+        return .normal
     }
 
     var tabBarInteractionEnabled: Bool {
@@ -48,7 +48,7 @@ class ShotsInitialAnimationsStateHandler: NSObject, ShotsStateHandler {
         return shotsCollectionViewController?.shots.count == 0 && Settings.areAllStreamSourcesOff()
     }
 
-    private let emptyDataSetLoadingView = EmptyDataSetLoadingView.newAutoLayoutView()
+    fileprivate let emptyDataSetLoadingView = EmptyDataSetLoadingView.newAutoLayout()
 
     override init () {
         super.init()
@@ -72,28 +72,28 @@ class ShotsInitialAnimationsStateHandler: NSObject, ShotsStateHandler {
 
 extension ShotsInitialAnimationsStateHandler {
 
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
             numberOfItemsInSection section: Int) -> Int {
         return self.animationManager.visibleItems.count
     }
 
-    func collectionView(collectionView: UICollectionView,
-            cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+            cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let shotsCollectionViewController = shotsCollectionViewController else {
             return UICollectionViewCell()
         }
 
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
         cell.configureForDisplayingAuthorView = Settings.Customization.ShowAuthor
         let shot = shotsCollectionViewController.shots[indexPath.item]
         let shouldBlurShotImage = indexPath.row != 0
         let blur = shouldBlurShotImage ? CGFloat(1) : CGFloat(0)
         cell.shotImageView.loadShotImageFromURL(shot.shotImage.normalURL, blur: blur)
         cell.shotImageView.applyBlur(blur)
-        cell.gifLabel.hidden = !shot.animated
+        cell.gifLabel.isHidden = !shot.animated
 
-        let imageCompletion: UIImage -> Void = { image in
+        let imageCompletion: (UIImage) -> Void = { image in
             cell.shotImageView.image = image
             cell.shotImageView.applyBlur(blur)
         }
@@ -110,11 +110,11 @@ extension ShotsInitialAnimationsStateHandler {
 
 extension ShotsInitialAnimationsStateHandler: ShotsAnimatorDelegate {
 
-    func collectionViewForShotsAnimator(animator: ShotsAnimator) -> UICollectionView? {
+    func collectionViewForShotsAnimator(_ animator: ShotsAnimator) -> UICollectionView? {
         return shotsCollectionViewController?.collectionView
     }
 
-    func itemsForShotsAnimator(animator: ShotsAnimator) -> [ShotType] {
+    func itemsForShotsAnimator(_ animator: ShotsAnimator) -> [ShotType] {
         guard let shotsCollectionViewController = shotsCollectionViewController else {
             return []
         }
@@ -124,7 +124,7 @@ extension ShotsInitialAnimationsStateHandler: ShotsAnimatorDelegate {
 
 extension ShotsInitialAnimationsStateHandler: DZNEmptyDataSetSource {
 
-    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
         emptyDataSetLoadingView.startAnimating()
         return emptyDataSetLoadingView
     }
@@ -134,10 +134,9 @@ extension ShotsInitialAnimationsStateHandler: DZNEmptyDataSetSource {
 
 private extension ShotsInitialAnimationsStateHandler {
 
-    // NGRHack: DZNEmptyDataSet does not react on `insertItemsAtIndexPaths`
-    // so we need to manually hide loading view
+    // DZNEmptyDataSet does not react on `insertItemsAtIndexPaths` so we need to manually hide loading view
     func hideEmptyDataSetLoadingView() {
-        emptyDataSetLoadingView.hidden = true
+        emptyDataSetLoadingView.isHidden = true
         emptyDataSetLoadingView.stopAnimating()
     }
 }

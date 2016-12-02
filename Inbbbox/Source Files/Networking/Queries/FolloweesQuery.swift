@@ -12,7 +12,7 @@ struct FolloweesQuery: Query {
 
     let method = Method.GET
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for list who the authenticated user is following.
     init() {

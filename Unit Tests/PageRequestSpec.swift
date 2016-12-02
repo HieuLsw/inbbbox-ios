@@ -31,7 +31,7 @@ class PageRequestSpec: QuickSpec {
             var didInvokeSuccess: Bool?
             
             beforeEach {
-                self.stub(everything, builder: json([]))
+                self.stub(everything, json([]))
             }
             
             afterEach {
@@ -42,7 +42,7 @@ class PageRequestSpec: QuickSpec {
                 
                 sut.resume().then { _ -> Void in
                     didInvokeSuccess = true
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(didInvokeSuccess).toEventuallyNot(beNil())
                 expect(didInvokeSuccess!).toEventually(beTruthy())
@@ -51,11 +51,11 @@ class PageRequestSpec: QuickSpec {
 
         context("when sending data with failure") {
             
-            var error: ErrorType?
+            var error: Error?
             
             beforeEach {
-                let error = NSError(domain: "fixture.domain", code: 0, message: "fixture.message")
-                self.stub(everything, builder: failure(error))
+                let error = NSError(domain: "fixture.domain", code: 0, userInfo: nil)
+                self.stub(everything, failure(error))
             }
             
             afterEach {
@@ -66,7 +66,7 @@ class PageRequestSpec: QuickSpec {
                 
                 sut.resume().then { _ -> Void in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
                 
@@ -79,6 +79,6 @@ class PageRequestSpec: QuickSpec {
 
 private struct QueryMock: Query {
     let path = "/fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
     let method = Method.POST
 }

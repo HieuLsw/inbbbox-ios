@@ -13,7 +13,7 @@ struct Comment: CommentType {
 
     let identifier: String
     let body: NSAttributedString?
-    let createdAt: NSDate
+    let createdAt: Date
     let user: UserType
     var likesCount: Int
     var likedByMe: Bool
@@ -21,7 +21,7 @@ struct Comment: CommentType {
 }
 
 extension Comment: Mappable {
-    static var map: JSON -> Comment {
+    static var map: (JSON) -> Comment {
         return { json in
 
             let stringDate = json[Key.CreatedAt.rawValue].stringValue
@@ -35,7 +35,7 @@ extension Comment: Mappable {
             return Comment(
                 identifier: json[Key.Identifier.rawValue].stringValue,
                 body: htmlBody,
-                createdAt: Formatter.Date.Timestamp.dateFromString(stringDate)!,
+                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
                 user: User.map(json[Key.User.rawValue]),
                 likesCount: json[Key.LikesCount.rawValue].intValue,
                 likedByMe:  false,
@@ -44,7 +44,7 @@ extension Comment: Mappable {
         }
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Identifier = "id"
         case Body = "body"
         case CreatedAt = "created_at"

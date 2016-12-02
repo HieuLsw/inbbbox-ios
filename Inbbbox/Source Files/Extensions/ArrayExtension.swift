@@ -24,9 +24,9 @@ extension Array where Element : Equatable {
     
     /// Removes element from array if element is in array.
     /// Contents of Array must conform to `Equatable` protocol.
-    mutating func removeIfContains(element: Element) {
-        if let i = indexOf(element) {
-            removeAtIndex(i)
+    mutating func remove(ifContains element: Element) {
+        if let i = index(of: element) {
+            remove(at: i)
         }
     }
     

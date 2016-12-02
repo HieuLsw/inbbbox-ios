@@ -1,10 +1,9 @@
 PODS:
-  - AOAlertController (1.1)
-  - AsyncSwift (1.7.4)
-  - DeviceKit (0.3.5)
-  - Dobby (0.6.0)
+  - AOAlertController (1.2.1)
+  - AsyncSwift (2.0.0)
+  - DeviceKit (1.0.0)
+  - Dobby (0.7.0)
   - DZNEmptyDataSet (1.8.1)
-  - EasyAnimation (1.0.2)
   - FLAnimatedImage (1.0.12)
   - GoogleAnalytics (3.17.0)
   - GPUImage (0.1.7)
@@ -12,131 +11,114 @@ PODS:
   - HockeySDK (4.1.2):
     - HockeySDK/DefaultLib (= 4.1.2)
   - HockeySDK/DefaultLib (4.1.2)
-  - ImageViewer (2.0)
-  - KeychainAccess (2.4.0)
+  - ImageViewer (4.0)
+  - KeychainAccess (3.0.1)
   - Keys (1.0.0)
-  - Mockingjay (1.3.1):
-    - Mockingjay/Core (= 1.3.1)
-    - Mockingjay/XCTest (= 1.3.1)
-  - Mockingjay/Core (1.3.1):
-    - URITemplate (~> 1.3)
-  - Mockingjay/XCTest (1.3.1):
+  - Mockingjay (2.0.0):
+    - Mockingjay/Core (= 2.0.0)
+    - Mockingjay/XCTest (= 2.0.0)
+  - Mockingjay/Core (2.0.0):
+    - URITemplate (~> 2.0)
+  - Mockingjay/XCTest (2.0.0):
     - Mockingjay/Core
-  - Nimble (4.1.0)
-  - OMGHTTPURLRQ (3.2.0):
-    - OMGHTTPURLRQ/RQ (= 3.2.0)
-  - OMGHTTPURLRQ/FormURLEncode (3.2.0)
-  - OMGHTTPURLRQ/RQ (3.2.0):
-    - OMGHTTPURLRQ/FormURLEncode
-    - OMGHTTPURLRQ/UserAgent
-  - OMGHTTPURLRQ/UserAgent (3.2.0)
-  - PromiseKit (3.5.1):
-    - PromiseKit/Foundation (= 3.5.1)
-    - PromiseKit/QuartzCore (= 3.5.1)
-    - PromiseKit/UIKit (= 3.5.1)
-  - PromiseKit/CorePromise (3.5.1)
-  - PromiseKit/Foundation (3.5.1):
-    - OMGHTTPURLRQ (~> 3.2.0)
+  - Nimble (5.1.1)
+  - PromiseKit (4.0.5):
+    - PromiseKit/Foundation (= 4.0.5)
+    - PromiseKit/QuartzCore (= 4.0.5)
+    - PromiseKit/UIKit (= 4.0.5)
+  - PromiseKit/CorePromise (4.0.5)
+  - PromiseKit/Foundation (4.0.5):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (3.5.1):
+  - PromiseKit/QuartzCore (4.0.5):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (3.5.1):
+  - PromiseKit/UIKit (4.0.5):
     - PromiseKit/CorePromise
   - PureLayout (3.0.2)
-  - Quick (0.9.3)
-  - SwiftyJSON (2.4.0)
-  - SwiftyUserDefaults (2.2.1)
+  - Quick (0.10.0)
+  - SwiftyJSON (3.1.3)
+  - SwiftyUserDefaults (3.0.0)
   - TTTAttributedLabel (2.0.0)
-  - URITemplate (1.4.0)
+  - URITemplate (2.0.0)
   - ZFDragableModalTransition (0.6)
 
 DEPENDENCIES:
-  - AOAlertController (from `https://github.com/pikor/AOAlertController/`, commit `30e32c5cc66acf83dc1ec0d0649c234f4eee7846`)
-  - AsyncSwift (~> 1.6)
-  - DeviceKit (from `https://github.com/dennisweissmann/DeviceKit.git`, branch `swift-2.3-unsupported`)
-  - Dobby (~> 0.5)
+  - AOAlertController (from `https://github.com/0legAdamov/AOAlertController`, tag `v1.2.1`)
+  - AsyncSwift (~> 2.0)
+  - DeviceKit (~> 1.0)
+  - Dobby (from `https://github.com/trivago/Dobby.git`, tag `0.7.0`)
   - DZNEmptyDataSet (~> 1.7)
-  - EasyAnimation (from `https://git@github.com/PatrykKaczmarek/EasyAnimation.git`, commit `3e97dc7e2f262222e2fd614ff5143d6432f73a7d`)
   - FLAnimatedImage (~> 1.0)
   - GoogleAnalytics (~> 3.14)
   - GPUImage (~> 0.1)
-  - HanekeSwift (from `https://github.com/pikor/HanekeSwift.git`)
+  - HanekeSwift (from `https://github.com/Haneke/HanekeSwift.git`, branch `feature/swift-3`)
   - HockeySDK (~> 4.1)
-  - ImageViewer (from `https://github.com/twalenciak/ImageViewer.git`, branch `gif_loading`)
-  - KeychainAccess (~> 2.3)
+  - ImageViewer (from `https://github.com/Siemian/ImageViewer`)
+  - KeychainAccess (~> 3.0)
   - Keys (from `Pods/CocoaPodsKeys`)
-  - Mockingjay (~> 1.3.1)
-  - Nimble (~> 4.1)
-  - PromiseKit (~> 3.2)
+  - Mockingjay (~> 2.0)
+  - Nimble (~> 5.0)
+  - PromiseKit (~> 4.0)
   - PureLayout (~> 3.0)
-  - Quick (~> 0.9.3)
-  - SwiftyJSON (~> 2.3)
-  - SwiftyUserDefaults (~> 2.0)
+  - Quick (~> 0.10)
+  - SwiftyJSON (~> 3.1)
+  - SwiftyUserDefaults (~> 3.0)
   - TTTAttributedLabel (~> 2.0)
   - ZFDragableModalTransition (~> 0.6)
 
 EXTERNAL SOURCES:
   AOAlertController:
-    :commit: 30e32c5cc66acf83dc1ec0d0649c234f4eee7846
-    :git: https://github.com/pikor/AOAlertController/
-  DeviceKit:
-    :branch: swift-2.3-unsupported
-    :git: https://github.com/dennisweissmann/DeviceKit.git
-  EasyAnimation:
-    :commit: 3e97dc7e2f262222e2fd614ff5143d6432f73a7d
-    :git: https://git@github.com/PatrykKaczmarek/EasyAnimation.git
+    :git: https://github.com/0legAdamov/AOAlertController
+    :tag: v1.2.1
+  Dobby:
+    :git: https://github.com/trivago/Dobby.git
+    :tag: 0.7.0
   HanekeSwift:
-    :git: https://github.com/pikor/HanekeSwift.git
+    :branch: feature/swift-3
+    :git: https://github.com/Haneke/HanekeSwift.git
   ImageViewer:
-    :branch: gif_loading
-    :git: https://github.com/twalenciak/ImageViewer.git
+    :git: https://github.com/Siemian/ImageViewer
   Keys:
     :path: Pods/CocoaPodsKeys
 
 CHECKOUT OPTIONS:
   AOAlertController:
-    :commit: 30e32c5cc66acf83dc1ec0d0649c234f4eee7846
-    :git: https://github.com/pikor/AOAlertController/
-  DeviceKit:
-    :commit: ce47728d13129d0a126901a589c12ddfdfcb3d32
-    :git: https://github.com/dennisweissmann/DeviceKit.git
-  EasyAnimation:
-    :commit: 3e97dc7e2f262222e2fd614ff5143d6432f73a7d
-    :git: https://git@github.com/PatrykKaczmarek/EasyAnimation.git
+    :git: https://github.com/0legAdamov/AOAlertController
+    :tag: v1.2.1
+  Dobby:
+    :git: https://github.com/trivago/Dobby.git
+    :tag: 0.7.0
   HanekeSwift:
-    :commit: 3664b33b543eece40bd3cf83c59619211301c3bf
-    :git: https://github.com/pikor/HanekeSwift.git
+    :commit: 1157a124ec699f4ad926cb054f1d0bfce88ae7a9
+    :git: https://github.com/Haneke/HanekeSwift.git
   ImageViewer:
-    :commit: d59518ac3fac72a77d1eb59f06d5f253386ced67
-    :git: https://github.com/twalenciak/ImageViewer.git
+    :commit: b5e3d0c117a2f242b6b3153438d0ff282a27afb5
+    :git: https://github.com/Siemian/ImageViewer
 
 SPEC CHECKSUMS:
-  AOAlertController: d5f62b122eeeea7de3fb7dfac4ea58490ba823a5
-  AsyncSwift: cecffe40af6e09558ed25dd71fabf04836b5eaf4
-  DeviceKit: c6946cf7abb41940214aa4618e6191ff865568c0
-  Dobby: 8c7409902b6e0738a1dc1ccc024dfa26c2187f38
+  AOAlertController: 937352719e3e9df03f0b6b9903665e1eaa76a558
+  AsyncSwift: 6ba6ed9ecb51344458063f7c86fe447ab824e313
+  DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
+  Dobby: efe7dca1c2bca412034dc909d350b2409193bf99
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  EasyAnimation: 9615e40f58aa7d8d6a67de66e0edda1903ffa990
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   HanekeSwift: 4113367892828e7700d24a384027de6ebc79aad1
   HockeySDK: c7523379550a4305cefc1cdfa7b5f9a5a3538180
-  ImageViewer: 00eae024d0cb2eebb4b228f4669b6c4872afadb9
-  KeychainAccess: c2a71459af5bddf720a51806046a598500976c04
+  ImageViewer: 364abc0309c33dda86d08ca25b0243e5c67d8cd3
+  KeychainAccess: 017ea25e313a49eda10bb19b0bb0760fb1edfe1a
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
-  Mockingjay: e6ffe6106591d2555025842b1b655decc124f0ca
-  Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
-  OMGHTTPURLRQ: 1e54807cb7d5dbb506926e53498e1e9ac5720c79
-  PromiseKit: 99ea973444a4bff6c38ffb97fa1bb175e619bcf0
+  Mockingjay: 7122a3fc0597aa63438e4cd9b71b7bc8aac05b87
+  Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
+  PromiseKit: 593b5e24ded6cbb1ebc708bc2c3428a8a5632d91
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
-  Quick: 13a2a2b19a5d8e3ed4fd0c36ee46597fd77ebf71
-  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
-  SwiftyUserDefaults: 7abdba50a50ea0c18ee8903af3c88e4c1cb8448d
+  Quick: 5d290df1c69d5ee2f0729956dcf0fd9a30447eaa
+  SwiftyJSON: 38a8ea2006779c0fc4c310cb2ee8195327740faf
+  SwiftyUserDefaults: 0f1d45fc3aafb9064dac661e367f8f83fe21a4b4
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
-  URITemplate: e2a2a0f9d398834fde67214b491c2c925c9baa06
+  URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: be30362424166231baa14d22e4f6e170f23db75d
+PODFILE CHECKSUM: a40359a2f301d5518e17470c292a6ddd255043ee
 
 COCOAPODS: 1.1.1

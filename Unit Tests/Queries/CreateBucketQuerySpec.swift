@@ -18,7 +18,7 @@ class CreateBucketQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return CreateBucketQuery(name: "fixture.name", description: nil)
         }) { Void -> QueryExpectation in
-                return (method: .POST, encoding: .JSON, path: "/buckets")
+                return (method: .POST, encoding: .json, path: "/buckets")
         }
         
         describe("when newly initialized with bucket") {

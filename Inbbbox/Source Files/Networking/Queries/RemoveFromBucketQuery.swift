@@ -12,7 +12,7 @@ struct RemoveFromBucketQuery: Query {
 
     let method = Method.DELETE
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for removing shot from bucket.
     ///
@@ -20,6 +20,6 @@ struct RemoveFromBucketQuery: Query {
     /// - parameter bucket: Bucket that shot should be removed from.
     init(shot: ShotType, bucket: BucketType) {
         path = "/buckets/" + bucket.identifier.stringValue + "/shots"
-        parameters["shot_id"] = shot.identifier
+        parameters["shot_id"] = shot.identifier as AnyObject?
     }
 }

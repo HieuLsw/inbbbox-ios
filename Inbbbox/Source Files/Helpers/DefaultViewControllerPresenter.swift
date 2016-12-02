@@ -6,7 +6,7 @@ import UIKit
 
 class DefaultViewControllerPresenter: ViewControllerPresenter {
 
-    private(set) weak var presentingViewController: UIViewController?
+    fileprivate(set) weak var presentingViewController: UIViewController?
 
     init(presentingViewController: UIViewController) {
         self.presentingViewController = presentingViewController
@@ -14,15 +14,15 @@ class DefaultViewControllerPresenter: ViewControllerPresenter {
 
 //    MARK: - ViewControllerPresenter
 
-    func presentViewController(viewController: UIViewController,
+    func presentViewController(_ viewController: UIViewController,
                                      animated: Bool,
                                    completion: (() -> Void)?) {
-        presentingViewController?.presentViewController(viewController,
+        presentingViewController?.present(viewController,
                                               animated: animated,
                                             completion: completion)
     }
 
-    func dismissViewControllerAnimated(animated: Bool, completion: (() -> Void)?) {
-        presentingViewController?.dismissViewControllerAnimated(animated, completion: completion)
+    func dismissViewControllerAnimated(_ animated: Bool, completion: (() -> Void)?) {
+        presentingViewController?.dismiss(animated: animated, completion: completion)
     }
 }

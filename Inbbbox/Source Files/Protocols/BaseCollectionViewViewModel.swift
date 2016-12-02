@@ -20,24 +20,24 @@ protocol BaseCollectionViewViewModel {
 protocol BaseCollectionViewViewModelDelegate: class {
 
     func viewModelDidLoadInitialItems()
-    func viewModelDidFailToLoadInitialItems(error: ErrorType)
-    func viewModelDidFailToLoadItems(error: ErrorType)
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath])
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath)
+    func viewModelDidFailToLoadInitialItems(_ error: Error)
+    func viewModelDidFailToLoadItems(_ error: Error)
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath])
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath)
 }
 
 extension BaseCollectionViewViewModelDelegate {
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
         // Empty by design - optional function.
     }
 }
 
 extension BaseCollectionViewViewModel {
 
-    func notifyDelegateAboutFailure(error: ErrorType) {
+    func notifyDelegateAboutFailure(_ error: Error) {
         if let downloadError = error as? PageableProviderError {
-            if downloadError != .DidReachLastPage {
+            if downloadError != .didReachLastPage {
                 self.delegate?.viewModelDidFailToLoadItems(error)
             }
         } else {

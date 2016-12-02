@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ShotBucketsFooterView: UICollectionReusableView {
+class ShotBucketsFooterView: UICollectionReusableView, Reusable {
 
-    private let separatorLine = UIView.newAutoLayoutView()
+    fileprivate let separatorLine = UIView.newAutoLayout()
 
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +25,7 @@ class ShotBucketsFooterView: UICollectionReusableView {
 
     }
 
-    @available(*, unavailable, message = "Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -35,27 +35,20 @@ class ShotBucketsFooterView: UICollectionReusableView {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            separatorLine.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            separatorLine.autoSetDimension(.Height, toSize: 0.5)
+            separatorLine.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            separatorLine.autoSetDimension(.height, toSize: 0.5)
         }
 
         super.updateConstraints()
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
 
-        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.BottomLeft, .BottomRight],
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomLeft, .bottomRight],
                 cornerRadii: CGSize(width: 15, height: 15))
         let mask = CAShapeLayer()
-        mask.path = path.CGPath
+        mask.path = path.cgPath
         layer.mask = mask
-    }
-}
-
-extension ShotBucketsFooterView: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotBucketsFooterView)
     }
 }

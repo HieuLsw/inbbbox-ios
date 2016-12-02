@@ -20,17 +20,17 @@ class ShotDescriptionView: UIView {
     }
 
     // Private Properties
-    private var didUpdateConstraints = false
-    private let topInset = CGFloat(10)
-    private let bottomInset = CGFloat(10)
+    fileprivate var didUpdateConstraints = false
+    fileprivate let topInset = CGFloat(10)
+    fileprivate let bottomInset = CGFloat(10)
 
     // Colors
-    private let viewBackgroundColor = UIColor.whiteColor()
+    fileprivate let viewBackgroundColor = UIColor.white
 
     // Private UI Components
-    private let topSeparatorLine = UIView.newAutoLayoutView()
-    private let descriptionLabel = UILabel()
-    private let bottomSeparatorLine = UIView.newAutoLayoutView()
+    fileprivate let topSeparatorLine = UIView.newAutoLayout()
+    fileprivate let descriptionLabel = UILabel()
+    fileprivate let bottomSeparatorLine = UIView.newAutoLayout()
 
     // MARK: Life Cycle
 
@@ -40,14 +40,14 @@ class ShotDescriptionView: UIView {
         setupSubviews()
     }
 
-    @available(*, unavailable, message="Use init(frame: CGRect) method instead")
+    @available(*, unavailable, message: "Use init(frame: CGRect) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: UI
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -58,20 +58,20 @@ class ShotDescriptionView: UIView {
 
         if !didUpdateConstraints {
 
-            topSeparatorLine.autoPinEdgeToSuperviewEdge(.Top)
-            topSeparatorLine.autoSetDimension(.Height, toSize: separatorLinesHeight)
-            topSeparatorLine.autoPinEdgeToSuperviewEdge(.Left)
-            topSeparatorLine.autoPinEdgeToSuperviewEdge(.Right)
+            topSeparatorLine.autoPinEdge(toSuperviewEdge: .top)
+            topSeparatorLine.autoSetDimension(.height, toSize: separatorLinesHeight)
+            topSeparatorLine.autoPinEdge(toSuperviewEdge: .left)
+            topSeparatorLine.autoPinEdge(toSuperviewEdge: .right)
 
-            descriptionLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: topSeparatorLine, withOffset: topInset)
-            descriptionLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: leftAndRightInset)
-            descriptionLabel.autoPinEdgeToSuperviewEdge(.Trailing, withInset: leftAndRightInset)
+            descriptionLabel.autoPinEdge(.top, to: .bottom, of: topSeparatorLine, withOffset: topInset)
+            descriptionLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: leftAndRightInset)
+            descriptionLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: leftAndRightInset)
 
-            bottomSeparatorLine.autoPinEdge(.Top, toEdge: .Bottom, ofView: descriptionLabel, withOffset: bottomInset)
-            bottomSeparatorLine.autoSetDimension(.Height, toSize: separatorLinesHeight)
-            bottomSeparatorLine.autoPinEdgeToSuperviewEdge(.Left)
-            bottomSeparatorLine.autoPinEdgeToSuperviewEdge(.Right)
-            bottomSeparatorLine.autoPinEdgeToSuperviewEdge(.Bottom)
+            bottomSeparatorLine.autoPinEdge(.top, to: .bottom, of: descriptionLabel, withOffset: bottomInset)
+            bottomSeparatorLine.autoSetDimension(.height, toSize: separatorLinesHeight)
+            bottomSeparatorLine.autoPinEdge(toSuperviewEdge: .left)
+            bottomSeparatorLine.autoPinEdge(toSuperviewEdge: .right)
+            bottomSeparatorLine.autoPinEdge(toSuperviewEdge: .bottom)
 
             didUpdateConstraints = true
         }
@@ -81,23 +81,23 @@ class ShotDescriptionView: UIView {
 
     // MARK: Private
 
-    private func setupSubviews() {
+    fileprivate func setupSubviews() {
         setupDescriptionLabel()
         setupSeparatorLines()
     }
 
-    private func setupDescriptionLabel() {
+    fileprivate func setupDescriptionLabel() {
         descriptionLabel.text = descriptionText?.string
-        descriptionLabel.font = UIFont.helveticaFont(.Neue, size: 15)
+        descriptionLabel.font = UIFont.helveticaFont(.neue, size: 15)
         descriptionLabel.textColor = UIColor.textLightColor()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.backgroundColor = backgroundColor
-        descriptionLabel.lineBreakMode = .ByWordWrapping
+        descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.tintColor = UIColor.textLightColor()
         addSubview(descriptionLabel)
     }
 
-    private func setupSeparatorLines() {
+    fileprivate func setupSeparatorLines() {
         topSeparatorLine.backgroundColor = UIColor.RGBA(223, 224, 226, 1)
         bottomSeparatorLine.backgroundColor = UIColor.RGBA(223, 224, 226, 1)
         addSubview(topSeparatorLine)

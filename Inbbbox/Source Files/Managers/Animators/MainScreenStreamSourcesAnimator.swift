@@ -13,9 +13,9 @@ final class MainScreenStreamSourcesAnimator {
     let view: ShotsCollectionBackgroundView
     var areStreamSourcesShown = false
     var isAnimationInProgress = false
-    private let animationDuration: NSTimeInterval
+    fileprivate let animationDuration: TimeInterval
     
-    init(view: ShotsCollectionBackgroundView, animationDuration: NSTimeInterval = 0.2) {
+    init(view: ShotsCollectionBackgroundView, animationDuration: TimeInterval = 0.2) {
         self.view = view
         self.animationDuration = animationDuration
     }
@@ -29,27 +29,27 @@ final class MainScreenStreamSourcesAnimator {
         }
         isAnimationInProgress = true
         view.prepareAnimatableContent()
-        let options = UIViewAnimationOptions.CurveEaseInOut
+        let options = UIViewAnimationOptions()
 
         view.showingYouVerticalConstraint?.constant = ShotsCollectionBackgroundViewSpacing.showingYouDefaultVerticalSpacing
         
-        UIView.animateWithDuration(animationDuration, delay: 0, options: options, animations: { [unowned self] in
+        UIView.animate(withDuration: animationDuration, delay: 0, options: options, animations: { [unowned self] in
             
             self.view.showingYouLabel.alpha = 1
             self.view.layoutIfNeeded()
         }, completion: nil)
         
         view.logoVerticalConstraint?.constant = ShotsCollectionBackgroundViewSpacing.logoAnimationVerticalInset
-        UIView.animateWithDuration(2 * animationDuration, delay: 0, options: options, animations: { [unowned self] in
+        UIView.animate(withDuration: 2 * animationDuration, delay: 0, options: options, animations: { [unowned self] in
             
             self.view.logoImageView.alpha = 0
             self.view.layoutIfNeeded()
             
         }, completion: nil)
         let items = view.availableItems()
-        for (index, item) in items.enumerate() {
+        for (index, item) in items.enumerated() {
             item.verticalSpacingConstraint?.constant = 0
-            UIView.animateWithDuration(animationDuration, delay: Double(index + 1) * 0.1, options: options, animations: {
+            UIView.animate(withDuration: animationDuration, delay: Double(index + 1) * 0.1, options: options, animations: {
                     item.label.alpha = 1
                     item.label.layoutIfNeeded()
                 }, completion: { [unowned self] _ in
@@ -69,24 +69,24 @@ final class MainScreenStreamSourcesAnimator {
             return
         }
         isAnimationInProgress = true
-        let options = UIViewAnimationOptions.CurveEaseInOut
+        let options = UIViewAnimationOptions()
         
         view.showingYouVerticalConstraint?.constant = ShotsCollectionBackgroundViewSpacing.showingYouHiddenVerticalSpacing
-        UIView.animateWithDuration(animationDuration, delay: 0.2, options: options, animations:    { [unowned self] in
+        UIView.animate(withDuration: animationDuration, delay: 0.2, options: options, animations:    { [unowned self] in
                 self.view.showingYouLabel.alpha = 0
                 self.view.layoutIfNeeded()
         }, completion: nil)
 
         view.logoVerticalConstraint?.constant = ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset
-        UIView.animateWithDuration(2 * animationDuration, delay: 0.1, options: options, animations:{ [unowned self] in
+        UIView.animate(withDuration: 2 * animationDuration, delay: 0.1, options: options, animations:{ [unowned self] in
             self.view.logoImageView.alpha = 1
             self.view.layoutIfNeeded()
         }, completion: nil)
         
         let items = view.availableItems()
-        for (index, item) in items.reverse().enumerate() {
+        for (index, item) in items.reversed().enumerated() {
             item.verticalSpacingConstraint?.constant = -5
-            UIView.animateWithDuration(animationDuration, delay: Double(index) * 0.1, options: options, animations: {
+            UIView.animate(withDuration: animationDuration, delay: Double(index) * 0.1, options: options, animations: {
                     item.label.alpha = 0
                     item.label.superview?.layoutIfNeeded()
                 }, completion: { [unowned self] _ in

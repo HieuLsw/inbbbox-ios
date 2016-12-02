@@ -11,37 +11,37 @@ import Foundation
 class APIShotsProviderConfiguration {
 
     enum ShotsSource {
-        case NewToday, PopularToday, Debuts, Following
+        case newToday, popularToday, debuts, following
 
         var isActive: Bool {
             switch self {
-                case .NewToday: return Settings.StreamSource.NewToday
-                case .PopularToday: return Settings.StreamSource.PopularToday
-                case .Debuts: return Settings.StreamSource.Debuts
-                case .Following: return Settings.StreamSource.Following
+                case .newToday: return Settings.StreamSource.NewToday
+                case .popularToday: return Settings.StreamSource.PopularToday
+                case .debuts: return Settings.StreamSource.Debuts
+                case .following: return Settings.StreamSource.Following
             }
         }
     }
 
     var sources: [ShotsSource] {
-        return [.NewToday, .PopularToday, .Debuts, .Following].filter { $0.isActive }
+        return [.newToday, .popularToday, .debuts, .following].filter { $0.isActive }
     }
 
-    func queryByConfigurationForQuery(query: ShotsQuery, source: ShotsSource) -> ShotsQuery {
+    func queryByConfigurationForQuery(_ query: ShotsQuery, source: ShotsSource) -> ShotsQuery {
         var resultQuery = query
         switch source {
-            case .NewToday:
-                resultQuery.parameters["sort"] = "recent"
-            case .PopularToday:
+            case .newToday:
+                resultQuery.parameters["sort"] = "recent" as AnyObject?
+            case .popularToday:
                 break
-            case .Debuts:
-                resultQuery.parameters["list"] = "debuts"
-                resultQuery.parameters["sort"] = "recent"
-            case .Following:
+            case .debuts:
+                resultQuery.parameters["list"] = "debuts" as AnyObject?
+                resultQuery.parameters["sort"] = "recent" as AnyObject?
+            case .following:
                 resultQuery.followingUsersShotsQuery = true
         }
 
-        resultQuery.date = NSDate()
+        resultQuery.date = Date()
 
         return resultQuery
     }

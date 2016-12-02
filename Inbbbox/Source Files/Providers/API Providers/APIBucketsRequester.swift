@@ -22,7 +22,7 @@ class APIBucketsRequester: Verifiable {
 
      - returns: Promise which resolves with newly created bucket.
      */
-    func postBucket(name: String, description: NSAttributedString?) -> Promise<BucketType> {
+    func postBucket(_ name: String, description: NSAttributedString?) -> Promise<BucketType> {
         let query = CreateBucketQuery(name: name, description: description)
         return sendCreateBucketQuery(query, verifyTextLength: name)
     }
@@ -38,7 +38,7 @@ class APIBucketsRequester: Verifiable {
 
      - returns: Promise which resolves with void.
      */
-    func addShot(shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
+    func addShot(_ shot: ShotType, toBucket bucket: BucketType) -> Promise<Void> {
 
         let query = AddToBucketQuery(shot: shot, bucket: bucket)
         return sendBucketQuery(query)
@@ -55,7 +55,7 @@ class APIBucketsRequester: Verifiable {
 
      - returns: Promise which resolves with void.
      */
-    func removeShot(shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
+    func removeShot(_ shot: ShotType, fromBucket bucket: BucketType) -> Promise<Void> {
 
         let query = RemoveFromBucketQuery(shot: shot, bucket: bucket)
         return sendBucketQuery(query)
@@ -64,7 +64,7 @@ class APIBucketsRequester: Verifiable {
 
 private extension APIBucketsRequester {
 
-    func sendBucketQuery(query: Query) -> Promise<Void> {
+    func sendBucketQuery(_ query: Query) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             firstly {
@@ -73,11 +73,11 @@ private extension APIBucketsRequester {
                 Request(query: query).resume()
             }.then { _ -> Void in
                 fulfill()
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
-    func sendCreateBucketQuery(query: Query, verifyTextLength text: String) -> Promise<BucketType> {
+    func sendCreateBucketQuery(_ query: Query, verifyTextLength text: String) -> Promise<BucketType> {
         return Promise<BucketType> { fulfill, reject in
 
             firstly {
@@ -89,11 +89,11 @@ private extension APIBucketsRequester {
             }.then { json -> Void in
 
                 guard let json = json else {
-                    throw ResponseError.UnexpectedResponse
+                    throw ResponseError.unexpectedResponse
                 }
                 fulfill(Bucket.map(json))
 
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

@@ -117,7 +117,7 @@ protocol ColorModeType {
     var activityIndicatorViewStyle: UIActivityIndicatorViewStyle { get }
     var visualEffectBlurType: UIBlurEffectStyle { get }
     
-    func isEqualTo(other: ColorModeType) -> Bool
+    func isEqualTo(_ other: ColorModeType) -> Bool
 }
 
 func ==(lhs: ColorModeType, rhs: ColorModeType) -> Bool {

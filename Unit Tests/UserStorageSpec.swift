@@ -54,7 +54,7 @@ class UserStorageSpec: QuickSpec {
             }
             
             it("user's avatar url should be same as previously stored") {
-                expect(UserStorage.currentUser!.avatarURL).to(equal(NSURL(string:"fixture.avatar.url")))
+                expect(UserStorage.currentUser!.avatarURL).to(equal(URL(string:"fixture.avatar.url")))
             }
             
             it("user's id should be same as previously stored") {

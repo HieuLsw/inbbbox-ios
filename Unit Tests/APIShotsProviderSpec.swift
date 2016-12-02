@@ -32,7 +32,7 @@ class APIShotsProviderSpec: QuickSpec {
             it("shots should be properly returned") {
                 sut.provideShots().then { _shots -> Void in
                     shots = _shots
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(shots).toNotEventually(beNil())
                 expect(shots).toEventually(haveCount(3))
@@ -43,7 +43,7 @@ class APIShotsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: ErrorType?
+                var error: Error?
                 
                 beforeEach {
                     TokenStorage.clear()
@@ -56,7 +56,7 @@ class APIShotsProviderSpec: QuickSpec {
                 it("error should appear") {
                     sut.provideMyLikedShots().then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
 
@@ -77,7 +77,7 @@ class APIShotsProviderSpec: QuickSpec {
                 it("shots should be properly returned") {
                     sut.provideMyLikedShots().then { _shots -> Void in
                         shots = _shots
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(shots).toNotEventually(beNil())
                     expect(shots).toEventually(haveCount(3))
@@ -90,7 +90,7 @@ class APIShotsProviderSpec: QuickSpec {
             it("shots should be properly returned") {
                 sut.provideShotsForUser(User.fixtureUser()).then { _shots -> Void in
                     shots = _shots
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(shots).toNotEventually(beNil())
                 expect(shots).toEventually(haveCount(3))
@@ -102,7 +102,7 @@ class APIShotsProviderSpec: QuickSpec {
             it("shots should be properly returned") {
                 sut.provideLikedShotsForUser(User.fixtureUser()).then { _shots -> Void in
                     shots = _shots
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(shots).toNotEventually(beNil())
                 expect(shots).toEventually(haveCount(3))
@@ -114,7 +114,7 @@ class APIShotsProviderSpec: QuickSpec {
             it("shots should be properly returned") {
                 sut.provideShotsForBucket(Bucket.fixtureBucket()).then { _shots -> Void in
                     shots = _shots
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(shots).toNotEventually(beNil())
                 expect(shots).toEventually(haveCount(3))
@@ -123,7 +123,7 @@ class APIShotsProviderSpec: QuickSpec {
         
         describe("when providing shots from next/previous page") {
             
-            var error: ErrorType!
+            var error: Error!
             
             afterEach {
                 error = nil
@@ -134,7 +134,7 @@ class APIShotsProviderSpec: QuickSpec {
                 it("should raise an error") {
                     sut.nextPage().then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -144,7 +144,7 @@ class APIShotsProviderSpec: QuickSpec {
                 it("should raise an error") {
                     sut.previousPage().then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -155,13 +155,13 @@ class APIShotsProviderSpec: QuickSpec {
             context("with using provide method first") {
                 
                 beforeEach {
-                    sut.provideShots()
+                    _ = sut.provideShots()
                 }
                 
                 it("shots should be properly returned") {
                     sut.nextPage().then { _shots -> Void in
                         shots = _shots
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(shots).toNotEventually(beNil())
                     expect(shots).toEventually(haveCount(3))
@@ -171,7 +171,7 @@ class APIShotsProviderSpec: QuickSpec {
                 it("shots should be properly returned") {
                     sut.previousPage().then { _shots -> Void in
                         shots = _shots
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(shots).toNotEventually(beNil())
                     expect(shots).toEventually(haveCount(3))
@@ -185,19 +185,19 @@ class APIShotsProviderSpec: QuickSpec {
 //Explanation: Create ShotsProviderMock to override methods from PageableProvider.
 private class APIShotsProviderPrivateMock: APIShotsProvider {
     
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
-        return mockResult(T)
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
             
             let configuration = [

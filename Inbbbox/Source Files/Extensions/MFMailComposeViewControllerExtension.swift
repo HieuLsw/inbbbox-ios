@@ -10,11 +10,11 @@ import Foundation
 import MessageUI
 
 extension MFMailComposeViewController {
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    open override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
 
-    public override func childViewControllerForStatusBarStyle() -> UIViewController? {
+    open override var childViewControllerForStatusBarStyle : UIViewController? {
         return nil
     }
 }

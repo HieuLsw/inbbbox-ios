@@ -17,7 +17,7 @@ class LikeQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return LikeQuery(shot: Shot.fixtureShot())
         }) { Void -> QueryExpectation in
-            return (method: .POST, encoding: .JSON, path: "/shots/fixture.identifier/like")
+            return (method: .POST, encoding: .json, path: "/shots/fixture.identifier/like")
         }
         
         describe("when newly initialized with shot identifier") {

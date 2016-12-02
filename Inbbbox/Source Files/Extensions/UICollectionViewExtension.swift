@@ -11,8 +11,8 @@ import UIKit
 extension UICollectionView {
 
     /// Defines type used during registering class for reusable view.
-    enum Type {
-        case Cell, Header, Footer
+    enum `Type` {
+        case cell, header, footer
     }
 
     /// Registers class for reuse.
@@ -21,18 +21,18 @@ extension UICollectionView {
     /// - parameter aClass: Class to register.
     /// - parameter type:   Type of reusable view.
     ///
-    /// - SeeAlso: `Type` enum.
-    func registerClass<T: UICollectionReusableView where T: Reusable>(aClass: T.Type, type: Type) {
+    /// - SeeAlso: `ViewType` enum.
+    func registerClass<T: UICollectionReusableView>(_ aClass: T.Type, type: Type) where T: Reusable {
 
         switch type {
-        case .Cell:
-            registerClass(aClass, forCellWithReuseIdentifier: T.reuseIdentifier)
-        case .Header:
-            registerClass(aClass, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
-                                         withReuseIdentifier: T.reuseIdentifier)
-        case .Footer:
-            registerClass(aClass, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
-                                         withReuseIdentifier: T.reuseIdentifier)
+        case .cell:
+            register(aClass, forCellWithReuseIdentifier: T.identifier as String)
+        case .header:
+            register(aClass, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
+                                         withReuseIdentifier: T.identifier)
+        case .footer:
+            register(aClass, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                                         withReuseIdentifier: T.identifier)
         }
     }
 
@@ -42,24 +42,24 @@ extension UICollectionView {
     /// - parameter forIndexPath:   The index path specifying the location of the cell or view.
     /// - parameter type:           Type of reusable view.
     ///
-    /// - SeeAlso: `Type` enum.
+    /// - SeeAlso: `ViewType` enum.
     ///
     /// - returns: A valid UICollectionReusableView object.
-    func dequeueReusableClass<T: UICollectionReusableView where T: Reusable>(aClass: T.Type,
-            forIndexPath indexPath: NSIndexPath, type: Type) -> T {
+    func dequeueReusableClass<T: UICollectionReusableView>(_ aClass: T.Type,
+            forIndexPath indexPath: IndexPath, type: Type) -> T where T: Reusable {
 
         switch type {
-        case .Cell:
-            return (dequeueReusableCellWithReuseIdentifier(T.reuseIdentifier,
-                                             forIndexPath: indexPath) as? T)!
-        case .Header:
-            return (dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader,
-                                      withReuseIdentifier: T.reuseIdentifier,
-                                             forIndexPath: indexPath) as? T)!
-        case .Footer:
-            return (dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter,
-                                      withReuseIdentifier: T.reuseIdentifier,
-                                             forIndexPath: indexPath) as? T)!
+        case .cell:
+            return (dequeueReusableCell(withReuseIdentifier: T.identifier,
+                                             for: indexPath) as? T)!
+        case .header:
+            return (dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader,
+                                      withReuseIdentifier: T.identifier,
+                                             for: indexPath) as? T)!
+        case .footer:
+            return (dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter,
+                                      withReuseIdentifier: T.identifier,
+                                             for: indexPath) as? T)!
         }
     }
 
@@ -72,9 +72,9 @@ extension UICollectionView {
     /// - SeeAlso: `Type` enum.
     ///
     /// - returns: Size of cell.
-    func sizeForAutoSizingCell<T: UICollectionViewCell where T: AutoSizable>(cell: T.Type,
+    func sizeForAutoSizingCell<T: UICollectionViewCell>(_ cell: T.Type,
                  textToBound: [NSAttributedString?]?, withInsets
-            additionalInsets: UIEdgeInsets = UIEdgeInsetsZero) -> CGSize {
+            additionalInsets: UIEdgeInsets = UIEdgeInsets.zero) -> CGSize where T: AutoSizable {
 
         let insets = cell.contentInsets
         let availableWidth = bounds.size.width - (cell.maximumContentWidth ?? 0) -

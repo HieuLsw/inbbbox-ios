@@ -9,7 +9,7 @@
 import UIKit
 
 enum KeyboardState {
-    case WillAppear, WillDisappear, DidAppear, DidDisappear
+    case willAppear, willDisappear, didAppear, didDisappear
 }
 
 protocol KeyboardResizableViewDelegate: class {
@@ -20,7 +20,7 @@ protocol KeyboardResizableViewDelegate: class {
     - parameter view:  KeyboardResizableView instance.
     - parameter state: Indicates state of keyboard.
     */
-    func keyboardResizableView(view: KeyboardResizableView, willRelayoutSubviewsWithState state: KeyboardState)
+    func keyboardResizableView(_ view: KeyboardResizableView, willRelayoutSubviewsWithState state: KeyboardState)
 
     /**
      Invokes when *KeyboardResizableView* did relayout itself (when keyboard did (dis)appear).
@@ -28,11 +28,11 @@ protocol KeyboardResizableViewDelegate: class {
      - parameter view:  KeyboardResizableView instance.
      - parameter state: Indicates state of keyboard.
      */
-    func keyboardResizableView(view: KeyboardResizableView, didRelayoutSubviewsWithState state: KeyboardState)
+    func keyboardResizableView(_ view: KeyboardResizableView, didRelayoutSubviewsWithState state: KeyboardState)
 }
 
 extension KeyboardResizableViewDelegate {
-    func keyboardResizableView(view: KeyboardResizableView, didRelayoutSubviewsWithState state: KeyboardState) { }
+    func keyboardResizableView(_ view: KeyboardResizableView, didRelayoutSubviewsWithState state: KeyboardState) { }
 }
 
 class KeyboardResizableView: UIView {
@@ -45,7 +45,7 @@ class KeyboardResizableView: UIView {
     /**
      Indicates whether keyboard is present or not.
      */
-    private(set) var isKeyboardPresent = false {
+    fileprivate(set) var isKeyboardPresent = false {
         willSet(newValue) {
             if !newValue {
                 snapOffset = 0
@@ -66,38 +66,40 @@ class KeyboardResizableView: UIView {
     var bottomEdgeOffset = CGFloat(0)
 
     // Private variables:
-    private var initialBottomConstraintConstant = CGFloat(0)
-    private var bottomConstraint: NSLayoutConstraint?
-    private var snapOffset = CGFloat(0)
+    fileprivate var initialBottomConstraintConstant = CGFloat(0)
+    fileprivate var bottomConstraint: NSLayoutConstraint!
+    fileprivate var snapOffset = CGFloat(0)
 
     init() {
         super.init(frame: CGRect.zero)
 
         clipsToBounds = true
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillAppear(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear(_:)),
+        name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear(_:)),
+        name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
-    @available(*, unavailable, message = "Use init() instead")
+    @available(*, unavailable, message: "Use init() instead")
     override init(frame: CGRect) {
         fatalError("init(frame:) has not been implemented")
     }
 
-    @available(*, unavailable, message = "Use init() instead")
+    @available(*, unavailable, message: "Use init() instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func setReferenceBottomConstraint(constraint: NSLayoutConstraint) {
+    func setReferenceBottomConstraint(_ constraint: NSLayoutConstraint) {
         bottomConstraint = constraint
         initialBottomConstraintConstant = constraint.constant
     }
@@ -107,16 +109,16 @@ class KeyboardResizableView: UIView {
 
 extension KeyboardResizableView {
 
-    func keyboardWillAppear(notification: NSNotification) {
+    func keyboardWillAppear(_ notification: Notification) {
         if !isKeyboardPresent {
-            relayoutViewWithParameters(notification.userInfo!, keyboardPresence: true)
+            relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: true)
         }
         isKeyboardPresent = true
     }
 
-    func keyboardWillDisappear(notification: NSNotification) {
+    func keyboardWillDisappear(_ notification: Notification) {
         if isKeyboardPresent {
-            relayoutViewWithParameters(notification.userInfo!, keyboardPresence: false)
+            relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: false)
         }
         isKeyboardPresent = false
     }
@@ -126,39 +128,39 @@ extension KeyboardResizableView {
 
 private extension KeyboardResizableView {
 
-    func calculateCorrectKeyboardRectWithParameters(parameters: NSDictionary) -> CGRect {
+    func calculateCorrectKeyboardRectWithParameters(_ parameters: NSDictionary) -> CGRect {
 
-        let rawKeyboardRect = parameters[UIKeyboardFrameEndUserInfoKey]?.CGRectValue ?? CGRect.zero
-        return superview?.window?.convertRect(rawKeyboardRect, toView: superview) ?? CGRect.zero
+        let rawKeyboardRect = (parameters[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue ?? CGRect.zero
+        return superview?.window?.convert(rawKeyboardRect, to: superview) ?? CGRect.zero
     }
 
     func relayoutViewWithParameters(parameters: NSDictionary, keyboardPresence: Bool) {
         
         guard let
             bottomConstraint = bottomConstraint,
-            animationDuration = parameters[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber else {
+            let animationDuration = parameters[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber else {
             return
         }
 
-        bottomConstraint.constant = calculateConstantIn(bottomConstraint, basedOnParameters: parameters, andKeyboardPresence: keyboardPresence)
+        bottomConstraint.constant = calculateConstantIn(bottomConstraint: bottomConstraint, basedOnParameters: parameters, andKeyboardPresence: keyboardPresence)
         
-        let state: KeyboardState = keyboardPresence ? .WillAppear : .WillDisappear
+        let state: KeyboardState = keyboardPresence ? .willAppear : .willDisappear
         delegate?.keyboardResizableView(self, willRelayoutSubviewsWithState: state)
 
-        UIView.animateWithDuration(animationDuration.doubleValue, animations: {
+        UIView.animate(withDuration: animationDuration.doubleValue, animations: {
             self.layoutIfNeeded()
-        }) {
+        }, completion: {
             _ in
-            let state: KeyboardState = keyboardPresence ? .DidAppear : .DidDisappear
+            let state: KeyboardState = keyboardPresence ? .didAppear : .didDisappear
             self.delegate?.keyboardResizableView(self, didRelayoutSubviewsWithState: state)
-        }
+        }) 
     }
     
     func calculateConstantIn(bottomConstraint: NSLayoutConstraint, basedOnParameters parameters: NSDictionary, andKeyboardPresence keyboardPresence: Bool) -> CGFloat {
         
         if automaticallySnapToKeyboardTopEdge && !isKeyboardPresent {
-            let rectInSuperviewCoordinateSpace = superview!.convertRect(bounds, toView: self)
-            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = CGRectGetHeight(superview!.frame) - CGRectGetHeight(rectInSuperviewCoordinateSpace) + CGRectGetMinY(rectInSuperviewCoordinateSpace)
+            let rectInSuperviewCoordinateSpace = superview!.convert(bounds, to: self)
+            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = superview!.frame.height - rectInSuperviewCoordinateSpace.height + rectInSuperviewCoordinateSpace.minY
             
             snapOffset = keyboardTopEdgeAndSelfBottomEdgeOffsetY
         }

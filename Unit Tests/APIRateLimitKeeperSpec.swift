@@ -25,13 +25,13 @@ class APIRateLimitKeeperSpec: QuickSpec {
         }
         
         afterSuite {
-            NSUserDefaults.standardUserDefaults().removeObjectForKey("DailyRateLimitRemainingKey")
+            UserDefaults.standard.removeObject(forKey: "DailyRateLimitRemainingKey")
         }
 
         describe("when newly initilized") {
             
             beforeEach {
-                NSUserDefaults.standardUserDefaults().removeObjectForKey("DailyRateLimitRemainingKey")
+                UserDefaults.standard.removeObject(forKey: "DailyRateLimitRemainingKey")
             }
             
             it("daily rate limit should not be defined") {
@@ -154,23 +154,23 @@ class APIRateLimitKeeperSpec: QuickSpec {
 
 private extension APIRateLimitKeeperSpec {
     
-    func fixtureResponseWithCode(code: Int) -> NSHTTPURLResponse {
-        return NSHTTPURLResponse(
-            URL: NSURL(string: "http://www.fixture.host")!,
+    func fixtureResponseWithCode(_ code: Int) -> HTTPURLResponse {
+        return HTTPURLResponse(
+            url: URL(string: "http://www.fixture.host")!,
             statusCode: code,
-            HTTPVersion: nil,
+            httpVersion: nil,
             headerFields: nil
         )!
     }
     
-    func fixtureHeaderWithLimit(limit: UInt, remainingLimit: UInt, timeToResetSinceNow: NSTimeInterval) -> [String: AnyObject] {
+    func fixtureHeaderWithLimit(_ limit: UInt, remainingLimit: UInt, timeToResetSinceNow: TimeInterval) -> [String: AnyObject] {
         
-        let rateLimitReset = NSDate(timeIntervalSinceNow: timeToResetSinceNow).timeIntervalSinceDate(NSDate(timeIntervalSince1970: 0))
+        let rateLimitReset = Date(timeIntervalSinceNow: timeToResetSinceNow).timeIntervalSince(Date(timeIntervalSince1970: 0))
         
         return [
-            "X-RateLimit-Limit": String(limit),
-            "X-RateLimit-Remaining": String(remainingLimit),
-            "X-RateLimit-Reset": String(UInt(rateLimitReset))
+            "X-RateLimit-Limit": String(limit) as AnyObject,
+            "X-RateLimit-Remaining": String(remainingLimit) as AnyObject,
+            "X-RateLimit-Reset": String(UInt(rateLimitReset)) as AnyObject
         ]
     }
 }

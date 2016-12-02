@@ -20,7 +20,7 @@ class MainScreenStreamSourcesAnimatorSpec: QuickSpec {
         
         beforeEach {
             let backgroundView = ShotsCollectionBackgroundView()
-            backgroundView.frame = UIScreen.mainScreen().bounds
+            backgroundView.frame = UIScreen.main.bounds
             backgroundView.layoutSubviews()
             sut = MainScreenStreamSourcesAnimator(view: backgroundView, animationDuration: 0.01)
             view = backgroundView

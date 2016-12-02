@@ -12,24 +12,24 @@ import UIKit
 /// Also deals with a problem where UIActionItem handler was 
 /// not called because UIWindows problems
 public final class AlertViewController: UIAlertController {
-    private var alertWindow: UIWindow? = UIWindow()
-    private var rootViewController: UIViewController? = UIViewController()
+    fileprivate var alertWindow: UIWindow? = UIWindow()
+    fileprivate var rootViewController: UIViewController? = UIViewController()
     
-    func show(animated:Bool = true) {
-        guard let alertWindow = alertWindow, rootViewController = rootViewController else {
+    func show(_ animated:Bool = true) {
+        guard let alertWindow = alertWindow, let rootViewController = rootViewController else {
             return
         }
-        alertWindow.backgroundColor = .clearColor()
+        alertWindow.backgroundColor = .clear
         alertWindow.windowLevel = UIWindowLevelAlert + 1
-        rootViewController.view.backgroundColor = .clearColor()
+        rootViewController.view.backgroundColor = .clear
         alertWindow.rootViewController = rootViewController
         alertWindow.makeKeyAndVisible()
-        rootViewController.presentViewController(self, animated: animated, completion: nil)
+        rootViewController.present(self, animated: animated, completion: nil)
     }
     
-    public override func viewWillDisappear(animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        alertWindow?.hidden = true
+        alertWindow?.isHidden = true
         alertWindow = nil
         rootViewController = nil
     }

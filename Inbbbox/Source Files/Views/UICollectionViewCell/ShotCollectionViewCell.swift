@@ -5,22 +5,22 @@
 import UIKit
 
 protocol ShotCollectionViewCellDelegate: class {
-    func shotCollectionViewCellDidStartSwiping(shotCollectionViewCell: ShotCollectionViewCell)
+    func shotCollectionViewCellDidStartSwiping(_ shotCollectionViewCell: ShotCollectionViewCell)
 
-    func shotCollectionViewCellDidEndSwiping(shotCollectionViewCell: ShotCollectionViewCell)
+    func shotCollectionViewCellDidEndSwiping(_ shotCollectionViewCell: ShotCollectionViewCell)
 }
 
-class ShotCollectionViewCell: UICollectionViewCell {
+class ShotCollectionViewCell: UICollectionViewCell, Reusable {
 
     enum Action {
-        case DoNothing
-        case Like
-        case Bucket
-        case Comment
-        case Follow
+        case doNothing
+        case like
+        case bucket
+        case comment
+        case follow
     }
 
-    let shotImageView = ShotImageView.newAutoLayoutView()
+    let shotImageView = ShotImageView.newAutoLayout()
     let likeImageView = DoubleImageView(firstImage: UIImage(named: "ic-like-swipe"),
                                         secondImage: UIImage(named: "ic-like-swipe-filled"))
     let plusImageView = UIImageView(image: UIImage(named: "ic-plus"))
@@ -33,40 +33,40 @@ class ShotCollectionViewCell: UICollectionViewCell {
     let gifLabel = GifIndicatorView()
     let messageLabel: UILabel = {
         let l = UILabel()
-        l.font = UIFont.helveticaFont(.NeueBold, size: 15)
-        l.textColor = .whiteColor()
-        l.textAlignment = .Center
+        l.font = UIFont.helveticaFont(.neueBold, size: 15)
+        l.textColor = .white
+        l.textAlignment = .center
         return l
     }()
     
 
-    let shotContainer = UIView.newAutoLayoutView()
-    let authorView = ShotAuthorCompactView.newAutoLayoutView()
+    let shotContainer = UIView.newAutoLayout()
+    let authorView = ShotAuthorCompactView.newAutoLayout()
     var configureForDisplayingAuthorView = false
 
-    private(set) var likeImageViewLeftConstraint: NSLayoutConstraint?
-    private(set) var likeImageViewWidthConstraint: NSLayoutConstraint?
-    private(set) var plusImageViewWidthConstraint: NSLayoutConstraint?
-    private(set) var bucketImageViewWidthConstraint: NSLayoutConstraint?
-    private(set) var commentImageViewRightConstraint: NSLayoutConstraint?
-    private(set) var commentImageViewWidthConstraint: NSLayoutConstraint?
-    private(set) var followImageViewWidthConstraint: NSLayoutConstraint?
-    private var authorInfoHeightConstraint: NSLayoutConstraint?
+    fileprivate(set) var likeImageViewLeftConstraint: NSLayoutConstraint?
+    fileprivate(set) var likeImageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate(set) var plusImageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate(set) var bucketImageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate(set) var commentImageViewRightConstraint: NSLayoutConstraint?
+    fileprivate(set) var commentImageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate(set) var followImageViewWidthConstraint: NSLayoutConstraint?
+    fileprivate var authorInfoHeightConstraint: NSLayoutConstraint?
 
     var viewClass = UIView.self
-    var swipeCompletion: (Action -> Void)?
+    var swipeCompletion: ((Action) -> Void)?
     weak var delegate: ShotCollectionViewCellDelegate?
     var isRegisteredTo3DTouch = false
 
-    private let panGestureRecognizer = UIPanGestureRecognizer()
+    fileprivate let panGestureRecognizer = UIPanGestureRecognizer()
 
-    private let likeActionRange = ActionRange(min: 40, max: 120)
-    private let bucketActionRange = ActionRange(min: 120, max: 170)
-    private let commentActionRange = ActionRange(min: -80, max: 0)
-    private let followActionRange = ActionRange(min: -170, max: -80)
-    private let authorInfoHeight: CGFloat = 25
+    fileprivate let likeActionRange = ActionRange(min: 40, max: 120)
+    fileprivate let bucketActionRange = ActionRange(min: 120, max: 170)
+    fileprivate let commentActionRange = ActionRange(min: -80, max: 0)
+    fileprivate let followActionRange = ActionRange(min: -170, max: -80)
+    fileprivate let authorInfoHeight: CGFloat = 25
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
     var previousXTranslation: CGFloat = 0
 
     var liked = false {
@@ -78,11 +78,11 @@ class ShotCollectionViewCell: UICollectionViewCell {
             }
         }
     }
-    var enabledActions:[Action] = [.DoNothing, .Like, .Bucket, .Comment, .Follow]
+    var enabledActions:[Action] = [.doNothing, .like, .bucket, .comment, .follow]
 
     // MARK: - Life cycle
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -135,67 +135,64 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UIView
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     override func updateConstraints() {
 
         if !didSetConstraints {
-            shotContainer.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
-            shotContainer.autoPinEdge(.Bottom, toEdge: .Top, ofView: authorView)
+            shotContainer.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
+            shotContainer.autoPinEdge(.bottom, to: .top, of: authorView)
             let height = configureForDisplayingAuthorView ? authorInfoHeight : 0
 
-            authorInfoHeightConstraint = authorView.autoSetDimension(.Height, toSize: height)
-            authorView.autoPinEdgeToSuperviewEdge(.Leading, withInset: 2)
-            authorView.autoPinEdgeToSuperviewEdge(.Trailing)
-            authorView.autoPinEdgeToSuperviewEdge(.Bottom)
+            authorInfoHeightConstraint = authorView.autoSetDimension(.height, toSize: height)
+            authorView.autoPinEdge(toSuperviewEdge: .leading, withInset: 2)
+            authorView.autoPinEdge(toSuperviewEdge: .trailing)
+            authorView.autoPinEdge(toSuperviewEdge: .bottom)
 
             shotImageView.autoPinEdgesToSuperviewEdges()
 
-            likeImageViewWidthConstraint = likeImageView.autoSetDimension(.Width, toSize: 0)
-            likeImageView.autoConstrainAttribute(.Height,
-                                                 toAttribute: .Width,
-                                                 ofView: likeImageView,
-                                                 withMultiplier: likeImageView.intrinsicContentSize().height /
-                                                                 likeImageView.intrinsicContentSize().width)
-            likeImageViewLeftConstraint = likeImageView.autoPinEdgeToSuperviewEdge(.Left)
-            likeImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            likeImageViewWidthConstraint = likeImageView.autoSetDimension(.width, toSize: 0)
+            likeImageView.autoConstrainAttribute(.height,
+                to: .width, of: likeImageView, withMultiplier: likeImageView.intrinsicContentSize.height / likeImageView.intrinsicContentSize.width)
+            likeImageViewLeftConstraint = likeImageView.autoPinEdge(toSuperviewEdge: .left)
+            likeImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            plusImageViewWidthConstraint = plusImageView.autoSetDimension(.Width, toSize: 0)
-            plusImageView.autoConstrainAttribute(.Height, toAttribute: .Width, ofView: plusImageView,
-                    withMultiplier: plusImageView.intrinsicContentSize().height /
-                            plusImageView.intrinsicContentSize().width)
-            plusImageView.autoPinEdge(.Left, toEdge: .Right, ofView: likeImageView, withOffset: 15)
-            plusImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            plusImageViewWidthConstraint = plusImageView.autoSetDimension(.width, toSize: 0)
+            plusImageView.autoConstrainAttribute(.height, to: .width, of: plusImageView,
+                    withMultiplier: plusImageView.intrinsicContentSize.height /
+                            plusImageView.intrinsicContentSize.width)
+            plusImageView.autoPinEdge(.left, to: .right, of: likeImageView, withOffset: 15)
+            plusImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            bucketImageViewWidthConstraint = bucketImageView.autoSetDimension(.Width, toSize: 0)
-            bucketImageView.autoConstrainAttribute(.Height, toAttribute: .Width, ofView: bucketImageView,
-                    withMultiplier: bucketImageView.intrinsicContentSize().height /
-                            bucketImageView.intrinsicContentSize().width)
-            bucketImageView.autoPinEdge(.Left, toEdge: .Right, ofView: plusImageView, withOffset: 15)
-            bucketImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            bucketImageViewWidthConstraint = bucketImageView.autoSetDimension(.width, toSize: 0)
+            bucketImageView.autoConstrainAttribute(.height, to: .width, of: bucketImageView,
+                    withMultiplier: bucketImageView.intrinsicContentSize.height /
+                            bucketImageView.intrinsicContentSize.width)
+            bucketImageView.autoPinEdge(.left, to: .right, of: plusImageView, withOffset: 15)
+            bucketImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            commentImageViewWidthConstraint = commentImageView.autoSetDimension(.Width, toSize: 0)
-            commentImageView.autoConstrainAttribute(.Height, toAttribute: .Width, ofView: commentImageView,
-                    withMultiplier: commentImageView.intrinsicContentSize().height /
-                            commentImageView.intrinsicContentSize().width)
-            commentImageViewRightConstraint = commentImageView.autoPinEdgeToSuperviewEdge(.Right)
-            commentImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            commentImageViewWidthConstraint = commentImageView.autoSetDimension(.width, toSize: 0)
+            commentImageView.autoConstrainAttribute(.height, to: .width, of: commentImageView,
+                    withMultiplier: commentImageView.intrinsicContentSize.height /
+                            commentImageView.intrinsicContentSize.width)
+            commentImageViewRightConstraint = commentImageView.autoPinEdge(toSuperviewEdge: .right)
+            commentImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
             
-            followImageViewWidthConstraint = followImageView.autoSetDimension(.Width, toSize: 0)
-            followImageView.autoConstrainAttribute(.Height, toAttribute: .Width, ofView: followImageView,
-                    withMultiplier: followImageView.intrinsicContentSize().height /
-                            followImageView.intrinsicContentSize().width)
-            followImageView.autoAlignAxis(.Vertical, toSameAxisOfView: commentImageView)
-            followImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            followImageViewWidthConstraint = followImageView.autoSetDimension(.width, toSize: 0)
+            followImageView.autoConstrainAttribute(.height, to: .width, of: followImageView,
+                    withMultiplier: followImageView.intrinsicContentSize.height /
+                            followImageView.intrinsicContentSize.width)
+            followImageView.autoAlignAxis(.vertical, toSameAxisOf: commentImageView)
+            followImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
             
-            gifLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 10)
-            gifLabel.autoPinEdgeToSuperviewEdge(.Right, withInset: 10)
+            gifLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
+            gifLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 10)
 
-            messageLabel.autoAlignAxisToSuperviewAxis(.Vertical)
-            let messageHorizontalOffset = followImageView.intrinsicContentSize().height
-            messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: shotContainer, withOffset: messageHorizontalOffset)
+            messageLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            let messageHorizontalOffset = followImageView.intrinsicContentSize.height
+            messageLabel.autoAlignAxis(.horizontal, toSameAxisOf: shotContainer, withOffset: messageHorizontalOffset)
             
             didSetConstraints = true
         }
@@ -203,11 +200,11 @@ class ShotCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
     }
 
-    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
             return true
         }
-        let velocity = panGestureRecognizer.velocityInView(self.contentView)
+        let velocity = panGestureRecognizer.velocity(in: self.contentView)
         return fabs(velocity.x) > fabs(velocity.y)
     }
 
@@ -217,16 +214,16 @@ class ShotCollectionViewCell: UICollectionViewCell {
         shotImageView.image = nil
         shotImageView.originalImage = nil
         authorView.alpha = 0
-        enabledActions = [.DoNothing, .Like, .Bucket, .Comment, .Follow]
+        enabledActions = [.doNothing, .like, .bucket, .comment, .follow]
     }
 
     // MARK: - Public
 
-    func displayAuthor(shouldDisplay: Bool, animated: Bool) {
+    func displayAuthor(_ shouldDisplay: Bool, animated: Bool) {
 
         self.layoutIfNeeded()
         if animated {
-            UIView.animate(duration: 1.0, delay: 0, options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: 1.0, delay: 0, options: UIViewAnimationOptions(), animations: {
                 self.configureAuthorView(shouldDisplay)
                 self.layoutIfNeeded()
             })
@@ -237,19 +234,19 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Actions
 
-    func didSwipeCell(panGestureRecognizer: UIPanGestureRecognizer) {
+    func didSwipeCell(_ panGestureRecognizer: UIPanGestureRecognizer) {
         switch panGestureRecognizer.state {
-        case .Began:
+        case .began:
             self.delegate?.shotCollectionViewCellDidStartSwiping(self)
-        case .Ended, .Cancelled, .Failed:
+        case .ended, .cancelled, .failed:
             let xTranslation = adjustedXTranslation()
             let selectedAction = self.selectedActionForSwipeXTranslation(xTranslation)
-            panGestureRecognizer.enabled = false
+            panGestureRecognizer.isEnabled = false
             displayMessageBasedOnAction(selectedAction)
             animateCellAction(selectedAction) { [unowned self] in
                 self.swipeCompletion?(selectedAction)
                 self.delegate?.shotCollectionViewCellDidEndSwiping(self)
-                panGestureRecognizer.enabled = true
+                panGestureRecognizer.isEnabled = true
             }
         default:
             let xTranslation = adjustedXTranslation()
@@ -261,51 +258,51 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Private Helpers
     
-    private func adjustedXTranslation() -> CGFloat {
+    fileprivate func adjustedXTranslation() -> CGFloat {
         let likeOffset = likeActionRange.max - 40
-        let xTranslation = self.panGestureRecognizer.translationInView(self.contentView).x
-        if xTranslation < 0 && (!enabledActions.contains(.Comment) && !enabledActions.contains(.Follow)) {
+        let xTranslation = self.panGestureRecognizer.translation(in: self.contentView).x
+        if xTranslation < 0 && (!enabledActions.contains(.comment) && !enabledActions.contains(.follow)) {
             return 0
-        } else if xTranslation > 0 && !enabledActions.contains(.Like) && !enabledActions.contains(.Bucket) {
+        } else if xTranslation > 0 && !enabledActions.contains(.like) && !enabledActions.contains(.bucket) {
             return 0
-        } else if xTranslation > 0 && !enabledActions.contains(.Bucket) && xTranslation >= likeOffset {
+        } else if xTranslation > 0 && !enabledActions.contains(.bucket) && xTranslation >= likeOffset {
             return likeOffset
-        } else if xTranslation < 0 && !enabledActions.contains(.Follow) && xTranslation <= commentActionRange.min {
+        } else if xTranslation < 0 && !enabledActions.contains(.follow) && xTranslation <= commentActionRange.min {
             return commentActionRange.min
         }
         
         return xTranslation
     }
 
-    private func adjustConstraintsForSwipeXTranslation(xTranslation: CGFloat) {
+    fileprivate func adjustConstraintsForSwipeXTranslation(_ xTranslation: CGFloat) {
         if xTranslation > bucketActionRange.max || xTranslation < followActionRange.min {
             return
         }
 
-        shotImageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, xTranslation, 0)
+        shotImageView.transform = CGAffineTransform.identity.translatedBy(x: xTranslation, y: 0)
         likeImageViewLeftConstraint?.constant = abs(xTranslation) * 0.17
         likeImageViewWidthConstraint?.constant = min(abs(xTranslation * 0.6),
-                likeImageView.intrinsicContentSize().width)
+                likeImageView.intrinsicContentSize.width)
 
         let secondLeftActionWidthConstant = max((abs(xTranslation * 0.6) - likeActionRange.min), 0)
         plusImageViewWidthConstraint?.constant = min(secondLeftActionWidthConstant,
-                plusImageView.intrinsicContentSize().width)
+                plusImageView.intrinsicContentSize.width)
         plusImageView.alpha = min((abs(xTranslation) - likeActionRange.min) / 70, 1)
 
         bucketImageViewWidthConstraint?.constant = min(secondLeftActionWidthConstant,
-                bucketImageView.intrinsicContentSize().width)
+                bucketImageView.intrinsicContentSize.width)
 
-        let width = min(abs(xTranslation * 0.6), commentImageView.intrinsicContentSize().width)
+        let width = min(abs(xTranslation * 0.6), commentImageView.intrinsicContentSize.width)
         commentImageViewWidthConstraint?.constant = width
         commentImageViewRightConstraint?.constant = -((abs(xTranslation) * 0.5) - (width / 2))
         
         followImageViewWidthConstraint?.constant = min(abs(xTranslation * 0.6),
-                                                        followImageView.intrinsicContentSize().width)
+                                                        followImageView.intrinsicContentSize.width)
     }
 
-    private func adjustActionImageViewForXTranslation(xTranslation: CGFloat) {
+    fileprivate func adjustActionImageViewForXTranslation(_ xTranslation: CGFloat) {
         switch xTranslation {
-        case likeActionRange.min ..< CGFloat.max where xTranslation > previousXTranslation && likeImageView.isFirstImageVisible && !liked:
+        case likeActionRange.min ..< CGFloat.greatestFiniteMagnitude where xTranslation > previousXTranslation && likeImageView.isFirstImageVisible && !liked:
             UIView.animate(animations: {
                 self.likeImageView.displaySecondImageView()
             })
@@ -313,7 +310,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
             UIView.animate(animations: {
                 self.likeImageView.displayFirstImageView()
             })
-        case bucketActionRange.min ..< CGFloat.max where bucketImageView.isFirstImageVisible:
+        case bucketActionRange.min ..< CGFloat.greatestFiniteMagnitude where bucketImageView.isFirstImageVisible:
             UIView.animate(animations: {
                 self.bucketImageView.displaySecondImageView()
             })
@@ -344,49 +341,49 @@ class ShotCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func displayComment() {
+    fileprivate func displayComment() {
         commentImageView.alpha = 1
         followImageView.alpha = 0
     }
     
-    private func displayFollow() {
+    fileprivate func displayFollow() {
         commentImageView.alpha = 0
         followImageView.alpha = 1
     }
 
-    private func selectedActionForSwipeXTranslation(xTranslation: CGFloat) -> Action {
+    fileprivate func selectedActionForSwipeXTranslation(_ xTranslation: CGFloat) -> Action {
         switch xTranslation {
         case likeActionRange.min ... likeActionRange.max:
-            return .Like
+            return .like
         case likeActionRange.max ..< CGFloat.infinity:
-            return .Bucket
+            return .bucket
         case commentActionRange.min ... commentActionRange.mid:
-            return .Comment
+            return .comment
         case -CGFloat.infinity ..< followActionRange.mid:
-            return .Follow
+            return .follow
         default:
-            return .DoNothing
+            return .doNothing
         }
     }
 
-    private func animateCellAction(action: Action, completion: (() -> ())?) {
+    fileprivate func animateCellAction(_ action: Action, completion: (() -> ())?) {
         switch action {
-        case .Like:
-            bucketImageView.hidden = true
-            plusImageView.hidden = true
-            commentImageView.hidden = true
-            followImageView.hidden = true
+        case .like:
+            bucketImageView.isHidden = true
+            plusImageView.isHidden = true
+            commentImageView.isHidden = true
+            followImageView.isHidden = true
             viewClass.animateWithDescriptor(ShotCellLikeActionAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
-        case .Bucket:
-            commentImageView.hidden = true
-            followImageView.hidden = true
+        case .bucket:
+            commentImageView.isHidden = true
+            followImageView.isHidden = true
             viewClass.animateWithDescriptor(ShotCellBucketActionAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
-        case .Comment, .Follow:
-            likeImageView.hidden = true
-            plusImageView.hidden = true
-            bucketImageView.hidden = true
+        case .comment, .follow:
+            likeImageView.isHidden = true
+            plusImageView.isHidden = true
+            bucketImageView.isHidden = true
             viewClass.animateWithDescriptor(ShotCellCommentActionAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
         default:
@@ -395,40 +392,42 @@ class ShotCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func displayMessageBasedOnAction(action: Action) {
+    fileprivate func displayMessageBasedOnAction(_ action: Action) {
         switch action {
-        case .Like:
+        case .like:
             messageLabel.text = NSLocalizedString("ShotCollectionCell.Like", comment: "Shown when user perform like action")
-        case .Bucket:
+        case .bucket:
             messageLabel.text = NSLocalizedString("ShotCollectionCell.Bucket", comment: "Shown when user perform add to bucket action")
-        case .Comment:
+        case .comment:
             messageLabel.text = NSLocalizedString("ShotCollectionCell.Comment", comment: "Shown when user perform comment action")
-        case .Follow:
+        case .follow:
             messageLabel.text = NSLocalizedString("ShotCollectionCell.Follow", comment: "Shown when user perform follow action")
-        case .DoNothing:
+        case .doNothing:
             messageLabel.text = ""
         }
     }
 
-    private func configureAuthorView(shouldDisplay: Bool) {
+    fileprivate func configureAuthorView(_ shouldDisplay: Bool) {
         authorView.alpha = shouldDisplay ? 1 : 0
-        authorView.hidden = !shouldDisplay
+        authorView.isHidden = !shouldDisplay
         authorInfoHeightConstraint?.constant = shouldDisplay ? authorInfoHeight : 0
-    }
-}
-
-extension ShotCollectionViewCell: Reusable {
-
-    static var reuseIdentifier: String {
-        return "ShotCollectionViewCellIdentifier"
     }
 }
 
 extension ShotCollectionViewCell: UIGestureRecognizerDelegate {
 
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWithGestureRecognizer
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith
                            otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+fileprivate extension UIView {
+    
+    class func animate(animations: @escaping () -> Void) {
+        UIView.animate(withDuration: 0.3) {
+            animations()
+        }
     }
 }

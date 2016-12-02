@@ -16,8 +16,8 @@ class ScrollViewAutoScroller {
     /// scroll view to use by ScrollViewAutoScroller
     weak var scrollView: UIScrollView?
 
-    private var autoScrollInvocationSuppressCounter = 0
-    private var shouldAllowScrollAction: Bool {
+    fileprivate var autoScrollInvocationSuppressCounter = 0
+    fileprivate var shouldAllowScrollAction: Bool {
         return autoScrollInvocationSuppressCounter >= autoScrollInvocationSuppressCount
     }
 
@@ -28,14 +28,14 @@ class ScrollViewAutoScroller {
 
      - parameter animated: Indicates whether scroll should be animated or not.
      */
-    func scrollToBottomAnimated(animated: Bool) {
+    func scrollToBottomAnimated(_ animated: Bool) {
 
-        guard let scrollView = self.scrollView where shouldAllowScrollAction else {
+        guard let scrollView = self.scrollView, shouldAllowScrollAction else {
             autoScrollInvocationSuppressCounter += 1
             return
         }
 
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             let rect = CGRect(x: 0, y: scrollView.contentSize.height - 1, width: 1, height: 1)
             scrollView.scrollRectToVisible(rect, animated: animated)
         }

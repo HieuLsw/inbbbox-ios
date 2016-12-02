@@ -15,12 +15,12 @@ struct Bucket: BucketType {
     let name: String
     let attributedDescription: NSAttributedString?
     let shotsCount: UInt
-    let createdAt: NSDate
+    let createdAt: Date
     let owner: UserType
 }
 
 extension Bucket: Mappable {
-    static var map: JSON -> Bucket {
+    static var map: (JSON) -> Bucket {
         return { json in
 
             let stringDate = json[Key.CreatedAt.rawValue].stringValue
@@ -36,13 +36,13 @@ extension Bucket: Mappable {
                 name: json[Key.Name.rawValue].stringValue,
                 attributedDescription: attributedDescription,
                 shotsCount: json[Key.ShotsCount.rawValue].uIntValue,
-                createdAt: Formatter.Date.Timestamp.dateFromString(stringDate)!,
+                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
                 owner: User.map(json[Key.User.rawValue])
             )
         }
     }
 
-    private enum Key: String {
+    fileprivate enum Key: String {
         case Identifier = "id"
         case Name = "name"
         case Description = "description"

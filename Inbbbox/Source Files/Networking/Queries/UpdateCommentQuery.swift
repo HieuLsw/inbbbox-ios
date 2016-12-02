@@ -12,7 +12,7 @@ struct UpdateCommentQuery: Query {
 
     let method = Method.PUT
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for updating comment.
     ///
@@ -21,6 +21,6 @@ struct UpdateCommentQuery: Query {
     /// - parameter withBody: New comment's body.
     init(shot: ShotType, comment: CommentType, withBody body: String) {
         path = "/shots/" + shot.identifier + "/comments/" + comment.identifier
-        parameters["body"] = body
+        parameters["body"] = body as AnyObject?
     }
 }

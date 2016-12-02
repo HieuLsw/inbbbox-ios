@@ -17,15 +17,15 @@ extension String {
     /// - parameter constrainedToWidth: Maximum width of bounding rect.
     ///
     /// - returns: Bounding rect.
-    func boundingRectWithFont(font: UIFont, constrainedToWidth width: CGFloat) -> CGRect {
+    func boundingRectWithFont(_ font: UIFont, constrainedToWidth width: CGFloat) -> CGRect {
 
-        let size = CGSize(width: width, height: CGFloat.max)
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let attributes = [NSFontAttributeName: font]
-        let rect = NSString(string: self).boundingRectWithSize(size,
-                                                      options: .UsesLineFragmentOrigin,
+        let rect = NSString(string: self).boundingRect(with: size,
+                                                      options: .usesLineFragmentOrigin,
                                                    attributes: attributes,
                                                       context: nil)
 
-        return CGRectIntegral(rect)
+        return rect.integral
     }
 }

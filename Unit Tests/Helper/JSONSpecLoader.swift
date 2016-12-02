@@ -16,19 +16,19 @@ class JSONSpecLoader {
     
     static let sharedInstance = JSONSpecLoader()
 
-    func jsonWithResourceName(name: String) -> JSON {
+    func jsonWithResourceName(_ name: String) -> JSON {
         
-        let file = NSBundle(forClass: self.dynamicType).pathForResource(name, ofType:"json")
-        let data = NSData(contentsOfFile: file!)
-        return JSON(data: data!)
+        let fileURL = URL(fileURLWithPath: Bundle(for: type(of: self)).path(forResource: name, ofType:"json")!)
+        let data = try! Data(contentsOf: fileURL)
+        return JSON(data: data)
     }
     
-    func fixtureShotJSON(configuration: [(identifier: Int, animated: Bool)]) -> [JSON] {
+    func fixtureShotJSON(_ configuration: [(identifier: Int, animated: Bool)]) -> [JSON] {
         
         let json = fixtureJSONArrayWithResourceName("Shot", count: configuration.count)
         var array = [JSON]()
         
-        for (index, var element) in json.enumerate() {
+        for (index, var element) in json.enumerated() {
             element["animated"].boolValue = configuration[index].animated
             element["id"].intValue = configuration[index].identifier
             
@@ -69,7 +69,7 @@ class JSONSpecLoader {
 
 private extension JSONSpecLoader {
     
-    func fixtureJSONArrayWithResourceName(name: String, count: Int) -> [JSON] {
+    func fixtureJSONArrayWithResourceName(_ name: String, count: Int) -> [JSON] {
         
         var array = [JSON]()
         

@@ -11,7 +11,7 @@ import UIKit
 struct ShotCellCommentActionAnimationDescriptor: AnimationDescriptor {
 
     weak var shotCell: ShotCollectionViewCell?
-    var animationType = AnimationType.Plain
+    var animationType = AnimationType.plain
     var delay = 0.0
     var options: UIViewAnimationOptions = []
     var animations: () -> Void
@@ -20,15 +20,15 @@ struct ShotCellCommentActionAnimationDescriptor: AnimationDescriptor {
     init(shotCell: ShotCollectionViewCell, swipeCompletion: (() -> ())?) {
         self.shotCell = shotCell
         animations = {
-            let contentViewWidht = CGRectGetWidth(shotCell.contentView.bounds)
+            let contentViewWidht = shotCell.contentView.bounds.width
             shotCell.commentImageViewRightConstraint?.constant =
                     -round(contentViewWidht / 2 -
-                    shotCell.commentImageView.intrinsicContentSize().width / 2)
+                    shotCell.commentImageView.intrinsicContentSize.width / 2)
             shotCell.commentImageViewWidthConstraint?.constant =
-                    shotCell.commentImageView.intrinsicContentSize().width
+                    shotCell.commentImageView.intrinsicContentSize.width
             shotCell.contentView.layoutIfNeeded()
             shotCell.shotImageView.transform =
-                    CGAffineTransformTranslate(CGAffineTransformIdentity, -contentViewWidht, 0)
+                    CGAffineTransform.identity.translatedBy(x: -contentViewWidht, y: 0)
             shotCell.messageLabel.alpha = 1
         }
         completion = { _ in

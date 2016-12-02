@@ -11,6 +11,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 # Initial configuration
 platform :ios, '8.2'
+swift_version = '3.0'
 inhibit_all_warnings!
 use_frameworks!
 
@@ -23,36 +24,33 @@ plugin 'cocoapods-keys', {
 
 target 'Inbbbox' do
 
-  pod 'AsyncSwift', '~> 1.6'
-  pod 'KeychainAccess', '~> 2.3'
-  pod 'PromiseKit', '~> 3.2'
-  pod 'SwiftyJSON', '~> 2.3'
+  pod 'AsyncSwift', '~> 2.0'
+  pod 'KeychainAccess', '~> 3.0'
+  pod 'PromiseKit', '~> 4.0'
+  pod 'SwiftyJSON', '~> 3.1'
   pod 'HockeySDK', '~> 4.1'
   pod 'PureLayout', '~> 3.0'
-  pod 'SwiftyUserDefaults', '~> 2.0'
+  pod 'SwiftyUserDefaults', '~> 3.0'
   #for older swift version 
-  pod 'DeviceKit', :git => 'https://github.com/dennisweissmann/DeviceKit.git', :branch => 'swift-2.3-unsupported'
+  pod 'DeviceKit', '~> 1.0'
   pod 'GPUImage', '~> 0.1'
-  #fork cause of https://github.com/icanzilb/EasyAnimation/issues/25
-  pod 'EasyAnimation', :git => 'https://git@github.com/PatrykKaczmarek/EasyAnimation.git', :commit => '3e97dc7e2f262222e2fd614ff5143d6432f73a7d'
   pod 'FLAnimatedImage', '~> 1.0'
   pod 'ZFDragableModalTransition', '~> 0.6'
-  #fork cause of https://github.com/Haneke/HanekeSwift/pull/307
-  pod 'HanekeSwift', :git => 'https://github.com/pikor/HanekeSwift.git'
+  pod 'HanekeSwift', :git => 'https://github.com/Haneke/HanekeSwift.git', :branch => 'feature/swift-3'
   pod 'DZNEmptyDataSet', '~> 1.7'
   pod 'GoogleAnalytics', '~> 3.14'
   pod 'TTTAttributedLabel', '~> 2.0'
-  #fork because of private imageView property, overwrited with animated ImageView subclass
-  pod 'ImageViewer', :git => 'https://github.com/twalenciak/ImageViewer.git', :branch => 'gif_loading'
+  #fork until this will be merged: https://github.com/MailOnline/ImageViewer/pull/91
+  pod 'ImageViewer', :git => 'https://github.com/Siemian/ImageViewer'
   #fork because of styling private properties
-  pod 'AOAlertController', :git => 'https://github.com/pikor/AOAlertController/', :commit => '30e32c5cc66acf83dc1ec0d0649c234f4eee7846'
+  pod 'AOAlertController', :git => 'https://github.com/0legAdamov/AOAlertController', :tag => 'v1.2.1'
 
   target 'Unit Tests' do
     inherit! :search_paths
-    pod 'Quick', '~> 0.9.3', :configurations => ['Test']
-    pod 'Nimble', '~> 4.1', :configurations => ['Test']
-    pod 'Dobby', '~> 0.5', :configurations => ['Test']
-    pod 'Mockingjay', '~> 1.3.1', :configurations => ['Test']
+    pod 'Quick', '~> 0.10', :configurations => ['Test']
+    pod 'Nimble', '~> 5.0', :configurations => ['Test']
+    pod 'Dobby', :git => 'https://github.com/trivago/Dobby.git', :tag => '0.7.0', :configurations => ['Test']
+    pod 'Mockingjay', '~> 2.0', :configurations => ['Test']
   end
 
 end
@@ -69,6 +67,9 @@ post_install do |installer|
       }.each { |value, configs|
         target.set_build_setting('CODE_SIGN_IDENTITY[sdk=iphoneos*]', value, configs)
       }
+      target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+        end
     }
 
   end

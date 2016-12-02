@@ -20,24 +20,24 @@ protocol UserToURLProvider {
     /// - parameter user: Team that is converted.
     ///
     /// - returns: URL represantation of user.
-    func urlForUser(user: UserType) -> NSURL?
+    func urlForUser(_ user: UserType) -> URL?
 
     /// Converts team to URL represantation of team.
     ///
     /// - parameter team: Team that is converted.
     ///
     /// - returns: URL represantation of team.
-    func urlForTeam(team: TeamType) -> NSURL?
+    func urlForTeam(_ team: TeamType) -> URL?
 
 }
 
 extension UserToURLProvider {
 
-    func urlForUser(user: UserType) -> NSURL? {
-        return NSURL(string: user.identifier)
+    func urlForUser(_ user: UserType) -> URL? {
+        return URL(string: user.identifier)
     }
 
-    func urlForTeam(team: TeamType) -> NSURL? {
-        return NSURL(string: team.identifier)
+    func urlForTeam(_ team: TeamType) -> URL? {
+        return URL(string: team.identifier)
     }
 }

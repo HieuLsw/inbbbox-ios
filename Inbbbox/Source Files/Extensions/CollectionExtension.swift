@@ -8,26 +8,28 @@
 
 import Foundation
 
-extension CollectionType {
+extension Collection {
 
     /// Shuffle CollectionType.
     ///
     /// - returns: Same collection with random order of elements.
-    func shuffle() -> [Generator.Element] {
+    func shuffle() -> [Iterator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
         return list
     }
 }
 
-private extension MutableCollectionType where Index == Int {
+private extension MutableCollection where Index == Int {
     mutating func shuffleInPlace() {
         if count < 2 { return }
 
-        for i in 0..<count - 1 {
-            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+        for i in 0..<UInt32(count.toIntMax() - 1) {
+            let d = UInt32(count.toIntMax()) - i
+            let random = arc4random_uniform(UInt32(d))
+            let j = UInt32(random + i)
             guard i != j else { continue }
-            swap(&self[i], &self[j])
+            swap(&self[Int(i)], &self[Int(j)])
         }
     }
 }

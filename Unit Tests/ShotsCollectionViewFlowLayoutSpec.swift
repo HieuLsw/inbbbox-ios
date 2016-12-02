@@ -16,7 +16,7 @@ class ShotsCollectionViewFlowLayoutSpec: QuickSpec {
         beforeEach {
             
             sut = ShotsCollectionViewFlowLayout()
-            collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: sut!)
+            collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: sut!)
         }
 
         afterEach() {
@@ -28,7 +28,7 @@ class ShotsCollectionViewFlowLayoutSpec: QuickSpec {
             beforeEach {
                 Settings.Customization.ShowAuthor = false
                 collectionView!.bounds = CGRect(x: 0, y: 0, width: 375, height: 667)
-                sut!.prepareLayout()
+                sut!.prepare()
             }
 
             it("should have proper item size") {
@@ -54,7 +54,7 @@ class ShotsCollectionViewFlowLayoutSpec: QuickSpec {
             beforeEach {
                 Settings.Customization.ShowAuthor = true
                 collectionView!.bounds = CGRect(x: 0, y: 0, width: 375, height: 667)
-                sut!.prepareLayout()
+                sut!.prepare()
             }
             
             it("should have proper item size") {

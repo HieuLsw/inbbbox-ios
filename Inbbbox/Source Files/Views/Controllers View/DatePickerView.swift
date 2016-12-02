@@ -11,11 +11,11 @@ import PureLayout
 
 class DatePickerView: UIView {
 
-    let datePicker = UIDatePicker.newAutoLayoutView()
-    private let contentView = UIView.newAutoLayoutView()
-    private let separatorLine = UIView.newAutoLayoutView()
+    let datePicker = UIDatePicker.newAutoLayout()
+    fileprivate let contentView = UIView.newAutoLayout()
+    fileprivate let separatorLine = UIView.newAutoLayout()
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +28,7 @@ class DatePickerView: UIView {
 
         datePicker.backgroundColor = currentMode.datePickerBackgroundColor
         datePicker.setValue(currentMode.datePickerTextColor, forKey: "textColor")
-        datePicker.datePickerMode = .Time
+        datePicker.datePickerMode = .time
         contentView.addSubview(datePicker)
 
         separatorLine.backgroundColor = currentMode.datePickerViewSeparatorColor
@@ -37,7 +37,7 @@ class DatePickerView: UIView {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message="Use init(frame:) method instead")
+    @available(*, unavailable, message: "Use init(frame:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,19 +47,19 @@ class DatePickerView: UIView {
         if !didSetConstraints {
             didSetConstraints = true
 
-            contentView.autoAlignAxisToSuperviewAxis(.Vertical)
-            contentView.autoMatchDimension(.Width, toDimension: .Width, ofView: self)
-            contentView.autoSetDimension(.Height, toSize: 217)
-            contentView.autoPinEdgeToSuperviewEdge(.Top)
+            contentView.autoAlignAxis(toSuperviewAxis: .vertical)
+            contentView.autoMatch(.width, to: .width, of: self)
+            contentView.autoSetDimension(.height, toSize: 217)
+            contentView.autoPinEdge(toSuperviewEdge: .top)
 
             datePicker.autoCenterInSuperview()
-            datePicker.autoMatchDimension(.Width, toDimension: .Width, ofView: contentView)
-            datePicker.autoSetDimension(.Height, toSize: 177)
+            datePicker.autoMatch(.width, to: .width, of: contentView)
+            datePicker.autoSetDimension(.height, toSize: 177)
 
-            separatorLine.autoAlignAxisToSuperviewAxis(.Vertical)
-            separatorLine.autoMatchDimension(.Width, toDimension: .Width, ofView: contentView)
-            separatorLine.autoSetDimension(.Height, toSize: 1)
-            separatorLine.autoPinEdgeToSuperviewEdge(.Bottom, withInset: -1)
+            separatorLine.autoAlignAxis(toSuperviewAxis: .vertical)
+            separatorLine.autoMatch(.width, to: .width, of: contentView)
+            separatorLine.autoSetDimension(.height, toSize: 1)
+            separatorLine.autoPinEdge(toSuperviewEdge: .bottom, withInset: -1)
         }
 
         super.updateConstraints()

@@ -28,13 +28,13 @@ class ResponsableSpec: QuickSpec {
         describe("when respond with data") {
             
             var response: Response?
-            var error: ErrorType?
+            var error: Error?
             
             beforeEach {
-                let data = try! NSJSONSerialization.dataWithJSONObject(["fixture.key" : "fixture.value"], options: .PrettyPrinted)
+                let data = try! JSONSerialization.data(withJSONObject: ["fixture.key" : "fixture.value"], options: .prettyPrinted)
                 sut.responseWithData(data, response: self.mockResponse(200)).then { _response in
                     response = _response
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
             }
             
             afterEach {
@@ -70,12 +70,12 @@ class ResponsableSpec: QuickSpec {
         describe("when respond with server error") {
             
             var response: Response?
-            var error: ErrorType?
+            var error: Error?
             
             beforeEach {
                 sut.responseWithData(nil, response: self.mockResponse(422)).then { _ -> Void in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
             }
@@ -101,14 +101,14 @@ class ResponsableSpec: QuickSpec {
         describe("when respond with dictionary of errors") {
             
             var response: Response?
-            var error: ErrorType?
+            var error: Error?
             
             beforeEach {
                 let json = ["errors" : [["message" : "fixture.message"]]]
-                let data = try! NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
+                let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                 sut.responseWithData(data, response: self.mockResponse(422)).then { _ -> Void in
                     fail()
-                }.error { _error in
+                }.catch { _error in
                     error = _error
                 }
             }
@@ -141,9 +141,9 @@ private struct ResponsableMock: Responsable {}
 
 private extension ResponsableSpec {
     
-    func mockResponse(statusCode: Int) -> NSURLResponse {
-        let url = NSURL(string: "http://fixture.host.co")!
+    func mockResponse(_ statusCode: Int) -> URLResponse {
+        let url = URL(string: "http://fixture.host.co")!
         let headerFields = ["fixture.header": "fixture.http.header.field"]
-        return NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: nil, headerFields: headerFields)!
+        return HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: headerFields)!
     }
 }

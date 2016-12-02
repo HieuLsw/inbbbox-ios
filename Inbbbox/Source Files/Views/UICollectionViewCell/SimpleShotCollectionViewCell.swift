@@ -10,14 +10,14 @@ import UIKit
 
 class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDependentHeight {
 
-    let shotImageView = UIImageView.newAutoLayoutView()
-    let gifLabel = GifIndicatorView.newAutoLayoutView()
-    private var didSetConstraints = false
+    let shotImageView = UIImageView.newAutoLayout()
+    let gifLabel = GifIndicatorView.newAutoLayout()
+    fileprivate var didSetConstraints = false
     var isRegisteredTo3DTouch = false
 
     // MARK: Life cycle
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -36,7 +36,7 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
 
     // MARK: UIView
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -45,8 +45,8 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
         if !didSetConstraints {
             didSetConstraints = true
             shotImageView.autoPinEdgesToSuperviewEdges()
-            gifLabel.autoPinEdgeToSuperviewEdge(.Right, withInset: 5)
-            gifLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 5)
+            gifLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 5)
+            gifLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 5)
         }
     }
 
@@ -54,11 +54,6 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
         super.prepareForReuse()
 
         shotImageView.image = nil
-    }
-
-    // MARK: - Reusable
-    static var reuseIdentifier: String {
-        return "SimpleShotCollectionViewCellIdentifier"
     }
 
     // MARK: - Width dependent height

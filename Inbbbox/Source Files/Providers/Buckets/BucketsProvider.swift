@@ -20,12 +20,12 @@ class BucketsProvider {
         return managedBucketsProvider.provideMyBuckets()
     }
 
-    func provideBucketsForUser(user: UserType) -> Promise<[BucketType]?> {
+    func provideBucketsForUser(_ user: UserType) -> Promise<[BucketType]?> {
         assert(UserStorage.isUserSignedIn, "Cannot provide buckets when user is not signed in")
         return apiBucketsProvider.provideBucketsForUser(user)
     }
 
-    func provideBucketsForUsers(users: [UserType]) -> Promise<[BucketType]?> {
+    func provideBucketsForUsers(_ users: [UserType]) -> Promise<[BucketType]?> {
         assert(UserStorage.isUserSignedIn, "Cannot provide buckets when user is not signed in")
         return apiBucketsProvider.provideBucketsForUsers(users)
     }

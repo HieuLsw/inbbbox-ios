@@ -22,11 +22,11 @@ private var horizontalSpaceBetweenAvatarAndText: CGFloat {
 }
 
 enum EditActionType {
-    case Editing
-    case Reporting
+    case editing
+    case reporting
 }
 
-class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
+class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
 
     weak var delegate: UICollectionViewCellWithLabelContainingClickableLinksDelegate?
 
@@ -36,13 +36,13 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
     var unlikeActionHandler: (() -> Void)?
 
     let avatarView = AvatarView(size: avatarSize, bordered: false)
-    let authorLabel = TTTAttributedLabel.newAutoLayoutView()
-    let dateLabel = UILabel.newAutoLayoutView()
-    private let likesImageView: UIImageView = UIImageView(image: UIImage(named: "ic-like-emptystate"))
-    let likesCountLabel = UILabel.newAutoLayoutView()
-    private let commentLabel = TTTAttributedLabel.newAutoLayoutView()
-    private let editView = CommentEditView.newAutoLayoutView()
-    private let separatorView = UIView.newAutoLayoutView()
+    let authorLabel = TTTAttributedLabel.newAutoLayout()
+    let dateLabel = UILabel.newAutoLayout()
+    fileprivate let likesImageView: UIImageView = UIImageView(image: UIImage(named: "ic-like-emptystate"))
+    let likesCountLabel = UILabel.newAutoLayout()
+    fileprivate let commentLabel = TTTAttributedLabel.newAutoLayout()
+    fileprivate let editView = CommentEditView.newAutoLayout()
+    fileprivate let separatorView = UIView.newAutoLayout()
     
     var likedByMe: Bool = false {
         didSet {
@@ -52,13 +52,13 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
     }
 
     // Regards clickable links in comment label
-    private let layoutManager = NSLayoutManager()
-    private let textContainer = NSTextContainer(size: CGSize.zero)
-    lazy private var textStorage: NSTextStorage = { [unowned self] in
+    fileprivate let layoutManager = NSLayoutManager()
+    fileprivate let textContainer = NSTextContainer(size: CGSize.zero)
+    lazy fileprivate var textStorage: NSTextStorage = { [unowned self] in
         return NSTextStorage(attributedString: self.commentLabel.attributedText ?? NSAttributedString())
     }()
 
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,8 +76,8 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(authorLabel)
 
         commentLabel.numberOfLines = 0
-        commentLabel.lineBreakMode = .ByWordWrapping
-        commentLabel.userInteractionEnabled = true
+        commentLabel.lineBreakMode = .byWordWrapping
+        commentLabel.isUserInteractionEnabled = true
         commentLabel.linkAttributes = [NSForegroundColorAttributeName : ColorModeProvider.current().shotDetailsCommentLinkTextColor]
         commentLabel.delegate = self
         contentView.addSubview(commentLabel)
@@ -85,18 +85,18 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         dateLabel.numberOfLines = 0
         contentView.addSubview(dateLabel)
 
-        likesCountLabel.font = UIFont.helveticaFont(.Neue, size: 10)
+        likesCountLabel.font = UIFont.helveticaFont(.neue, size: 10)
         likesCountLabel.textColor = ColorModeProvider.current().shotDetailsCommentLikesCountTextColor
 
         contentView.addSubview(likesImageView)
         contentView.addSubview(likesCountLabel)
 
         editView.cancelButton.addTarget(self,
-                action: #selector(cancelButtonDidTap(_:)), forControlEvents: .TouchUpInside)
+                action: #selector(cancelButtonDidTap(_:)), for: .touchUpInside)
         contentView.addSubview(editView)
 
         editView.likeButton.addTarget(self,
-                action: #selector(likeButtonDidTap(_:)), forControlEvents: .TouchUpInside)
+                action: #selector(likeButtonDidTap(_:)), for: .touchUpInside)
         contentView.addSubview(editView)
         
         separatorView.backgroundColor = ColorModeProvider.current().cellSeparator
@@ -105,7 +105,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -113,7 +113,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let preferredMaxLayoutWidth = frame.size.width - (self.dynamicType.maximumContentWidth ?? 0)
+        let preferredMaxLayoutWidth = frame.size.width - (type(of: self).maximumContentWidth ?? 0)
 
         authorLabel.preferredMaxLayoutWidth = preferredMaxLayoutWidth
         commentLabel.preferredMaxLayoutWidth = preferredMaxLayoutWidth
@@ -126,47 +126,47 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            let verticalSpacing = self.dynamicType.verticalInteritemSpacing
-            let insets = self.dynamicType.contentInsets
+            let verticalSpacing = type(of: self).verticalInteritemSpacing
+            let insets = type(of: self).contentInsets
             
             contentView.autoPinEdgesToSuperviewEdges()
             
-            avatarView.autoPinEdgeToSuperviewEdge(.Left, withInset: insets.left)
-            avatarView.autoPinEdgeToSuperviewEdge(.Top, withInset: insets.top)
-            avatarView.autoSetDimensionsToSize(avatarView.frame.size)
-            avatarView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: insets.bottom, relation: .GreaterThanOrEqual)
+            avatarView.autoPinEdge(toSuperviewEdge: .left, withInset: insets.left)
+            avatarView.autoPinEdge(toSuperviewEdge: .top, withInset: insets.top)
+            avatarView.autoSetDimensions(to: avatarView.frame.size)
+            avatarView.autoPinEdge(toSuperviewEdge: .bottom, withInset: insets.bottom, relation: .greaterThanOrEqual)
 
-            authorLabel.autoPinEdge(.Top, toEdge: .Top, ofView: authorLabel.superview!, withOffset: insets.top)
-            authorLabel.autoPinEdge(.Left, toEdge: .Right, ofView: avatarView,
+            authorLabel.autoPinEdge(.top, to: .top, of: authorLabel.superview!, withOffset: insets.top)
+            authorLabel.autoPinEdge(.left, to: .right, of: avatarView,
                     withOffset: horizontalSpaceBetweenAvatarAndText)
-            authorLabel.autoPinEdgeToSuperviewEdge(.Right, withInset: insets.right)
-            authorLabel.autoSetDimension(.Height, toSize: 20, relation: .GreaterThanOrEqual)
+            authorLabel.autoPinEdge(toSuperviewEdge: .right, withInset: insets.right)
+            authorLabel.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
 
-            commentLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: authorLabel, withOffset: verticalSpacing)
-            commentLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: dateLabel)
-            commentLabel.autoPinEdge(.Left, toEdge: .Left, ofView: authorLabel)
-            commentLabel.autoPinEdge(.Right, toEdge: .Right, ofView: authorLabel, withOffset: insets.right)
+            commentLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: verticalSpacing)
+            commentLabel.autoPinEdge(.bottom, to: .top, of: dateLabel)
+            commentLabel.autoPinEdge(.left, to: .left, of: authorLabel)
+            commentLabel.autoPinEdge(.right, to: .right, of: authorLabel, withOffset: insets.right)
 
-            dateLabel.autoPinEdgeToSuperviewEdge(.Bottom, withInset: insets.bottom)
-            dateLabel.autoPinEdge(.Left, toEdge: .Left, ofView: authorLabel)
-            dateLabel.autoSetDimension(.Height, toSize: 26, relation: .GreaterThanOrEqual)
+            dateLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: insets.bottom)
+            dateLabel.autoPinEdge(.left, to: .left, of: authorLabel)
+            dateLabel.autoSetDimension(.height, toSize: 26, relation: .greaterThanOrEqual)
 
-            likesCountLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: dateLabel)
-            likesCountLabel.autoPinEdge(.Right, toEdge: .Right, ofView: self, withOffset: -insets.right)
+            likesCountLabel.autoAlignAxis(.horizontal, toSameAxisOf: dateLabel)
+            likesCountLabel.autoPinEdge(.right, to: .right, of: self, withOffset: -insets.right)
 
-            likesImageView.autoSetDimensionsToSize(likesImageSize)
-            likesImageView.autoAlignAxis(.Horizontal, toSameAxisOfView: dateLabel)
-            likesImageView.autoPinEdge(.Trailing, toEdge: .Leading, ofView: likesCountLabel, withOffset: -3)
+            likesImageView.autoSetDimensions(to: likesImageSize)
+            likesImageView.autoAlignAxis(.horizontal, toSameAxisOf: dateLabel)
+            likesImageView.autoPinEdge(.trailing, to: .leading, of: likesCountLabel, withOffset: -3)
 
-            editView.autoPinEdge(.Right, toEdge: .Right, ofView: self)
-            editView.autoPinEdge(.Left, toEdge: .Left, ofView: self)
-            editView.autoPinEdge(.Top, toEdge: .Top, ofView: self)
-            editView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: self)
+            editView.autoPinEdge(.right, to: .right, of: self)
+            editView.autoPinEdge(.left, to: .left, of: self)
+            editView.autoPinEdge(.top, to: .top, of: self)
+            editView.autoPinEdge(.bottom, to: .bottom, of: self)
             
-            separatorView.autoPinEdge(.Left, toEdge: .Left, ofView: dateLabel)
-            separatorView.autoPinEdgeToSuperviewEdge(.Right)
-            separatorView.autoPinEdgeToSuperviewEdge(.Bottom)
-            separatorView.autoSetDimension(.Height, toSize: 1)
+            separatorView.autoPinEdge(.left, to: .left, of: dateLabel)
+            separatorView.autoPinEdge(toSuperviewEdge: .right)
+            separatorView.autoPinEdge(toSuperviewEdge: .bottom)
+            separatorView.autoSetDimension(.height, toSize: 1)
         }
 
         super.updateConstraints()
@@ -181,33 +181,33 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         avatarView.imageView.image = nil
         editView.deleteButton.removeTarget(self,
                                            action: #selector(deleteButtonDidTap(_:)),
-                                           forControlEvents: .TouchUpInside)
+                                           for: .touchUpInside)
         editView.deleteButton.removeTarget(self,
                                            action: #selector(reportButtonDidTap(_:)),
-                                           forControlEvents: .TouchUpInside)
+                                           for: .touchUpInside)
         showEditView(false)
         likedByMe = false
     }
 
-    func showEditView(show: Bool, forActionType action: EditActionType = .Editing) {
+    func showEditView(_ show: Bool, forActionType action: EditActionType = .editing) {
 
-        editView.hidden = !show
+        editView.isHidden = !show
 
         guard show else { return }
 
         switch action {
-        case .Editing:
+        case .editing:
             editView.configureForEditing()
             editView.deleteButton.addTarget(self,
-                                            action: #selector(deleteButtonDidTap(_:)), forControlEvents: .TouchUpInside)
-        case .Reporting:
+                                            action: #selector(deleteButtonDidTap(_:)), for: .touchUpInside)
+        case .reporting:
             editView.configureForReporting()
             editView.deleteButton.addTarget(self,
-                                            action: #selector(reportButtonDidTap(_:)), forControlEvents: .TouchUpInside)
+                                            action: #selector(reportButtonDidTap(_:)), for: .touchUpInside)
         }
     }
 
-    func setCommentLabelAttributedText(attributedText: NSAttributedString) {
+    func setCommentLabelAttributedText(_ attributedText: NSAttributedString) {
 
         commentLabel.setText(attributedText)
 
@@ -219,10 +219,10 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         textContainer.maximumNumberOfLines = commentLabel.numberOfLines
     }
 
-    func setLinkInAuthorLabel(URL: NSURL, delegate: TTTAttributedLabelDelegate) {
+    func setLinkInAuthorLabel(_ URL: URL, delegate: TTTAttributedLabelDelegate) {
         let linkAttributes = [
                 NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentAuthorTextColor,
-                NSFontAttributeName: UIFont.helveticaFont(.NeueMedium, size: 16)
+                NSFontAttributeName: UIFont.helveticaFont(.neueMedium, size: 16)
         ]
         let authorText = authorLabel.text ?? ""
         let range = NSRange(location: 0, length: authorText.characters.count)
@@ -230,7 +230,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell {
         authorLabel.activeLinkAttributes = linkAttributes
         authorLabel.inactiveLinkAttributes = linkAttributes
         authorLabel.extendsLinkTouchArea = false
-        authorLabel.addLinkToURL(URL, withRange: range)
+        authorLabel.addLink(to: URL, with: range)
         authorLabel.delegate = delegate
     }
 }
@@ -256,7 +256,7 @@ extension ShotDetailsCommentCollectionViewCell {
 }
 
 extension ShotDetailsCommentCollectionViewCell: TTTAttributedLabelDelegate {
-    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWith url: URL!) {
         delegate?.urlInLabelTapped(url)
     }
 }
@@ -277,12 +277,5 @@ extension ShotDetailsCommentCollectionViewCell: AutoSizable {
 
     static var verticalInteritemSpacing: CGFloat {
         return 5
-    }
-}
-
-extension ShotDetailsCommentCollectionViewCell: Reusable {
-
-    class var reuseIdentifier: String {
-        return String(ShotDetailsCommentCollectionViewCell)
     }
 }

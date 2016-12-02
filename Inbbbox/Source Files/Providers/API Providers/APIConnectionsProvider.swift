@@ -53,7 +53,7 @@ class APIConnectionsProvider: PageableProvider {
 
      - returns: Promise which resolves with followers or nil.
      */
-    func provideFollowersForUser(user: UserType) -> Promise<[Follower]?> {
+    func provideFollowersForUser(_ user: UserType) -> Promise<[Follower]?> {
         return provideFollowersForUsers([user])
     }
 
@@ -64,7 +64,7 @@ class APIConnectionsProvider: PageableProvider {
 
      - returns: Promise which resolves with followers or nil.
      */
-    func provideFollowersForUsers(users: [UserType]) -> Promise<[Follower]?> {
+    func provideFollowersForUsers(_ users: [UserType]) -> Promise<[Follower]?> {
 
         let queries = users.map { FollowersQuery(followersOfUser: $0) } as [Query]
         return provideUsersWithQueries(queries, serializationKey: followerSerializationKey,
@@ -78,7 +78,7 @@ class APIConnectionsProvider: PageableProvider {
 
      - returns: Promise which resolves with followees or nil.
      */
-    func provideFolloweesForUser(user: UserType) -> Promise<[Followee]?> {
+    func provideFolloweesForUser(_ user: UserType) -> Promise<[Followee]?> {
         return provideFolloweesForUsers([user])
     }
 
@@ -89,7 +89,7 @@ class APIConnectionsProvider: PageableProvider {
 
      - returns: Promise which resolves with followees or nil.
      */
-    func provideFolloweesForUsers(users: [UserType]) -> Promise<[Followee]?> {
+    func provideFolloweesForUsers(_ users: [UserType]) -> Promise<[Followee]?> {
 
         let queries = users.map { FolloweesQuery(followeesOfUser: $0) } as [Query]
         return provideUsersWithQueries(queries, serializationKey: followeeSerializationKey,
@@ -105,7 +105,7 @@ class APIConnectionsProvider: PageableProvider {
      - returns: Promise which resolves with shots or nil.
      */
     func nextPage() -> Promise<[UserType]?> {
-        return fetchPage(nextPageFor(User))
+        return fetchPage(nextPageFor(User.self))
     }
 
     /**
@@ -117,13 +117,13 @@ class APIConnectionsProvider: PageableProvider {
      - returns: Promise which resolves with shots or nil.
      */
     func previousPage() -> Promise<[UserType]?> {
-        return fetchPage(previousPageFor(User))
+        return fetchPage(previousPageFor(User.self))
     }
 }
 
 private extension APIConnectionsProvider {
 
-    func provideUsersWithQueries(queries: [Query], serializationKey key: String? = nil,
+    func provideUsersWithQueries(_ queries: [Query], serializationKey key: String? = nil,
                                  authentizationRequired: Bool) -> Promise<[UserType]?> {
         return Promise<[UserType]?> { fulfill, reject in
 
@@ -133,18 +133,18 @@ private extension APIConnectionsProvider {
                 self.firstPageForQueries(queries, withSerializationKey: key)
             }.then { (users: [User]?) -> Void in
                 fulfill(users.flatMap { $0.map { $0 as UserType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
-    func fetchPage(promise: Promise<[User]?>) -> Promise<[UserType]?> {
+    func fetchPage(_ promise: Promise<[User]?>) -> Promise<[UserType]?> {
         return Promise<[UserType]?> { fulfill, reject in
 
             firstly {
                 promise
             }.then { (users: [User]?) -> Void in
                 fulfill(users.flatMap { $0.map { $0 as UserType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

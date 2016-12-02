@@ -6,7 +6,7 @@ import UIKit
 
 class CenterButtonTabBarController: UITabBarController {
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
     let centerButton = RoundedButton()
     let shotsCollectionViewController = ShotsCollectionViewController()
     let settingsViewController = SettingsViewController()
@@ -14,19 +14,19 @@ class CenterButtonTabBarController: UITabBarController {
     var animatableLikesTabBarItem: UIImageView?
     var animatableBucketsTabBarItem: UIImageView?
     
-    private var currentColorMode = ColorModeProvider.current()
+    fileprivate var currentColorMode = ColorModeProvider.current()
 
     enum CenterButtonViewControllers: Int {
-        case Likes = 0
-        case Buckets = 1
-        case Shots = 2
-        case Followees = 3
-        case Accounts = 4
+        case likes = 0
+        case buckets = 1
+        case shots = 2
+        case followees = 3
+        case accounts = 4
     }
 
     override var selectedIndex: Int {
         didSet {
-            centerButton.selected = selectedViewController == shotsCollectionViewController
+            centerButton.isSelected = selectedViewController == shotsCollectionViewController
         }
     }
 
@@ -64,7 +64,7 @@ class CenterButtonTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tabBar.layer.shadowColor = UIColor(white: 0, alpha: 0.03).CGColor
+        tabBar.layer.shadowColor = UIColor(white: 0, alpha: 0.03).cgColor
         tabBar.layer.shadowRadius = 1
         tabBar.layer.shadowOpacity = 0.6
 
@@ -73,7 +73,7 @@ class CenterButtonTabBarController: UITabBarController {
             tabBar.backgroundImage = UIImage()
         }
 
-        tabBar.translucent = false
+        tabBar.isTranslucent = false
         centerButton.configureForAutoLayout()
         
         centerButton.adaptColorMode(currentColorMode)
@@ -82,26 +82,26 @@ class CenterButtonTabBarController: UITabBarController {
         centerButton.addTarget(
             self,
             action: #selector(didTapCenterButton(_:)),
-            forControlEvents: .TouchUpInside
+            for: .touchUpInside
         )
         tabBar.addSubview(centerButton)
-        centerButton.autoAlignAxisToSuperviewAxis(.Vertical)
-        centerButton.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 8.0)
+        centerButton.autoAlignAxis(toSuperviewAxis: .vertical)
+        centerButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8.0)
         delegate = self
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if let items = tabBar.items where !didUpdateTabBarItems {
+        if let items = tabBar.items, !didUpdateTabBarItems {
             didUpdateTabBarItems = true
             for tabBarItem in items {
                 tabBarItem.titlePositionAdjustment = UIOffsetMake(0, -3)
             }
         }
-        tabBar.bringSubviewToFront(centerButton)
+        tabBar.bringSubview(toFront: centerButton)
         if selectedViewController == shotsCollectionViewController {
-            centerButton.selected = true
+            centerButton.isSelected = true
         }
         prepareAnimatableTabBarItems()
     }
@@ -111,47 +111,47 @@ class CenterButtonTabBarController: UITabBarController {
     /// where app was launched with 3D Touch shortcut.
     func configureForLaunchingWithForceTouchShortcut() {
         tabBar.alpha = 1.0
-        tabBar.userInteractionEnabled = true
+        tabBar.isUserInteractionEnabled = true
     }
 
-    func animateTabBarItem(item: CenterButtonViewControllers) {
-        guard item == .Likes || item == .Buckets else { return }
+    func animateTabBarItem(_ item: CenterButtonViewControllers) {
+        guard item == .likes || item == .buckets else { return }
 
         let bounceAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
         bounceAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
-        bounceAnimation.duration = NSTimeInterval(0.5)
+        bounceAnimation.duration = TimeInterval(0.5)
         bounceAnimation.calculationMode = kCAAnimationCubic
 
-        let itemToAnimate = item == .Likes ? animatableLikesTabBarItem : animatableBucketsTabBarItem
+        let itemToAnimate = item == .likes ? animatableLikesTabBarItem : animatableBucketsTabBarItem
 
-        itemToAnimate?.layer.addAnimation(bounceAnimation, forKey: nil)
+        itemToAnimate?.layer.add(bounceAnimation, forKey: nil)
 
         if let iconImage = itemToAnimate?.image {
-            let renderImage = iconImage.imageWithRenderingMode(.AlwaysOriginal)
+            let renderImage = iconImage.withRenderingMode(.alwaysOriginal)
             itemToAnimate?.image = renderImage
-            itemToAnimate?.tintColor = .blackColor()
+            itemToAnimate?.tintColor = .black
         }
     }
 
 //    MARK: - Actions
 
     func didTapCenterButton(_: UIButton) {
-        centerButton.selected = true
+        centerButton.isSelected = true
         selectedViewController = shotsCollectionViewController
     }
 }
 
 extension CenterButtonTabBarController: UITabBarControllerDelegate {
-    func tabBarController(tabBarController: UITabBarController,
-                          didSelectViewController viewController: UIViewController) {
-        if selectedIndex != CenterButtonViewControllers.Shots.rawValue {
-            centerButton.selected = false
+    func tabBarController(_ tabBarController: UITabBarController,
+                          didSelect viewController: UIViewController) {
+        if selectedIndex != CenterButtonViewControllers.shots.rawValue {
+            centerButton.isSelected = false
         }
     }
 }
 
 extension CenterButtonTabBarController: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         
         setupTabBarItem(forViewControllers: viewControllers, forColorMode: mode)
         centerButton.adaptColorMode(mode)
@@ -160,10 +160,10 @@ extension CenterButtonTabBarController: ColorModeAdaptable {
 
 private extension CenterButtonTabBarController {
 
-    func tabBarItemWithTitle(title: String?, normalImageName: String, selectedImageName:String) -> UITabBarItem {
+    func tabBarItemWithTitle(_ title: String?, normalImageName: String, selectedImageName:String) -> UITabBarItem {
         
-        let image = UIImage(named: normalImageName)?.imageWithRenderingMode(.AlwaysOriginal)
-        let selectedImage = UIImage(named: selectedImageName)?.imageWithRenderingMode(.AlwaysOriginal)
+        let image = UIImage(named: normalImageName)?.withRenderingMode(.alwaysOriginal)
+        let selectedImage = UIImage(named: selectedImageName)?.withRenderingMode(.alwaysOriginal)
 
         let tabBarItem = UITabBarItem(
             title: title,
@@ -175,11 +175,11 @@ private extension CenterButtonTabBarController {
         
         tabBarItem.setTitleTextAttributes(
             [NSForegroundColorAttributeName: ColorModeProvider.current().tabBarSelectedItemTextColor],
-            forState: .Selected
+            for: .selected
         )
         tabBarItem.setTitleTextAttributes(
             [NSForegroundColorAttributeName: ColorModeProvider.current().tabBarNormalItemTextColor],
-            forState: .Normal
+            for: .normal
         )
 
         tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0)
@@ -190,9 +190,9 @@ private extension CenterButtonTabBarController {
     func prepareAnimatableTabBarItems() {
         guard animatableLikesTabBarItem == nil else { return }
 
-        animatableLikesTabBarItem = tabBar.subviews[CenterButtonViewControllers.Likes.rawValue].subviews.first as? UIImageView
-        animatableBucketsTabBarItem = tabBar.subviews[CenterButtonViewControllers.Buckets.rawValue].subviews.first as? UIImageView
-        animatableLikesTabBarItem?.contentMode = .Center
+        animatableLikesTabBarItem = tabBar.subviews[CenterButtonViewControllers.likes.rawValue].subviews.first as? UIImageView
+        animatableBucketsTabBarItem = tabBar.subviews[CenterButtonViewControllers.buckets.rawValue].subviews.first as? UIImageView
+        animatableLikesTabBarItem?.contentMode = .center
     }
     
     func setupTabBarItem(forViewControllers viewControllers: [UIViewController]?, forColorMode mode: ColorModeType) {

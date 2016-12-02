@@ -12,7 +12,7 @@ import PromiseKit
 protocol ProfileViewModel: BaseCollectionViewViewModel {
 
     var title: String { get }
-    var avatarURL: NSURL? { get }
+    var avatarURL: URL? { get }
     var shouldShowFollowButton: Bool { get }
     var collectionIsEmpty: Bool { get }
 

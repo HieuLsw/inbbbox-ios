@@ -21,6 +21,6 @@ protocol URLToUserProvider {
      - returns: user provided from URL
      */
 
-    func userForURL(url: NSURL) -> UserType?
+    func userForURL(_ url: URL) -> UserType?
 
 }

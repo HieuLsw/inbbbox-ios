@@ -17,18 +17,18 @@ final class URLDetector {
     /// - parameter layoutManager: Layout manager of tapped view.
     ///
     /// - returns: Detected URL if exists, otherwise returns `nil`.
-    class func detectUrlFromGestureRecognizer(gestureRecognizer: UIGestureRecognizer,
+    class func detectUrlFromGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                               textContainer: NSTextContainer,
-                                              layoutManager: NSLayoutManager) -> NSURL? {
+                                              layoutManager: NSLayoutManager) -> URL? {
 
         guard let view = gestureRecognizer.view else { return nil }
 
-        var locationOfTouchInLabel = gestureRecognizer.locationInView(gestureRecognizer.view)
-        let glyphRange = layoutManager.glyphRangeForTextContainer(textContainer)
+        var locationOfTouchInLabel = gestureRecognizer.location(in: gestureRecognizer.view)
+        let glyphRange = layoutManager.glyphRange(for: textContainer)
 
         let textOffset: CGPoint = {
             var textOffset = CGPoint.zero
-            let textBounds = layoutManager.boundingRectForGlyphRange(glyphRange, inTextContainer: textContainer)
+            let textBounds = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
             let paddingHeight = (view.bounds.size.height - textBounds.size.height) / 2
             if paddingHeight > 0 {
                 textOffset.y = paddingHeight
@@ -39,10 +39,10 @@ final class URLDetector {
         locationOfTouchInLabel.x -= textOffset.x
         locationOfTouchInLabel.y -= textOffset.y
 
-        let glyphIndex = layoutManager.glyphIndexForPoint(locationOfTouchInLabel, inTextContainer: textContainer)
-        let locationIndex = layoutManager.characterIndexForGlyphAtIndex(glyphIndex)
+        let glyphIndex = layoutManager.glyphIndex(for: locationOfTouchInLabel, in: textContainer)
+        let locationIndex = layoutManager.characterIndexForGlyph(at: glyphIndex)
 
         return (view as? UILabel)?.attributedText?.attribute(NSLinkAttributeName,
-                                                             atIndex: locationIndex, effectiveRange: nil) as? NSURL
+                                                             at: locationIndex, effectiveRange: nil) as? URL
     }
 }

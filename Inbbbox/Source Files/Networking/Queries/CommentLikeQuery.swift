@@ -12,7 +12,7 @@ struct CommentLikeQuery: Query {
 
     let method = Method.POST
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for marking given comment as liked.
     ///

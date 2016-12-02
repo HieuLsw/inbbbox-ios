@@ -53,11 +53,13 @@ class ShotDetailsPageViewControllerDataSourceSpec: QuickSpec {
             describe("when providing data to UPageViewController") {
                 
                 it("nil should be returned when asking for view controller before index of 0") {
-                    expect(sut.pageViewController(pageViewController, viewControllerBeforeViewController: shotDetailsViewController)).to(beNil())
+                    let controller = sut.pageViewController(pageViewController, viewControllerBefore: shotDetailsViewController)
+                    expect(controller).to(beNil())
                 }
                 
                 it("nil should be returned when asking for view controller after index of shots.count - 1") {
-                    expect(sut.pageViewController(pageViewController, viewControllerAfterViewController: shotDetailsViewController)).to(beNil())
+                    let controller = sut.pageViewController(pageViewController, viewControllerAfter: shotDetailsViewController)
+                    expect(controller).to(beNil())
                 }
             }
         }
@@ -98,29 +100,29 @@ class ShotDetailsPageViewControllerDataSourceSpec: QuickSpec {
                 describe("when asking for view controller before index greater than 0") {
                     
                     it("a new view controller should be returned") {
-                        expect(sut.pageViewController(pageViewController, viewControllerBeforeViewController: shotDetailsViewController)).toNot(beNil())
+                        expect(sut.pageViewController(pageViewController, viewControllerBefore: shotDetailsViewController)).toNot(beNil())
                     }
                     
                     it("a new view controller different than initialViewController should be returned") {
-                        expect(sut.pageViewController(pageViewController, viewControllerBeforeViewController: shotDetailsViewController)).toNot(equal(shotDetailsViewController))
+                        expect(sut.pageViewController(pageViewController, viewControllerBefore: shotDetailsViewController)).toNot(equal(shotDetailsViewController))
                     }
                 }
                 
                 describe("when asking for view controller after index less than shots.count - 1") {
                     
                     it("a new view controller should be returned") {
-                        expect(sut.pageViewController(pageViewController, viewControllerAfterViewController: shotDetailsViewController)).toNot(beNil())
+                        expect(sut.pageViewController(pageViewController, viewControllerAfter: shotDetailsViewController)).toNot(beNil())
                     }
                     
                     it("a new view controller different than initialViewController should be returned") {
-                        expect(sut.pageViewController(pageViewController, viewControllerAfterViewController: shotDetailsViewController)).toNot(equal(shotDetailsViewController))
+                        expect(sut.pageViewController(pageViewController, viewControllerAfter: shotDetailsViewController)).toNot(equal(shotDetailsViewController))
                     }
                 }
                 
                 describe("when asking for view controller with the same index as initialViewController") {
                     
                     it("the initialViewController shoulb be returned") {
-                        expect(sut.pageViewController(pageViewController, viewControllerBeforeViewController: sut.pageViewController(pageViewController, viewControllerAfterViewController: shotDetailsViewController)!)).to(equal(shotDetailsViewController))
+                        expect(sut.pageViewController(pageViewController, viewControllerBefore: sut.pageViewController(pageViewController, viewControllerAfter: shotDetailsViewController)!)).to(equal(shotDetailsViewController))
                     }
                 }
             }

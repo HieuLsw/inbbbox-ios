@@ -16,22 +16,22 @@ extension UIWindow {
     ///
     /// - parameter newRootViewController:  new root view controller
     /// - parameter transition:             optional transition animation
-    func setRootViewController(newRootViewController: UIViewController,
+    func setRootViewController(_ newRootViewController: UIViewController,
                                           transition: CATransition? = nil) {
 
         let previousViewController = rootViewController
 
         if let transition = transition {
             // Add the transition
-            layer.addAnimation(transition, forKey: kCATransition)
+            layer.add(transition, forKey: kCATransition)
         }
 
         rootViewController = newRootViewController
 
-        if UIView.areAnimationsEnabled() {
-            UIView.animateWithDuration(CATransaction.animationDuration()) {
+        if UIView.areAnimationsEnabled {
+            UIView.animate(withDuration: CATransaction.animationDuration(), animations: {
                 newRootViewController.setNeedsStatusBarAppearanceUpdate()
-            }
+            }) 
         } else {
             newRootViewController.setNeedsStatusBarAppearanceUpdate()
         }
@@ -40,7 +40,7 @@ extension UIWindow {
         /// as its currently transistioning and presenting a view controller
         if let previousViewController = previousViewController {
             // Allow the view controller to be deallocated
-            previousViewController.dismissViewControllerAnimated(false) {
+            previousViewController.dismiss(animated: false) {
                 // Remove the root view in case its still showing
                 previousViewController.view.removeFromSuperview()
             }

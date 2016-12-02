@@ -23,7 +23,7 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
 
         beforeEach {
             sut = InitialShotsCollectionViewLayout()
-            collectionViewMock = CollectionViewMock(frame: CGRectZero, collectionViewLayout: sut!)
+            collectionViewMock = CollectionViewMock(frame: CGRect(x: 0,y: 0, width: 0, height: 0), collectionViewLayout: sut!)
         }
 
         afterEach() {
@@ -42,7 +42,7 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
 
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
-                    contentSize = sut.collectionViewContentSize()
+                    contentSize = sut.collectionViewContentSize
                 }
 
                 it("should have proper content size") {
@@ -62,8 +62,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 context("when collection view has 2 items in first section") {
 
                     beforeEach {
-                        collectionViewMock.numberOfItemsInSectionStub.on(equals(0), returnValue: 2)
-                        layoutAttributes = sut.layoutAttributesForElementsInRect(CGRectZero)
+                        collectionViewMock.numberOfItemsInSectionStub.on(equals(0), return: 2)
+                        layoutAttributes = sut.layoutAttributesForElements(in: CGRect(x:0, y:0, width: 0, height: 0))
                     }
 
                     it("should have layout attributes for 2 items") {
@@ -130,7 +130,7 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
 
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: 0, y: 0, width: 375, height: 667)
-                    boundsChanged = sut.shouldInvalidateLayoutForBoundsChange(CGRect(x: 0, y: 0, width: 200, height: 100))
+                    boundsChanged = sut.shouldInvalidateLayout(forBoundsChange: CGRect(x: 0, y: 0, width: 200, height: 100))
                 }
 
                 it("should invalidate layout when bounds size changes") {
@@ -145,8 +145,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
                     collectionViewMock.center = CGPoint(x: fixtureCollectionViewBounds.width / 2, y: fixtureCollectionViewBounds.height / 2)
-                    collectionViewMock.numberOfItemsInSectionStub.on(0, returnValue: 1)
-                    initialLayoutAttributes = sut.initialLayoutAttributesForAppearingItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+                    collectionViewMock.numberOfItemsInSectionStub.on(0, return: 1)
+                    initialLayoutAttributes = sut.initialLayoutAttributesForAppearingItem(at: IndexPath(item: 0, section: 0))
                 }
 
                 it("should have proper size") {
@@ -173,8 +173,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
                     collectionViewMock.center = CGPoint(x: fixtureCollectionViewBounds.width / 2, y: fixtureCollectionViewBounds.height / 2)
-                    collectionViewMock.numberOfItemsInSectionStub.on(0, returnValue: 1)
-                    finalLayoutAttributes = sut.finalLayoutAttributesForDisappearingItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+                    collectionViewMock.numberOfItemsInSectionStub.on(0, return: 1)
+                    finalLayoutAttributes = sut.finalLayoutAttributesForDisappearingItem(at: IndexPath(item: 0, section: 0))
                 }
 
                 it("should have proper size") {
@@ -207,7 +207,7 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
-                    contentSize = sut.collectionViewContentSize()
+                    contentSize = sut.collectionViewContentSize
                 }
                 
                 it("should have proper content size") {
@@ -227,8 +227,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 context("when collection view has 2 items in first section") {
                     
                     beforeEach {
-                        collectionViewMock.numberOfItemsInSectionStub.on(0, returnValue: 2)
-                        layoutAttributes = sut.layoutAttributesForElementsInRect(CGRectZero)
+                        collectionViewMock.numberOfItemsInSectionStub.on(0, return: 2)
+                        layoutAttributes = sut.layoutAttributesForElements(in: CGRect(x:0, y:0, width: 0, height: 0))
                     }
                     
                     it("should have layout attributes for 2 items") {
@@ -296,7 +296,7 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: 0, y: 0, width: 375, height: 667)
-                    boundsChanged = sut.shouldInvalidateLayoutForBoundsChange(CGRect(x: 0, y: 0, width: 200, height: 100))
+                    boundsChanged = sut.shouldInvalidateLayout(forBoundsChange: CGRect(x: 0, y: 0, width: 200, height: 100))
                 }
                 
                 it("should invalidate layout when bounds size changes") {
@@ -311,8 +311,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
                     collectionViewMock.center = CGPoint(x: fixtureCollectionViewBounds.width / 2, y: fixtureCollectionViewBounds.height / 2)
-                    collectionViewMock.numberOfItemsInSectionStub.on(0, returnValue: 1)
-                    initialLayoutAttributes = sut.initialLayoutAttributesForAppearingItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+                    collectionViewMock.numberOfItemsInSectionStub.on(0, return: 1)
+                    initialLayoutAttributes = sut.initialLayoutAttributesForAppearingItem(at: IndexPath(item: 0, section: 0))
                 }
                 
                 it("should have proper size") {
@@ -339,8 +339,8 @@ class InitialShotsCollectionViewLayoutSpec: QuickSpec {
                 beforeEach {
                     collectionViewMock.bounds = CGRect(x: fixtureCollectionViewBounds.x, y: fixtureCollectionViewBounds.y, width: fixtureCollectionViewBounds.width, height: fixtureCollectionViewBounds.height)
                     collectionViewMock.center = CGPoint(x: fixtureCollectionViewBounds.width / 2, y: fixtureCollectionViewBounds.height / 2)
-                    collectionViewMock.numberOfItemsInSectionStub.on(0, returnValue: 1)
-                    finalLayoutAttributes = sut.finalLayoutAttributesForDisappearingItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+                    collectionViewMock.numberOfItemsInSectionStub.on(0, return: 1)
+                    finalLayoutAttributes = sut.finalLayoutAttributesForDisappearingItem(at: IndexPath(item: 0, section: 0))
                 }
                 
                 it("should have proper size") {

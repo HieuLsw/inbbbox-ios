@@ -10,32 +10,28 @@ import UIKit
 
 class SwitchCell: UITableViewCell, Reusable {
 
-    class var reuseIdentifier: String {
-        return "TableViewSwitchCellReuseIdentifier"
-    }
-
-    let switchControl = UISwitch.newAutoLayoutView()
-    let titleLabel = UILabel.newAutoLayoutView()
+    let switchControl = UISwitch.newAutoLayout()
+    let titleLabel = UILabel.newAutoLayout()
     let edgesInset: CGFloat = 16
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        titleLabel.font = UIFont.systemFontOfSize(17, weight: UIFontWeightRegular)
+        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 
         switchControl.layer.cornerRadius = 18.0
-        switchControl.thumbTintColor = UIColor.whiteColor()
+        switchControl.thumbTintColor = UIColor.white
         switchControl.onTintColor = UIColor.pinkColor()
         contentView.addSubview(switchControl)
 
         setNeedsUpdateConstraints()
     }
 
-    @available(*, unavailable, message="Use init(style:reuseIdentifier:) method instead")
+    @available(*, unavailable, message: "Use init(style:reuseIdentifier:) method instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -44,12 +40,12 @@ class SwitchCell: UITableViewCell, Reusable {
         if !didSetConstraints {
             didSetConstraints = true
 
-            titleLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: edgesInset)
-            titleLabel.autoAlignAxisToSuperviewAxis(.Horizontal)
+            titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: edgesInset)
+            titleLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            switchControl.autoPinEdge(.Leading, toEdge: .Trailing, ofView: titleLabel, withOffset: 5)
-            switchControl.autoPinEdgeToSuperviewEdge(.Trailing, withInset: edgesInset)
-            switchControl.autoAlignAxisToSuperviewAxis(.Horizontal)
+            switchControl.autoPinEdge(.leading, to: .trailing, of: titleLabel, withOffset: 5)
+            switchControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: edgesInset)
+            switchControl.autoAlignAxis(toSuperviewAxis: .horizontal)
         }
 
         super.updateConstraints()
@@ -57,7 +53,7 @@ class SwitchCell: UITableViewCell, Reusable {
 }
 
 extension SwitchCell: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         titleLabel.textColor = mode.tableViewCellTextColor
         switchControl.tintColor = mode.switchCellTintColor
         switchControl.backgroundColor = switchControl.tintColor

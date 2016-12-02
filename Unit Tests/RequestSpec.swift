@@ -33,7 +33,7 @@ class RequestSpec: QuickSpec {
             }
             
             it("should use NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData") {
-                expect(sut.session.configuration.requestCachePolicy == NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData).to(beTruthy())
+                expect(sut.session.configuration.requestCachePolicy == NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData).to(beTruthy())
             }
 
             context("when sending data with success") {
@@ -42,7 +42,7 @@ class RequestSpec: QuickSpec {
                 
                 beforeEach {
                     let body = ["fixture.key": "fixture.value"]
-                    self.stub(everything, builder: json(body))
+                    self.stub(everything, json(body))
                 }
                 
                 afterEach {
@@ -57,7 +57,7 @@ class RequestSpec: QuickSpec {
                         sut.resume().then { _response -> Void in
                             response = _response
                             done()
-                        }.error { _ in fail() }
+                        }.catch { _ in fail() }
                     }
                     
                     expect(response).toNot(beNil())
@@ -67,11 +67,11 @@ class RequestSpec: QuickSpec {
             
             context("when sending data with failure") {
                 
-                var error: ErrorType?
+                var error: Error?
                 
                 beforeEach {
-                    let error = NSError(domain: "fixture.domain", code: 0, message: "fixture.message")
-                    self.stub(everything, builder: failure(error))
+                    let error = NSError(domain: "fixture.domain", code: 0, userInfo: nil)
+                    self.stub(everything, failure(error))
                 }
                 
                 afterEach {
@@ -85,7 +85,7 @@ class RequestSpec: QuickSpec {
                         
                         sut.resume().then { _ -> Void in
                             fail()
-                        }.error { _error in
+                        }.catch { _error in
                             error = _error
                             done()
                         }
@@ -101,6 +101,6 @@ class RequestSpec: QuickSpec {
 
 private struct QueryMock: Query {
     let path = "/fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
     let method = Method.POST
 }

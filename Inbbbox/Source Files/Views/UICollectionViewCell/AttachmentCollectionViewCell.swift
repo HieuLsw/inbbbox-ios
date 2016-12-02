@@ -8,12 +8,12 @@
 
 import Foundation
 
-class AttachmentCollectionViewCell: UICollectionViewCell {
+class AttachmentCollectionViewCell: UICollectionViewCell, Reusable {
     
-    let imageView = UIImageView.newAutoLayoutView()
-    private let attachmentIconImageView = UIImageView.newAutoLayoutView()
+    let imageView = UIImageView.newAutoLayout()
+    fileprivate let attachmentIconImageView = UIImageView.newAutoLayout()
     
-    private var didUpdateConstraints = false
+    fileprivate var didUpdateConstraints = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,15 +21,15 @@ class AttachmentCollectionViewCell: UICollectionViewCell {
         configureForAutoLayout()
         
         contentView.configureForAutoLayout()
-        contentView.backgroundColor = .clearColor()
+        contentView.backgroundColor = .clear
         
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 3
         contentView.addSubview(imageView)
         
         attachmentIconImageView.image = UIImage(named: "ic_attachment")
-        attachmentIconImageView.contentMode = .Center
+        attachmentIconImageView.contentMode = .center
         attachmentIconImageView.layer.cornerRadius = 9
         attachmentIconImageView.backgroundColor = UIColor.RGBA(175, 175, 175, 0.26)
         contentView.addSubview(attachmentIconImageView)
@@ -37,7 +37,7 @@ class AttachmentCollectionViewCell: UICollectionViewCell {
         setNeedsUpdateConstraints()
     }
     
-    @available(*, unavailable, message = "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -48,20 +48,13 @@ class AttachmentCollectionViewCell: UICollectionViewCell {
             didUpdateConstraints = true
             
             imageView.autoPinEdgesToSuperviewEdges()
-            attachmentIconImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 3)
-            attachmentIconImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: 3)
-            attachmentIconImageView.autoSetDimensionsToSize(CGSizeMake(18, 18))
+            attachmentIconImageView.autoPinEdge(toSuperviewEdge: .right, withInset: 3)
+            attachmentIconImageView.autoPinEdge(toSuperviewEdge: .top, withInset: 3)
+            attachmentIconImageView.autoSetDimensions(to: CGSize(width: 18, height: 18))
             
             contentView.autoPinEdgesToSuperviewEdges()
         }
         
         super.updateConstraints()
-    }
-}
-
-extension AttachmentCollectionViewCell: Reusable {
-    
-    class var reuseIdentifier: String {
-        return String(AttachmentCollectionViewCell)
     }
 }

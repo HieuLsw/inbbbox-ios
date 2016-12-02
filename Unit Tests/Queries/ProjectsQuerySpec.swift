@@ -18,7 +18,7 @@ class ProjectsQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return ProjectsQuery(shot: Shot.fixtureShot())
         }) { Void -> QueryExpectation in
-            return (method: .GET, encoding: .URL, path: "/shots/fixture.identifier/projects")
+            return (method: .GET, encoding: .url, path: "/shots/fixture.identifier/projects")
         }
         
         describe("when newly initialized with project") {

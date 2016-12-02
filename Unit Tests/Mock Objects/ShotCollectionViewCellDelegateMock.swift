@@ -11,11 +11,11 @@ class ShotCollectionViewCellDelegateMock: ShotCollectionViewCellDelegate{
     let shotCollectionViewCellDidStartSwipingStub = Stub<ShotCollectionViewCell, Void>()
     let shotCollectionViewCellDidEndSwipingStub = Stub<ShotCollectionViewCell, Void>()
 
-    func shotCollectionViewCellDidStartSwiping(shotCollectionViewCell: ShotCollectionViewCell) {
+    func shotCollectionViewCellDidStartSwiping(_ shotCollectionViewCell: ShotCollectionViewCell) {
         try! shotCollectionViewCellDidStartSwipingStub.invoke(shotCollectionViewCell)
     }
 
-    func shotCollectionViewCellDidEndSwiping(shotCollectionViewCell: ShotCollectionViewCell) {
+    func shotCollectionViewCellDidEndSwiping(_ shotCollectionViewCell: ShotCollectionViewCell) {
         try! shotCollectionViewCellDidEndSwipingStub.invoke(shotCollectionViewCell)
     }
 }

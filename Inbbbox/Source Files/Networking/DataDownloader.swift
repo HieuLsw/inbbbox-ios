@@ -10,12 +10,14 @@ import Foundation
 import UIKit
 
 class DataDownloader: NSObject {
-    private var data = NSMutableData()
-    private var totalSize = Float(0)
-    private var progress: ((Float) -> Void)?
-    private var completion: ((NSData) -> Void)?
-    private var session: NSURLSession?
-    private var tasks = [NSURLSessionTask]()
+
+    fileprivate var data = NSMutableData()
+    fileprivate var totalSize = Float(0)
+    fileprivate var progress: ((Float) -> Void)?
+    fileprivate var completion: ((Data) -> Void)?
+    fileprivate var session: URLSession?
+    fileprivate var tasks = [URLSessionTask]()
+
 
     /// Fetches data from given URL and gives information about progress and completion of operation.
     /// Will not fetch if task with given url is already in progress.
@@ -24,16 +26,17 @@ class DataDownloader: NSObject {
     /// - parameter progress:   Block called every time when portion of data is fetched.
     ///                         Gives information about progress.
     /// - parameter completion: Block called when fetching is complete. It returns fetched data as parameter.
-    func fetchData(url: NSURL, progress:(progress: Float) -> Void, completion:(data: NSData) -> Void) {
+    func fetchData(_ url: URL, progress:@escaping (_ progress: Float) -> Void, completion:@escaping (_ data: Data) -> Void) {
         
-        guard !isTaskWithUrlAlreadyInProgress(url) else { return }
+        guard !isTaskWithUrlAlreadyInProgress(with: url) else { return }
         
         self.progress = progress
         self.completion = completion
-        session = NSURLSession.init(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+        session = URLSession.init(configuration: URLSessionConfiguration.default,
                                          delegate: self,
                                          delegateQueue: nil)
-        if let task = session?.dataTaskWithURL(url) {
+        if let task = session?.dataTask(with: url) {
+            print("add new task \(task.hash)")
             tasks.append(task)
             task.resume()
         }
@@ -46,35 +49,39 @@ class DataDownloader: NSObject {
     }
 }
 
-extension DataDownloader: NSURLSessionDataDelegate {
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse,
-        completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-            completionHandler(.Allow)
+extension DataDownloader: URLSessionDataDelegate {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+            completionHandler(.allow)
             totalSize = Float(response.expectedContentLength)
     }
 
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         let percentOfProgress = Float(self.data.length) / totalSize
         
         guard percentOfProgress < 1 else {
             session.invalidateAndCancel()
-            tasks.removeIfContains(dataTask)
+            tasks.remove(ifContains: dataTask)
             return
             
         }
-        self.data.appendData(data)
+
+        self.data.append(data)
         progress?(percentOfProgress)
     }
-    
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         guard error == nil else { return }
-        completion?(NSData(data: self.data))
+        print("complete task \(task.hash)")
+        completion?(self.data as Data)
     }
 }
 
 private extension DataDownloader {
     
-    func isTaskWithUrlAlreadyInProgress(url: NSURL) -> Bool {
-        return tasks.contains { $0.currentRequest?.URL?.absoluteString == url.absoluteString }
+    func isTaskWithUrlAlreadyInProgress(with url: URL) -> Bool {
+        return tasks.contains() { task -> Bool in
+            return task.currentRequest?.url?.absoluteString == url.absoluteString
+        }
     }
 }

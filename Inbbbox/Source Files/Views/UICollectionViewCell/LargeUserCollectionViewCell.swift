@@ -11,10 +11,10 @@ import UIKit
 class LargeUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, WidthDependentHeight,
         InfoShotsCellConfigurable, AvatarSettable {
 
-    let shotImageView = UIImageView.newAutoLayoutView()
+    let shotImageView = UIImageView.newAutoLayout()
     var avatarView: AvatarView!
     let avatarSize = CGSize(width: 16, height: 16)
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
     // MARK: - Lifecycle
 
@@ -55,27 +55,21 @@ class LargeUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
     }
 
     func setInfoViewConstraints() {
-        avatarView.autoSetDimensionsToSize(avatarSize)
-        avatarView.autoPinEdge(.Left, toEdge: .Left, ofView: infoView, withOffset: 2)
-        avatarView.autoPinEdge(.Top, toEdge: .Top, ofView: infoView, withOffset: 10)
+        avatarView.autoSetDimensions(to: avatarSize)
+        avatarView.autoPinEdge(.left, to: .left, of: infoView, withOffset: 2)
+        avatarView.autoPinEdge(.top, to: .top, of: infoView, withOffset: 10)
 
-        nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: avatarView)
-        nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: avatarView, withOffset: 3)
-        nameLabel.autoPinEdge(.Right, toEdge: .Left, ofView: numberOfShotsLabel)
+        nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: avatarView)
+        nameLabel.autoPinEdge(.left, to: .right, of: avatarView, withOffset: 3)
+        nameLabel.autoPinEdge(.right, to: .left, of: numberOfShotsLabel)
 
-        numberOfShotsLabel.autoPinEdge(.Right, toEdge: .Right, ofView: infoView, withOffset: -2)
-        numberOfShotsLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: nameLabel)
+        numberOfShotsLabel.autoPinEdge(.right, to: .right, of: infoView, withOffset: -2)
+        numberOfShotsLabel.autoAlignAxis(.horizontal, toSameAxisOf: nameLabel)
     }
 
     func clearImages() {
         avatarView.imageView.image = nil
         shotImageView.image = nil
-    }
-
-    // MARK: - Reusable
-
-    static var reuseIdentifier: String {
-        return String(LargeUserCollectionViewCell)
     }
 
     // MARK: - Width dependent height

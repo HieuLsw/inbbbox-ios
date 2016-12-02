@@ -16,8 +16,8 @@ class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
     var viewModel: SimpleShotsViewModel?
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
-    private var shouldShowLoadingView = true
-    private var indexesToUpdateCellImage = [Int]()
+    fileprivate var shouldShowLoadingView = true
+    fileprivate var indexesToUpdateCellImage = [Int]()
 }
 
 // MARK: Lifecycle
@@ -52,16 +52,16 @@ extension SimpleShotsCollectionViewController {
         guard let collectionView = collectionView else {
             return
         }
-        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .Cell)
+        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel?.clearViewModelIfNeeded()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel?.downloadInitialItems()
     }
@@ -71,11 +71,11 @@ extension SimpleShotsCollectionViewController {
 
 extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegate {
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
-            let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)),
-            let cell = collectionView?.cellForItemAtIndexPath(indexPath),
+            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView?.cellForItem(at: indexPath),
             let viewModel = viewModel
         else { return nil }
         
@@ -88,7 +88,7 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
         return detailsViewController
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         
         if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
             let viewModel = viewModel {
@@ -99,9 +99,9 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
             modalTransitionAnimator?.behindViewScale = 1
             
             pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .Custom
+            pageViewController.modalPresentationStyle = .custom
             
-            tabBarController?.presentViewController(pageViewController, animated: true, completion: nil)
+            tabBarController?.present(pageViewController, animated: true, completion: nil)
         }
     }
 }
@@ -110,14 +110,14 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
 
 extension SimpleShotsCollectionViewController {
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel!.itemsCount
     }
 
-    override func collectionView(collectionView: UICollectionView,
-                                 cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self, forIndexPath: indexPath,
-                type: .Cell)
+                type: .cell)
         let cellData = viewModel!.shotCollectionViewCellViewData(indexPath)
 
         indexesToUpdateCellImage.append(indexPath.row)
@@ -127,7 +127,7 @@ extension SimpleShotsCollectionViewController {
             cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
         }
 
-        cell.gifLabel.hidden = !cellData.animated
+        cell.gifLabel.isHidden = !cellData.animated
         return cell
     }
 
@@ -137,14 +137,14 @@ extension SimpleShotsCollectionViewController {
 
 extension SimpleShotsCollectionViewController {
 
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell,
-            forItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == viewModel!.itemsCount - 1 {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+            forItemAt indexPath: IndexPath) {
+        if (indexPath.row == viewModel!.itemsCount - 1) {
             viewModel?.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         guard let viewModel = viewModel else {
             return
@@ -159,15 +159,15 @@ extension SimpleShotsCollectionViewController {
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         
         pageViewController.transitioningDelegate = modalTransitionAnimator
-        pageViewController.modalPresentationStyle = .Custom
+        pageViewController.modalPresentationStyle = .custom
 
-        tabBarController?.presentViewController(pageViewController, animated: true, completion: nil)
+        tabBarController?.present(pageViewController, animated: true, completion: nil)
     }
 
-    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
-                                 forItemAtIndexPath indexPath: NSIndexPath) {
-        if let index = indexesToUpdateCellImage.indexOf(indexPath.row) {
-            indexesToUpdateCellImage.removeAtIndex(index)
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
+        if let index = indexesToUpdateCellImage.index(of: indexPath.row) {
+            indexesToUpdateCellImage.remove(at: index)
         }
     }
 }
@@ -179,40 +179,40 @@ extension SimpleShotsCollectionViewController: BaseCollectionViewViewModelDelega
         collectionView?.reloadData()
     }
 
-    func viewModelDidFailToLoadInitialItems(error: ErrorType) {
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
         self.shouldShowLoadingView = false
         collectionView?.reloadData()
 
-        if let viewModel = viewModel where viewModel.shots.isEmpty {
+        if let viewModel = viewModel, viewModel.shots.isEmpty {
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
-    func viewModelDidFailToLoadItems(error: ErrorType) {
+    func viewModelDidFailToLoadItems(_ error: Error) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
-        collectionView?.insertItemsAtIndexPaths(indexPaths)
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        collectionView?.insertItems(at: indexPaths)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
-        collectionView?.reloadItemsAtIndexPaths([indexPath])
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        collectionView?.reloadItems(at: [indexPath])
     }
 }
 
 extension SimpleShotsCollectionViewController: DZNEmptyDataSetSource {
 
-    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
 
         guard let viewModel = viewModel else { return UIView() }
 
         if shouldShowLoadingView {
-            let loadingView = EmptyDataSetLoadingView.newAutoLayoutView()
+            let loadingView = EmptyDataSetLoadingView.newAutoLayout()
             loadingView.startAnimating()
             return loadingView
         } else {
-            let emptyDataSetView = EmptyDataSetView.newAutoLayoutView()
+            let emptyDataSetView = EmptyDataSetView.newAutoLayout()
             let descriptionAttributes = viewModel.emptyCollectionDescriptionAttributes()
             emptyDataSetView.setDescriptionText(
                 firstLocalizedString: descriptionAttributes.firstLocalizedString,
@@ -226,7 +226,7 @@ extension SimpleShotsCollectionViewController: DZNEmptyDataSetSource {
 }
 
 extension SimpleShotsCollectionViewController: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         collectionView?.reloadData()
     }
 }
@@ -235,15 +235,15 @@ extension SimpleShotsCollectionViewController: ColorModeAdaptable {
 
 private extension SimpleShotsCollectionViewController {
 
-    func lazyLoadImage(shotImage: ShotImageType, atIndexPath indexPath: NSIndexPath) {
-        let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
+    func lazyLoadImage(_ shotImage: ShotImageType, atIndexPath indexPath: IndexPath) {
+        let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
-            guard let certainSelf = self where certainSelf.indexesToUpdateCellImage.contains(indexPath.row) else {
+            guard let certainSelf = self, certainSelf.indexesToUpdateCellImage.contains(indexPath.row) else {
                 return
             }
 
             typealias cellType = SimpleShotCollectionViewCell
-            if let cell = certainSelf.collectionView?.cellForItemAtIndexPath(indexPath) as? cellType {
+            if let cell = certainSelf.collectionView?.cellForItem(at: indexPath) as? cellType {
                 cell.shotImageView.image = nil
                 cell.shotImageView.image = image
             }

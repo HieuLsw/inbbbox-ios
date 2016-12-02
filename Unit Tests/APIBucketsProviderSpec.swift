@@ -29,7 +29,7 @@ class APIBucketsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: ErrorType?
+                var error: Error?
                 
                 beforeEach {
                     TokenStorage.clear()
@@ -42,7 +42,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("error should appear") {
                     sut.provideMyBuckets().then { _ -> Void in
                         fail()
-                    }.error { _error in
+                    }.catch { _error in
                         error = _error
                     }
                     
@@ -65,7 +65,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("buckets should be properly returned") {
                     sut.provideMyBuckets().then { _buckets -> Void in
                         buckets = _buckets
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(buckets).toNotEventually(beNil(), timeout: 5)
                     expect(buckets).toEventually(haveCount(3))
@@ -92,7 +92,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("buckets should be properly returned") {
                     sut.provideBucketsForUser(User.fixtureUser()).then { _buckets -> Void in
                         buckets = _buckets
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(buckets).toNotEventually(beNil())
                     expect(buckets).toEventually(haveCount(3))
@@ -105,7 +105,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("buckets should be properly returned") {
                     sut.provideBucketsForUsers([User.fixtureUser(), User.fixtureUser()]).then { _buckets -> Void in
                         buckets = _buckets
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(buckets).toNotEventually(beNil())
                     expect(buckets).toEventually(haveCount(3))
@@ -118,7 +118,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("buckets should be properly returned") {
                     sut.nextPage().then { _buckets -> Void in
                         buckets = _buckets
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(buckets).toNotEventually(beNil())
                     expect(buckets).toEventually(haveCount(3))
@@ -131,7 +131,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 it("buckets should be properly returned") {
                     sut.previousPage().then { _buckets -> Void in
                         buckets = _buckets
-                    }.error { _ in fail() }
+                    }.catch { _ in fail() }
                     
                     expect(buckets).toNotEventually(beNil())
                     expect(buckets).toEventually(haveCount(3))
@@ -145,19 +145,19 @@ class APIBucketsProviderSpec: QuickSpec {
 //Explanation: Create BucketsProviderPrivateMock to override methods from PageableProvider.
 private class APIBucketsProviderPrivateMock: APIBucketsProvider {
     
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
-        return mockResult(T)
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
             
             let json = JSONSpecLoader.sharedInstance.fixtureBucketsJSON(withCount: 3)

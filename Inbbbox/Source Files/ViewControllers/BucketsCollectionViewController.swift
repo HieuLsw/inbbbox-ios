@@ -12,13 +12,13 @@ import DZNEmptyDataSet
 
 class BucketsCollectionViewController: UICollectionViewController {
 
-    private let viewModel = BucketsViewModel()
-    private var shouldShowLoadingView = true
+    fileprivate let viewModel = BucketsViewModel()
+    fileprivate var shouldShowLoadingView = true
 
-    private var cellsAnimateTimer: NSTimer?
-    private let animationCycleInterval = 6.0
+    fileprivate var cellsAnimateTimer: Timer?
+    fileprivate let animationCycleInterval = 6.0
 
-    private var currentColorMode = ColorModeProvider.current()
+    fileprivate var currentColorMode = ColorModeProvider.current()
     // MARK: - Lifecycle
 
     convenience init() {
@@ -35,24 +35,24 @@ class BucketsCollectionViewController: UICollectionViewController {
         guard let collectionView = collectionView else {
             return
         }
-        collectionView.registerClass(BucketCollectionViewCell.self, type: .Cell)
+        collectionView.registerClass(BucketCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.clearViewModelIfNeeded()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
-        AnalyticsManager.trackScreen(.BucketsView)
+        AnalyticsManager.trackScreen(.bucketsView)
         
-        cellsAnimateTimer = NSTimer.scheduledTimerWithTimeInterval(animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
+        cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         cellsAnimateTimer?.invalidate()
@@ -61,15 +61,15 @@ class BucketsCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func collectionView(collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                     numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath
-                    indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt
+                    indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(BucketCollectionViewCell.self,
-                forIndexPath: indexPath, type: .Cell)
+                forIndexPath: indexPath, type: .cell)
         cell.clearImages()
         let cellData = viewModel.bucketCollectionViewCellViewData(indexPath)
         cell.nameLabel.text = cellData.name
@@ -89,16 +89,16 @@ class BucketsCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
 
-    override func collectionView(collectionView: UICollectionView,
-                           willDisplayCell cell: UICollectionViewCell,
-                   forItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == viewModel.itemsCount - 1 {
+    override func collectionView(_ collectionView: UICollectionView,
+                           willDisplay cell: UICollectionViewCell,
+                   forItemAt indexPath: IndexPath) {
+        if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(collectionView: UICollectionView,
-             didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView,
+             didSelectItemAt indexPath: IndexPath) {
         let bucketContentCollectionViewController =
                 SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.row])
         navigationController?.pushViewController(bucketContentCollectionViewController,
@@ -110,7 +110,7 @@ class BucketsCollectionViewController: UICollectionViewController {
     func setupBarButtons() {
         navigationItem.rightBarButtonItem =
                 UIBarButtonItem(title: NSLocalizedString("BucketsCollectionView.AddNew",
-                comment: "Button for adding new bucket"), style: .Plain,
+                comment: "Button for adding new bucket"), style: .plain,
                 target: self, action: #selector(didTapAddNewBucketButton(_:)))
     }
 
@@ -125,20 +125,20 @@ class BucketsCollectionViewController: UICollectionViewController {
                 if self.viewModel.buckets.count == 1 {
                     self.collectionView?.reloadData()
                 } else {
-                    self.collectionView?.insertItemsAtIndexPaths(
-                        [NSIndexPath(forItem: self.viewModel.buckets.count-1, inSection: 0)])
+                    self.collectionView?.insertItems(
+                        at: [IndexPath(item: self.viewModel.buckets.count-1, section: 0)])
                 }
-            }.error { error in
+            }.catch { error in
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketCreationFailed, canBeDismissedByUser: true)
                 return
             }
         }
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         alert.view.tintColor = .pinkColor()
     }
 
     func makeRandomRotation() {
-        if let visCells = self.collectionView?.visibleCells() where visCells.count > 0 {
+        if let visCells = self.collectionView?.visibleCells, visCells.count > 0 {
             let randomIndex = Int(arc4random_uniform(UInt32(visCells.count)))
             if let randomCell = visCells[randomIndex] as? BucketCollectionViewCell {
                 randomCell.makeRotationOnImages()
@@ -154,7 +154,7 @@ extension BucketsCollectionViewController: BaseCollectionViewViewModelDelegate {
         collectionView?.reloadData()
     }
 
-    func viewModelDidFailToLoadInitialItems(error: ErrorType) {
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
         self.shouldShowLoadingView = false
         collectionView?.reloadData()
 
@@ -163,31 +163,31 @@ extension BucketsCollectionViewController: BaseCollectionViewViewModelDelegate {
         }
     }
 
-    func viewModelDidFailToLoadItems(error: ErrorType) {
+    func viewModelDidFailToLoadItems(_ error: Error) {
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel,
-            didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
-        collectionView?.insertItemsAtIndexPaths(indexPaths)
+    func viewModel(_ viewModel: BaseCollectionViewViewModel,
+            didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        collectionView?.insertItems(at: indexPaths)
     }
 
-    func viewModel(viewModel: BaseCollectionViewViewModel,
-            didLoadShotsForItemAtIndexPath indexPath: NSIndexPath) {
-        collectionView?.reloadItemsAtIndexPaths([indexPath])
+    func viewModel(_ viewModel: BaseCollectionViewViewModel,
+            didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        collectionView?.reloadItems(at: [indexPath])
     }
 }
 
 extension BucketsCollectionViewController: DZNEmptyDataSetSource {
 
-    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
 
         if shouldShowLoadingView {
-            let loadingView = EmptyDataSetLoadingView.newAutoLayoutView()
+            let loadingView = EmptyDataSetLoadingView.newAutoLayout()
             loadingView.startAnimating()
             return loadingView
         } else {
-            let emptyDataSetView = EmptyDataSetView.newAutoLayoutView()
+            let emptyDataSetView = EmptyDataSetView.newAutoLayout()
             emptyDataSetView.setDescriptionText(
                 firstLocalizedString:
                 NSLocalizedString("BucketsCollectionViewController.EmptyData.FirstLocalizedString",
@@ -206,11 +206,11 @@ extension BucketsCollectionViewController: DZNEmptyDataSetSource {
 
 extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
-            let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)),
-            let cell = collectionView?.cellForItemAtIndexPath(indexPath)
+            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView?.cellForItem(at: indexPath)
         else { return nil }
         
         previewingContext.sourceRect = cell.contentView.bounds
@@ -218,7 +218,7 @@ extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
 }
@@ -226,7 +226,7 @@ extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
 // MARK: ColorModeAdaptable
 
 extension BucketsCollectionViewController: ColorModeAdaptable {
-    func adaptColorMode(mode: ColorModeType) {
+    func adaptColorMode(_ mode: ColorModeType) {
         currentColorMode = mode
         collectionView?.reloadData()
     }

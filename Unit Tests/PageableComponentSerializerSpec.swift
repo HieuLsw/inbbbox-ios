@@ -26,7 +26,7 @@ class PageableComponentSerializerSpec: QuickSpec {
             context("with proper header") {
                 
                 beforeEach {
-                    let header = self.linkHeaderForTypes([.RelNext])
+                    let header = self.linkHeaderForTypes([.relNext])
                     component = PageableComponentSerializer.nextPageableComponentWithSentQuery(QueryMock(), receivedHeader: header)
                 }
                 
@@ -67,7 +67,7 @@ class PageableComponentSerializerSpec: QuickSpec {
                 
                 beforeEach {
                     let header = ["fixture.header.key": "fixture.header.value"]
-                    component = PageableComponentSerializer.nextPageableComponentWithSentQuery(QueryMock(), receivedHeader: header)
+                    component = PageableComponentSerializer.nextPageableComponentWithSentQuery(QueryMock(), receivedHeader: header as [String : AnyObject])
                 }
                 
                 it("serialized component should not be nil") {
@@ -81,7 +81,7 @@ class PageableComponentSerializerSpec: QuickSpec {
             context("with proper header") {
                 
                 beforeEach {
-                    let header = self.linkHeaderForTypes([.RelPrev])
+                    let header = self.linkHeaderForTypes([.relPrev])
                     component = PageableComponentSerializer.previousPageableComponentWithSentQuery(QueryMock(), receivedHeader: header)
                 }
                 
@@ -123,7 +123,7 @@ class PageableComponentSerializerSpec: QuickSpec {
                 
                 beforeEach {
                     let header = ["fixture.header.key": "fixture.header.value"]
-                    component = PageableComponentSerializer.previousPageableComponentWithSentQuery(QueryMock(), receivedHeader: header)
+                    component = PageableComponentSerializer.previousPageableComponentWithSentQuery(QueryMock(), receivedHeader: header as [String : AnyObject])
                 }
                 
                 it("serialized component should not be nil") {
@@ -136,7 +136,7 @@ class PageableComponentSerializerSpec: QuickSpec {
 
 private struct QueryMock: Query {
     let path = "/fixture/path"
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
     let method = Method.POST
     
     var service: SecureNetworkService {
@@ -150,20 +150,20 @@ private struct ServiceMock: SecureNetworkService {
     let host = "fixture.host"
     let version = "/v1"
     
-    func authorizeRequest(request: NSMutableURLRequest) {
+    func authorizeRequest(_ request: NSMutableURLRequest) {
         request.setValue("fixture.header", forHTTPHeaderField: "fixture.http.header.field")
     }
 }
 
 
 private enum LinkHeaderType {
-    case RelNext, RelPrev
+    case relNext, relPrev
     
     var description: String {
         switch self {
-            case .RelNext:
+            case .relNext:
                 return "<https://fixture.host/v1/fixture.path.next?page=3&per_page=100>; rel=\"next\""
-            case .RelPrev:
+            case .relPrev:
                 return "<https://fixture.host/v1/fixture.path.prev?page=1&per_page=200>; rel=\"prev\""
         }
     }
@@ -171,7 +171,7 @@ private enum LinkHeaderType {
 
 private extension PageableComponentSerializerSpec {
     
-    func linkHeaderForTypes(types: [LinkHeaderType]) -> [String: AnyObject] {
+    func linkHeaderForTypes(_ types: [LinkHeaderType]) -> [String: AnyObject] {
         
         var linkValue = [String]()
         
@@ -180,7 +180,7 @@ private extension PageableComponentSerializerSpec {
         }
         
         return [
-            "Link" : linkValue.joinWithSeparator(",")
+            "Link" : linkValue.joined(separator: ",") as AnyObject
         ]
     }
 }

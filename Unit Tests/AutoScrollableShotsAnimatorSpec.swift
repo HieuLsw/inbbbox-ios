@@ -17,9 +17,9 @@ class AutoScrollableShotsAnimatorSpec: QuickSpec {
         var sut: AutoScrollableShotsAnimator!
         var collectionViews: [UICollectionView]! // keep reference to be able to check expectation
         let content =  [
-            UIImage.referenceImageWithColor(.greenColor()),
-            UIImage.referenceImageWithColor(.yellowColor()),
-            UIImage.referenceImageWithColor(.redColor())
+            UIImage.referenceImageWithColor(.green),
+            UIImage.referenceImageWithColor(.yellow),
+            UIImage.referenceImageWithColor(.red)
         ]
         var mockSuperview: UIView!
         
@@ -46,7 +46,7 @@ class AutoScrollableShotsAnimatorSpec: QuickSpec {
         }
         
         it("when newly created, content offset should be 0") {
-            expect(collectionViews.map{ $0.contentOffset }).to(equal([CGPointZero, CGPointZero]))
+            expect(collectionViews.map{ $0.contentOffset }).to(equal([CGPoint.zero, CGPoint.zero]))
         }
         
         describe("when scrolling to middle") {
@@ -74,7 +74,7 @@ class AutoScrollableShotsAnimatorSpec: QuickSpec {
                 beforeEach {
                     initialValueY = collectionViews[0].contentOffset.y
                     sut.startScrollAnimationInfinitely()
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate())
+                    RunLoop.current.run(until: NSDate() as Date)
                 }
                 
                 it("should be scrolled up") {
@@ -89,7 +89,7 @@ class AutoScrollableShotsAnimatorSpec: QuickSpec {
                 beforeEach {
                     initialValueY = collectionViews[1].contentOffset.y
                     sut.startScrollAnimationInfinitely()
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate())
+                    RunLoop.current.run(until: NSDate() as Date)
                 }
                 
                 it("should be scrolled down") {

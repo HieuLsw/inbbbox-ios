@@ -18,7 +18,7 @@ protocol CommentType {
     var body: NSAttributedString? { get }
 
     /// Date when Comment was created.
-    var createdAt: NSDate { get }
+    var createdAt: Date { get }
 
     /// User which created this comment.
     ///

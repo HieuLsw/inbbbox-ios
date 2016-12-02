@@ -12,25 +12,12 @@ import MessageUI
 import TTTAttributedLabel
 import PromiseKit
 
-// MARK: ImageProvider
-
-extension ShotDetailsViewController: ImageProvider {
-
-    func provideImage(completion: UIImage? -> Void) {
-        if !viewModel.shot.animated {
-            if let image = header?.imageView.image {
-                completion(image)
-            }
-        }
-    }
-}
-
 // MARK: KeyboardResizableViewDelegate
 
 extension ShotDetailsViewController: KeyboardResizableViewDelegate {
 
-    func keyboardResizableView(view: KeyboardResizableView, willRelayoutSubviewsWithState state: KeyboardState) {
-        let round = state == .WillAppear
+    func keyboardResizableView(_ view: KeyboardResizableView, willRelayoutSubviewsWithState state: KeyboardState) {
+        let round = state == .willAppear
         shotDetailsView.commentComposerView.animateByRoundingCorners(round)
     }
 }
@@ -47,7 +34,7 @@ extension ShotDetailsViewController: ModalByDraggingClosable {
 
 extension ShotDetailsViewController: CommentComposerViewDelegate {
 
-    func didTapSendButtonInComposerView(view: CommentComposerView, comment: String) {
+    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String) {
 
         view.startAnimation()
 
@@ -57,25 +44,25 @@ extension ShotDetailsViewController: CommentComposerViewDelegate {
             viewModel.postComment(comment)
         }.then { () -> Void in
 
-            let numberOfItemsInFirstSection = self.shotDetailsView.collectionView.numberOfItemsInSection(0)
-            var indexPaths = [NSIndexPath(forItem: numberOfItemsInFirstSection, inSection: 0)]
+            let numberOfItemsInFirstSection = self.shotDetailsView.collectionView.numberOfItems(inSection: 0)
+            var indexPaths = [IndexPath(item: numberOfItemsInFirstSection, section: 0)]
             if isAllowedToDisplaySeparator != self.viewModel.isAllowedToDisplaySeparator {
-                indexPaths.append(NSIndexPath(forItem: numberOfItemsInFirstSection + 1, inSection: 0))
+                indexPaths.append(IndexPath(item: numberOfItemsInFirstSection + 1, section: 0))
             }
             self.shotDetailsView.collectionView.performBatchUpdates({ () -> Void in
-                self.shotDetailsView.collectionView.insertItemsAtIndexPaths(indexPaths)
+                self.shotDetailsView.collectionView.insertItems(at: indexPaths)
             }, completion: { _ -> Void in
-                self.shotDetailsView.collectionView.scrollToItemAtIndexPath(indexPaths[0],
-                        atScrollPosition: .CenteredVertically, animated: true)
+                self.shotDetailsView.collectionView.scrollToItem(at: indexPaths[0],
+                    at: .centeredVertically, animated: true)
             })
         }.always {
             view.stopAnimation()
-        }.error { error in
+        }.catch { error -> Void in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.addingCommentFailed, canBeDismissedByUser: true)
         }
     }
 
-    func commentComposerViewDidBecomeActive(view: CommentComposerView) {
+    func commentComposerViewDidBecomeActive(_ view: CommentComposerView) {
         scroller.scrollToBottomAnimated(true)
     }
 }
@@ -84,24 +71,24 @@ extension ShotDetailsViewController: CommentComposerViewDelegate {
 
 extension ShotDetailsViewController: UIScrollViewDelegate {
 
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         animateHeader(start: false)
     }
 
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         !decelerate ? {
             animateHeader(start: true)
             checkForCommentsLikes()
         }() : {}()
     }
 
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         animateHeader(start: true)
         checkForCommentsLikes()
     }
 
-    private func checkForCommentsLikes() {
-        let visibleCells = shotDetailsView.collectionView.indexPathsForVisibleItems()
+    fileprivate func checkForCommentsLikes() {
+        let visibleCells = shotDetailsView.collectionView.indexPathsForVisibleItems
 
         for indexPath in visibleCells {
             let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
@@ -112,9 +99,9 @@ extension ShotDetailsViewController: UIScrollViewDelegate {
                 }.then { isLiked -> Void in
                     self.viewModel.setLikeStatusForComment(atIndexPath: indexPath, withValue: isLiked)
                     if isLiked {
-                        self.shotDetailsView.collectionView.reloadItemsAtIndexPaths([indexPath])
+                        self.shotDetailsView.collectionView.reloadItems(at: [indexPath])
                     }
-                }
+                }.catch { _ in }
             }
         }
     }
@@ -124,17 +111,17 @@ extension ShotDetailsViewController: UIScrollViewDelegate {
 
 extension ShotDetailsViewController: MFMailComposeViewControllerDelegate {
 
-    func mailComposeController(controller: MFMailComposeViewController,
-                               didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult, error: Error?) {
 
-        controller.dismissViewControllerAnimated(true) {
+        controller.dismiss(animated: true) {
             self.hideUnusedCommentEditingViews()
         }
 
         switch result {
-        case MFMailComposeResultSent:
+        case MFMailComposeResult.sent:
             let contentReportedAlert = UIAlertController.inappropriateContentReported()
-            presentViewController(contentReportedAlert, animated: true, completion: nil)
+            present(contentReportedAlert, animated: true, completion: nil)
         default: break
         }
     }
@@ -144,7 +131,7 @@ extension ShotDetailsViewController: MFMailComposeViewControllerDelegate {
 
 extension ShotDetailsViewController: TTTAttributedLabelDelegate {
 
-    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWith url: URL!) {
         if let user = viewModel.userForURL(url) {
             presentProfileViewControllerForUser(user)
         } else {
@@ -152,7 +139,7 @@ extension ShotDetailsViewController: TTTAttributedLabelDelegate {
                 viewModel.userForId(url.absoluteString)
             }.then { [weak self] user in
                 self?.presentProfileViewControllerForUser(user)
-            }
+            }.catch { _ in }
         }
     }
 }
@@ -161,7 +148,7 @@ extension ShotDetailsViewController: TTTAttributedLabelDelegate {
 
 extension ShotDetailsViewController: AvatarViewDelegate {
 
-    func avatarView(avatarView: AvatarView, didTapButton avatarButton: UIButton) {
+    func avatarView(_ avatarView: AvatarView, didTapButton avatarButton: UIButton) {
         var user: UserType?
         if avatarView.superview == header {
             user = viewModel.shot.user
@@ -169,7 +156,7 @@ extension ShotDetailsViewController: AvatarViewDelegate {
 
             guard let cell = avatarView.superview?.superview as? ShotDetailsCommentCollectionViewCell else { return }
 
-            if let indexPath = shotDetailsView.collectionView.indexPathForCell(cell) {
+            if let indexPath = shotDetailsView.collectionView.indexPath(for: cell) {
                 let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
                 user = viewModel.comments[index].user
             }
@@ -184,7 +171,7 @@ extension ShotDetailsViewController: AvatarViewDelegate {
 
 extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClickableLinksDelegate {
 
-    func labelContainingClickableLinksDidTap(gestureRecognizer: UITapGestureRecognizer,
+    func labelContainingClickableLinksDidTap(_ gestureRecognizer: UITapGestureRecognizer,
                                              textContainer: NSTextContainer, layoutManager: NSLayoutManager) {
 
         guard let url = URLDetector.detectUrlFromGestureRecognizer(gestureRecognizer,
@@ -194,21 +181,21 @@ extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClic
         
     }
     
-    func urlInLabelTapped(url: NSURL) {
+    func urlInLabelTapped(_ url: URL) {
         handleTappedUrl(url)
     }
     
-    private func handleTappedUrl(url: NSURL) {
+    fileprivate func handleTappedUrl(_ url: URL) {
         if viewModel.shouldOpenUserDetailsFromUrl(url) {
-            if let identifier = url.absoluteString.componentsSeparatedByString("/").last {
+            if let identifier = url.absoluteString.components(separatedBy: "/").last {
                 firstly {
                     viewModel.userForId(identifier)
                     }.then { [weak self] user in
                         self?.presentProfileViewControllerForUser(user)
-                }
+                }.catch { _ in }
             }
         } else {
-            UIApplication.sharedApplication().openURL(url)
+            UIApplication.shared.openURL(url)
         }
     }
 }
@@ -217,7 +204,7 @@ extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClic
 
 protocol UICollectionViewCellWithLabelContainingClickableLinksDelegate: class {
 
-    func labelContainingClickableLinksDidTap(gestureRecognizer: UITapGestureRecognizer,
+    func labelContainingClickableLinksDidTap(_ gestureRecognizer: UITapGestureRecognizer,
                                              textContainer: NSTextContainer, layoutManager: NSLayoutManager)
-    func urlInLabelTapped(url: NSURL)
+    func urlInLabelTapped(_ url: URL)
 }

@@ -11,15 +11,15 @@ import UIKit
 class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, WidthDependentHeight,
         InfoShotsCellConfigurable, AvatarSettable {
 
-    let firstShotImageView = UIImageView.newAutoLayoutView()
-    let secondShotImageView = UIImageView.newAutoLayoutView()
-    let thirdShotImageView = UIImageView.newAutoLayoutView()
-    let fourthShotImageView = UIImageView.newAutoLayoutView()
+    let firstShotImageView = UIImageView.newAutoLayout()
+    let secondShotImageView = UIImageView.newAutoLayout()
+    let thirdShotImageView = UIImageView.newAutoLayout()
+    let fourthShotImageView = UIImageView.newAutoLayout()
 
     var avatarView: AvatarView!
     let avatarSize = CGSize(width: 16, height: 16)
 
-    private var didSetConstraints = false
+    fileprivate var didSetConstraints = false
 
 
     // MARK: - Lifecycle
@@ -58,7 +58,7 @@ class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
         }
     }
 
-    func updateImageViewsWith(color: UIColor) {
+    func updateImageViewsWith(_ color: UIColor) {
         for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView] {
             view.backgroundColor = color
         }
@@ -69,46 +69,46 @@ class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
         let shotImageViewWidth = contentView.bounds.width / 2
         let shotImageViewHeight = shotImageViewWidth * spacings.smallerShotHeightToWidthRatio
 
-        firstShotImageView.autoSetDimension(.Height, toSize: shotImageViewHeight)
-        firstShotImageView.autoSetDimension(.Width, toSize: shotImageViewWidth)
+        firstShotImageView.autoSetDimension(.height, toSize: shotImageViewHeight)
+        firstShotImageView.autoSetDimension(.width, toSize: shotImageViewWidth)
 
-        secondShotImageView.autoSetDimension(.Height, toSize: shotImageViewHeight)
-        secondShotImageView.autoSetDimension(.Width, toSize: shotImageViewWidth)
+        secondShotImageView.autoSetDimension(.height, toSize: shotImageViewHeight)
+        secondShotImageView.autoSetDimension(.width, toSize: shotImageViewWidth)
 
-        thirdShotImageView.autoSetDimension(.Height, toSize: shotImageViewHeight)
-        thirdShotImageView.autoSetDimension(.Width, toSize: shotImageViewWidth)
+        thirdShotImageView.autoSetDimension(.height, toSize: shotImageViewHeight)
+        thirdShotImageView.autoSetDimension(.width, toSize: shotImageViewWidth)
 
-        fourthShotImageView.autoSetDimension(.Height, toSize: shotImageViewHeight)
-        fourthShotImageView.autoSetDimension(.Width, toSize: shotImageViewWidth)
+        fourthShotImageView.autoSetDimension(.height, toSize: shotImageViewHeight)
+        fourthShotImageView.autoSetDimension(.width, toSize: shotImageViewWidth)
 
-        firstShotImageView.autoPinEdge(.Top, toEdge: .Top, ofView: shotsView)
-        firstShotImageView.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView)
-        firstShotImageView.autoPinEdge(.Bottom, toEdge: .Top, ofView: thirdShotImageView)
-        firstShotImageView.autoPinEdge(.Right, toEdge: .Left, ofView: secondShotImageView)
+        firstShotImageView.autoPinEdge(.top, to: .top, of: shotsView)
+        firstShotImageView.autoPinEdge(.left, to: .left, of: shotsView)
+        firstShotImageView.autoPinEdge(.bottom, to: .top, of: thirdShotImageView)
+        firstShotImageView.autoPinEdge(.right, to: .left, of: secondShotImageView)
 
-        secondShotImageView.autoPinEdge(.Top, toEdge: .Top, ofView: shotsView)
-        secondShotImageView.autoPinEdge(.Right, toEdge: .Right, ofView: shotsView)
-        secondShotImageView.autoPinEdge(.Bottom, toEdge: .Top, ofView: fourthShotImageView)
+        secondShotImageView.autoPinEdge(.top, to: .top, of: shotsView)
+        secondShotImageView.autoPinEdge(.right, to: .right, of: shotsView)
+        secondShotImageView.autoPinEdge(.bottom, to: .top, of: fourthShotImageView)
 
-        thirdShotImageView.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView)
-        thirdShotImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: shotsView)
-        thirdShotImageView.autoPinEdge(.Right, toEdge: .Left, ofView: fourthShotImageView)
+        thirdShotImageView.autoPinEdge(.left, to: .left, of: shotsView)
+        thirdShotImageView.autoPinEdge(.bottom, to: .bottom, of: shotsView)
+        thirdShotImageView.autoPinEdge(.right, to: .left, of: fourthShotImageView)
 
-        fourthShotImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: shotsView)
-        fourthShotImageView.autoPinEdge(.Right, toEdge: .Right, ofView: shotsView)
+        fourthShotImageView.autoPinEdge(.bottom, to: .bottom, of: shotsView)
+        fourthShotImageView.autoPinEdge(.right, to: .right, of: shotsView)
     }
 
     func setInfoViewConstraints() {
-        avatarView.autoSetDimensionsToSize(avatarSize)
-        avatarView.autoPinEdge(.Left, toEdge: .Left, ofView: infoView)
-        avatarView.autoPinEdge(.Top, toEdge: .Top, ofView: infoView, withOffset: 6.5)
+        avatarView.autoSetDimensions(to: avatarSize)
+        avatarView.autoPinEdge(.left, to: .left, of: infoView)
+        avatarView.autoPinEdge(.top, to: .top, of: infoView, withOffset: 6.5)
 
-        nameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: numberOfShotsLabel)
-        nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: avatarView)
-        nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: avatarView, withOffset: 3)
-        nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: infoView)
+        nameLabel.autoPinEdge(.bottom, to: .top, of: numberOfShotsLabel)
+        nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: avatarView)
+        nameLabel.autoPinEdge(.left, to: .right, of: avatarView, withOffset: 3)
+        nameLabel.autoPinEdge(.right, to: .right, of: infoView)
 
-        numberOfShotsLabel.autoPinEdge(.Left, toEdge: .Left, ofView: nameLabel)
+        numberOfShotsLabel.autoPinEdge(.left, to: .left, of: nameLabel)
     }
 
     func clearImages() {
@@ -120,8 +120,8 @@ class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
 
     // MARK: - Reusable
 
-    static var reuseIdentifier: String {
-        return String(SmallUserCollectionViewCell)
+    static var identifier: String {
+        return String(describing: SmallUserCollectionViewCell.self)
     }
 
     // MARK: - Width dependent height

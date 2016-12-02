@@ -66,7 +66,7 @@ class ShotDetailsViewModelSpec: QuickSpec {
             }
             
             commentsRequesterMock.deleteCommentStub.on(any()) { _, _ in
-                return Promise()
+                return Promise<Void>(value: Void())
             }
         }
         
@@ -97,7 +97,7 @@ class ShotDetailsViewModelSpec: QuickSpec {
                     sut.loadComments().then { result -> Void in
                         didReceiveResponse = true
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
             
@@ -122,13 +122,13 @@ class ShotDetailsViewModelSpec: QuickSpec {
                 waitUntil { done in
                     sut.loadComments().then { result in
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
                 
                 waitUntil { done in
                     sut.loadComments().then { result in
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
         
@@ -148,7 +148,7 @@ class ShotDetailsViewModelSpec: QuickSpec {
                     sut.postComment("fixture.message").then { result -> Void in
                         didReceiveResponse = true
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
             

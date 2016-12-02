@@ -15,16 +15,16 @@ protocol ShotImageType {
     ///
     /// - returns: URL to image with size 800x600. If `animated` attribute of the shot is `true`,
     ///            this image will be animated.
-    var hidpiURL: NSURL? { get }
+    var hidpiURL: URL? { get }
 
     /// The normal image is typically 400x300, but may be smaller if created before October 4th, 2012.
     ///
     /// - returns: URL to image with size 400x300. If `animated` attribute of the shot is `true`,
     ///            this image will be animated.
-    var normalURL: NSURL { get }
+    var normalURL: URL { get }
 
     /// The teaser image is typically 200x150, but may be smaller if created before October 4th, 2012.
     ///
     /// - returns: URL to image with size 200x150.
-    var teaserURL: NSURL { get }
+    var teaserURL: URL { get }
 }

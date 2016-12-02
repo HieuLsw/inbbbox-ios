@@ -12,38 +12,38 @@ import PromiseKit
 /// Defines how Requestable type should behave
 protocol Requestable {
     var query: Query { get }
-    var foundationRequest: NSURLRequest { get }
+    var foundationRequest: URLRequest { get }
 }
 
 // MARK: - Common implementation for Requestable
 extension Requestable {
 
     /// Foundation request based on query.
-    var foundationRequest: NSURLRequest {
+    var foundationRequest: URLRequest {
 
         let queryItems = query.parameters.queryItems
 
-        let components = NSURLComponents()
+        var components = URLComponents()
         components.scheme = query.service.scheme
         components.host = query.service.host
         components.path = query.service.version + query.path
 
         if queryItems.count > 0 {
-            components.queryItems = queryItems
+            components.queryItems = queryItems as [URLQueryItem]?
         }
 
         // Intentionally force unwrapping optional to get crash when problem occur
-        let mutableRequest = NSMutableURLRequest(URL: components.URL!)
-        mutableRequest.HTTPMethod = query.method.rawValue
-        mutableRequest.HTTPBody = query.parameters.body
+        let mutableRequest = NSMutableURLRequest(url: components.url!)
+        mutableRequest.httpMethod = query.method.rawValue
+        mutableRequest.httpBody = query.parameters.body as Data?
 
-        if mutableRequest.HTTPBody != nil {
+        if mutableRequest.httpBody != nil {
             mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
 
         query.service.authorizeRequest(mutableRequest)
-        guard let immutableRequest = mutableRequest.copy() as? NSURLRequest else {
-            return NSURLRequest()
+        guard let immutableRequest = mutableRequest.copy() as? URLRequest else {
+            return URLRequest(url: components.url!)
         }
         return immutableRequest
     }

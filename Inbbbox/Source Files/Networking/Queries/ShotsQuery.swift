@@ -17,20 +17,20 @@ struct ShotsQuery: Query {
     /// - BucketShots:    List of the given bucket's shots.
     /// - UserLikedShots: List of the given user's liked shots.
     enum ShotsType {
-        case List, UserShots(UserType), BucketShots(BucketType), UserLikedShots(UserType), LikedShots
+        case list, userShots(UserType), bucketShots(BucketType), userLikedShots(UserType), likedShots
 
         var path: String {
 
             switch self {
-            case .List:
+            case .list:
                 return "/shots"
-            case .UserShots(let user):
+            case .userShots(let user):
                 return "/users/\(user.username)/shots"
-            case .BucketShots(let bucket):
+            case .bucketShots(let bucket):
                 return "/buckets/\(bucket.identifier)/shots"
-            case .UserLikedShots(let user):
+            case .userLikedShots(let user):
                 return "/users/\(user.username)/likes"
-            case .LikedShots:
+            case .likedShots:
                 return "/user/likes"
             }
         }
@@ -38,8 +38,8 @@ struct ShotsQuery: Query {
 
     // Query definition
     let method = Method.GET
-    var parameters = Parameters(encoding: .URL)
-    private(set) var path = "/shots"
+    var parameters = Parameters(encoding: .url)
+    fileprivate(set) var path = "/shots"
     var followingUsersShotsQuery = false {
         willSet (newValue) {
             path = newValue ? "/user/following/shots" : "/shots"
@@ -77,7 +77,7 @@ struct ShotsQuery: Query {
     }
 
     // Parameters keys
-    private enum Key: String {
+    fileprivate enum Key: String {
         case List = "list"
         case Timeframe = "timeframe"
         case Date = "date"
@@ -92,7 +92,7 @@ struct ShotsQuery: Query {
             }
             return nil
         }
-        set { parameters[Key.List.rawValue] = newValue?.rawValue }
+        set { parameters[Key.List.rawValue] = newValue?.rawValue as AnyObject? }
     }
 
     var timeFrame: TimeFrame? {
@@ -102,19 +102,19 @@ struct ShotsQuery: Query {
             }
             return nil
         }
-        set { parameters[Key.Timeframe.rawValue] = newValue?.rawValue }
+        set { parameters[Key.Timeframe.rawValue] = newValue?.rawValue as AnyObject? }
     }
 
-    var date: NSDate? {
+    var date: Date? {
         get {
             if let dateString = parameters[Key.Date.rawValue] as? String {
-                return Formatter.Date.Basic.dateFromString(dateString)
+                return Formatter.Date.Basic.date(from: dateString)
             }
             return nil
         }
         set {
             if let newDate = newValue {
-                parameters[Key.Date.rawValue] = Formatter.Date.Basic.stringFromDate(newDate)
+                parameters[Key.Date.rawValue] = Formatter.Date.Basic.string(from: newDate) as AnyObject?
             }
         }
     }
@@ -126,6 +126,6 @@ struct ShotsQuery: Query {
             }
             return nil
         }
-        set { parameters[Key.Sort.rawValue] = newValue?.rawValue }
+        set { parameters[Key.Sort.rawValue] = newValue?.rawValue as AnyObject? }
     }
 }

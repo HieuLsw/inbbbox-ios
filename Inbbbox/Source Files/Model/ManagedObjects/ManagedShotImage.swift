@@ -18,22 +18,22 @@ class ManagedShotImage: NSManagedObject {
 
 extension ManagedShotImage: ShotImageType {
 
-    var hidpiURL: NSURL? {
-        guard let encodedString = mngd_hidpiURL?.stringByAddingPercentEncodingWithAllowedCharacters(
-        NSCharacterSet.URLQueryAllowedCharacterSet()) else {
+    var hidpiURL: URL? {
+        guard let encodedString = mngd_hidpiURL?.addingPercentEncoding(
+        withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             return nil
         }
-        return NSURL(string: encodedString)
+        return URL(string: encodedString)
     }
-    var normalURL: NSURL {
-        let encodedString = mngd_normalURL.stringByAddingPercentEncodingWithAllowedCharacters(
-        NSCharacterSet.URLQueryAllowedCharacterSet())
-        return NSURL(string: encodedString!)!
+    var normalURL: URL {
+        let encodedString = mngd_normalURL.addingPercentEncoding(
+        withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        return URL(string: encodedString!)!
 
     }
-    var teaserURL: NSURL {
-        let encodedString = mngd_teaserURL.stringByAddingPercentEncodingWithAllowedCharacters(
-        NSCharacterSet.URLQueryAllowedCharacterSet())
-        return NSURL(string: encodedString!)!
+    var teaserURL: URL {
+        let encodedString = mngd_teaserURL.addingPercentEncoding(
+        withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        return URL(string: encodedString!)!
     }
 }

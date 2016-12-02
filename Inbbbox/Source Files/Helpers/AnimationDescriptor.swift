@@ -5,8 +5,8 @@
 import UIKit
 
 enum AnimationType {
-    case Plain
-    case Spring
+    case plain
+    case spring
 }
 
 /// AnimationDescriptor hold all necessary information to perform animation.
@@ -18,10 +18,10 @@ protocol AnimationDescriptor {
 
     /// Animation duration value.
     /// Default is 0.3.
-    var duration: NSTimeInterval { get }
+    var duration: TimeInterval { get }
 
     /// Animation delay value.
-    var delay: NSTimeInterval { get set }
+    var delay: TimeInterval { get set }
 
     /// Animation spring damping value.
     /// Default is 0.0.
@@ -57,7 +57,7 @@ extension AnimationDescriptor {
     var springVelocity: CGFloat {
         return 0.0
     }
-    var duration: NSTimeInterval {
+    var duration: TimeInterval {
         return 0.3
     }
 }

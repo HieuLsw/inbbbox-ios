@@ -19,9 +19,9 @@ class UserDetailsViewModelSpec: QuickSpec {
         
         var sut: UserDetailsViewModelMock!
         let fixtureShotImage: ShotImageType = ShotImage(
-            hidpiURL: NSURL(string: "https://fixture.domain/fixture.image.hidpi.png"),
-            normalURL: NSURL(string: "https://fixture.domain/fixture.image.normal.png")!,
-            teaserURL: NSURL(string: "https://fixture.domain/fixture.image.teaser.png")!
+            hidpiURL: URL(string: "https://fixture.domain/fixture.image.hidpi.png"),
+            normalURL: URL(string: "https://fixture.domain/fixture.image.normal.png")!,
+            teaserURL: URL(string: "https://fixture.domain/fixture.image.teaser.png")!
         )
         var connectionsRequesterMock: APIConnectionsRequesterMock!
         
@@ -30,15 +30,15 @@ class UserDetailsViewModelSpec: QuickSpec {
             connectionsRequesterMock = APIConnectionsRequesterMock()
             sut.connectionsRequester = connectionsRequesterMock
             connectionsRequesterMock.isUserFollowedByMeStub.on(any()) { _ in
-                return Promise(true)
+                return Promise<Bool>(value: true)
             }
             
             connectionsRequesterMock.followUserStub.on(any()) { _ in
-                return Promise()
+                return Promise<Void>(value: Void())
             }
             
             connectionsRequesterMock.unfollowUserStub.on(any()) { _ in
-                return Promise()
+                return Promise<Void>(value: Void())
             }
         }
         
@@ -68,7 +68,7 @@ class UserDetailsViewModelSpec: QuickSpec {
             }
             
             it("should return proper cell data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.shotCollectionViewCellViewData(indexPath)
                 expect(cellData.animated).to(equal(true))
                 expect(cellData.shotImage.teaserURL).to(equal(fixtureShotImage.teaserURL))
@@ -88,7 +88,7 @@ class UserDetailsViewModelSpec: QuickSpec {
             }
             
             it("should return proper shot data for index path") {
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
                 let cellData = sut.shotCollectionViewCellViewData(indexPath)
                 expect(cellData.animated).to(equal(true))
                 expect(cellData.shotImage.teaserURL).to(equal(fixtureShotImage.teaserURL))
@@ -108,7 +108,7 @@ class UserDetailsViewModelSpec: QuickSpec {
                     sut.isProfileFollowedByMe().then { result -> Void in
                         didReceiveResponse = true
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
             
@@ -133,7 +133,7 @@ class UserDetailsViewModelSpec: QuickSpec {
                     sut.followProfile().then { result -> Void in
                         didReceiveResponse = true
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
             
@@ -158,7 +158,7 @@ class UserDetailsViewModelSpec: QuickSpec {
                     sut.unfollowProfile().then { result -> Void in
                         didReceiveResponse = true
                         done()
-                    }.error { _ in fail("This should not be invoked") }
+                    }.catch { _ in fail("This should not be invoked") }
                 }
             }
             

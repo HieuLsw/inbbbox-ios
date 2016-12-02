@@ -14,20 +14,20 @@ class ManagedTeam: NSManagedObject {
     @NSManaged var mngd_name: String
     @NSManaged var mngd_username: String
     @NSManaged var mngd_avatarURL: String?
-    @NSManaged var mngd_createdAt: NSDate
+    @NSManaged var mngd_createdAt: Date
 }
 
 extension ManagedTeam: TeamType {
     var identifier: String { return mngd_identifier }
     var name: String { return mngd_name }
     var username: String { return mngd_username }
-    var avatarURL: NSURL? {
+    var avatarURL: URL? {
         guard let encodedString =
-                mngd_avatarURL?.stringByAddingPercentEncodingWithAllowedCharacters(
-                NSCharacterSet.URLQueryAllowedCharacterSet()) else {
+                mngd_avatarURL?.addingPercentEncoding(
+                withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             return nil
         }
-        return NSURL(string: encodedString)
+        return URL(string: encodedString)
     }
-    var createdAt: NSDate { return mngd_createdAt }
+    var createdAt: Date { return mngd_createdAt }
 }

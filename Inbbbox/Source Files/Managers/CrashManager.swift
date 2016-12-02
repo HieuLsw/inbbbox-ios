@@ -14,8 +14,8 @@ final class CrashManager {
             return
         }
 
-        BITHockeyManager.sharedHockeyManager().configureWithIdentifier(identifier)
-        BITHockeyManager.sharedHockeyManager().crashManager.crashManagerStatus = .AutoSend
-        BITHockeyManager.sharedHockeyManager().startManager()
+        BITHockeyManager.shared().configure(withIdentifier: identifier)
+        BITHockeyManager.shared().crashManager.crashManagerStatus = .autoSend
+        BITHockeyManager.shared().start()
     }
 }

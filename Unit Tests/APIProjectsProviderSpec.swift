@@ -33,7 +33,7 @@ class APIProjectsProviderSpec: QuickSpec {
             it("comments should be properly returned") {
                 sut.provideProjectsForShot(Shot.fixtureShot()).then { _projects -> Void in
                     projects = _projects
-                }.error { _ in fail() }
+                }.catch { _ in fail() }
                 
                 expect(projects).toNotEventually(beNil())
                 expect(projects).toEventually(haveCount(3))
@@ -45,19 +45,19 @@ class APIProjectsProviderSpec: QuickSpec {
 //Explanation: Create ProjectsProviderMock to override methods from PageableProvider.
 private class APIProjectsProviderMock: APIProjectsProvider {
     
-    override func firstPageForQueries<T: Mappable>(queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
-        return mockResult(T)
+    override func firstPageForQueries<T: Mappable>(_ queries: [Query], withSerializationKey key: String?) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func nextPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func nextPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    override func previousPageFor<T: Mappable>(type: T.Type) -> Promise<[T]?> {
-        return mockResult(T)
+    override func previousPageFor<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
+        return mockResult(T.self)
     }
     
-    func mockResult<T: Mappable>(type: T.Type) -> Promise<[T]?> {
+    func mockResult<T: Mappable>(_ type: T.Type) -> Promise<[T]?> {
         return Promise<[T]?> { fulfill, _ in
             
             let json = JSONSpecLoader.sharedInstance.fixtureProjectsJSON(withCount: 3)

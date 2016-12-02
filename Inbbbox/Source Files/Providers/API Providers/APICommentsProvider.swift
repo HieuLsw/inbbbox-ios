@@ -20,7 +20,7 @@ class APICommentsProvider: PageableProvider {
 
      - returns: Promise which resolves with comments or nil.
      */
-    func provideCommentsForShot(shot: ShotType) -> Promise<[CommentType]?> {
+    func provideCommentsForShot(_ shot: ShotType) -> Promise<[CommentType]?> {
 
         let query = CommentQuery(shot: shot)
         return Promise<[CommentType]?> { fulfill, reject in
@@ -28,7 +28,7 @@ class APICommentsProvider: PageableProvider {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (comments: [Comment]?) -> Void in
                 fulfill(comments.flatMap { $0.map { $0 as CommentType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -43,10 +43,10 @@ class APICommentsProvider: PageableProvider {
     func nextPage() -> Promise<[CommentType]?> {
         return Promise <[CommentType]?> { fulfill, reject in
             firstly {
-                nextPageFor(Comment)
+                nextPageFor(Comment.self)
             }.then { comments -> Void in
                 fulfill(comments.flatMap { $0.map { $0 as CommentType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
@@ -61,10 +61,10 @@ class APICommentsProvider: PageableProvider {
     func previousPage() -> Promise<[CommentType]?> {
         return Promise <[CommentType]?> { fulfill, reject in
             firstly {
-                previousPageFor(Comment)
+                previousPageFor(Comment.self)
             }.then { comments -> Void in
                 fulfill(comments.flatMap { $0.map { $0 as CommentType } })
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }

@@ -12,7 +12,7 @@ struct AddToBucketQuery: Query {
 
     let method = Method.PUT
     let path: String
-    var parameters = Parameters(encoding: .JSON)
+    var parameters = Parameters(encoding: .json)
 
     /// Initialize query for adding shot to bucket.
     ///
@@ -20,6 +20,6 @@ struct AddToBucketQuery: Query {
     /// - parameter bucket: Bucket which shot should be added to.
     init(shot: ShotType, bucket: BucketType) {
         path = "/buckets/" + bucket.identifier.stringValue + "/shots"
-        parameters["shot_id"] = shot.identifier
+        parameters["shot_id"] = shot.identifier as AnyObject?
     }
 }

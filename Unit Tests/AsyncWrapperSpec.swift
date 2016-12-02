@@ -34,7 +34,7 @@ class AsyncWrapperSpec: QuickSpec {
                 waitUntil { done in
                     sut.main(after: 0.1) {
                         didExecuteClosure = true
-                        isMainThread = NSThread.isMainThread()
+                        isMainThread = Thread.isMainThread
                         done()
                     }
                 }

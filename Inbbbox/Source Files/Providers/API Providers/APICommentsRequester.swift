@@ -23,8 +23,8 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with created comment.
      */
-    func postCommentForShot(shot: ShotType, withText text: String) -> Promise<CommentType> {
-        AnalyticsManager.trackUserActionEvent(.Comment)
+    func postCommentForShot(_ shot: ShotType, withText text: String) -> Promise<CommentType> {
+        AnalyticsManager.trackUserActionEvent(.comment)
         let query = CreateCommentQuery(shot: shot, body: text)
         return sendCommentQuery(query, verifyTextLength: text)
     }
@@ -41,7 +41,7 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with updated comment.
      */
-    func updateComment(comment: CommentType, forShot shot: ShotType, withText text: String) -> Promise<CommentType> {
+    func updateComment(_ comment: CommentType, forShot shot: ShotType, withText text: String) -> Promise<CommentType> {
 
         let query = UpdateCommentQuery(shot: shot, comment: comment, withBody: text)
         return sendCommentQuery(query, verifyTextLength: text)
@@ -58,14 +58,14 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with Void.
      */
-    func deleteComment(comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
+    func deleteComment(_ comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             let query = DeleteCommentQuery(shot: shot, comment: comment)
 
             firstly {
                 sendCommentDeleteQuery(query)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -79,14 +79,14 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with Void.
      */
-    func likeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
+    func likeComment(_ comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             let query = CommentLikeQuery(shot: shot, comment: comment)
 
             firstly {
                 sendCommentLikeQuery(query)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -100,14 +100,14 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with Void.
      */
-    func unlikeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
+    func unlikeComment(_ comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             let query = CommentUnlikeQuery(shot: shot, comment: comment)
 
             firstly {
                 sendCommentLikeQuery(query)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -119,7 +119,7 @@ class APICommentsRequester: Verifiable {
 
      - returns: Promise which resolves with Bool.
      */
-    func checkIfLikeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Bool> {
+    func checkIfLikeComment(_ comment: CommentType, forShot shot: ShotType) -> Promise<Bool> {
         return Promise<Bool> { fulfill, reject in
 
             let query = CommentLikedQuery(shot: shot, comment: comment)
@@ -128,25 +128,25 @@ class APICommentsRequester: Verifiable {
                 sendCommentLikedQuery(query)
             }.then { result in
                 fulfill(result)
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 }
 
 private extension APICommentsRequester {
 
-    func sendCommentQuery(query: Query, verifyTextLength text: String) -> Promise<CommentType> {
+    func sendCommentQuery(_ query: Query, verifyTextLength text: String) -> Promise<CommentType> {
         return Promise<CommentType> { fulfill, reject in
 
             firstly {
                 verifyTextLength(text, min: 1, max: UInt.max)
             }.then {
                 self.sendCommentQuery(query)
-            }.then(fulfill).error(reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
-    func sendCommentQuery(query: Query) -> Promise<CommentType> {
+    func sendCommentQuery(_ query: Query) -> Promise<CommentType> {
         return Promise<CommentType> { fulfill, reject in
 
             firstly {
@@ -158,15 +158,15 @@ private extension APICommentsRequester {
             }.then { json -> Void in
 
                 guard let json = json else {
-                    throw ResponseError.UnexpectedResponse
+                    throw ResponseError.unexpectedResponse
                 }
                 fulfill(Comment.map(json))
 
-            }.error(reject)
+            }.catch(execute: reject)
         }
     }
 
-    func sendCommentDeleteQuery(query: Query) -> Promise<Void> {
+    func sendCommentDeleteQuery(_ query: Query) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             firstly {
@@ -175,22 +175,22 @@ private extension APICommentsRequester {
                 self.verifyAccountType()
             }.then {
                 Request(query: query).resume()
-            }.then { _ in fulfill() }.error(reject)
+            }.then { _ in fulfill() }.catch(execute: reject)
         }
     }
 
-    func sendCommentLikeQuery(query: Query) -> Promise<Void> {
+    func sendCommentLikeQuery(_ query: Query) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
             firstly {
                 verifyAuthenticationStatus(true)
             }.then {
                 Request(query: query).resume()
-            }.then { _ in fulfill() }.error(reject)
+            }.then { _ in fulfill() }.catch(execute: reject)
         }
     }
 
-    func sendCommentLikedQuery(query: Query) -> Promise<Bool> {
+    func sendCommentLikedQuery(_ query: Query) -> Promise<Bool> {
         return Promise<Bool> { fulfill, reject in
 
             firstly {
@@ -199,7 +199,7 @@ private extension APICommentsRequester {
                 Request(query: query).resume()
             }.then { _ in
                 fulfill(true)
-            }.error { error in
+            }.catch { error in
                 // According to API documentation, when response.code is 404,
                 // then comment is not liked by authenticated user.
                 (error as NSError).code == 404 ? fulfill(false) : reject(error)

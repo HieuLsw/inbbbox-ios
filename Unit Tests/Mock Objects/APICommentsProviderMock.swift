@@ -16,7 +16,7 @@ class APICommentsProviderMock: APICommentsProvider {
     let provideCommentsForShotStub = Stub<ShotType, Promise<[CommentType]?>>()
     let nextPageStub = Stub<Void, Promise<[CommentType]?>>()
 
-    override func provideCommentsForShot(shot: ShotType) -> Promise<[CommentType]?> {
+    override func provideCommentsForShot(_ shot: ShotType) -> Promise<[CommentType]?> {
         return try! provideCommentsForShotStub.invoke(shot)
     }
     

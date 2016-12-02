@@ -9,23 +9,23 @@
 import UIKit
 
 enum ActivityIndicatorSelectableViewState {
-    case Selected, Deselected
+    case selected, deselected
 }
 
 class ActivityIndicatorSelectableView: UIView {
 
     var selected: Bool {
-        get { return button.selected }
-        set { button.selected = newValue }
+        get { return button.isSelected }
+        set { button.isSelected = newValue }
     }
 
     var tapHandler: (() -> Void)?
 
-    private let bouncingBall: BouncingView
-    private let button = UIButton(type: .Custom)
+    fileprivate let bouncingBall: BouncingView
+    fileprivate let button = UIButton(type: .custom)
 
-    private var didSetConstraints = false
-    private var wasSelectedBeforeAnimationStart = false
+    fileprivate var didSetConstraints = false
+    fileprivate var wasSelectedBeforeAnimationStart = false
 
     override init(frame: CGRect) {
         bouncingBall = BouncingView(frame: frame, jumpHeight: 20, jumpDuration: 0.8)
@@ -33,21 +33,21 @@ class ActivityIndicatorSelectableView: UIView {
         super.init(frame: frame)
 
         button.configureForAutoLayout()
-        button.imageView?.backgroundColor = .clearColor()
-        button.contentMode = .ScaleAspectFit
-        button.setImage(UIImage(), forState: .Disabled)
-        button.addTarget(self, action: #selector(buttonDidTap(_:)), forControlEvents: .TouchUpInside)
+        button.imageView?.backgroundColor = .clear
+        button.contentMode = .scaleAspectFit
+        button.setImage(UIImage(), for: .disabled)
+        button.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         addSubview(button)
 
         addSubview(bouncingBall)
     }
 
-    @available(*, unavailable, message="Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(frame:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -61,19 +61,19 @@ class ActivityIndicatorSelectableView: UIView {
         super.updateConstraints()
     }
 
-    func setImage(image: UIImage?, forState state: ActivityIndicatorSelectableViewState) {
-        button.setImage(image, forState: state.controlState)
+    func setImage(_ image: UIImage?, forState state: ActivityIndicatorSelectableViewState) {
+        button.setImage(image, for: state.controlState)
     }
 
     func startAnimating() {
         if !bouncingBall.shouldAnimate {
             bouncingBall.startAnimating()
         }
-        button.hidden = true
+        button.isHidden = true
     }
 
     func stopAnimating() {
-        button.hidden = false
+        button.isHidden = false
         bouncingBall.stopAnimating()
     }
 }
@@ -88,6 +88,6 @@ private extension ActivityIndicatorSelectableView {
 private extension ActivityIndicatorSelectableViewState {
 
     var controlState: UIControlState {
-        return self == .Selected ? .Selected : .Normal
+        return self == .selected ? .selected : .normal
     }
 }

@@ -18,7 +18,7 @@ class CommentLikedQuerySpec: QuickSpec {
         SharedQuerySpec.performSpecForQuery( { Void -> Query in
             return CommentLikedQuery(shot: Shot.fixtureShot(), comment: Comment.fixtureComment())
         }) { Void -> QueryExpectation in
-            return (method: .GET, encoding: .URL, path: "/shots/fixture.identifier/comments/fixture.identifier/like")
+            return (method: .GET, encoding: .url, path: "/shots/fixture.identifier/comments/fixture.identifier/like")
         }
         
         describe("when newly initialized with shot and comment identifiers") {

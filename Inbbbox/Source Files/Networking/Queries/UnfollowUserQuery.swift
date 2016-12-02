@@ -12,7 +12,7 @@ struct UnfollowUserQuery: Query {
 
     let method = Method.DELETE
     let path: String
-    var parameters = Parameters(encoding: .URL)
+    var parameters = Parameters(encoding: .url)
 
     /// Initialize query for unfollowing a given user.
     ///
