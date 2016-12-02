@@ -150,7 +150,7 @@ extension ShotsCollectionViewController {
         stateHandler.collectionView?(collectionView, willDisplay: cell, forItemAt: indexPath)
 
         if !isForceTouchAvailable() {
-            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell(_:)))
+            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(apply3DTouch(_:)))
             gesture.minimumPressDuration = 0.5
             cell.addGestureRecognizer(gesture)
         }
@@ -337,20 +337,22 @@ private extension ShotsCollectionViewController {
         }
     }
 
-    @objc func longPressCell(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        if let
+}
+
+extension ShotsCollectionViewController : ForceTouchApplicapable {
+    func apply3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard let
             cell = gestureRecognizer.view as? UICollectionViewCell,
             let indexPath = collectionView?.indexPath(for: cell),
-            let normalStateHandler = stateHandler as?ShotsNormalStateHandler
-            {
-                let height =  self.view.frame.height * 0.8
-                let controller  = normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
-                let frame = CGRect(x: 15, y: (self.view.frame.height - height) / 2 , width: self.view.frame.width - 30, height: self.view.frame.height)
+            let normalStateHandler = stateHandler as? ShotsNormalStateHandler
+        else {
+            return
+        }
 
-                PeekView().viewForController(parentViewController: self, contentViewController: controller!, expectedContentViewFrame: frame, fromGesture: gestureRecognizer, shouldHideStatusBar: true, withOptions: nil, completionHandler: nil)
-            }
-
+        let height =  self.view.frame.height * 0.8
+        let controller  = normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
+        let frame = CGRect(x: 15, y: (self.view.frame.height - height) / 2 , width: self.view.frame.width - 30, height: self.view.frame.height)
+        PeekView().viewForController(parentViewController: self, contentViewController: controller!, expectedContentViewFrame: frame, fromGesture: gestureRecognizer, shouldHideStatusBar: true, withOptions: nil, completionHandler: nil)
 
     }
-
 }

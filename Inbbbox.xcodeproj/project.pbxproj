@@ -189,6 +189,7 @@
 		706212225CCFF89D35423D58 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D86F0D3CB41BCD1D56D9AC5 /* AvatarView.swift */; };
 		70A9390D8C1FC18E771C9A21 /* FollowUserQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A8EC52138981168880334D /* FollowUserQuerySpec.swift */; };
 		738000923C392AA96CEB1C32 /* APIBucketsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74061C3F8179787B1B2A764F /* APIBucketsProviderSpec.swift */; };
+		73A9F50E1DF1C88E005BE877 /* ForceTouchApplicapable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9F50D1DF1C88E005BE877 /* ForceTouchApplicapable.swift */; };
 		741557631DA7D54500767008 /* ShotLikesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741557621DA7D54500767008 /* ShotLikesQuery.swift */; };
 		742F7F7C45218BBF696179BD /* RemoveFromBucketQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1B71814BD31275DACE75B1 /* RemoveFromBucketQuery.swift */; };
 		7449D9861CAD4A7500E37CE9 /* UserToURLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7449D9851CAD4A7500E37CE9 /* UserToURLProvider.swift */; };
@@ -639,6 +640,7 @@
 		70A22688C61F1F08F321055C /* UIImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		7245F62B4560D66933573C0B /* ShotsAnimatorMock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotsAnimatorMock.swift; sourceTree = "<group>"; };
 		7277F2A2B3ABE9E8C70E55CE /* PageableComponentSerializer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PageableComponentSerializer.swift; sourceTree = "<group>"; };
+		73A9F50D1DF1C88E005BE877 /* ForceTouchApplicapable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForceTouchApplicapable.swift; sourceTree = "<group>"; };
 		73AE0E38438C576F26771C97 /* UnfollowUserQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UnfollowUserQuery.swift; sourceTree = "<group>"; };
 		73ED7991095A44326D902553 /* ShotBucketsFooterView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotBucketsFooterView.swift; sourceTree = "<group>"; };
 		74061C3F8179787B1B2A764F /* APIBucketsProviderSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIBucketsProviderSpec.swift; sourceTree = "<group>"; };
@@ -1314,6 +1316,7 @@
 				F0FD0A851CBE56D100735933 /* SimpleShotsViewModel.swift */,
 				30C184641CC674920032798C /* DefaultImage.swift */,
 				F0BEBDD81CDB3E9800AA391C /* ProfileViewModel.swift */,
+				73A9F50D1DF1C88E005BE877 /* ForceTouchApplicapable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2077,6 +2080,7 @@
 				342302627F76B9CA7836C927 /* ManagedObjectsProvider.swift in Sources */,
 				7D9A80E3D139236DFE200B24 /* SecretKeysProvider.m in Sources */,
 				594325F453FC541B1BB008C5 /* ShotCellInitialStateAnimationDescriptor.swift in Sources */,
+				73A9F50E1DF1C88E005BE877 /* ForceTouchApplicapable.swift in Sources */,
 				E408F0C1D6F845C2859813C8 /* AnalyticsManager.swift in Sources */,
 				164D72F4A0A2783801625241 /* AutoScrollableShotsDataSource.swift in Sources */,
 				C20FF7DE8259CD89BC892442 /* LocalNotificationRegistrator.swift in Sources */,
