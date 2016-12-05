@@ -229,6 +229,7 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
     }
 }
 
+// MARK: PeekPopPreviewingDelegate
 
 extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {

@@ -237,7 +237,7 @@ extension BucketsCollectionViewController: ColorModeAdaptable {
     }
 }
 
-// MARK: ForceTouchApplicapable
+// MARK: PeekPopPreviewingDelegate
 
 extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
 
