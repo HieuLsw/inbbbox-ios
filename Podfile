@@ -44,6 +44,7 @@ target 'Inbbbox' do
   pod 'ImageViewer', :git => 'https://github.com/Siemian/ImageViewer'
   #fork because of styling private properties
   pod 'AOAlertController', :git => 'https://github.com/0legAdamov/AOAlertController', :tag => 'v1.2.1'
+  pod 'Solar', '~> 1.0.0'
 
   target 'Unit Tests' do
     inherit! :search_paths
