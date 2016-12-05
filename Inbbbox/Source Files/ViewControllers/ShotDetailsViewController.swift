@@ -228,7 +228,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
 
         self.present(activityViewController, animated: true, completion: nil)
-	}
+    }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {

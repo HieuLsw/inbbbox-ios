@@ -21,7 +21,7 @@ class ShotDetailsOperationView: UIView {
 
     let likeSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
     let bucketSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
-	let shareButton = UIButton.newAutoLayout()
+    let shareButton = UIButton.newAutoLayout()
     let likeCounterLabel = UILabel.newAutoLayout()
     let bucketCounterLabel = UILabel.newAutoLayout()
 
