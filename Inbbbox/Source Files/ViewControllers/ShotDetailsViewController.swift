@@ -150,7 +150,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             let likeSelectableView = cell.operationView.likeSelectableView
             let bucketSelectableView = cell.operationView.bucketSelectableView
-
+            let shareButton = cell.operationView.shareButton
+			
             likeSelectableView.tapHandler = { [weak self] in
                 self?.likeSelectableViewDidTap(likeSelectableView)
             }
@@ -158,6 +159,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             bucketSelectableView.tapHandler = { [weak self] in
                 self?.bucketSelectableViewDidTap(bucketSelectableView)
             }
+			
+            shareButton.addTarget(self, action: #selector(shareButtonDidTap), for: .touchUpInside)
 
             setLikeStateInSelectableView(likeSelectableView)
             setBucketStatusInSelectableView(bucketSelectableView)
@@ -600,5 +603,10 @@ private extension ShotDetailsViewController {
 
     dynamic func closeButtonDidTap(_: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    dynamic func shareButtonDidTap() {
+        let activityViewController = UIActivityViewController(activityItems: [viewModel.shot.htmlUrl], applicationActivities: nil)
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
