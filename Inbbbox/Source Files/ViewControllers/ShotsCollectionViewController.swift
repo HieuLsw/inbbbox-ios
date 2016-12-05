@@ -15,6 +15,7 @@ class ShotsCollectionViewController: UICollectionViewController {
     let initialState: State = Defaults[.onboardingPassed] ? .initialAnimations : .onboarding
     var stateHandler: ShotsStateHandler
     var backgroundAnimator: MainScreenStreamSourcesAnimator?
+    var skipButtonAnimator: OnboardingSkipButtonAnimator?
     let shotsProvider = ShotsProvider()
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
@@ -56,11 +57,13 @@ extension ShotsCollectionViewController {
         let backgroundView = ShotsCollectionBackgroundView()
         collectionView?.backgroundView = backgroundView
         backgroundAnimator = MainScreenStreamSourcesAnimator(view: backgroundView)
+        skipButtonAnimator = OnboardingSkipButtonAnimator(view: backgroundView)
         collectionView?.registerClass(ShotCollectionViewCell.self, type: .cell)
 
         configureForCurrentStateHandler()
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
+        setupSkipButton()
     }
     
     
@@ -211,7 +214,7 @@ extension ShotsCollectionViewController: ShotsStateHandlerDelegate {
 
 // MARK: Private methods
 
-private extension ShotsCollectionViewController {
+fileprivate extension ShotsCollectionViewController {
 
     func configureForCurrentStateHandler() {
         stateHandler.shotsCollectionViewController = self
@@ -233,6 +236,8 @@ private extension ShotsCollectionViewController {
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)
             }
+        } else if let onboardingStateHandler = stateHandler as? ShotsOnboardingStateHandler {
+            onboardingStateHandler.skipDelegate = self
         }
     }
 
@@ -329,5 +334,30 @@ private extension ShotsCollectionViewController {
             showStreamSources()
         }
     }
+}
 
+// MARK: OnboardingSkipable
+
+extension ShotsCollectionViewController: OnboardingSkipButtonHandlerDelegate {
+    
+    func shouldSkipButtonAppear() {
+        skipButtonAnimator?.showButton()
+    }
+    
+    func shouldSkipButtonDisappear() {
+        skipButtonAnimator?.hideButton()
+    }
+}
+
+private extension ShotsCollectionViewController {
+    
+    func setupSkipButton() {
+        guard let background = collectionView?.backgroundView as? ShotsCollectionBackgroundView else { return }
+        background.skipButton.addTarget(self, action: #selector(skipStep), for: .touchUpInside)
+    }
+    
+    @objc func skipStep() {
+        guard let onboardingHandler = stateHandler as? ShotsOnboardingStateHandler else { return }
+        onboardingHandler.skipOnboardingStep()
+    }
 }
