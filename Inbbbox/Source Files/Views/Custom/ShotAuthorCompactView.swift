@@ -10,7 +10,7 @@ import PureLayout
 
 class ShotAuthorCompactView: UIView {
 
-    // MARK: Public
+    // MARK: Internal
     lazy var avatarView: AvatarView = AvatarView(size: self.avatarSize,
                                                  bordered: false)
 
@@ -37,9 +37,9 @@ class ShotAuthorCompactView: UIView {
             let placeholder = UIImage(named: "ic-account-nopicture")
             avatarView.imageView.loadImageFromURL((viewData?.avatarURL)!, placeholderImage: placeholder)
             if let viewData = viewData, viewData.liked {
-                likesImageView.image = UIImage(named: "ic-like-details-active")
+                setLikesIconActive()
             } else {
-                likesImageView.image = UIImage(named: "ic-likes-count")
+                setLikesIconInactive()
             }
             likesLabel.text = "\(viewData?.likesCount ?? 0)"
             commentsLabel.text = "\(viewData?.commentsCount ?? 0)"
@@ -76,7 +76,29 @@ class ShotAuthorCompactView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: UIView
+    // MARK: Internal
+
+    func setLikesIconActive() {
+        likesImageView.image = UIImage(named: "ic-like-details-active")
+    }
+
+    func setLikesIconInactive() {
+        likesImageView.image = UIImage(named: "ic-likes-count")
+    }
+
+    func incrementLikesNumber() {
+        if let currentCount = viewData?.likesCount {
+            likesLabel.text = "\(currentCount + 1)"
+        }
+    }
+
+    func decrementLikesNumber() {
+        if let currentCount = viewData?.likesCount {
+            likesLabel.text = "\(currentCount + 1)"
+        }
+    }
+
+    // MARK: Subclassing
 
     override class var requiresConstraintBasedLayout: Bool {
         return true
