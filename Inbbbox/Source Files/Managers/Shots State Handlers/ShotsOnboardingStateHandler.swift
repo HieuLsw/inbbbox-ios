@@ -53,7 +53,7 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     }
 
     func prepareForPresentingData() {
-        // Do nothing, all set.
+        self.disablePrefetching()
     }
 
     func presentData() {
@@ -108,6 +108,7 @@ extension ShotsOnboardingStateHandler {
         if indexPath.row == onboardingSteps.count {
             scrollViewAnimationsCompletion = {
                 Defaults[.onboardingPassed] = true
+                self.enablePrefetching()
                 self.delegate?.shotsStateHandlerDidInvalidate(self)
             }
         }
@@ -162,11 +163,12 @@ private extension ShotsOnboardingStateHandler {
             }
             
         }
-        
-        if indexPath.row == 3 {
-            skipDelegate?.shouldSkipButtonAppear()
-        } else {
-            skipDelegate?.shouldSkipButtonDisappear()
+
+        let currentStep = onboardingSteps[indexPath.row].action
+
+        switch currentStep {
+        case .follow: skipDelegate?.shouldSkipButtonAppear()
+        default: skipDelegate?.shouldSkipButtonDisappear()
         }
         
         return cell
@@ -178,6 +180,18 @@ private extension ShotsOnboardingStateHandler {
         }.then { user in
             self.connectionsRequester.followUser(user)
         }.catch { _ in }
+    }
+
+    func enablePrefetching() {
+        if #available(iOS 10.0, *) {
+            self.shotsCollectionViewController?.collectionView?.isPrefetchingEnabled = true
+        }
+    }
+
+    func disablePrefetching() {
+        if #available(iOS 10.0, *) {
+            self.shotsCollectionViewController?.collectionView?.isPrefetchingEnabled = false
+        }
     }
 }
 

@@ -57,6 +57,7 @@ extension ShotsCollectionViewController {
         let backgroundView = ShotsCollectionBackgroundView()
         collectionView?.backgroundView = backgroundView
         backgroundAnimator = MainScreenStreamSourcesAnimator(view: backgroundView)
+        skipButtonAnimator = OnboardingSkipButtonAnimator(view: backgroundView)
         collectionView?.registerClass(ShotCollectionViewCell.self, type: .cell)
 
         configureForCurrentStateHandler()
