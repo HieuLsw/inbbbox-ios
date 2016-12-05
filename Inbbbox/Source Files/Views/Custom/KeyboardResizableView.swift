@@ -158,9 +158,11 @@ private extension KeyboardResizableView {
     
     func calculateConstantIn(bottomConstraint: NSLayoutConstraint, basedOnParameters parameters: NSDictionary, andKeyboardPresence keyboardPresence: Bool) -> CGFloat {
         
+        guard let superview = superview else { return 0 }
+        
         if automaticallySnapToKeyboardTopEdge && !isKeyboardPresent {
-            let rectInSuperviewCoordinateSpace = superview!.convert(bounds, to: self)
-            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = superview!.frame.height - rectInSuperviewCoordinateSpace.height + rectInSuperviewCoordinateSpace.minY
+            let rectInSuperviewCoordinateSpace = superview.convert(bounds, to: self)
+            let keyboardTopEdgeAndSelfBottomEdgeOffsetY = superview.frame.height - rectInSuperviewCoordinateSpace.height + rectInSuperviewCoordinateSpace.minY
             
             snapOffset = keyboardTopEdgeAndSelfBottomEdgeOffsetY
         }
