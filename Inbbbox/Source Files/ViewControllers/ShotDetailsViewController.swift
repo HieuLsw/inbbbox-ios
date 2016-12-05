@@ -221,19 +221,12 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
         }
     }
 	
-	@objc private func shareButtonDidTap() {
-		// text to share
+    @objc private func shareButtonDidTap() {
         let text = viewModel.shot.htmlUrl
 		
-		// set up activity view controller
         let textToShare = [ text ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-		
-		// exclude some activity types from the list (optional)
-//		activityViewController.excludedActivityTypes = [ UIActivityType.airDrop, UIActivityType.postToFacebook ]
-		
-		// present the view controller
+
         self.present(activityViewController, animated: true, completion: nil)
 	}
 

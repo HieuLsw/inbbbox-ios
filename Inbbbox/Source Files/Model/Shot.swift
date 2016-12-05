@@ -23,7 +23,7 @@ struct Shot: ShotType {
     let bucketsCount: UInt
     let team: TeamType?
     let attachmentsCount: UInt
-	let htmlUrl: String
+    let htmlUrl: String
 }
 
 extension Shot: Mappable {
