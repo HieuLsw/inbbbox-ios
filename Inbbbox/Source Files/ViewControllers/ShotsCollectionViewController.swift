@@ -5,7 +5,7 @@
 import UIKit
 import PromiseKit
 import SwiftyUserDefaults
-import PeekView
+import PeekPop
 
 class ShotsCollectionViewController: UICollectionViewController {
 
@@ -20,6 +20,7 @@ class ShotsCollectionViewController: UICollectionViewController {
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
+    fileprivate var peekPop: PeekPop?
 
     // MARK: Life cycle
 
@@ -62,6 +63,9 @@ extension ShotsCollectionViewController {
         configureForCurrentStateHandler()
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
+        
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
     
     
@@ -148,12 +152,6 @@ extension ShotsCollectionViewController {
                                  willDisplay cell: UICollectionViewCell,
                                  forItemAt indexPath: IndexPath) {
         stateHandler.collectionView?(collectionView, willDisplay: cell, forItemAt: indexPath)
-
-        if !isForceTouchAvailable() {
-            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(applyArtificial3DTouch(_:)))
-            gesture.minimumPressDuration = 0.5
-            cell.addGestureRecognizer(gesture)
-        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
@@ -339,22 +337,25 @@ private extension ShotsCollectionViewController {
 
 }
 
-// MARK: ForceTouchApplicapable
+// MARK: PeekPopPreviewingDelegate
 
-extension ShotsCollectionViewController : ForceTouchApplicapable {
-    func applyArtificial3DTouch(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        guard let
-            cell = gestureRecognizer.view as? UICollectionViewCell,
-            let indexPath = collectionView?.indexPath(for: cell),
-            let normalStateHandler = stateHandler as? ShotsNormalStateHandler
-        else {
-            return
+extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard
+            let visibleCell = collectionView?.visibleCells.first,
+            let normalStateHandler = stateHandler as? ShotsNormalStateHandler,
+            let indexPath = collectionView?.indexPathsForVisibleItems.first
+            else { return nil }
+
+        previewingContext.sourceRect = visibleCell.contentView.bounds
+
+        return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+        if let normalStateHandler = stateHandler as? ShotsNormalStateHandler {
+            normalStateHandler.popViewController(viewControllerToCommit)
         }
-
-        let height =  self.view.frame.height * 0.8
-        let controller  = normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
-        let frame = CGRect(x: 15, y: (self.view.frame.height - height) / 2 , width: self.view.frame.width - 30, height: self.view.frame.height)
-        PeekView().viewForController(parentViewController: self, contentViewController: controller!, expectedContentViewFrame: frame, fromGesture: gestureRecognizer, shouldHideStatusBar: true, withOptions: nil, completionHandler: nil)
-
     }
 }
