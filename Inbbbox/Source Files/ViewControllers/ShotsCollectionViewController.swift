@@ -214,7 +214,7 @@ extension ShotsCollectionViewController: ShotsStateHandlerDelegate {
 
 // MARK: Private methods
 
-private extension ShotsCollectionViewController {
+fileprivate extension ShotsCollectionViewController {
 
     func configureForCurrentStateHandler() {
         stateHandler.shotsCollectionViewController = self

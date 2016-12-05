@@ -140,7 +140,7 @@ extension ShotsCollectionBackgroundView {
     }
 }
 
-private extension ShotsCollectionBackgroundView {
+fileprivate extension ShotsCollectionBackgroundView {
 
     func setupItems() {
         followingItem.label.text = NSLocalizedString("SettingsViewModel.Following", comment: "User settings, enable following")
