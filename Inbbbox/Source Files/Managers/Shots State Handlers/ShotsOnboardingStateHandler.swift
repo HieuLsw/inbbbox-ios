@@ -14,6 +14,7 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     
     weak var shotsCollectionViewController: ShotsCollectionViewController?
     weak var delegate: ShotsStateHandlerDelegate?
+    weak var skipDelegate: OnboardingSkipButtonHandlerDelegate?
     let onboardingSteps: [(image: UIImage?, action: ShotCollectionViewCell.Action)]
 
 
@@ -73,6 +74,11 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
             (image: UIImage(named: step5), action: ShotCollectionViewCell.Action.doNothing),
         ]
     }
+    
+    func skipOnboardingStep() {
+        guard let collectionView = shotsCollectionViewController?.collectionView else { return }
+        collectionView.animateToNextCell()
+    }
 }
 
 // MARK: UICollectionViewDataSource
@@ -111,7 +117,7 @@ extension ShotsOnboardingStateHandler {
         guard indexPath.row == onboardingSteps.count - 1 else {
             return
         }
-        collectionView.animateToNextCell()
+        skipOnboardingStep()
     }
 }
 
@@ -156,6 +162,13 @@ private extension ShotsOnboardingStateHandler {
             }
             
         }
+        
+        if indexPath.row == 3 {
+            skipDelegate?.shouldSkipButtonAppear()
+        } else {
+            skipDelegate?.shouldSkipButtonDisappear()
+        }
+        
         return cell
     }
     
