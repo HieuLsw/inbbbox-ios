@@ -220,15 +220,6 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             return cell
         }
     }
-	
-    @objc private func shareButtonDidTap() {
-        let text = viewModel.shot.htmlUrl
-		
-        let textToShare = [ text ]
-        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-
-        self.present(activityViewController, animated: true, completion: nil)
-    }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -609,5 +600,10 @@ private extension ShotDetailsViewController {
 
     dynamic func closeButtonDidTap(_: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    dynamic func shareButtonDidTap() {
+        let activityViewController = UIActivityViewController(activityItems: [viewModel.shot.htmlUrl], applicationActivities: nil)
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
