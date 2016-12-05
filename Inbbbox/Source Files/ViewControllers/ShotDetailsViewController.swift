@@ -149,7 +149,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             let likeSelectableView = cell.operationView.likeSelectableView
             let bucketSelectableView = cell.operationView.bucketSelectableView
-
+            let shareButton = cell.operationView.shareButton
+			
             likeSelectableView.tapHandler = { [weak self] in
                 self?.likeSelectableViewDidTap(likeSelectableView)
             }
@@ -157,6 +158,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             bucketSelectableView.tapHandler = { [weak self] in
                 self?.bucketSelectableViewDidTap(bucketSelectableView)
             }
+			
+            shareButton.addTarget(self, action: #selector(shareButtonDidTap), for: .touchUpInside)
 
             setLikeStateInSelectableView(likeSelectableView)
             setBucketStatusInSelectableView(bucketSelectableView)
@@ -217,6 +220,22 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             return cell
         }
     }
+	
+	@objc private func shareButtonDidTap() {
+		// text to share
+        let text = viewModel.shot.htmlUrl
+		
+		// set up activity view controller
+        let textToShare = [ text ]
+        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+		
+		// exclude some activity types from the list (optional)
+//		activityViewController.excludedActivityTypes = [ UIActivityType.airDrop, UIActivityType.postToFacebook ]
+		
+		// present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
+	}
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {

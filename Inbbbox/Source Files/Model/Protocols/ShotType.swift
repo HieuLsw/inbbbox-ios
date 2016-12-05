@@ -55,6 +55,9 @@ protocol ShotType {
     
     /// Attachments count
     var attachmentsCount: UInt { get }
+	
+	/// URL of the shot.
+	var htmlUrl: String { get }
 }
 
 func == (lhs: ShotType, rhs: ShotType) -> Bool {

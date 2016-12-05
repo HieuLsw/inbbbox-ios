@@ -2783,7 +2783,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
 				PRODUCT_NAME = Inbbbox;
-				PROVISIONING_PROFILE = "12578a8b-2366-46b0-80c8-66e5bc1b862d";
+				PROVISIONING_PROFILE = "7ac1bffd-ae7f-4406-b092-46ae49761a4e";
 				PROVISIONING_PROFILE_SPECIFIER = "Inbbbox Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

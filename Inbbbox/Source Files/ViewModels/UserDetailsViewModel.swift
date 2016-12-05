@@ -141,7 +141,8 @@ extension UserDetailsViewModel {
             commentsCount: shot.commentsCount,
             bucketsCount: shot.bucketsCount,
             team: shot.team,
-            attachmentsCount: shot.attachmentsCount
+            attachmentsCount: shot.attachmentsCount,
+            htmlUrl: shot.htmlUrl
         )
     }
 }
