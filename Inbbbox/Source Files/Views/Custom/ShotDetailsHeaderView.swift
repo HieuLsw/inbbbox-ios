@@ -44,6 +44,13 @@ class ShotDetailsHeaderView: UICollectionReusableView, Reusable {
     var imageDidTap: (() -> Void)?
     let avatarView = AvatarView(size: avatarSize, bordered: false)
 
+    /// Return state of fetching in imageView if it is a gif
+    var isDoneFetchingImage: Bool {
+        guard let imageView = imageView as? AnimatableShotImageView else { return true }
+    
+        return imageView.hiddenProgressView
+    }
+    
     let closeButtonView = CloseButtonView.newAutoLayout()
     fileprivate let titleLabel = TTTAttributedLabel.newAutoLayout()
     fileprivate let overlapingTitleLabel = UILabel.newAutoLayout()
@@ -253,6 +260,12 @@ extension ShotDetailsHeaderView {
     fileprivate func setupImageView() {
         imageViewCenterWrapperView.insertSubview(imageView, belowSubview: dimView)
         imageView.autoPinEdgesToSuperviewEdges()
+    }
+    
+    func cancelAllAnimatedImageSettings() {
+        guard let imageView = imageView as? AnimatableShotImageView else { return }
+        
+        imageView.cancelLoadingImage()
     }
 }
 
