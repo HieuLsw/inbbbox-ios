@@ -43,6 +43,10 @@ class ShotsInitialAnimationsStateHandler: NSObject, ShotsStateHandler {
     var collectionViewScrollEnabled: Bool {
         return false
     }
+    
+    var shouldShowNoShotsView: Bool {
+        return shotsCollectionViewController?.shots.count == 0 && Settings.areAllStreamSourcesOff()
+    }
 
     private let emptyDataSetLoadingView = EmptyDataSetLoadingView.newAutoLayoutView()
 
@@ -86,7 +90,20 @@ extension ShotsInitialAnimationsStateHandler {
         let shouldBlurShotImage = indexPath.row != 0
         let blur = shouldBlurShotImage ? CGFloat(1) : CGFloat(0)
         cell.shotImageView.loadShotImageFromURL(shot.shotImage.normalURL, blur: blur)
+        cell.shotImageView.applyBlur(blur)
         cell.gifLabel.hidden = !shot.animated
+
+        let imageCompletion: UIImage -> Void = { image in
+            cell.shotImageView.image = image
+            cell.shotImageView.applyBlur(blur)
+        }
+
+        LazyImageProvider.lazyLoadImageFromURLs(
+            (shot.shotImage.teaserURL, shot.shotImage.normalURL, nil),
+            teaserImageCompletion: imageCompletion,
+            normalImageCompletion: imageCompletion
+        )
+        
         return cell
     }
 }

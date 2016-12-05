@@ -10,122 +10,140 @@ import Dobby
 
 class ShotCollectionViewCellSpec: QuickSpec {
     override func spec() {
-        pending("pending because of random crashes") {
-            var sut: ShotCollectionViewCell!
+        
+        var sut: ShotCollectionViewCell!
+        
+        beforeEach {
+            sut = ShotCollectionViewCell(frame: CGRectZero)
+        }
+        
+        afterEach {
+            sut = nil
+        }
+        
+        describe("shot container view") {
+            
+            var shotContainer: UIView!
             
             beforeEach {
-                sut = ShotCollectionViewCell(frame: CGRectZero)
+                shotContainer = sut.shotContainer
             }
             
-            afterEach {
-                sut = nil
+            it("should not translate autoresizing mask into constraints") {
+                expect(shotContainer.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
             }
             
-            describe("like image view") {
-                
-                var likeImageView: DoubleImageView!
-                
-                beforeEach {
-                    likeImageView = sut.likeImageView
-                }
-                
-                it("should not translate autoresizing mask into constraints") {
-                    expect(likeImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
-                }
-                
-                it("should be added to cell content view subviews") {
-                    expect(sut.contentView.subviews).to(contain(likeImageView))
-                }
-                
-                it("should have proper first image") {
-                    expect(UIImagePNGRepresentation(likeImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-like-swipe")!)))
-                }
-                
-                it("should have proper second image") {
-                    expect(UIImagePNGRepresentation(likeImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-like-swipe-filled")!)))
-                }
+            it("should be added to cell content view subviews") {
+                expect(sut.contentView.subviews).to(contain(shotContainer))
+            }
+        }
+        
+        describe("like image view") {
+            
+            var likeImageView: DoubleImageView!
+            
+            beforeEach {
+                likeImageView = sut.likeImageView
             }
             
-            describe("bucket image view") {
-                
-                var bucketImageView: DoubleImageView!
-                
-                beforeEach {
-                    bucketImageView = sut.bucketImageView
-                }
-                
-                it("should not translate autoresizing mask into constraints") {
-                    expect(bucketImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
-                }
-                
-                it("should be added to cell content view subviews") {
-                    expect(sut.contentView.subviews).to(contain(bucketImageView))
-                }
-                
-                it("should have proper first image") {
-                    expect(UIImagePNGRepresentation(bucketImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-bucket-swipe")!)))
-                }
-                
-                it("should have proper second image") {
-                    expect(UIImagePNGRepresentation(bucketImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-bucket-swipe-filled")!)))
-                }
+            it("should not translate autoresizing mask into constraints") {
+                expect(likeImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
             }
             
-            describe("comment image view") {
-                
-                var commentImageView: DoubleImageView!
-                
-                beforeEach {
-                    commentImageView = sut.commentImageView
-                }
-                
-                it("should not translate autoresizing mask into constraints") {
-                    expect(commentImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
-                }
-                
-                it("should be added to cell content view subviews") {
-                    expect(sut.contentView.subviews).to(contain(commentImageView))
-                }
-                
-                it("should have proper first image") {
-                    expect(UIImagePNGRepresentation(commentImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-comment")!)))
-                }
-                
-                it("should have proper second image") {
-                    expect(UIImagePNGRepresentation(commentImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-comment-swipe-filled")!)))
-                }
+            it("should be added to cell content view subviews") {
+                expect(sut.shotContainer.subviews).to(contain(likeImageView))
             }
             
-            describe("shot image view") {
-                
-                var shotImageView: UIImageView!
-                
-                beforeEach {
-                    shotImageView = sut.shotImageView
-                }
-                
-                it("should not translate autoresizing mask into constraints") {
-                    expect(shotImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
-                }
-                
-                it("should be added to cell content view subviews") {
-                    expect(sut.contentView.subviews).to(contain(shotImageView))
-                }
+            it("should have proper first image") {
+                expect(UIImagePNGRepresentation(likeImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-like-swipe")!)))
             }
             
-            describe("requires constraint based layout") {
-                
-                var requiresConstraintBasedLayout: Bool!
-                
-                beforeEach {
-                    requiresConstraintBasedLayout = ShotCollectionViewCell.requiresConstraintBasedLayout()
-                }
-                
-                it("should require constraint based layout") {
-                    expect(requiresConstraintBasedLayout).to(beTruthy())
-                }
+            it("should have proper second image") {
+                expect(UIImagePNGRepresentation(likeImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-like-swipe-filled")!)))
+            }
+        }
+        
+        describe("bucket image view") {
+            
+            var bucketImageView: DoubleImageView!
+            
+            beforeEach {
+                bucketImageView = sut.bucketImageView
             }
             
+            it("should not translate autoresizing mask into constraints") {
+                expect(bucketImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
+            }
+            
+            it("should be added to cell content view subviews") {
+                expect(sut.shotContainer.subviews).to(contain(bucketImageView))
+            }
+            
+            it("should have proper first image") {
+                expect(UIImagePNGRepresentation(bucketImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-bucket-swipe")!)))
+            }
+            
+            it("should have proper second image") {
+                expect(UIImagePNGRepresentation(bucketImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-bucket-swipe-filled")!)))
+            }
+        }
+        
+        describe("comment image view") {
+            
+            var commentImageView: DoubleImageView!
+            
+            beforeEach {
+                commentImageView = sut.commentImageView
+            }
+            
+            it("should not translate autoresizing mask into constraints") {
+                expect(commentImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
+            }
+            
+            it("should be added to cell content view subviews") {
+                expect(sut.shotContainer.subviews).to(contain(commentImageView))
+            }
+            
+            it("should have proper first image") {
+                expect(UIImagePNGRepresentation(commentImageView.firstImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-comment")!)))
+            }
+            
+            it("should have proper second image") {
+                expect(UIImagePNGRepresentation(commentImageView.secondImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "ic-comment-filled")!)))
+            }
+        }
+        
+        describe("shot image view") {
+            
+            var shotImageView: UIImageView!
+            
+            beforeEach {
+                shotImageView = sut.shotImageView
+            }
+            
+            it("should not translate autoresizing mask into constraints") {
+                expect(shotImageView.translatesAutoresizingMaskIntoConstraints).to(beFalsy())
+            }
+            
+            it("should be added to cell content view subviews") {
+                expect(sut.shotContainer.subviews).to(contain(shotImageView))
+            }
+        }
+        
+        describe("requires constraint based layout") {
+            
+            var requiresConstraintBasedLayout: Bool!
+            
+            beforeEach {
+                requiresConstraintBasedLayout = ShotCollectionViewCell.requiresConstraintBasedLayout()
+            }
+            
+            it("should require constraint based layout") {
+                expect(requiresConstraintBasedLayout).to(beTruthy())
+            }
+        }
+        
+        pending("randomly crashes bitrise, works locally; check with Xcode 8 and Swift 3 after conversion") {
             describe("swiping cell") {
                 
                 var panGestureRecognizer: UIPanGestureRecognizer!
@@ -272,124 +290,194 @@ class ShotCollectionViewCellSpec: QuickSpec {
                                 }
                                 
                                 it("should display first image view") {
-                                    expect(likeImageView.firstImageView.alpha).to(equal(1))
+                                    expect(likeImageView.firstImageView.alpha).to(equal(0))
                                 }
                                 
                                 it("should hide second image view") {
-                                    expect(likeImageView.secondImageView.alpha).to(equal(0))
+                                    expect(likeImageView.secondImageView.alpha).to(equal(1))
                                 }
                             }
                         }
                     }
                     
-                    context("when user swiped slightly right") {
+                    context("when user swiped") {
                         
-                        var capturedLikeActionDuration: NSTimeInterval!
-                        var capturedLikeActionDelay: NSTimeInterval!
-                        var capturedLikeActionOptions: UIViewAnimationOptions!
-                        var capturedLikeActionAnimations: (() -> Void)!
-                        var capturedLikeActionCompletion: ((Bool) -> Void)!
+                        var capturedActionDuration: NSTimeInterval!
+                        var capturedActionDelay: NSTimeInterval!
+                        var capturedActionOptions: UIViewAnimationOptions!
+                        var capturedActionAnimations: (() -> Void)!
+                        var capturedActionCompletion: ((Bool) -> Void)!
                         
                         beforeEach {
                             viewClassMock.animationStub.on(any()) { duration, delay, options, animations, completion in
-                                capturedLikeActionDuration = duration
-                                capturedLikeActionDelay = delay
-                                capturedLikeActionOptions = options
-                                capturedLikeActionAnimations = animations
-                                capturedLikeActionCompletion = completion
+                                capturedActionDuration = duration
+                                capturedActionDelay = delay
+                                capturedActionOptions = options
+                                capturedActionAnimations = animations
+                                capturedActionCompletion = completion
                             }
-                            panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
-                                return CGPoint(x: 50, y:0)
-                            }
-                            panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
                         }
                         
-                        it("should animate like action with duration 0.3") {
-                            expect(capturedLikeActionDuration).to(equal(0.3))
-                        }
-                        
-                        it("should animate like action without delay") {
-                            expect(capturedLikeActionDelay).to(equal(0))
-                        }
-                        
-                        it("should animate like action without options") {
-                            expect(capturedLikeActionOptions).to(equal([]))
-                        }
-                        
-                        describe("like action animations block") {
+                        context("slightly right") {
                             
                             beforeEach {
-                                sut.contentView.bounds = CGRect(x: 0, y: 0, width: 100, height: 0)
-                                sut.likeImageView.alpha = 0
-                                capturedLikeActionAnimations()
+                                panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
+                                    return CGPoint(x: 50, y:0)
+                                }
+                                panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
                             }
                             
-                            it("should set shot image view tranform") {
-                                expect(CGAffineTransformEqualToTransform(sut.shotImageView.transform, CGAffineTransformTranslate(CGAffineTransformIdentity, 100, 0))).to(beTruthy())
+                            it("should animate like action with duration 0.3") {
+                                expect(capturedActionDuration).to(equal(0.3))
                             }
                             
-                            describe("like image view") {
-                                
-                                var likeImageView: DoubleImageView!
+                            it("should animate like action without delay") {
+                                expect(capturedActionDelay).to(equal(0))
+                            }
+                            
+                            it("should animate like action without options") {
+                                expect(capturedActionOptions).to(equal([]))
+                            }
+                            
+                            describe("like action animations block") {
                                 
                                 beforeEach {
-                                    likeImageView = sut.likeImageView
+                                    sut.contentView.bounds = CGRect(x: 0, y: 0, width: 100, height: 0)
+                                    sut.likeImageView.alpha = 0
+                                    capturedActionAnimations()
                                 }
                                 
-                                it("should have alpha 1") {
-                                    expect(likeImageView.alpha).to(equal(1.0))
+                                it("should set shot image view tranform") {
+                                    expect(CGAffineTransformEqualToTransform(sut.shotImageView.transform, CGAffineTransformTranslate(CGAffineTransformIdentity, 100, 0))).to(beTruthy())
                                 }
                                 
-                                it("should display second image view") {
-                                    expect(likeImageView.secondImageView.alpha).to(equal(1))
+                                describe("like image view") {
+                                    
+                                    var likeImageView: DoubleImageView!
+                                    
+                                    beforeEach {
+                                        likeImageView = sut.likeImageView
+                                    }
+                                    
+                                    it("should have alpha 1") {
+                                        expect(likeImageView.alpha).to(equal(1.0))
+                                    }
+                                    
+                                    it("should display second image view") {
+                                        expect(likeImageView.secondImageView.alpha).to(equal(1))
+                                    }
+                                    
+                                    it("should hide first image view") {
+                                        expect(likeImageView.firstImageView.alpha).to(equal(0))
+                                    }
+                                }
+                            }
+                            
+                            describe("like action completion block") {
+                                
+                                beforeEach {
+                                    capturedActionCompletion(true)
                                 }
                                 
-                                it("should hide first image view") {
-                                    expect(likeImageView.firstImageView.alpha).to(equal(0))
+                                itBehavesLike("returning to initial cell state animation") {
+                                    ["expectedDelay": 0.2,
+                                     "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Like)]
                                 }
                             }
                         }
                         
-                        describe("like action completion block") {
+                        context("considerably right") {
                             
                             beforeEach {
-                                capturedLikeActionCompletion(true)
+                                panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
+                                    return CGPoint(x: 150, y:0)
+                                }
+                                panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
                             }
                             
-                            itBehavesLike("returning to initial cell state animation") {
-                                ["expectedDelay": 0.2,
-                                    "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Like)]
+                            it("should animate bucket action with duration 0.3") {
+                                expect(capturedActionDuration).to(equal(0.3))
+                            }
+                            
+                            it("should animate bucket action without delay") {
+                                expect(capturedActionDelay).to(equal(0))
+                            }
+                            
+                            it("should animate bucket action without options") {
+                                expect(capturedActionOptions).to(equal([]))
+                            }
+                            
+                            describe("bucket action animations block") {
+                                
+                                beforeEach {
+                                    sut.contentView.bounds = CGRect(x: 0, y: 0, width: 100, height: 0)
+                                    sut.bucketImageView.alpha = 0
+                                    capturedActionAnimations()
+                                }
+                                
+                                it("should set shot image view tranform") {
+                                    expect(CGAffineTransformEqualToTransform(sut.shotImageView.transform, CGAffineTransformTranslate(CGAffineTransformIdentity, 100, 0))).to(beTruthy())
+                                }
+                            }
+                            
+                            describe("bucket action completion block") {
+                                
+                                beforeEach {
+                                    capturedActionCompletion(true)
+                                }
+                                
+                                itBehavesLike("returning to initial cell state animation") {
+                                    ["expectedDelay": 0.2,
+                                     "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Bucket)]
+                                }
                             }
                         }
-                    }
-                    
-                    context("when user swiped considerably right") {
                         
-                        beforeEach {
-                            panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
-                                return CGPoint(x: 150, y:0)
+                        context("slightly left") {
+                            
+                            beforeEach {
+                                panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
+                                    return CGPoint(x: -50, y:0)
+                                }
+                                panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
                             }
-                            panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
-                        }
-                        
-                        itBehavesLike("returning to initial cell state animation") {
-                            ["expectedDelay": 0.0,
-                                "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Bucket)]
-                        }
-                    }
-                    
-                    context("when user swiped slightly left") {
-                        
-                        beforeEach {
-                            panGestureRecognizerMock.translationInViewStub.on(any()) { _ in
-                                return CGPoint(x: -50, y:0)
+                            
+                            it("should animate comment action with duration 0.3") {
+                                expect(capturedActionDuration).to(equal(0.3))
                             }
-                            panGestureRecognizer!.specRecognizeWithGestureRecognizer(panGestureRecognizerMock)
-                        }
-                        
-                        itBehavesLike("returning to initial cell state animation") {
-                            ["expectedDelay": 0.0,
-                                "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Comment)]
+                            
+                            it("should animate comment action without delay") {
+                                expect(capturedActionDelay).to(equal(0))
+                            }
+                            
+                            it("should animate comment action without options") {
+                                expect(capturedActionOptions).to(equal([]))
+                            }
+                            
+                            describe("comment action animations block") {
+                                
+                                beforeEach {
+                                    sut.contentView.bounds = CGRect(x: 0, y: 0, width: 100, height: 0)
+                                    sut.commentImageView.alpha = 0
+                                    capturedActionAnimations()
+                                }
+                                
+                                it("should set shot image view tranform") {
+                                    expect(CGAffineTransformEqualToTransform(sut.shotImageView.transform, CGAffineTransformTranslate(CGAffineTransformIdentity, -100, 0))).to(beTruthy())
+                                }
+                            }
+                            
+                            describe("comment action completion block") {
+                                
+                                beforeEach {
+                                    capturedActionCompletion(true)
+                                }
+                                
+                                itBehavesLike("returning to initial cell state animation") {
+                                    ["expectedDelay": 0.2,
+                                     "expectedAction": ShotCollectionViewCellActionWrapper(action: ShotCollectionViewCell.Action.Comment)]
+                                }
+                            }
                         }
                     }
                 }
@@ -434,39 +522,38 @@ class ShotCollectionViewCellSpec: QuickSpec {
                     }
                 }
             }
+        }
+        
+        describe("reusable") {
             
-            describe("reusable") {
+            describe("reuse identifier") {
                 
-                describe("reuse identifier") {
-                    
-                    var reuseIdentifier: String?
-                    
-                    beforeEach {
-                        reuseIdentifier = ShotCollectionViewCell.reuseIdentifier
-                    }
-                    
-                    it("should have proper reuse identifier") {
-                        expect(reuseIdentifier).to(equal("ShotCollectionViewCellIdentifier"))
-                    }
+                var reuseIdentifier: String?
+                
+                beforeEach {
+                    reuseIdentifier = ShotCollectionViewCell.reuseIdentifier
+                }
+                
+                it("should have proper reuse identifier") {
+                    expect(reuseIdentifier).to(equal("ShotCollectionViewCellIdentifier"))
                 }
             }
+        }
+        
+        describe("gesture recognizer delegate") {
             
-            describe("gesture recognizer delegate") {
+            describe("gesture recognize should should recognize simultaneously") {
                 
-                describe("gesture recognize should should recognize simultaneously") {
-                    
-                    var shouldRecognizeSimultaneously: Bool!
-                    
-                    beforeEach {
-                        shouldRecognizeSimultaneously = sut.gestureRecognizer(UIGestureRecognizer(), shouldRecognizeSimultaneouslyWithGestureRecognizer: UIGestureRecognizer())
-                    }
-                    
-                    it("should alwawys recognize simultaneously all gesture recognizers") {
-                        expect(shouldRecognizeSimultaneously).to(beTruthy())
-                    }
+                var shouldRecognizeSimultaneously: Bool!
+                
+                beforeEach {
+                    shouldRecognizeSimultaneously = sut.gestureRecognizer(UIGestureRecognizer(), shouldRecognizeSimultaneouslyWithGestureRecognizer: UIGestureRecognizer())
+                }
+                
+                it("should alwawys block other gesture recognizers") {
+                    expect(shouldRecognizeSimultaneously).to(beFalsy())
                 }
             }
-            
         }
     }
 }

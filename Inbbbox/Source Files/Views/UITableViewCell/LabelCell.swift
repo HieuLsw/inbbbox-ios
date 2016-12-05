@@ -43,3 +43,9 @@ class LabelCell: UITableViewCell, Reusable {
         super.updateConstraints()
     }
 }
+
+extension LabelCell: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        selectedBackgroundView = UIView.withColor(mode.settingsSelectedCellBackgound)
+    }
+}

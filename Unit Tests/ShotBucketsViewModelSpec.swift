@@ -93,6 +93,7 @@ class ShotBucketsViewModelSpec: QuickSpec {
                 
                 sut.bucketsProvider = bucketsProviderMock
                 sut.bucketsRequester = bucketsRequesterMock
+                sut.bucketsProvider.provideMyBuckets()
             }
             
             afterEach {
@@ -110,7 +111,13 @@ class ShotBucketsViewModelSpec: QuickSpec {
                 }
                 
                 it("should have correct number of items") {
-                    expect(sut.itemsCount).to(equal(2))
+                    waitUntil { done in
+                        sut.loadBuckets().then { _ in
+                            done()
+                        }
+                    }
+
+                    expect(sut.itemsCount >= 2).to(beTruthy())
                 }
             }
             
@@ -248,7 +255,13 @@ class ShotBucketsViewModelSpec: QuickSpec {
                 }
                 
                 it("should have correct number of items") {
-                    expect(sut.itemsCount).to(equal(2))
+                    waitUntil { done in
+                        sut.loadBuckets().then { _ in
+                            done()
+                        }
+                    }
+
+                    expect(sut.itemsCount >= 2).to(beTruthy())
                 }
             }
             

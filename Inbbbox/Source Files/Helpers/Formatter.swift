@@ -25,6 +25,7 @@ struct Formatter {
 private extension Formatter.Date {
     static var basicDateFormatter = { Void -> NSDateFormatter in
         let formatter = NSDateFormatter()
+        formatter.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
         formatter.dateFormat = "yyyy-MM-dd"
 
         return formatter
@@ -32,6 +33,7 @@ private extension Formatter.Date {
 
     static var timestampDateFormatter = { Void -> NSDateFormatter in
         let formatter = NSDateFormatter()
+        formatter.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
 

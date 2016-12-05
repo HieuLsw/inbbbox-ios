@@ -24,6 +24,13 @@ enum AnalyticsUserActionEvent: String {
     case Like, AddToBucket, Comment, SwipeDown
 }
 
+/// Defines which settings change can be tracked.
+enum SettingsValueChangedEvent: String {
+    case DailyRemainderEnabled, FollowingStreamSource,
+            NewTodayStreamSource, PopularTodayStreamSource, DebutsStreamSource,
+            AuthorOnHomeScreen, NightMode
+}
+
 class AnalyticsManager {
 
     /// Setup analytics using Tracking ID.
@@ -72,6 +79,19 @@ class AnalyticsManager {
         tracker.send(event)
     }
 
+    /// Method to track settings change events.
+    ///
+    /// - parameter changedSetting: setting change to track.
+    class func trackSettingChanged(changedSetting: SettingsValueChangedEvent, state: Bool) {
+        guard let tracker = GAI.sharedInstance().defaultTracker else {
+            return
+        }
+        let event = GAIDictionaryBuilder.createEventWithCategory("SettingsChange",
+                action: changedSetting.rawValue,
+                label: state ? "on" : "off", value: nil).build() as [NSObject:AnyObject]
+        tracker.send(event)
+    }
+    
     /// Method to track Dribbble API Rate Limit (X-RateLimit-Remaining).
     ///
     /// - parameter requests: The number of requests remaining in the current rate limit window (per minute).

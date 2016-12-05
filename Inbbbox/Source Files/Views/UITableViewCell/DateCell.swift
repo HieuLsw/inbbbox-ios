@@ -26,7 +26,6 @@ class DateCell: UITableViewCell, Reusable {
         accessoryType = .DisclosureIndicator
 
         titleLabel.font = UIFont.systemFontOfSize(17, weight: UIFontWeightRegular)
-        titleLabel.textColor = .blackColor()
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 
@@ -59,5 +58,12 @@ class DateCell: UITableViewCell, Reusable {
 
     func setDateText(text: String) {
         dateLabel.text = text
+    }
+}
+
+extension DateCell: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        titleLabel.textColor = mode.tableViewCellTextColor
+        selectedBackgroundView = UIView.withColor(mode.settingsSelectedCellBackgound)
     }
 }

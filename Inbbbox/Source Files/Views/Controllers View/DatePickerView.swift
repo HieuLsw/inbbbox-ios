@@ -20,16 +20,18 @@ class DatePickerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor.backgroundGrayColor()
+        let currentMode = ColorModeProvider.current()
+        backgroundColor = currentMode.datePickerViewBackgroundColor
 
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = currentMode.datePickerBackgroundColor
         addSubview(contentView)
 
-        datePicker.backgroundColor = UIColor.whiteColor()
+        datePicker.backgroundColor = currentMode.datePickerBackgroundColor
+        datePicker.setValue(currentMode.datePickerTextColor, forKey: "textColor")
         datePicker.datePickerMode = .Time
         contentView.addSubview(datePicker)
 
-        separatorLine.backgroundColor = UIColor.RGBA(224, 224, 224, 1)
+        separatorLine.backgroundColor = currentMode.datePickerViewSeparatorColor
         contentView.addSubview(separatorLine)
 
         setNeedsUpdateConstraints()

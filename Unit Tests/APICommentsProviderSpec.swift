@@ -15,56 +15,53 @@ import Dobby
 
 class APICommentsProviderSpec: QuickSpec {
     override func spec() {
-
-        pending("tests fail randomly - need to be fixed") {
-
-            var comments: [CommentType]?
-            var sut: APICommentsProviderPrivateMock!
-
-            beforeEach {
-                sut = APICommentsProviderPrivateMock()
+        
+        var comments: [CommentType]?
+        var sut: APICommentsProviderPrivateMock!
+        
+        beforeEach {
+            sut = APICommentsProviderPrivateMock()
+        }
+        
+        afterEach {
+            sut = nil
+            comments = nil
+        }
+        
+        describe("when providing comments for shot") {
+            
+            it("comments should be properly returned") {
+                sut.provideCommentsForShot(Shot.fixtureShot()).then { _comments -> Void in
+                    comments = _comments
+                }.error { _ in fail() }
+                
+                expect(comments).toNotEventually(beNil())
+                expect(comments).toEventually(haveCount(3))
             }
-
-            afterEach {
-                sut = nil
-                comments = nil
+            
+        }
+        
+        describe("when providing comments from next page") {
+            
+            it("comments should be properly returned") {
+                sut.nextPage().then { _comments -> Void in
+                    comments = _comments
+                }.error { _ in fail() }
+                
+                expect(comments).toNotEventually(beNil())
+                expect(comments).toEventually(haveCount(3))
             }
-
-            describe("when providing comments for shot") {
-
-                it("comments should be properly returned") {
-                    sut.provideCommentsForShot(Shot.fixtureShot()).then { _comments -> Void in
-                        comments = _comments
-                    }.error { _ in fail() }
-
-                    expect(comments).toNotEventually(beNil())
-                    expect(comments).toEventually(haveCount(3))
-                }
-
-            }
-
-            describe("when providing comments from next page") {
-
-                it("comments should be properly returned") {
-                    sut.nextPage().then { _comments -> Void in
-                        comments = _comments
-                    }.error { _ in fail() }
-
-                    expect(comments).toNotEventually(beNil())
-                    expect(comments).toEventually(haveCount(3))
-                }
-            }
-
-            describe("when providing comments from previous page") {
-
-                it("comments should be properly returned") {
-                    sut.previousPage().then { _comments -> Void in
-                        comments = _comments
-                    }.error { _ in fail() }
-
-                    expect(comments).toNotEventually(beNil())
-                    expect(comments).toEventually(haveCount(3))
-                }
+        }
+        
+        describe("when providing comments from previous page") {
+            
+            it("comments should be properly returned") {
+                sut.previousPage().then { _comments -> Void in
+                    comments = _comments
+                }.error { _ in fail() }
+                
+                expect(comments).toNotEventually(beNil())
+                expect(comments).toEventually(haveCount(3))
             }
         }
     }

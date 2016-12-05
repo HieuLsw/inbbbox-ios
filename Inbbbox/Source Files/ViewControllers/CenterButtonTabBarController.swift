@@ -11,6 +11,10 @@ class CenterButtonTabBarController: UITabBarController {
     let shotsCollectionViewController = ShotsCollectionViewController()
     let settingsViewController = SettingsViewController()
     var didUpdateTabBarItems = false
+    var animatableLikesTabBarItem: UIImageView?
+    var animatableBucketsTabBarItem: UIImageView?
+    
+    private var currentColorMode = ColorModeProvider.current()
 
     enum CenterButtonViewControllers: Int {
         case Likes = 0
@@ -29,42 +33,19 @@ class CenterButtonTabBarController: UITabBarController {
     convenience init() {
         self.init(nibName: nil, bundle: nil)
 
-
-        let likesViewController = UINavigationController(
-            rootViewController: SimpleShotsCollectionViewController()
-        )
-        likesViewController.tabBarItem = tabBarItemWithTitle(
-            NSLocalizedString("CenterButtonTabBar.Likes", comment: "Main view, bottom bar"),
-            imageName: "ic-likes"
-        )
-
-        let bucketsViewController =
-                UINavigationController(rootViewController: BucketsCollectionViewController())
-        bucketsViewController.tabBarItem = tabBarItemWithTitle(
-            NSLocalizedString("CenterButtonTabBar.Buckets", comment: "Main view, bottom bar"),
-            imageName: "ic-buckets"
-        )
+        let likesViewController = UINavigationController(rootViewController: SimpleShotsCollectionViewController())
+        let bucketsViewController =  UINavigationController(rootViewController: BucketsCollectionViewController())
 
         let followeesViewController = UINavigationController(
             rootViewController: FolloweesCollectionViewController(
                 oneColumnLayoutCellHeightToWidthRatio:
-                    LargeUserCollectionViewCell.heightToWidthRatio,
+                LargeUserCollectionViewCell.heightToWidthRatio,
                 twoColumnsLayoutCellHeightToWidthRatio:
-                    SmallUserCollectionViewCell.heightToWidthRatio
+                SmallUserCollectionViewCell.heightToWidthRatio
             )
         )
 
-        followeesViewController.tabBarItem = tabBarItemWithTitle(
-            NSLocalizedString("CenterButtonTabBar.Following", comment: "Main view, bottom bar"),
-            imageName: "ic-following"
-        )
-
-        let settingsViewController =
-                UINavigationController(rootViewController: self.settingsViewController)
-        settingsViewController.tabBarItem = tabBarItemWithTitle(
-            NSLocalizedString("CenterButtonTabBar.Account", comment: "Main view, bottom bar"),
-            imageName: "ic-account"
-        )
+        let settingsViewController = UINavigationController(rootViewController: self.settingsViewController)
 
         viewControllers = [
             likesViewController,
@@ -73,6 +54,8 @@ class CenterButtonTabBarController: UITabBarController {
             followeesViewController,
             settingsViewController
         ]
+        
+        setupTabBarItem(forViewControllers: viewControllers, forColorMode: ColorModeProvider.current())
         selectedViewController = shotsCollectionViewController
     }
 
@@ -92,9 +75,9 @@ class CenterButtonTabBarController: UITabBarController {
 
         tabBar.translucent = false
         centerButton.configureForAutoLayout()
-        centerButton.setImage(UIImage(named: "ic-ball-active"), forState: .Selected)
-        centerButton.setImage(UIImage(named: "ic-ball-inactive"), forState: .Normal)
-        centerButton.backgroundColor = UIColor.whiteColor()
+        
+        centerButton.adaptColorMode(currentColorMode)
+        centerButton.adjustsImageWhenHighlighted = false
         centerButton.layer.zPosition = 1
         centerButton.addTarget(
             self,
@@ -120,6 +103,7 @@ class CenterButtonTabBarController: UITabBarController {
         if selectedViewController == shotsCollectionViewController {
             centerButton.selected = true
         }
+        prepareAnimatableTabBarItems()
     }
 
 // MARK: - Public
@@ -128,6 +112,25 @@ class CenterButtonTabBarController: UITabBarController {
     func configureForLaunchingWithForceTouchShortcut() {
         tabBar.alpha = 1.0
         tabBar.userInteractionEnabled = true
+    }
+
+    func animateTabBarItem(item: CenterButtonViewControllers) {
+        guard item == .Likes || item == .Buckets else { return }
+
+        let bounceAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
+        bounceAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
+        bounceAnimation.duration = NSTimeInterval(0.5)
+        bounceAnimation.calculationMode = kCAAnimationCubic
+
+        let itemToAnimate = item == .Likes ? animatableLikesTabBarItem : animatableBucketsTabBarItem
+
+        itemToAnimate?.layer.addAnimation(bounceAnimation, forKey: nil)
+
+        if let iconImage = itemToAnimate?.image {
+            let renderImage = iconImage.imageWithRenderingMode(.AlwaysOriginal)
+            itemToAnimate?.image = renderImage
+            itemToAnimate?.tintColor = .blackColor()
+        }
     }
 
 //    MARK: - Actions
@@ -147,28 +150,93 @@ extension CenterButtonTabBarController: UITabBarControllerDelegate {
     }
 }
 
+extension CenterButtonTabBarController: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        
+        setupTabBarItem(forViewControllers: viewControllers, forColorMode: mode)
+        centerButton.adaptColorMode(mode)
+    }
+}
+
 private extension CenterButtonTabBarController {
 
-    func tabBarItemWithTitle(title: String, imageName: String) -> UITabBarItem {
-
-        let image = UIImage(named: imageName)?.imageWithRenderingMode(.AlwaysOriginal)
-        let selectedImage = UIImage(
-            named: imageName + "-active"
-        )?.imageWithRenderingMode(.AlwaysOriginal)
+    func tabBarItemWithTitle(title: String?, normalImageName: String, selectedImageName:String) -> UITabBarItem {
+        
+        let image = UIImage(named: normalImageName)?.imageWithRenderingMode(.AlwaysOriginal)
+        let selectedImage = UIImage(named: selectedImageName)?.imageWithRenderingMode(.AlwaysOriginal)
 
         let tabBarItem = UITabBarItem(
             title: title,
             image: image,
             selectedImage: selectedImage
         )
+        
+        tabBarItem.accessibilityLabel = title
+        
         tabBarItem.setTitleTextAttributes(
-            [NSForegroundColorAttributeName: UIColor.pinkColor()],
+            [NSForegroundColorAttributeName: ColorModeProvider.current().tabBarSelectedItemTextColor],
             forState: .Selected
         )
         tabBarItem.setTitleTextAttributes(
-            [NSForegroundColorAttributeName: UIColor.tabBarGrayColor()],
+            [NSForegroundColorAttributeName: ColorModeProvider.current().tabBarNormalItemTextColor],
             forState: .Normal
         )
+
+        tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0)
+
         return tabBarItem
+    }
+
+    func prepareAnimatableTabBarItems() {
+        guard animatableLikesTabBarItem == nil else { return }
+
+        animatableLikesTabBarItem = tabBar.subviews[CenterButtonViewControllers.Likes.rawValue].subviews.first as? UIImageView
+        animatableBucketsTabBarItem = tabBar.subviews[CenterButtonViewControllers.Buckets.rawValue].subviews.first as? UIImageView
+        animatableLikesTabBarItem?.contentMode = .Center
+    }
+    
+    func setupTabBarItem(forViewControllers viewControllers: [UIViewController]?, forColorMode mode: ColorModeType) {
+        guard let viewControllers = viewControllers else {
+            return
+        }
+        
+        for viewController in viewControllers {
+            guard let firstViewController = (viewController as? UINavigationController)?.viewControllers.first else {
+                continue
+            }
+            
+            switch firstViewController {
+            case let likesViewController as SimpleShotsCollectionViewController:
+                likesViewController.tabBarItem = tabBarItemWithTitle(
+                    nil,
+                    normalImageName: mode.tabBarLikesNormalImageName,
+                    selectedImageName: mode.tabBarLikesSelectedImageName
+                )
+                likesViewController.adaptColorMode(mode)
+            case let bucketsViewController as BucketsCollectionViewController:
+                bucketsViewController.tabBarItem = tabBarItemWithTitle(
+                    nil,
+                    normalImageName: mode.tabBarBucketsNormalImageName,
+                    selectedImageName: mode.tabBarBucketsSelectedImageName
+                )
+                bucketsViewController.adaptColorMode(mode)
+            case let followeesViewController as FolloweesCollectionViewController:
+                followeesViewController.tabBarItem = tabBarItemWithTitle(
+                    nil,
+                    normalImageName: mode.tabBarFollowingNormalImageName,
+                    selectedImageName: mode.tabBarFollowingSelectedImageName
+                )
+                followeesViewController.adaptColorMode(mode)
+            case let settingsViewController as SettingsViewController:
+                settingsViewController.tabBarItem = tabBarItemWithTitle(
+                    nil,
+                    normalImageName: mode.tabBarSettingsNormalImageName,
+                    selectedImageName: mode.tabBarSettingsSelectedImageName
+                )
+                settingsViewController.adaptColorMode(mode)
+            default:
+                break
+            }
+        }
     }
 }

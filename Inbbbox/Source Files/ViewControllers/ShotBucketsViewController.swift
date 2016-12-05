@@ -10,6 +10,7 @@ import UIKit
 import PromiseKit
 import TTTAttributedLabel
 import ImageViewer
+import DZNEmptyDataSet
 
 enum ShotBucketsViewControllerMode {
     case AddToBucket
@@ -22,7 +23,9 @@ class ShotBucketsViewController: UIViewController {
         return view as? ShotBucketsView
     }
 
-    var dismissClosure: (() -> Void)?
+    var willDismissViewControllerClosure: (() -> Void)?
+    var didDismissViewControllerClosure: (() -> Void)?
+    var alertView: UIAlertController?
 
     private var header: ShotBucketsHeaderView?
     private var footer: ShotBucketsFooterView?
@@ -50,13 +53,16 @@ class ShotBucketsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        shotBucketsView.collectionView.emptyDataSetSource = self
+
         firstly {
             viewModel.loadBuckets()
         }.then {
             self.shotBucketsView.collectionView.reloadData()
+        }.then {
+            self.setEstimatedSizeIfNeeded()
         }.error { error in
-            let alert = UIAlertController.unableToDownloadItems()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
         shotBucketsView.viewController = self
         shotBucketsView.collectionView.delegate = self
@@ -77,7 +83,6 @@ class ShotBucketsViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        setEstimatedSizeIfNeeded()
         (shotBucketsView.collectionView.collectionViewLayout as?
                 ShotDetailsCollectionCollapsableHeader)?.collapsableHeight =
                 heightForCollapsedCollectionViewHeader
@@ -85,11 +90,14 @@ class ShotBucketsViewController: UIViewController {
 
     override func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
 
-        if let imageView = header?.imageView as? AnimatableShotImageView {
-            imageView.stopAnimatingGIF()
+        header?.imageView.startAnimating()
+        super.dismissViewControllerAnimated(flag) {
+            self.didDismissViewControllerClosure?()
         }
-
-        super.dismissViewControllerAnimated(flag, completion: completion)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return ColorModeProvider.current().preferredStatusBarStyle
     }
 }
 
@@ -165,7 +173,6 @@ extension ShotBucketsViewController: UICollectionViewDataSource {
             if footer == nil {
                 footer = collectionView.dequeueReusableClass(ShotBucketsFooterView.self, forIndexPath: indexPath,
                         type: .Footer)
-                footer?.backgroundColor = backgroundColorForFooter()
             }
             return footer!
         }
@@ -203,7 +210,7 @@ extension ShotBucketsViewController: UICollectionViewDelegateFlowLayout {
 extension ShotBucketsViewController {
 
     func closeButtonDidTap(_: UIButton) {
-        self.dismissClosure?()
+        self.willDismissViewControllerClosure?()
         dismissViewControllerAnimated(true, completion: nil)
     }
 
@@ -211,21 +218,20 @@ extension ShotBucketsViewController {
         firstly {
             viewModel.removeShotFromSelectedBuckets()
         }.then { () -> Void in
-            self.dismissClosure?()
+            self.willDismissViewControllerClosure?()
             self.dismissViewControllerAnimated(true, completion: nil)
         }.error { error in
-            let alert = UIAlertController.addRemoveShotToBucketFail()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }
     }
 
     func addNewBucketButtonDidTap(_: UIButton) {
 
-        let alert = UIAlertController.provideBucketName { bucketName in
+        let alert = AlertViewController.provideBucketName { bucketName in
             self.createBucketAndAddShot(bucketName)
         }
-        self.presentViewController(alert, animated: true, completion: nil)
-        alert.view.tintColor = .pinkColor()
+        alert.show()
+        
     }
 
     func setRemoveFromSelectedBucketsButtonActive(active: Bool) {
@@ -256,14 +262,20 @@ private extension ShotBucketsViewController {
 
         guard let header = header else { return }
 
-        let imageViewer = ImageViewer(imageProvider: self, displacedView: header.imageView)
+        var imageViewer: ImageViewer {
+            if viewModel.shot.animated {
+                let url = viewModel.shot.shotImage.hidpiURL ?? viewModel.shot.shotImage.normalURL
+                return ImageViewer(imageProvider: self, displacedView: header.imageView, animatedUrl: url)
+            } else {
+                return ImageViewer(imageProvider: self, displacedView: header.imageView)
+            }
+        }
+
         presentImageViewer(imageViewer)
     }
 
     func animateHeader(start start: Bool) {
-        if let imageView = header?.imageView as? AnimatableShotImageView {
-            start ? imageView.startAnimatingGIF() : imageView.stopAnimatingGIF()
-        }
+        start ? header?.imageView.startAnimating() : header?.imageView.stopAnimating()
     }
 
     var heightForCollapsedCollectionViewHeader: CGFloat {
@@ -287,26 +299,22 @@ private extension ShotBucketsViewController {
     func setEstimatedSizeIfNeeded() {
 
         let width = shotBucketsView.collectionView.frame.size.width ?? 0
+
         if let layout = shotBucketsView.collectionView.collectionViewLayout as?
-                UICollectionViewFlowLayout where layout.estimatedItemSize.width != width {
+            UICollectionViewFlowLayout where layout.estimatedItemSize.width != width {
             layout.estimatedItemSize = CGSize(width: width, height: 40)
             layout.invalidateLayout()
         }
-    }
-
-    func backgroundColorForFooter() -> UIColor {
-        return .RGBA(246, 248, 248, 1) // color same as header title background
     }
 
     func addShotToBucketAtIndex(index: Int) {
         firstly {
             viewModel.addShotToBucketAtIndex(index)
         }.then { () -> Void in
-            self.dismissClosure?()
+            self.willDismissViewControllerClosure?()
             self.dismissViewControllerAnimated(true, completion: nil)
         }.error { error in
-            let alert = UIAlertController.addRemoveShotToBucketFail()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }
     }
 
@@ -316,8 +324,7 @@ private extension ShotBucketsViewController {
         }.then { () -> Void in
             self.addShotToBucketAtIndex(self.viewModel.buckets.count-1)
         }.error { error in
-            let alert = UIAlertController.unableToCreateNewBucket()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketCreationFailed, canBeDismissedByUser: true)
         }
     }
 }
@@ -418,10 +425,19 @@ extension ShotBucketsViewController: UIScrollViewDelegate {
 extension ShotBucketsViewController: ImageProvider {
 
     func provideImage(completion: UIImage? -> Void) {
-        if let image = header?.imageView.image {
-            completion(image)
+        if !viewModel.shot.animated {
+            if let image = header?.imageView.image {
+                completion(image)
+            }
         }
     }
 
     func provideImage(atIndex index: Int, completion: UIImage? -> Void) { /* empty by design */ }
+}
+
+extension ShotBucketsViewController: DZNEmptyDataSetSource {
+
+    func customViewForEmptyDataSet(scrollView: UIScrollView!) -> UIView! {
+        return UIView.newAutoLayoutView()
+    }
 }

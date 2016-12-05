@@ -15,11 +15,7 @@ class ShotDetailsDummySpaceCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        separatorView.backgroundColor = .separatorGrayColor()
-        contentView.addSubview(separatorView)
-
-        contentView.backgroundColor = .whiteColor()
+        setupSubviews()
     }
 
     @available(*, unavailable, message="Use init(frame:) instead")
@@ -41,6 +37,14 @@ class ShotDetailsDummySpaceCollectionViewCell: UICollectionViewCell {
         }
 
         super.updateConstraints()
+    }
+    
+    private func setupSubviews() {
+        let currentColorMode = ColorModeProvider.current()
+        separatorView.backgroundColor = currentColorMode.shotDetailsSeparatorColor
+        contentView.addSubview(separatorView)
+        
+        contentView.backgroundColor = currentColorMode.shotDummySpaceBackground
     }
 }
 

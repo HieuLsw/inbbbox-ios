@@ -42,7 +42,6 @@ class ProfileHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .pinkColor()
         clipsToBounds = true
 
         addSubview(avatarView)

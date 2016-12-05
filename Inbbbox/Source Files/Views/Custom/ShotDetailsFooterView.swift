@@ -81,7 +81,8 @@ class ShotDetailsFooterView: UICollectionReusableView {
     }
 
     func grayOutBackground(grayOut: Bool) {
-        cornerWrapperView.backgroundColor = grayOut ? .RGBA(246, 248, 248, 1) : .whiteColor()
+        let currentMode = ColorModeProvider.current()
+        cornerWrapperView.backgroundColor = grayOut ? currentMode.tableViewBackground : currentMode.shotBucketsFooterViewBackground
     }
 }
 

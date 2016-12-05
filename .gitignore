@@ -62,3 +62,5 @@ vendor
 # Other
 node_modules/
 Inbbbox/Resources/Acknowledgements.html
+
+.bitrise*

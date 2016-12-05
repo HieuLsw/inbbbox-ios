@@ -65,7 +65,9 @@ class APIShotsProvider: PageableProvider {
     func provideLikedShots(max: UInt) -> Promise<[ShotType]?> {
         return Promise<[ShotType]?> {fulfill, reject in
             firstly {
-                fetchLikes(max)
+                prepareForFetchingLikes()
+            }.then {
+                self.fetchLikes(max)
             }.then {
                 fulfill(self.likes)
             }.error { error in
@@ -187,6 +189,14 @@ private extension APIShotsProvider {
         fulfill(result.flatMap { $0.map { $0 as ShotType } })
     }
 
+    private func prepareForFetchingLikes() -> Promise<Void> {
+        likes.removeAll()
+        likesFetched = 0
+        likesToFetch = 0
+        lastPageOfLikesReached = false
+        return Promise<Void>()
+    }
+
     private func fetchLikes(max: UInt) -> Promise<Void> {
         likesToFetch = max
         return Promise<Void> { fulfill, reject in
@@ -194,6 +204,7 @@ private extension APIShotsProvider {
                 fetchSingleBatch()
             }.then {
                 if self.likesFetched == self.likesToFetch || self.lastPageOfLikesReached {
+                    self.fetchingLikes = false
                     fulfill()
                     return Promise()
                 }

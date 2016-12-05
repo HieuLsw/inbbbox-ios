@@ -20,7 +20,8 @@ class ShotsAnimator {
 
     func startAnimationWithCompletion(completion: (() -> Void)?) {
         guard let collectionView = delegate?.collectionViewForShotsAnimator(self),
-                items = delegate?.itemsForShotsAnimator(self) else {
+                items = delegate?.itemsForShotsAnimator(self) where items.count != 0 else {
+            completion?()
             return
         }
 

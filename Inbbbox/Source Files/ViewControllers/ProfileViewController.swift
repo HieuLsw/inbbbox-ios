@@ -26,9 +26,15 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         return true
     }
 
+    func isDisplayingUser(user: UserType) -> Bool {
+        if let userDetailsViewModel = viewModel as? UserDetailsViewModel where userDetailsViewModel.user == user {
+            return true
+        }
+        return false
+    }
+
     private var isModal: Bool {
-        return self.presentingViewController?.presentedViewController == self ||
-                self.tabBarController?.presentingViewController is UITabBarController ||
+        return self.tabBarController?.presentingViewController is UITabBarController ||
                 self.navigationController?.presentingViewController?.presentedViewController ==
                 self.navigationController && (self.navigationController != nil)
     }
@@ -83,15 +89,15 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         collectionView.registerClass(ProfileHeaderView.self, type: .Header)
 
         do { // hides bottom border of navigationBar
-            navigationController?.navigationBar.shadowImage = UIImage(color: .pinkColor())
+            let currentColorMode = ColorModeProvider.current()
+            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
             navigationController?.navigationBar.setBackgroundImage(
-				UIImage(color: .pinkColor()),
+				UIImage(color: currentColorMode.navigationBarTint),
                 forBarMetrics: .Default
 			)
         }
 
         setupBackButton()
-
         viewModel.downloadInitialItems()
     }
 
@@ -126,8 +132,7 @@ extension ProfileViewController {
             }.always {
                 self.header?.stopActivityIndicator()
             }.error { error in
-                let alert = UIAlertController.generalError()
-                self.presentViewController(alert, animated: true, completion: nil)
+                FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
     }
@@ -147,6 +152,8 @@ extension ProfileViewController {
         if let viewModel = viewModel as? UserDetailsViewModel {
             let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self,
                                                            forIndexPath: indexPath, type: .Cell)
+
+            cell.backgroundColor = ColorModeProvider.current().shotViewCellBackground
             cell.shotImageView.image = nil
             let cellData = viewModel.shotCollectionViewCellViewData(indexPath)
 
@@ -154,6 +161,9 @@ extension ProfileViewController {
             lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
 
             cell.gifLabel.hidden = !cellData.animated
+            if !cell.isRegisteredTo3DTouch {
+                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
+            }
             return cell
         }
 
@@ -174,6 +184,9 @@ extension ProfileViewController {
                     cell.secondShotImageView.loadImageFromURL(cellData.shotsImagesURLs![1])
                     cell.thirdShotImageView.loadImageFromURL(cellData.shotsImagesURLs![2])
                     cell.fourthShotImageView.loadImageFromURL(cellData.shotsImagesURLs![3])
+                }
+                if !cell.isRegisteredTo3DTouch {
+                    cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
                 }
                 return cell
             } else {
@@ -197,6 +210,9 @@ extension ProfileViewController {
                         teaserImageCompletion: imageLoadingCompletion,
                         normalImageCompletion: imageLoadingCompletion
                     )
+                }
+                if !cell.isRegisteredTo3DTouch {
+                    cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
                 }
                 return cell
             }
@@ -227,16 +243,18 @@ extension ProfileViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
         if let viewModel = viewModel as? UserDetailsViewModel {
-            let shotDetailsViewController =
-                ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
 
-            modalTransitionAnimator =
-                CustomTransitions.pullDownToCloseTransitionForModalViewController(shotDetailsViewController)
+            let detailsViewController = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+            detailsViewController.shotIndex = indexPath.item
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .Custom
 
-            shotDetailsViewController.transitioningDelegate = modalTransitionAnimator
-            shotDetailsViewController.modalPresentationStyle = .Custom
-
-            presentViewController(shotDetailsViewController, animated: true, completion: nil)
+            presentViewController(pageViewController, animated: true, completion: nil)
         }
         if let viewModel = viewModel as? TeamDetailsViewModel {
 
@@ -273,14 +291,12 @@ extension ProfileViewController: BaseCollectionViewViewModelDelegate {
         collectionView?.reloadData()
 
         if viewModel.collectionIsEmpty {
-            let alert = UIAlertController.generalError()
-            presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
     func viewModelDidFailToLoadItems(error: ErrorType) {
-        let alert = UIAlertController.unableToDownloadItems()
-        tabBarController?.presentViewController(alert, animated: true, completion: nil)
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
     func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
@@ -340,5 +356,58 @@ private extension ProfileViewController {
     dynamic func didTapLeftBarButtonItem() {
         dismissClosure?()
         dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+// MARK: UIViewControllerPreviewingDelegate
+
+extension ProfileViewController: UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)) else { return nil }
+        
+        if let viewModel = viewModel as? UserDetailsViewModel {
+            guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+            
+            previewingContext.sourceRect = cell.contentView.bounds
+            
+            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+            controller.customizeFor3DTouch(true)
+            controller.shotIndex = indexPath.item
+            
+            return controller
+        } else if let viewModel = viewModel as? TeamDetailsViewModel {
+            if let collectionView = collectionView where
+                collectionView.collectionViewLayout.isKindOfClass(TwoColumnsCollectionViewFlowLayout) {
+                guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
+                previewingContext.sourceRect = cell.contentView.bounds
+            } else {
+                guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+                previewingContext.sourceRect = cell.contentView.bounds
+            }
+            
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+        }
+        
+        return nil
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        if let viewModel = viewModel as? UserDetailsViewModel,
+            let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
+            detailsViewController.customizeFor3DTouch(false)
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            modalTransitionAnimator?.behindViewScale = 1
+            
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .Custom
+            
+            presentViewController(pageViewController, animated: true, completion: nil)
+        } else if (viewModel as? TeamDetailsViewModel) != nil {
+            navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        }
     }
 }

@@ -10,6 +10,17 @@ import UIKit
 
 class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, WidthDependentHeight,
         InfoShotsCellConfigurable {
+    struct ConstantValues {
+        let top, left, width, height: CGFloat
+    }
+    struct PositionsConstraints {
+        let top, left, width, height: NSLayoutConstraint
+    }
+    
+    var imagesConstants: [ConstantValues]?
+    var animatableConstraints: [PositionsConstraints]?
+    var positionShift = 0
+    let rotationDuration = 1.25
 
     let firstShotImageView = UIImageView.newAutoLayoutView()
     let secondShotImageView = UIImageView.newAutoLayoutView()
@@ -21,11 +32,50 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
     }
     private var didSetConstraints = false
 
+    func makeRotationOnImages() {
+        
+        // representation of animation state
+        positionShift -= 1
+        if positionShift < 0 {
+            positionShift=3
+        }
+        
+        if let animatableConstraints = animatableConstraints, valuesConstants = imagesConstants {
+        
+            for (index, constraints) in animatableConstraints.enumerate() {
+            
+                // index of values in constraints array, shifted by animation state
+                let valsIndex = (index + positionShift) % animatableConstraints.count
+                
+                // views z-index repositions, for last and first animation frame
+                if valsIndex == 3 {
+                    if let view = constraints.top.firstItem as? UIView {
+                        shotsView.sendSubviewToBack(view)
+                    }
+                }
+                if valsIndex == 0 {
+                    if let view = constraints.top.firstItem as? UIView {
+                        shotsView.bringSubviewToFront(view)
+                    }
+                }
+                
+                // constants apply
+                self.updateConstraints(constraints, withValues: valuesConstants[valsIndex])
+            }
+        }
+        
+        UIView.animateWithDuration(rotationDuration, delay: 0, options: .CurveEaseInOut, animations: { [weak self] in
+            
+            self?.shotsView.layoutIfNeeded()
+            
+        }, completion: nil)
+    }
     // MARK: - Lifecycle
 
     override func commonInit() {
         super.commonInit()
         setupShotsView()
+        setupContainerShotView()
     }
 
     // MARK: - UIView
@@ -43,43 +93,25 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
 
     func setupShotsView() {
         for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView] {
-            view.backgroundColor = UIColor.cellBackgroundColor()
+            view.backgroundColor = ColorModeProvider.current().shotViewCellBackground
             shotsView.addSubview(view)
         }
     }
+    
+    func setupContainerShotView() {
+        self.shotsView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
+    }
 
     func setShotsViewConstraints() {
-        let spacings = CollectionViewLayoutSpacings()
-        let shotImageViewSideLenght = contentView.bounds.width
-        let secondaryImageViewWidth = contentView.bounds.width / 3
-        let secondaryImageViewHeight = secondaryImageViewWidth * spacings.smallerShotHeightToWidthRatio
-
-
-        firstShotImageView.autoSetDimension(.Width, toSize: shotImageViewSideLenght)
-        let firstShotImageViewHeight = shotImageViewSideLenght * spacings.smallerShotHeightToWidthRatio
-        firstShotImageView.autoSetDimension(.Height, toSize: firstShotImageViewHeight)
-
-        for imageView in [secondShotImageView, thirdShotImageView, fourthShotImageView] {
-            imageView.autoSetDimension(.Width, toSize: secondaryImageViewWidth)
-            imageView.autoSetDimension(.Height, toSize: secondaryImageViewHeight)
+        
+        imagesConstants = self.instantiateConstants()
+        
+        if let imagesConstants = imagesConstants {
+            animatableConstraints = [setupAndReturnConstraints(firstShotImageView, withValues: imagesConstants[0]),
+                                    setupAndReturnConstraints(secondShotImageView, withValues: imagesConstants[1]),
+                                    setupAndReturnConstraints(thirdShotImageView, withValues: imagesConstants[2]),
+                                    setupAndReturnConstraints(fourthShotImageView, withValues: imagesConstants[3])]
         }
-
-        firstShotImageView.autoPinEdge(.Top, toEdge: .Top, ofView: shotsView)
-        firstShotImageView.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView)
-        firstShotImageView.autoPinEdge(.Right, toEdge: .Right, ofView: shotsView)
-
-        secondShotImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: firstShotImageView)
-        secondShotImageView.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView)
-        secondShotImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: shotsView)
-        secondShotImageView.autoPinEdge(.Right, toEdge: .Left, ofView: thirdShotImageView)
-
-        thirdShotImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: firstShotImageView)
-        thirdShotImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: shotsView)
-        thirdShotImageView.autoPinEdge(.Right, toEdge: .Left, ofView: fourthShotImageView)
-
-        fourthShotImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: shotsView)
-        fourthShotImageView.autoPinEdge(.Right, toEdge: .Right, ofView: shotsView)
-        fourthShotImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: firstShotImageView)
     }
 
     func setInfoViewConstraints() {
@@ -104,5 +136,50 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
     // MARK: - Width dependent height
     static var heightToWidthRatio: CGFloat {
         return CGFloat(1.25)
+    }
+}
+
+extension BucketCollectionViewCell: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        updateBackgroundColorsForMode(mode)
+    }
+    
+    private func updateBackgroundColorsForMode(mode: ColorModeType) {
+        for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView, shotsView] {
+            view.backgroundColor = ColorModeProvider.current().shotViewCellBackground
+        }
+    }
+}
+
+// MARK: Constraints animation
+private extension BucketCollectionViewCell {
+    
+    func instantiateConstants() -> [ConstantValues] {
+        let spacings = CollectionViewLayoutSpacings()
+        let largeWidth = contentView.bounds.width
+        let largeHeight = largeWidth * spacings.smallerShotHeightToWidthRatio
+        let subimageWidth = contentView.bounds.width / 3
+        let subimageHeight = subimageWidth * spacings.smallerShotHeightToWidthRatio
+        
+        return [ConstantValues(top: 0, left: 0, width: largeWidth, height: largeHeight),
+                ConstantValues(top: largeHeight, left: 0, width: subimageWidth, height: subimageHeight),
+                ConstantValues(top: largeHeight, left: subimageWidth, width: subimageWidth, height: subimageHeight),
+                ConstantValues(top: largeHeight, left: 2 * subimageWidth, width: subimageWidth, height: subimageHeight)]
+    }
+    
+    func setupAndReturnConstraints(view:UIView, withValues values:ConstantValues) -> PositionsConstraints {
+        let topConstr = view.autoPinEdge(.Top, toEdge: .Top, ofView: shotsView, withOffset: values.top)
+        let leftConstr = view.autoPinEdge(.Left, toEdge: .Left, ofView: shotsView, withOffset: values.left)
+        let widthConstr = view.autoSetDimension(.Width, toSize: values.width)
+        let heightConstr = view.autoSetDimension(.Height, toSize: values.height)
+        
+        return PositionsConstraints(top: topConstr, left: leftConstr, width: widthConstr, height: heightConstr)
+    }
+    
+    func updateConstraints(constraints:PositionsConstraints, withValues values:ConstantValues) {
+        constraints.top.constant = values.top
+        constraints.left.constant = values.left
+        constraints.width.constant = values.width
+        constraints.height.constant = values.height
     }
 }

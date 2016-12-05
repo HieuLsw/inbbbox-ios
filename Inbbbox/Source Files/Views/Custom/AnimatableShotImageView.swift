@@ -8,11 +8,11 @@
 
 import UIKit
 import PureLayout
-import Gifu
+import FLAnimatedImage
 import Haneke
 import Async
 
-class AnimatableShotImageView: AnimatableImageView {
+class AnimatableShotImageView: FLAnimatedImageView {
     let downloader = DataDownloader()
     private let progressAnimator = ProgressAnimator(imageBaseName: "loadgif_", imageCount: 59)
     private var didSetupConstraints = false
@@ -23,6 +23,7 @@ class AnimatableShotImageView: AnimatableImageView {
         backgroundColor = .whiteColor()
         contentMode = .ScaleAspectFill
         progressAnimator.progressImageView.configureForAutoLayout()
+        progressAnimator.progressImageView.backgroundColor = .whiteColor()
         addSubview(progressAnimator.progressImageView)
     }
 
@@ -77,7 +78,7 @@ class AnimatableShotImageView: AnimatableImageView {
     private func setImageWithData(data: NSData) {
         Async.main {
             self.progressAnimator.progressImageView.hidden = true
-            self.animateWithImageData(data)
+            self.animatedImage = FLAnimatedImage(animatedGIFData: data)
         }
     }
 

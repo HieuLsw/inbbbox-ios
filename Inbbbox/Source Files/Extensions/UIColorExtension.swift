@@ -26,6 +26,8 @@ extension UIColor {
                      alpha: alpha)
     }
 
+    // MARK: Day Mode
+    
     /// Returns brand pink color.
     class func pinkColor() -> UIColor {
         return pinkColor(alpha: 1)
@@ -43,6 +45,11 @@ extension UIColor {
     /// Returns brand background gray color.
     class func backgroundGrayColor() -> UIColor {
         return RGBA(246, 248, 248, 1)
+    }
+    
+    /// Returns brand background gray color for nigth mode.
+    class func backgroundNightModeGrayColor() -> UIColor {
+        return RGBA(43, 49, 51, 1)
     }
 
     /// Returns brand text dark color.
@@ -73,6 +80,51 @@ extension UIColor {
     /// Returns brand gray color used for separator in shot details.
     class func separatorGrayColor() -> UIColor {
         return RGBA(218, 219, 221, 1)
+    }
+    
+    /// Returns default white color.
+    class func defaultWhiteColor() -> UIColor {
+         return RGBA(249, 212, 226, 1)
+    }
+    
+    // MARK: Night Mode
+    
+    /// Returns brand text gray color used in followee cell in night mode.
+    class func followeeTextGrayNightModeColor() -> UIColor {
+        return RGBA(164, 180, 188, 1)
+    }
+    
+    // Darker gray used in night mode
+    class func darkGrayNightMode() -> UIColor {
+        return .RGBA(43, 49, 51, 1)
+    }
+    
+    // Less darker gray used in night mode
+    class func lessDarkGrayNightMode() -> UIColor {
+        return .RGBA(87, 98, 103, 1)
+    }
+    
+    // Gray used in night mode
+    class func grayNightMode() -> UIColor {
+        return .RGBA(98, 113, 120, 1)
+    }
+    
+    // Less white used in night mode
+    class func lessWhiteNightMode() -> UIColor {
+        return .RGBA(223, 224, 226, 1)
+    }
+    
+    // Less white used in night mode
+    class func whiteNightMode() -> UIColor {
+        return .RGBA(236, 237, 239, 1)
+    }
+    
+
+    // MARK: Flash Message
+    
+    /// Returns flash message gray background
+    class func flashMessageBackgroundColor() -> UIColor {
+        return RGBA(51, 51, 51, 1)
     }
 
     /// Returns random color.

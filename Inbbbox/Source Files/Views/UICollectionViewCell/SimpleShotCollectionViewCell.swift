@@ -13,6 +13,7 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
     let shotImageView = UIImageView.newAutoLayoutView()
     let gifLabel = GifIndicatorView.newAutoLayoutView()
     private var didSetConstraints = false
+    var isRegisteredTo3DTouch = false
 
     // MARK: Life cycle
 
@@ -27,7 +28,6 @@ class SimpleShotCollectionViewCell: UICollectionViewCell, Reusable, WidthDepende
     }
 
     func commonInit() {
-        contentView.backgroundColor = UIColor.cellBackgroundColor()
         contentView.addSubview(shotImageView)
         contentView.addSubview(gifLabel)
         contentView.layer.cornerRadius = 5

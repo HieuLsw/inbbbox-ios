@@ -29,6 +29,8 @@ struct ShotCellInitialStateAnimationDescriptor: AnimationDescriptor {
             shotCell.bucketImageView.hidden = false
             shotCell.plusImageView.hidden = false
             shotCell.commentImageView.hidden = false
+            shotCell.followImageView.hidden = false
+            shotCell.messageLabel.alpha = 0
             swipeCompletion?()
         }
     }

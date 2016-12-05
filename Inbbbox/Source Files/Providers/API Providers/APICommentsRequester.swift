@@ -68,6 +68,69 @@ class APICommentsRequester: Verifiable {
             }.then(fulfill).error(reject)
         }
     }
+
+    /**
+     Likes given comment for provided shot.
+
+     - Warning: Liking comments requires authenticated user with the *write* scope.
+
+     - parameter comment: Comment which should be marked as liked.
+     - parameter shot:    Shot which belongs to comment.
+
+     - returns: Promise which resolves with Void.
+     */
+    func likeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            let query = CommentLikeQuery(shot: shot, comment: comment)
+
+            firstly {
+                sendCommentLikeQuery(query)
+            }.then(fulfill).error(reject)
+        }
+    }
+
+    /**
+     Unlikes given comment for provided shot.
+
+     - Warning: Unliking comments requires authenticated user with the *write* scope.
+
+     - parameter comment: Comment for which a like mark should be removed.
+     - parameter shot:    Shot which belongs to comment.
+
+     - returns: Promise which resolves with Void.
+     */
+    func unlikeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            let query = CommentUnlikeQuery(shot: shot, comment: comment)
+
+            firstly {
+                sendCommentLikeQuery(query)
+            }.then(fulfill).error(reject)
+        }
+    }
+
+    /**
+     Checks like status of comment for provided shot.
+
+     - parameter comment: Comment for check.
+     - parameter shot:    Shot which belongs to comment.
+
+     - returns: Promise which resolves with Bool.
+     */
+    func checkIfLikeComment(comment: CommentType, forShot shot: ShotType) -> Promise<Bool> {
+        return Promise<Bool> { fulfill, reject in
+
+            let query = CommentLikedQuery(shot: shot, comment: comment)
+
+            firstly {
+                sendCommentLikedQuery(query)
+            }.then { result in
+                fulfill(result)
+            }.error(reject)
+        }
+    }
 }
 
 private extension APICommentsRequester {
@@ -113,6 +176,34 @@ private extension APICommentsRequester {
             }.then {
                 Request(query: query).resume()
             }.then { _ in fulfill() }.error(reject)
+        }
+    }
+
+    func sendCommentLikeQuery(query: Query) -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                verifyAuthenticationStatus(true)
+            }.then {
+                Request(query: query).resume()
+            }.then { _ in fulfill() }.error(reject)
+        }
+    }
+
+    func sendCommentLikedQuery(query: Query) -> Promise<Bool> {
+        return Promise<Bool> { fulfill, reject in
+
+            firstly {
+                verifyAuthenticationStatus(true)
+            }.then {
+                Request(query: query).resume()
+            }.then { _ in
+                fulfill(true)
+            }.error { error in
+                // According to API documentation, when response.code is 404,
+                // then comment is not liked by authenticated user.
+                (error as NSError).code == 404 ? fulfill(false) : reject(error)
+            }
         }
     }
 }

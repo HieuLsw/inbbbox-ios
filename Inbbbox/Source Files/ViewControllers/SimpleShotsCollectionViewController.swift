@@ -48,11 +48,10 @@ extension SimpleShotsCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel?.delegate = self
-        self.title = viewModel?.title
+        navigationItem.title = viewModel?.title
         guard let collectionView = collectionView else {
             return
         }
-        collectionView.backgroundColor = UIColor.backgroundGrayColor()
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .Cell)
         collectionView.emptyDataSetSource = self
     }
@@ -65,6 +64,45 @@ extension SimpleShotsCollectionViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         viewModel?.downloadInitialItems()
+    }
+}
+
+// MARK: UIViewControllerPreviewingDelegate
+
+extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard
+            let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)),
+            let cell = collectionView?.cellForItemAtIndexPath(indexPath),
+            let viewModel = viewModel
+        else { return nil }
+        
+        previewingContext.sourceRect = cell.contentView.bounds
+        
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        detailsViewController.customizeFor3DTouch(true)
+        detailsViewController.shotIndex = indexPath.item
+        
+        return detailsViewController
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        
+        if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
+            let viewModel = viewModel {
+            detailsViewController.customizeFor3DTouch(false)
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            modalTransitionAnimator?.behindViewScale = 1
+            
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .Custom
+            
+            tabBarController?.presentViewController(pageViewController, animated: true, completion: nil)
+        }
     }
 }
 
@@ -84,6 +122,10 @@ extension SimpleShotsCollectionViewController {
 
         indexesToUpdateCellImage.append(indexPath.row)
         lazyLoadImage(cellData.shotImage, atIndexPath: indexPath)
+        
+        if !cell.isRegisteredTo3DTouch {
+            cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
+        }
 
         cell.gifLabel.hidden = !cellData.animated
         return cell
@@ -108,15 +150,17 @@ extension SimpleShotsCollectionViewController {
             return
         }
 
-        let shotDetailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        detailsViewController.shotIndex = indexPath.item
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+        
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .Custom
 
-        modalTransitionAnimator =
-                CustomTransitions.pullDownToCloseTransitionForModalViewController(shotDetailsViewController)
-
-        shotDetailsViewController.transitioningDelegate = modalTransitionAnimator
-        shotDetailsViewController.modalPresentationStyle = .Custom
-
-        tabBarController?.presentViewController(shotDetailsViewController, animated: true, completion: nil)
+        tabBarController?.presentViewController(pageViewController, animated: true, completion: nil)
     }
 
     override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
@@ -139,14 +183,12 @@ extension SimpleShotsCollectionViewController: BaseCollectionViewViewModelDelega
         collectionView?.reloadData()
 
         if let viewModel = viewModel where viewModel.shots.isEmpty {
-            let alert = UIAlertController.generalError()
-            tabBarController?.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
     func viewModelDidFailToLoadItems(error: ErrorType) {
-        let alert = UIAlertController.unableToDownloadItems()
-        tabBarController?.presentViewController(alert, animated: true, completion: nil)
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
     func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
@@ -179,6 +221,12 @@ extension SimpleShotsCollectionViewController: DZNEmptyDataSetSource {
             )
             return emptyDataSetView
         }
+    }
+}
+
+extension SimpleShotsCollectionViewController: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        collectionView?.reloadData()
     }
 }
 

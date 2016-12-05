@@ -38,4 +38,8 @@ class ShotsRequester {
         }
         return managedShotsRequester.userBucketsForShot(shot)
     }
+
+    func fetchShotDetails(shot: ShotType) -> Promise<ShotType> {
+        return apiShotsRequester.fetchShotDetailsForShot(shot)
+    }
 }

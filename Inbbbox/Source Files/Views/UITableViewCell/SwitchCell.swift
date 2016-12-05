@@ -24,12 +24,9 @@ class SwitchCell: UITableViewCell, Reusable {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         titleLabel.font = UIFont.systemFontOfSize(17, weight: UIFontWeightRegular)
-        titleLabel.textColor = .blackColor()
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 
-        switchControl.tintColor = UIColor.RGBA(143, 142, 148, 1)
-        switchControl.backgroundColor = switchControl.tintColor
         switchControl.layer.cornerRadius = 18.0
         switchControl.thumbTintColor = UIColor.whiteColor()
         switchControl.onTintColor = UIColor.pinkColor()
@@ -56,5 +53,13 @@ class SwitchCell: UITableViewCell, Reusable {
         }
 
         super.updateConstraints()
+    }
+}
+
+extension SwitchCell: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        titleLabel.textColor = mode.tableViewCellTextColor
+        switchControl.tintColor = mode.switchCellTintColor
+        switchControl.backgroundColor = switchControl.tintColor
     }
 }

@@ -17,8 +17,11 @@ struct Request: Requestable, Responsable {
     let query: Query
 
     // Session for request.
-    var session: NSURLSession {
-        return NSURLSession.sharedSession()
+    let session: NSURLSession
+
+    init(query: Query, urlSession: NSURLSession = NSURLSession.inbbboxDefaultSession()) {
+        self.query = query
+        session = urlSession
     }
 
     /// Invoke request.

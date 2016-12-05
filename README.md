@@ -1,5 +1,8 @@
 # Inbbbox
 
+![](https://www.bitrise.io/app/57ab32541a792428.svg?token=l69JVSj-LJqSlXjEwk9-fQ&branch=Inbbbox-v2)
+[![codebeat badge](https://codebeat.co/badges/b554db34-7c30-4e41-8b32-9ec8fc3742d9)](https://codebeat.co/a/netguru/projects/inbbbox-ios-master)
+
 With Inbbbox you can discover excellent visual works from Dribbble, the global directory for digital design.
 If you want to grab a copy for yourself just go straight to [App Store](link to App Store after release). However, if you are interested in the core of Inbbbox, check out [Configuration](#configuration) section. Note that Dribbble account is necessary for using the app.
 
@@ -58,6 +61,8 @@ You're more than welcome to contribute. Just try to follow our [coding style gui
     * [Radosław Szeja](https://github.com/rad3ks)
     * [Kamil Tomaszewski](https://github.com/kamil-tomaszewski)
     * [Łukasz Wolańczyk](https://github.com/lukwol)
+    * [Robert Abramczyk](https://github.com/Malibris)
+    * [Tomasz Walenciak](https://github.com/twalenciak)
 
 Copyright © 2016 [Netguru](http://netguru.co).
 

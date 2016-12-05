@@ -12,7 +12,7 @@ extension UIFont {
 
     /// Enumerated type of helvetica font.
     enum Helvetica {
-        case Neue, NeueMedium, NeueLight
+        case Neue, NeueMedium, NeueLight, NeueBold
 
         /// Font name
         var name: String {
@@ -20,6 +20,7 @@ extension UIFont {
                 case .Neue: return "HelveticaNeue"
                 case .NeueMedium: return "HelveticaNeue-Medium"
                 case .NeueLight: return "HelveticaNeue-Light"
+                case .NeueBold: return "HelveticaNeue-Bold"
             }
         }
     }

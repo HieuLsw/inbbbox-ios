@@ -29,6 +29,17 @@ class SettingsSpec: QuickSpec {
                 expect(self.didReceiveNotificationsNotification).to(beTrue())
             }
         }
+        
+        describe("when all stream sources are off") {
+            Settings.StreamSource.Debuts = false
+            Settings.StreamSource.Following = false
+            Settings.StreamSource.NewToday = false
+            Settings.StreamSource.PopularToday = false
+            
+            it("property indicating all sources are off should be true") {
+                expect(Settings.areAllStreamSourcesOff()).to(beTrue())
+            }
+        }
     }
     
     dynamic func streamNotification(notification: NSNotification) {

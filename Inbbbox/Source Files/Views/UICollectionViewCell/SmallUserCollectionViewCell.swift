@@ -54,8 +54,13 @@ class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
 
     func setupShotsView() {
         for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView] {
-            view.backgroundColor = UIColor.cellBackgroundColor()
             shotsView.addSubview(view)
+        }
+    }
+
+    func updateImageViewsWith(color: UIColor) {
+        for view in [firstShotImageView, secondShotImageView, thirdShotImageView, fourthShotImageView] {
+            view.backgroundColor = color
         }
     }
 

@@ -223,7 +223,7 @@ private extension LoginViewAnimator {
 
     func addInbbboxLogo(fromTop fromTop: CGFloat) -> Promise<Void> {
 
-        let logoImageView = UIImageView(image: UIImage(named: "logo-type-home"))
+        let logoImageView = UIImageView(image: UIImage(named: ColorModeProvider.current().logoImageName))
         logoImageView.alpha = 0.0
 
         let size = logoImageView.image?.size ?? CGSize.zero

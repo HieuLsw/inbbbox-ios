@@ -32,10 +32,10 @@ class RequestSpec: QuickSpec {
                 expect(sut.query.path).to(equal("/fixture/path"))
             }
             
-            it("should have shared session") {
-                expect(sut.session).to(beIdenticalTo(NSURLSession.sharedSession()))
+            it("should use NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData") {
+                expect(sut.session.configuration.requestCachePolicy == NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData).to(beTruthy())
             }
-            
+
             context("when sending data with success") {
                 
                 var response: JSON?

@@ -140,7 +140,8 @@ extension UserDetailsViewModel {
             viewsCount: shot.viewsCount,
             commentsCount: shot.commentsCount,
             bucketsCount: shot.bucketsCount,
-            team: shot.team
+            team: shot.team,
+            attachmentsCount: shot.attachmentsCount
         )
     }
 }

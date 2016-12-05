@@ -52,7 +52,6 @@ class ShotBucketsHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .RGBA(246, 248, 248, 1)
         clipsToBounds = true
 
         titleLabel.backgroundColor = .clearColor()

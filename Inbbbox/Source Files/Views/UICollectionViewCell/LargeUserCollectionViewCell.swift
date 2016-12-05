@@ -47,7 +47,6 @@ class LargeUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
     // MARK: - Info Shots Cell Configurable
 
     func setupShotsView() {
-        shotImageView.backgroundColor = UIColor.cellBackgroundColor()
         shotsView.addSubview(shotImageView)
     }
 

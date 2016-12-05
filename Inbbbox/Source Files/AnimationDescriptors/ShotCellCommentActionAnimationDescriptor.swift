@@ -29,12 +29,13 @@ struct ShotCellCommentActionAnimationDescriptor: AnimationDescriptor {
             shotCell.contentView.layoutIfNeeded()
             shotCell.shotImageView.transform =
                     CGAffineTransformTranslate(CGAffineTransformIdentity, -contentViewWidht, 0)
+            shotCell.messageLabel.alpha = 1
         }
         completion = { _ in
             var delayedRestoreInitialStateAnimationDescriptor =
                     ShotCellInitialStateAnimationDescriptor(shotCell: shotCell,
                                                      swipeCompletion: swipeCompletion)
-            delayedRestoreInitialStateAnimationDescriptor.delay = 0.2
+            delayedRestoreInitialStateAnimationDescriptor.delay = 0.5
             shotCell.viewClass.animateWithDescriptor(delayedRestoreInitialStateAnimationDescriptor)
         }
     }

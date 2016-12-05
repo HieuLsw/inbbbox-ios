@@ -12,11 +12,11 @@ class CustomTabBarItemView: UIView {
 
 //    MARK: - Life cycle
 
-    init(name: String?, icon: UIImage?) {
+    init(name: String? = nil, icon: UIImage?) {
         super.init(frame: CGRect.zero)
 
         nameLabel.font = UIFont.systemFontOfSize(10)
-        nameLabel.textColor = UIColor.tabBarGrayColor()
+        nameLabel.textColor = ColorModeProvider.current().tabBarNormalItemTextColor
         nameLabel.text = name
         addSubview(nameLabel)
 

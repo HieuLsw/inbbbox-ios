@@ -10,12 +10,14 @@ import UIKit
 import PromiseKit
 import AOAlertController
 import SafariServices
+import MessageUI
 
 class SettingsViewController: UITableViewController {
 
     private var viewModel: SettingsViewModel!
     private var authenticator: Authenticator?
-
+    private var currentColorMode =  ColorModeProvider.current()
+    
     convenience init() {
         self.init(style: UITableViewStyle.Grouped)
         viewModel = SettingsViewModel(delegate: self)
@@ -32,7 +34,6 @@ class SettingsViewController: UITableViewController {
         tableView.registerClass(LabelCell.self)
 
         tableView?.hideSeparatorForEmptyCells()
-        tableView?.backgroundColor = UIColor.backgroundGrayColor()
         tableView?.tableHeaderView = SettingsTableHeaderView(size: CGSize (width: 0, height: 250))
 
         provideDataForHeader()
@@ -41,6 +42,7 @@ class SettingsViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         refreshViewAccordingToAuthenticationStatus()
+        viewModel.updateStatus()
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -67,6 +69,12 @@ extension SettingsViewController: AlertDisplayable {
 
     func displayAlert(alert: AOAlertController) {
         tabBarController?.presentViewController(alert, animated: true, completion: nil)
+    }
+}
+
+extension SettingsViewController: FlashMessageDisplayable {
+    func displayFlashMessage(model: FlashMessageViewModel) {
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true)
     }
 }
 
@@ -128,12 +136,15 @@ extension SettingsViewController {
                                                    comment: "Title of group of buttons for stream source settings")
         let customizationTitle = NSLocalizedString("SettingsViewController.Customization",
                                                    comment: "Title of group of buttons for customization settings")
+        let feedbackTitle = NSLocalizedString("SettingsViewModel.Feedback",
+                                                   comment: "Title of group of buttons for sending feedback")
 
         switch section {
             case 0: return viewModel.userMode == .LoggedUser ? notificationsTitle : nil
             case 1: return viewModel.userMode == .LoggedUser ? streamSourcesTitle : notificationsTitle
             case 2: return viewModel.userMode == .LoggedUser ? customizationTitle : streamSourcesTitle
-            case 3: return viewModel.userMode == .LoggedUser ? nil : customizationTitle
+            case 3: return viewModel.userMode == .LoggedUser ? feedbackTitle : customizationTitle
+            case 4: return viewModel.userMode == .LoggedUser ? nil : feedbackTitle
             default: return nil
         }
     }
@@ -166,28 +177,31 @@ private extension SettingsViewController {
 
     func configureSettingCell(cell: UITableViewCell, forItem item: GroupItem) {
         if let item = item as? SwitchItem, switchCell = cell as? SwitchCell {
-            configureSwitchCell(switchCell, forItem: item)
+            configureSwitchCell(switchCell, forItem: item, withMode: currentColorMode)
         } else if let item = item as? DateItem, dateCell = cell as? DateCell {
-            configureDateCell(dateCell, forItem: item)
+            configureDateCell(dateCell, forItem: item, withMode: currentColorMode)
         } else if let item = item as? LabelItem, labelCell = cell as? LabelCell {
-            configureLabelCell(labelCell, forItem: item)
+            configureLabelCell(labelCell, forItem: item, withMode: currentColorMode)
         }
     }
 
-    func configureSwitchCell(cell: SwitchCell, forItem item: SwitchItem) {
+    func configureSwitchCell(cell: SwitchCell, forItem item: SwitchItem, withMode mode:ColorModeType) {
         cell.titleLabel.text = item.title
         cell.switchControl.on = item.enabled
         cell.selectionStyle = .None
+        cell.adaptColorMode(mode)
     }
 
-    func configureDateCell(cell: DateCell, forItem item: DateItem) {
+    func configureDateCell(cell: DateCell, forItem item: DateItem, withMode mode:ColorModeType) {
         cell.titleLabel.text = item.title
         cell.setDateText(item.dateString)
+        cell.adaptColorMode(mode)
     }
 
-    func configureLabelCell(cell: LabelCell, forItem item: LabelItem) {
+    func configureLabelCell(cell: LabelCell, forItem item: LabelItem, withMode mode: ColorModeType) {
         cell.titleLabel.text = item.title
         cell.titleLabel.adjustsFontSizeToFitWidth = true
+        cell.adaptColorMode(mode)
     }
 
 }
@@ -216,7 +230,11 @@ private extension SettingsViewController {
             header.usernameLabel.text = NSLocalizedString("SettingsViewController.Guest",
                     comment: "Is user a guest without account?")
         }
-        header.avatarView.imageView.loadImageFromURL(viewModel.loggedInUser?.avatarURL,
+        var avatarUrl: NSURL? = nil
+        if let url = viewModel.loggedInUser?.avatarURL where !url.absoluteString.containsString("avatar-default-") {
+            avatarUrl = url
+        }
+        header.avatarView.imageView.loadImageFromURL(avatarUrl,
                 placeholderImage: UIImage(named: "ic-guest-avatar"))
     }
 }
@@ -258,6 +276,7 @@ extension SettingsViewController {
         let userMode = UserStorage.isUserSignedIn ? UserMode.LoggedUser : .DemoUser
         if userMode != viewModel.userMode {
             viewModel = SettingsViewModel(delegate: self)
+            viewModel.settingsViewController = self
             provideDataForHeader()
             tableView.reloadData()
             configureLogoutButton()
@@ -282,6 +301,20 @@ extension SettingsViewController {
     }
 }
 
+// MARK: Mail Composer Delegate
+
+extension SettingsViewController: MFMailComposeViewControllerDelegate {
+    
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        controller.dismissViewControllerAnimated(true) { [unowned self] in
+            if (result == MFMailComposeResultSent) {
+                let message = FlashMessageViewModel(title: NSLocalizedString("SettingsViewModel.FeedbackSent", comment: "User Settings, feedback sent."))
+                self.displayFlashMessage(message)
+            }
+        }
+    }
+}
+
 private extension UITableView {
 
     func cellForItemCategory(category: GroupItem.Category) -> UITableViewCell {
@@ -291,5 +324,21 @@ private extension UITableView {
             case .Boolean: return dequeueReusableCell(SwitchCell)
             case .String: return dequeueReusableCell(LabelCell)
         }
+    }
+}
+
+extension SettingsViewController: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        currentColorMode = mode
+        tableView.reloadData()
+        updateUsernameColorForMode(mode)
+    }
+    
+    private func updateUsernameColorForMode(mode: ColorModeType) {
+        guard let header = tableView?.tableHeaderView as? SettingsTableHeaderView else {
+            return
+        }
+        
+        header.adaptColorMode(mode)
     }
 }

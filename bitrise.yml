@@ -1,0 +1,170 @@
+#
+# bitrise.yml
+#
+# Copyright (c) 2016 Netguru Sp. z o.o. All rights reserved.
+#
+
+# CLI metadata
+
+format_version: 1.1.0
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+# Environment configuration
+
+app:
+  envs:
+  - JIRA_DOMAIN: netguru
+  - JIRA_PROJECT_KEY: IOS
+  - SLACK_CHANNEL: "#notify-inbbbox"
+  - BITRISE_PROJECT_PATH: "./Inbbbox.xcworkspace"
+    opts:
+      is_expand: false
+  - BITRISE_SCHEME: Inbbbox
+    opts:
+      is_expand: false
+  - BITRISE_INFO_PLIST_PATH: Supporting Files/Inbbbox-Info.plist
+    opts:
+      is_expand: true
+    
+
+# Workflow trigger map
+
+trigger_map:
+- push_branch: develop
+  workflow: develop
+
+- push_branch: epic/*
+  workflow: develop
+
+- push_branch: task/*
+  workflow: pull-requests
+
+- push_branch: bug/*
+  workflow: pull-requests
+
+- push_branch: chore/*
+  workflow: pull-requests
+
+- push_branch: master
+  workflow: master
+
+- push_branch: release/*
+  workflow: master
+
+# Workflow declarations
+
+workflows:
+
+  # The default workflow
+
+  master:
+    before_run: 
+        - prepare_to_run
+    after_run: 
+        - test
+        - archive_and_deploy
+        - save_cache
+        - codecov_check
+        - deploy-artifacts
+        - notify
+
+  # The pull-requests workflow
+
+  pull-requests:
+    before_run: 
+        - prepare_to_run
+    after_run: 
+        - test
+        - save_cache
+        - codecov_check
+        - deploy-artifacts
+        - notify
+
+  # The development workflow
+
+  develop:
+    before_run: 
+        - prepare_to_run
+    after_run: 
+        - test
+        - save_cache
+        - archive_and_deploy
+        - codecov_check
+        - deploy-artifacts
+        - notify
+
+  #
+  # Reusable Workflows
+  #
+
+  # Setup
+
+  prepare_to_run:
+    steps:
+    - cache-pull: {}
+    - cocoapods-install:
+        inputs:
+        - is_update_cocoapods: 'true'
+    - certificate-and-profile-installer: {}
+
+  # Test
+
+  test:
+    steps:
+    - xcode-test@1.17.1:
+        title: 'Xcode: Unit Test'
+        inputs:
+        - simulator_device: iPhone 6s
+        - is_clean_build: 'yes'
+        - output_tool: xcpretty
+  
+  # Archive and Deploy
+
+  archive_and_deploy:
+    steps:
+      - xcode-archive:
+          inputs:
+          - configuration: Staging
+          - is_clean_build: 'yes'
+      - hockeyapp-deploy@2.3.0:
+          inputs:
+          - api_token: "$HOCKEY_APP_TOKEN_STAGING"
+          - app_id: "$HOCKEY_APP_ID_STAGING"
+
+  # Save cache
+
+  save_cache:
+    steps:
+      - cache-push:
+          inputs:
+            - cache_paths: |-
+                 ./Pods -> ./Podfile.lock
+                 ./Carthage -> ./Cartfile.resolved
+
+
+  # Slack Notify Workflow
+
+  notify:
+    steps:
+      - git::git@github.com:netguru/bitrise-step-slack.git@master:
+          title: Slack
+          inputs:
+          - webhook_url: $SLACK_WEBHOOK_URL
+          - channel: $SLACK_CHANNEL
+
+  # Codecov check
+
+  codecov_check:
+    steps:
+      - codecov:
+          inputs:
+          - CODECOV_TOKEN: $CODECOV_TOKEN
+
+  # Deploy artifacts
+
+  deploy-artifacts:
+    steps:
+      - deploy-to-bitrise-io:
+          inputs:
+            - notify_user_groups: none
+

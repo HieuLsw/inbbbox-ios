@@ -20,6 +20,15 @@ class CommentEditView: UIView {
             deleteLabel.text = deleteLabelText
             let imageName = isEditing ? "ic-delete-comment" : "ic-report-comment"
             deleteButton.setImage(UIImage(named: imageName), forState: .Normal)
+            likeButton.hidden = isEditing
+            likeLabel.hidden = isEditing
+            setUpConstraints()
+        }
+    }
+    private var isLiked = false {
+        didSet {
+            let imageName = isLiked ? "ic-like-details-active" : "ic-like-details"
+            likeButton.setImage(UIImage(named: imageName), forState: .Normal)
         }
     }
 
@@ -35,11 +44,19 @@ class CommentEditView: UIView {
     private let viewBackgroundColor = UIColor.clearColor()
 
     // public UI Components
+    let likeButton = UIButton()
+    let likeLabel = UILabel()
     let cancelButton = UIButton()
     let cancelLabel = UILabel()
     let deleteButton = UIButton()
     let deleteLabel = UILabel()
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+    let contentView: UIView = {
+        if Settings.Customization.CurrentColorMode == .NightMode {
+            return UIView.withColor(ColorModeProvider.current().shotDetailsCommentCollectionViewCellBackground)
+        } else {
+            return UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        }
+    }()
 
     // MARK: Life Cycle
 
@@ -60,29 +77,44 @@ class CommentEditView: UIView {
         return true
     }
 
-    override func updateConstraints() {
-
+    func setUpConstraints() {
         let distanceBetweenButtons = CGFloat(60)
         let buttonsCenterOffset = CGFloat(-5)
         let buttonsToLabelsAdditionalOffset = CGFloat(10)
+        var deleteButtonOffset = -(distanceBetweenButtons / 2 + buttonSize / 2)
+        var cancelButtonOffset = distanceBetweenButtons / 2 + buttonSize / 2
+        if !isEditing {
+            deleteButtonOffset = 0
+            cancelButtonOffset = distanceBetweenButtons + buttonSize
+        }
 
         if !didUpdateConstraints {
 
-            blurView.autoPinEdgesToSuperviewEdges()
+            contentView.autoPinEdgesToSuperviewEdges()
+
+            likeButton.autoAlignAxis(.Horizontal, toSameAxisOfView: likeButton.superview!,
+                withOffset: buttonsCenterOffset)
+            likeButton.autoAlignAxis(.Vertical, toSameAxisOfView: likeButton.superview!,
+                withOffset: -(distanceBetweenButtons + buttonSize))
+            likeButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
+
+            likeLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: likeButton,
+                withOffset: buttonSize / 2 + buttonsToLabelsAdditionalOffset)
+            likeLabel.autoAlignAxis(.Vertical, toSameAxisOfView: likeButton)
 
             deleteButton.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton.superview!,
-                    withOffset: buttonsCenterOffset)
+                withOffset: buttonsCenterOffset)
             deleteButton.autoAlignAxis(.Vertical, toSameAxisOfView: deleteButton.superview!,
-                    withOffset: -(distanceBetweenButtons / 2 + buttonSize / 2))
+                withOffset: deleteButtonOffset)
             deleteButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
 
             deleteLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton,
-                    withOffset: buttonSize / 2 + buttonsToLabelsAdditionalOffset)
+                withOffset: buttonSize / 2 + buttonsToLabelsAdditionalOffset)
             deleteLabel.autoAlignAxis(.Vertical, toSameAxisOfView: deleteButton)
 
             cancelButton.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteButton)
             cancelButton.autoAlignAxis(.Vertical, toSameAxisOfView: cancelButton.superview!,
-                    withOffset: distanceBetweenButtons / 2 + buttonSize / 2)
+                withOffset: cancelButtonOffset)
             cancelButton.autoSetDimensionsToSize(CGSize(width: buttonSize, height: buttonSize))
 
             cancelLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: deleteLabel)
@@ -90,8 +122,6 @@ class CommentEditView: UIView {
 
             didUpdateConstraints = true
         }
-
-        super.updateConstraints()
     }
 
     // MARK: Public
@@ -103,46 +133,64 @@ class CommentEditView: UIView {
         isEditing = false
     }
 
+    func setLiked(withValue value: Bool) {
+        isLiked = value
+    }
+
     // MARK: Private
 
     private func setupSubviews() {
         setupBlurView()
         setupCancelButton()
         setupDeleteButton()
+        setupLikeButton()
         setupCancelLabel()
         setupDeleteLabel()
+        setupLikeLabel()
     }
 
     private func setupBlurView() {
 
-        addSubview(blurView)
+        addSubview(contentView)
     }
 
     private func setupCancelButton() {
         cancelButton.setImage(UIImage(named: "ic-cancel-comment"), forState: .Normal)
         cancelButton.contentMode = .ScaleAspectFit
-        blurView.addSubview(cancelButton)
+        contentView.addSubview(cancelButton)
     }
 
     private func setupDeleteButton() {
         deleteButton.setImage(UIImage(named: "ic-delete-comment"), forState: .Normal)
         deleteButton.contentMode = .ScaleAspectFit
-        blurView.addSubview(deleteButton)
+        contentView.addSubview(deleteButton)
+    }
+
+    private func setupLikeButton() {
+        likeButton.setImage(UIImage(named: "ic-like-details"), forState: .Normal)
+        likeButton.contentMode = .ScaleAspectFit
+        contentView.addSubview(likeButton)
     }
 
     private func setupCancelLabel() {
         cancelLabel.font = UIFont.helveticaFont(.Neue, size: 10)
-        cancelLabel.textColor = UIColor.textLightColor()
+        cancelLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
         cancelLabel.text = NSLocalizedString("CommentEditView.Cancel", comment: "Cancel editing comment.")
-        cancelLabel.textColor = .followeeTextGrayColor()
-        blurView.addSubview(cancelLabel)
+        contentView.addSubview(cancelLabel)
     }
 
     private func setupDeleteLabel() {
         deleteLabel.font = UIFont.helveticaFont(.Neue, size: 10)
-        deleteLabel.textColor = UIColor.textLightColor()
+        deleteLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
         deleteLabel.text = deleteLabelText
-        deleteLabel.textColor = .followeeTextGrayColor()
-        blurView.addSubview(deleteLabel)
+        contentView.addSubview(deleteLabel)
+    }
+
+    private func setupLikeLabel() {
+        likeLabel.font = UIFont.helveticaFont(.Neue, size: 10)
+        likeLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
+        likeLabel.text = NSLocalizedString("CommentEditView.Like",
+                                           comment: "Mark selected comment as liked.")
+        contentView.addSubview(likeLabel)
     }
 }

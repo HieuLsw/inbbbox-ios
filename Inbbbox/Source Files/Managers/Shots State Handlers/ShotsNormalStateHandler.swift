@@ -42,8 +42,17 @@ class ShotsNormalStateHandler: NSObject, ShotsStateHandler {
     var collectionViewScrollEnabled: Bool {
         return true
     }
+    
+    var shouldShowNoShotsView: Bool {
+        return shotsCollectionViewController?.shots.count == 0 && Settings.areAllStreamSourcesOff()
+    }
 
-    private var indexPathsNeededImageUpdate = [NSIndexPath]()
+    var didLikeShotCompletionHandler: (() -> Void)?
+    var didAddShotToBucketCompletionHandler: (() -> Void)?
+    var willDismissDetailsCompletionHandler: (Int -> Void)?
+
+    private var indexPathsNeededImageUpdate = [UpdateableIndex]()
+    private let connectionsRequester = APIConnectionsRequester()
 
     func prepareForPresentingData() {
         if !UserStorage.isUserSignedIn {
@@ -62,7 +71,9 @@ class ShotsNormalStateHandler: NSObject, ShotsStateHandler {
         }
     }
 
-    func presentData() { /* empty by design */ }
+    func presentData() {
+        self.reloadFirstCell()
+    }
 }
 
 // MARK: UICollecitonViewDataSource
@@ -88,15 +99,21 @@ extension ShotsNormalStateHandler {
         let shot = shotsCollectionViewController.shots[indexPath.item]
 
         cell.shotImageView.activityIndicatorView.startAnimating()
+        cell.shotImageView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
 
-        indexPathsNeededImageUpdate.append(indexPath)
-        lazyLoadImage(shot.shotImage, forCell: cell, atIndexPath: indexPath)
+        load(shot.shotImage, for: indexPath)
 
         cell.gifLabel.hidden = !shot.animated
         cell.liked = self.isShotLiked(shot)
 
         if let user = shot.user.name, url = shot.user.avatarURL {
-            cell.authorView.viewData = ShotAuthorCompactView.ViewData(author: user, avatarURL: url)
+            let likes = shot.likesCount, comments = shot.commentsCount
+            cell.authorView.viewData = ShotAuthorCompactView
+                .ViewData(author: user,
+                          avatarURL: url,
+                          liked: cell.liked,
+                          likesCount: likes,
+                          commentsCount: comments)
         }
 
         cell.delegate = self
@@ -110,6 +127,8 @@ extension ShotsNormalStateHandler {
                     certainSelf.likeShot(shot)
                 }.then {
                     cell.liked = true
+                }.then {
+                    self?.didLikeShotCompletionHandler?()
                 }.error { error in
                     cell.liked = false
                 }
@@ -123,7 +142,12 @@ extension ShotsNormalStateHandler {
                 }
                 certainSelf.presentShotBucketsViewController(shot)
             case .Comment:
-                certainSelf.presentShotDetailsViewControllerWithShot(shot, scrollToMessages: true)
+                let shotUpdated = self?.shotDummyRecent(shot)
+                certainSelf.presentShotDetailsViewController(shotUpdated ?? shot, index: indexPath.item, scrollToMessages: true, focusOnInput: true)
+            case .Follow:
+                firstly {
+                    certainSelf.followAuthorOfShot(shot)
+                }
             case .DoNothing:
                 break
             }
@@ -132,46 +156,53 @@ extension ShotsNormalStateHandler {
     }
 }
 
-// MARK: UICollecitonViewDelegate
+// MARK: UICollectionViewDataSourcePrefetching
+
+// NGRTodo: iOS 10 only API. Remove after updating project.
+#if swift(>=2.3)
+extension ShotsNormalStateHandler: UICollectionViewDataSourcePrefetching {
+
+    func collectionView(collectionView: UICollectionView, prefetchItemsAtIndexPaths indexPaths: [NSIndexPath]) {
+        guard let shotsCollectionViewController = shotsCollectionViewController else { return }
+
+        indexPaths.forEach {
+            let shot = shotsCollectionViewController.shots[$0.item]
+            load(shot.shotImage, for: $0)
+        }
+    }
+
+    func collectionView(collectionView: UICollectionView, cancelPrefetchingForItemsAtIndexPaths indexPaths: [NSIndexPath]) {
+        indexPathsNeededImageUpdate.removeAll()
+    }
+}
+#endif
+
+// MARK: UICollectionViewDelegate
 extension ShotsNormalStateHandler {
 
     func collectionView(collectionView: UICollectionView,
             didSelectItemAtIndexPath indexPath: NSIndexPath) {
         guard let shotsCollectionViewController = shotsCollectionViewController else { return }
 
-        let shot = shotsCollectionViewController.shots[indexPath.row]
-        presentShotDetailsViewControllerWithShot(shot, scrollToMessages: false)
+        let shot = shotsCollectionViewController.shots[indexPath.item]
+        let shotUpdated = self.shotDummyRecent(shot)
+        shotsCollectionViewController.modalPresentationStyle = .OverFullScreen
+        presentShotDetailsViewController(shotUpdated ?? shot, index: indexPath.item, scrollToMessages: false)
     }
 
-    func collectionView(collectionView: UICollectionView,
-            willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        guard let shotsCollectionViewController = shotsCollectionViewController else { return }
-
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if let cell = cell as? ShotCollectionViewCell {
             cell.displayAuthor(Settings.Customization.ShowAuthor, animated: true)
-        }
 
-        if indexPath.row == shotsCollectionViewController.shots.count - 6 {
-            firstly {
-                shotsCollectionViewController.shotsProvider.nextPage()
-            }.then { [weak self] shots -> Void in
-                if let shots = shots, shotsCollectionViewController = self?.shotsCollectionViewController {
-                    shotsCollectionViewController.shots.appendContentsOf(shots)
-                    shotsCollectionViewController.collectionView?.reloadData()
-                }
-            }.error { error in
-                self.delegate?.shotsStateHandlerDidFailToFetchItems(error)
+            if let shotsCollectionViewController = shotsCollectionViewController {
+                let shot = shotsCollectionViewController.shots[indexPath.item]
+                load(shot.shotImage, for: indexPath)
             }
         }
+
+        downloadNextPageIfNeeded(for: indexPath)
     }
 
-    func collectionView(collectionView: UICollectionView,
-            didEndDisplayingCell cell: UICollectionViewCell,
-            forItemAtIndexPath indexPath: NSIndexPath) {
-        if let index = indexPathsNeededImageUpdate.indexOf(indexPath) {
-            indexPathsNeededImageUpdate.removeAtIndex(index)
-        }
-    }
 }
 
 // MARK: UIScrollViewDelegate
@@ -192,7 +223,9 @@ extension ShotsNormalStateHandler {
 
         for cell in collectionView.visibleCells() {
             if let shotCell = cell as? ShotCollectionViewCell {
-                shotCell.shotImageView.applyBlur(blur)
+                if !DeviceInfo.shouldDowngrade() {
+                    shotCell.shotImageView.applyBlur(blur)
+                }
             }
         }
     }
@@ -213,13 +246,49 @@ extension ShotsNormalStateHandler: ShotCollectionViewCellDelegate {
     }
 }
 
+// MARK: 3DTouch
+
+extension ShotsNormalStateHandler {
+    
+    func getShotDetailsViewController(atIndexPath indexPath: NSIndexPath) -> UIViewController? {
+        guard let shotsCollectionViewController = shotsCollectionViewController else { return nil }
+        
+        let shot = shotsCollectionViewController.shots[indexPath.item]
+        let shotDetailsViewController = ShotDetailsViewController(shot: shot)
+        shotDetailsViewController.customizeFor3DTouch(true)
+        shotDetailsViewController.shotIndex = indexPath.item
+        
+        return shotDetailsViewController
+    }
+    
+    func popViewController(controller: UIViewController) {
+        guard let detailsViewController = controller as? ShotDetailsViewController,
+            let shotsCollectionViewController = shotsCollectionViewController else { return }
+        
+        detailsViewController.customizeFor3DTouch(false)
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: shotsCollectionViewController.shots, initialViewController: detailsViewController)
+        shotDetailsPageDataSource.delegate = self
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        modalTransitionAnimator?.behindViewScale = 1
+        
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .Custom
+        
+        shotsCollectionViewController.tabBarController?.presentViewController(pageViewController, animated: true, completion: nil)
+    }
+}
+
 // MARK: Private methods
 private extension ShotsNormalStateHandler {
 
     func presentShotBucketsViewController(shot: ShotType) {
         let shotBucketsViewController = ShotBucketsViewController(shot: shot, mode: .AddToBucket)
-        modalTransitionAnimator =
-        CustomTransitions.pullDownToCloseTransitionForModalViewController(shotBucketsViewController)
+        shotBucketsViewController.didDismissViewControllerClosure = { [weak self] in
+            self?.didAddShotToBucketCompletionHandler?()
+        }
+        
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(shotBucketsViewController)
 
         shotBucketsViewController.transitioningDelegate = modalTransitionAnimator
         shotBucketsViewController.modalPresentationStyle = .Custom
@@ -227,25 +296,40 @@ private extension ShotsNormalStateHandler {
                 shotBucketsViewController, animated: true, completion: nil)
     }
 
-    func presentShotDetailsViewControllerWithShot(shot: ShotType, scrollToMessages: Bool) {
-
-        shotsCollectionViewController?.definesPresentationContext = true
-
-        let shotDetailsViewController = ShotDetailsViewController(shot: shot)
-        shotDetailsViewController.shouldScrollToMostRecentMessage = scrollToMessages
-
+    func presentShotDetailsViewController(shot: ShotType, index: Int, scrollToMessages: Bool, focusOnInput: Bool = false) {
+        guard let shotsCollectionViewController = shotsCollectionViewController else { return }
+        
+        shotsCollectionViewController.definesPresentationContext = true
+        
+        let detailsViewController = ShotDetailsViewController(shot: shot)
+        detailsViewController.shotIndex = index
+        detailsViewController.updatedShotInfo = { [weak self] shot in
+                self?.shotsCollectionViewController?.shots[index] = shot
+        }
+        detailsViewController.shouldShowKeyboardAtStart = focusOnInput
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: shotsCollectionViewController.shots, initialViewController: detailsViewController)
+        shotDetailsPageDataSource.delegate = self
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+        
         modalTransitionAnimator =
-        CustomTransitions.pullDownToCloseTransitionForModalViewController(shotDetailsViewController)
-
-        shotDetailsViewController.transitioningDelegate = modalTransitionAnimator
-        shotDetailsViewController.modalPresentationStyle = .Custom
-
-        shotsCollectionViewController?.tabBarController?.presentViewController(
-                shotDetailsViewController, animated: true, completion: nil)
+            CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .Custom
+        shotsCollectionViewController.tabBarController?.modalPresentationStyle = .OverCurrentContext
+        shotsCollectionViewController.tabBarController?.presentViewController(
+            pageViewController, animated: true, completion: nil)
     }
 
     func isShotLiked(shot: ShotType) -> Bool {
         return likedShots.contains { $0.identifier == shot.identifier }
+    }
+    
+    // shot with most recent likes/buckets count
+    func shotDummyRecent(shot: ShotType) -> ShotType {
+        let likedShot = likedShots.filter{ $0.identifier == shot.identifier }
+        
+        return likedShot.first ?? shot
     }
 
     func likeShot(shot: ShotType) -> Promise<Void> {
@@ -256,8 +340,10 @@ private extension ShotsNormalStateHandler {
         return Promise() { fulfill, reject in
             firstly {
                 shotsRequester.likeShot(shot)
+            }.then {
+                self.fetchLikedShots()
             }.then { () -> Void in
-                self.likedShots.append(shot)
+                self.updateAuthorData()
                 fulfill()
             }.error { error in
                 reject(error)
@@ -292,13 +378,32 @@ private extension ShotsNormalStateHandler {
         let visibleShot = self.visibleShot()
         let visibleCell = self.visibleCell()
 
-        if let cell = visibleCell, shot = visibleShot {
+        if let cell = visibleCell, var shot = visibleShot {
             cell.displayAuthor(Settings.Customization.ShowAuthor, animated: true)
+            cell.liked = self.isShotLiked(shot)
+
+            if cell.liked {
+                shot = likedShots.filter({ $0.identifier == shot.identifier }).first ?? shot
+            }
 
             if let user = shot.user.name, url = shot.user.avatarURL {
-                cell.authorView.viewData = ShotAuthorCompactView.ViewData(author: user, avatarURL: url)
+                let likes = shot.likesCount, comments = shot.commentsCount
+                cell.authorView.viewData = ShotAuthorCompactView
+                    .ViewData(author: user,
+                              avatarURL: url,
+                              liked: cell.liked,
+                              likesCount: likes,
+                              commentsCount: comments)
             }
         }
+    }
+    
+    func reloadFirstCell() {
+        guard let collectionView = collectionViewLayout.collectionView where shotsCollectionViewController?.shots.count != 0 else {
+            return
+        }
+        
+        collectionView.reloadItemsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)])
     }
 
     func visibleShot() -> ShotType? {
@@ -320,38 +425,101 @@ private extension ShotsNormalStateHandler {
 
         return collectionView.visibleCells().first as? ShotCollectionViewCell
     }
+
+    func load(image: ShotImageType, for indexPath: NSIndexPath) {
+        lazyLoadImage(image, for: indexPath)
+    }
+
+    func downloadNextPageIfNeeded(for indexPath: NSIndexPath) {
+        guard let shotsCollectionViewController = shotsCollectionViewController else { return }
+
+        if indexPath.item == shotsCollectionViewController.shots.count - 6 {
+
+            firstly {
+                shotsCollectionViewController.shotsProvider.nextPage()
+                }.then { [weak self] shots -> Void in
+                    if let shots = shots, shotsCollectionViewController = self?.shotsCollectionViewController {
+                        shotsCollectionViewController.shots.appendContentsOf(shots)
+                        shotsCollectionViewController.collectionView?.reloadData()
+                    }
+                }.error { error in
+                    self.delegate?.shotsStateHandlerDidFailToFetchItems(error)
+            }
+        }
+    }
+    
+    func followAuthorOfShot(shot: ShotType) -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+            
+            firstly {
+                connectionsRequester.followUser(shot.user)
+            }.then(fulfill).error(reject)
+        }
+    }
 }
 
 // MARK: Lazy loading of image
 
 private extension ShotsNormalStateHandler {
 
-    func lazyLoadImage(shotImage: ShotImageType, forCell cell: ShotCollectionViewCell,
-            atIndexPath indexPath: NSIndexPath) {
-        let teaserImageLoadingCompletion: UIImage -> Void = { [weak self] image in
+    /// Returns UpdateableIndex object that matches given NSIndexPath (if any)
+    /// - parameter indexPath: indexPath to match.
+    /// - returns: Matched UpdateableIndexes object.
+    func updateableIndexPath(for indexPath: NSIndexPath) -> UpdateableIndex? {
+        let toCompare = indexPath.item
+        return indexPathsNeededImageUpdate.filter { $0.index == toCompare }.first
+    }
 
-            guard let certainSelf = self
-                where certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else {
-                return
-             }
-            cell.shotImageView.activityIndicatorView.stopAnimating()
-            cell.shotImageView.originalImage = image
-            cell.shotImageView.image = image
+    func lazyLoadImage(shotImage: ShotImageType, for indexPath: NSIndexPath) {
+        let teaserImageLoadingCompletion: UIImage -> Void = { [weak self] image in
+            guard let certainSelf = self else { return }
+            guard let _ = certainSelf.updateableIndexPath(for: indexPath) else { return }
+
+            if let collectionView = certainSelf.shotsCollectionViewController?.collectionView {
+                if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? ShotCollectionViewCell {
+                    cell.shotImageView.activityIndicatorView.stopAnimating()
+                    cell.shotImageView.originalImage = image
+                    cell.shotImageView.image = image
+                }
+            }
         }
         let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
+            guard let certainSelf = self else {return}
+            guard var indexPathToUpdate = certainSelf.updateableIndexPath(for: indexPath) else { return }
 
-            guard let certainSelf = self
-                where certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else {
-                return
+            if let index = certainSelf.indexPathsNeededImageUpdate.indexOf({$0 == indexPathToUpdate}) {
+                indexPathToUpdate.status = .Updated
+                certainSelf.indexPathsNeededImageUpdate[index] = indexPathToUpdate
             }
 
-            cell.shotImageView.originalImage = image
-            cell.shotImageView.image = image
+            if let collectionView = certainSelf.shotsCollectionViewController?.collectionView {
+                if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? ShotCollectionViewCell {
+                    cell.shotImageView.activityIndicatorView.stopAnimating()
+                    cell.shotImageView.originalImage = image
+                    cell.shotImageView.image = image
+                }
+            }
         }
+
+        if let indexPathToUpdate = updateableIndexPath(for: indexPath) where indexPathToUpdate.status == .InProgress {
+            return
+        } else {
+            indexPathsNeededImageUpdate.append(UpdateableIndex(index: indexPath.item, status: .InProgress))
+        }
+
         LazyImageProvider.lazyLoadImageFromURLs(
             (shotImage.teaserURL, shotImage.normalURL, nil),
             teaserImageCompletion: teaserImageLoadingCompletion,
             normalImageCompletion: imageLoadingCompletion
         )
+    }
+}
+
+// MARK: ShotDetailsPageDelegate
+
+extension ShotsNormalStateHandler: ShotDetailsPageDelegate {
+    
+    func shotDetailsDismissed(atIndex index: Int) {
+        willDismissDetailsCompletionHandler?(index)
     }
 }

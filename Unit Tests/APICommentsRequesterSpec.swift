@@ -15,218 +15,371 @@ import Mockingjay
 
 class APICommentsRequesterSpec: QuickSpec {
     override func spec() {
-
-        pending("tests fail randomly - need to be fixed") {
-
-            var sut: APICommentsRequester!
-            var error: ErrorType?
-            var comment: CommentType?
+        
+        var sut: APICommentsRequester!
+        var error: ErrorType?
+        var comment: CommentType?
+        
+        beforeEach {
+            sut = APICommentsRequester()
+        }
+        
+        afterEach {
+            sut = nil
+            error = nil
+            comment = nil
+        }
+        
+        describe("when posting comment") {
+            
+            afterEach {
+                TokenStorage.clear()
+                UserStorage.clearUser()
+            }
+            
+            context("when token does not exist") {
+                
+                beforeEach {
+                    TokenStorage.clear()
+                }
+                
+                it("error should occur") {
+                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists, but account type is wrong") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                }
+                
+                it("error should occur") {
+                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists and account type is correct") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
+                }
+                
+                afterEach {
+                    self.removeAllStubs()
+                }
+                
+                it("comment should be posted") {
+                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _comment in
+                        comment = _comment
+                    }.error { _ in fail() }
+                    
+                    expect(comment).toNotEventually(beNil())
+                }
+            }
+        }
+        
+        describe("when updating comment") {
+            
+            afterEach {
+                TokenStorage.clear()
+                UserStorage.clearUser()
+            }
+            
+            context("when token does not exist") {
+                
+                beforeEach {
+                    TokenStorage.clear()
+                }
+                
+                it("error should occur") {
+                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists, but account type is wrong") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                }
+                
+                it("error should occur") {
+                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists and account type is correct") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
+                }
+                
+                afterEach {
+                    self.removeAllStubs()
+                }
+                
+                it("comment should be posted") {
+                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _comment in
+                        comment = _comment
+                    }.error { _ in fail() }
+                    
+                    expect(comment).toNotEventually(beNil())
+                }
+            }
+        }
+        
+        describe("when deleting comment") {
+            
+            var didInvokePromise: Bool?
             
             beforeEach {
-                sut = APICommentsRequester()
+                didInvokePromise = nil
             }
             
             afterEach {
-                sut = nil
-                error = nil
-                comment = nil
+                TokenStorage.clear()
+                UserStorage.clearUser()
             }
             
-            describe("when posting comment") {
-
-                afterEach {
-                    TokenStorage.clear()
-                    UserStorage.clearUser()
-                }
-                
-                context("when token does not exist") {
-                    
-                    beforeEach {
-                        TokenStorage.clear()
-                    }
-                    
-                    it("error should occur") {
-                        sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
-                }
-                
-                context("when token exists, but account type is wrong") {
-                    
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.User))
-                        TokenStorage.storeToken("fixture.token")
-                    }
-                    
-                    it("error should occur") {
-                        sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
-                }
-                
-                context("when token exists and account type is correct") {
-                    
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
-                        TokenStorage.storeToken("fixture.token")
-                        self.stub(everything, builder: json(self.fixtureJSON))
-                    }
-                    
-                    afterEach {
-                        self.removeAllStubs()
-                    }
-                    
-                    it("comment should be posted") {
-                        sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                            comment = _comment
-                        }.error { _ in fail() }
-                        
-                        expect(comment).toNotEventually(beNil())
-                    }
-                }
-            }
-            
-            describe("when updating comment") {
-                
-                afterEach {
-                    TokenStorage.clear()
-                    UserStorage.clearUser()
-                }
-                
-                context("when token does not exist") {
-                    
-                    beforeEach {
-                        TokenStorage.clear()
-                    }
-                    
-                    it("error should occur") {
-                        sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
-                }
-                
-                context("when token exists, but account type is wrong") {
-                    
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.User))
-                        TokenStorage.storeToken("fixture.token")
-                    }
-                    
-                    it("error should occur") {
-                        sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
-                }
-                
-                context("when token exists and account type is correct") {
-                    
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
-                        TokenStorage.storeToken("fixture.token")
-                        self.stub(everything, builder: json(self.fixtureJSON))
-                    }
-                    
-                    afterEach {
-                        self.removeAllStubs()
-                    }
-                    
-                    it("comment should be posted") {
-                        sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                            comment = _comment
-                        }.error { _ in fail() }
-                        
-                        expect(comment).toNotEventually(beNil())
-                    }
-                }
-            }
-            
-            describe("when deleting comment") {
-                
-                var didInvokePromise: Bool?
+            context("when token does not exist") {
                 
                 beforeEach {
-                    didInvokePromise = nil
+                    TokenStorage.clear()
+                }
+                
+                it("error should occur") {
+                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists, but account type is wrong") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                }
+                
+                it("error should occur") {
+                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
+                    }
+                    
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists and account type is correct") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
                 }
                 
                 afterEach {
+                    self.removeAllStubs()
+                }
+                
+                it("comment should be posted") {
+                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        didInvokePromise = true
+                    }.error { _ in fail() }
+                    
+                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                }
+            }
+        }
+        
+        describe("when liking comment") {
+            
+            var didInvokePromise: Bool?
+            
+            beforeEach {
+                didInvokePromise = nil
+            }
+            
+            afterEach {
+                TokenStorage.clear()
+                UserStorage.clearUser()
+            }
+            
+            context("when token does not exist") {
+                
+                beforeEach {
                     TokenStorage.clear()
-                    UserStorage.clearUser()
                 }
                 
-                context("when token does not exist") {
-                    
-                    beforeEach {
-                        TokenStorage.clear()
+                it("error should occur") {
+                    sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
                     }
                     
-                    it("error should occur") {
-                        sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
                 }
                 
-                context("when token exists, but account type is wrong") {
-                    
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.User))
-                        TokenStorage.storeToken("fixture.token")
-                    }
-                    
-                    it("error should occur") {
-                        sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                            fail()
-                        }.error { _error in
-                            error = _error
-                        }
-                        
-                        expect(error is VerifiableError).toEventually(beTruthy())
-                    }
+                afterEach {
+                    self.removeAllStubs()
                 }
                 
-                context("when token exists and account type is correct") {
+                it("comment should be marked as liked") {
+                    sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        didInvokePromise = true
+                    }.error { _ in fail() }
                     
-                    beforeEach {
-                        UserStorage.storeUser(User.fixtureUserForAccountType(.Player))
-                        TokenStorage.storeToken("fixture.token")
-                        self.stub(everything, builder: json(self.fixtureJSON))
+                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                }
+            }
+        }
+        
+        describe("when unliking comment") {
+            
+            var didInvokePromise: Bool?
+            
+            beforeEach {
+                didInvokePromise = nil
+            }
+            
+            afterEach {
+                TokenStorage.clear()
+                UserStorage.clearUser()
+            }
+            
+            context("when token does not exist") {
+                
+                beforeEach {
+                    TokenStorage.clear()
+                }
+                
+                it("error should occur") {
+                    sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
                     }
                     
-                    afterEach {
-                        self.removeAllStubs()
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
+                }
+                
+                afterEach {
+                    self.removeAllStubs()
+                }
+                
+                it("comment should be marked as unliked") {
+                    sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        didInvokePromise = true
+                    }.error { _ in fail() }
+                    
+                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                }
+            }
+        }
+        
+        describe("when checking if user did like a comment") {
+            
+            var didInvokePromise: Bool?
+            
+            beforeEach {
+                didInvokePromise = nil
+            }
+            
+            afterEach {
+                TokenStorage.clear()
+                UserStorage.clearUser()
+            }
+            
+            context("when token does not exist") {
+                
+                beforeEach {
+                    TokenStorage.clear()
+                }
+                
+                it("error should occur") {
+                    sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        fail()
+                    }.error { _error in
+                        error = _error
                     }
                     
-                    it("comment should be posted") {
-                        sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                            didInvokePromise = true
-                        }.error { _ in fail() }
-                        
-                        expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
-                    }
+                    expect(error is VerifiableError).toEventually(beTruthy())
+                }
+            }
+            
+            context("when token exists") {
+                
+                beforeEach {
+                    UserStorage.storeUser(User.fixtureUserForAccountType(.User))
+                    TokenStorage.storeToken("fixture.token")
+                    self.stub(everything, builder: json(self.fixtureJSON))
+                }
+                
+                afterEach {
+                    self.removeAllStubs()
+                }
+                
+                it("comment should be checked for like") {
+                    sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
+                        didInvokePromise = true
+                    }.error { _ in fail() }
+                    
+                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
                 }
             }
         }

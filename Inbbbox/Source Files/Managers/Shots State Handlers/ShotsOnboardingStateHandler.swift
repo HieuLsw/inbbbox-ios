@@ -4,11 +4,17 @@
 
 import Foundation
 import SwiftyUserDefaults
+import PromiseKit
 
 class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
 
+    private let connectionsRequester = APIConnectionsRequester()
+    private let userProvider = APIUsersProvider()
+    private let netguruIdentifier = "netguru"
+    
     weak var shotsCollectionViewController: ShotsCollectionViewController?
     weak var delegate: ShotsStateHandlerDelegate?
+    weak var skipDelegate: OnboardingSkipButtonHandlerDelegate?
     let onboardingSteps: [(image: UIImage?, action: ShotCollectionViewCell.Action)]
 
 
@@ -41,6 +47,10 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     var collectionViewScrollEnabled: Bool {
         return false
     }
+    
+    var shouldShowNoShotsView: Bool {
+        return false
+    }
 
     func prepareForPresentingData() {
         // Do nothing, all set.
@@ -54,11 +64,20 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
         let step1 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step1", comment: "")
         let step2 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step2", comment: "")
         let step3 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step3", comment: "")
+        let step4 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step4", comment: "")
+        let step5 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step5", comment: "")
         onboardingSteps = [
             (image: UIImage(named: step1), action: ShotCollectionViewCell.Action.Like),
             (image: UIImage(named: step2), action: ShotCollectionViewCell.Action.Bucket),
-            (image: UIImage(named: step3), action: ShotCollectionViewCell.Action.Comment)
+            (image: UIImage(named: step3), action: ShotCollectionViewCell.Action.Comment),
+            (image: UIImage(named: step4), action: ShotCollectionViewCell.Action.Follow),
+            (image: UIImage(named: step5), action: ShotCollectionViewCell.Action.DoNothing),
         ]
+    }
+    
+    func skipOnboardingStep() {
+        guard let collectionView = shotsCollectionViewController?.collectionView else { return }
+        collectionView.animateToNextCell()
     }
 }
 
@@ -86,12 +105,19 @@ extension ShotsOnboardingStateHandler {
 extension ShotsOnboardingStateHandler {
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell,
                         forItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 3 {
+        if indexPath.row == onboardingSteps.count {
             scrollViewAnimationsCompletion = {
                 Defaults[.onboardingPassed] = true
                 self.delegate?.shotsStateHandlerDidInvalidate(self)
             }
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        guard indexPath.row == onboardingSteps.count - 1 else {
+            return
+        }
+        skipOnboardingStep()
     }
 }
 
@@ -114,6 +140,7 @@ private extension ShotsOnboardingStateHandler {
         let cell = collectionView.dequeueReusableClass(ShotCollectionViewCell.self,
                 forIndexPath: indexPath, type: .Cell)
         cell.shotImageView.loadShotImageFromURL(shot.shotImage.normalURL)
+        cell.displayAuthor(Settings.Customization.ShowAuthor, animated: false)
         cell.gifLabel.hidden = !shot.animated
         return cell
     }
@@ -124,13 +151,40 @@ private extension ShotsOnboardingStateHandler {
         let stepImage = onboardingSteps[indexPath.row].image
         cell.shotImageView.image = stepImage
         cell.gifLabel.hidden = true
+        cell.enabledActions = [self.onboardingSteps[indexPath.row].action]
         cell.swipeCompletion = { [weak self] action in
-            if action == self?.onboardingSteps[indexPath.row].action {
-                var newContentOffset = collectionView.contentOffset
-                newContentOffset.y += CGRectGetHeight(collectionView.bounds)
-                collectionView.setContentOffset(newContentOffset, animated: true)
+            guard let certainSelf = self where action == certainSelf.onboardingSteps[indexPath.row].action else {
+                return
             }
+            collectionView.animateToNextCell()
+            if action == .Follow {
+                certainSelf.followNetguru()
+            }
+            
         }
+        
+        if indexPath.row == 3 {
+            skipDelegate?.shouldSkipButtonAppear()
+        } else {
+            skipDelegate?.shouldSkipButtonDisappear()
+        }
+        
         return cell
+    }
+    
+    func followNetguru() {
+        firstly {
+            userProvider.provideUser(netguruIdentifier)
+        }.then { user in
+            self.connectionsRequester.followUser(user)
+        }
+    }
+}
+
+private extension UICollectionView {
+    func animateToNextCell() {
+        var newContentOffset = contentOffset
+        newContentOffset.y += CGRectGetHeight(bounds)
+        setContentOffset(newContentOffset, animated: true)
     }
 }

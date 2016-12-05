@@ -42,7 +42,6 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
         guard let collectionView = collectionView else {
             return
         }
-        collectionView.backgroundColor = UIColor.backgroundGrayColor()
         setupBarButtons()
         updateBarButtons(collectionView.collectionViewLayout)
     }
@@ -95,7 +94,11 @@ class TwoLayoutsCollectionViewController: UICollectionViewController {
             flowLayout.containsHeader = containsHeader
             collectionView.setCollectionViewLayout(flowLayout, animated: false)
         }
-        collectionView.reloadData()
+        /*
+         Hack for ticket: https://netguru.atlassian.net/browse/IOS-441
+         reloadData() was not always causing refreshing visible cells, this do the work
+         */
+        collectionView.reloadItemsAtIndexPaths(collectionView.indexPathsForVisibleItems())
         scrollToTop(collectionView)
         updateBarButtons(collectionView.collectionViewLayout)
     }

@@ -37,15 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window!.rootViewController = rootViewController
         window!.makeKeyAndVisible()
-        window!.backgroundColor = UIColor.backgroundGrayColor()
-        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().barTintColor = UIColor.pinkColor()
-        UINavigationBar.appearance().barStyle = .Black
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        UINavigationBar.appearance().translucent = false
-
+        
         configureInitialSettings()
         CacheManager.setupCache()
+        ColorModeProvider.setup()
 
         var shouldPerformAdditionalDelegateHandling = true
         if let shortcut = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
@@ -128,6 +123,7 @@ private extension AppDelegate {
         if !Settings.StreamSource.IsSet {
             Settings.StreamSource.PopularToday = true
             Settings.StreamSource.IsSet = true
+            Settings.Customization.ShowAuthor = true
         }
     }
 }

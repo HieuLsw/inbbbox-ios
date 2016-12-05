@@ -13,24 +13,22 @@ class ShotsCollectionBackgroundViewSpec: QuickSpec {
 
         var sut: ShotsCollectionBackgroundView!
 
-        beforeEach {
-            sut = ShotsCollectionBackgroundView()
-        }
-
         afterEach() {
             sut = nil
         }
 
-        describe("logo image view") {
-
+        describe("logo image view in day mode") {
+            
             var logoImageView: UIImageView!
 
             beforeEach {
+                ColorModeProvider.change(to: .DayMode)
+                sut = ShotsCollectionBackgroundView()
                 logoImageView = sut.logoImageView
             }
-
+            
             it("should have proper image") {
-                expect(UIImagePNGRepresentation(logoImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: "logo-type-home")!)))
+                expect(UIImagePNGRepresentation(logoImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: ColorModeProvider.current().logoImageName)!)))
             }
 
             it("should be configured for auto layout") {
@@ -39,6 +37,21 @@ class ShotsCollectionBackgroundViewSpec: QuickSpec {
 
             it("should be added to subviews") {
                 expect(sut.subviews).to(contain(logoImageView))
+            }
+        }
+        
+        describe("logo image view in night mode") {
+            
+            var logoImageView: UIImageView!
+            
+            beforeEach {
+                ColorModeProvider.change(to: .NightMode)
+                sut = ShotsCollectionBackgroundView()
+                logoImageView = sut.logoImageView
+            }
+            
+            it("should have proper image") {
+                expect(UIImagePNGRepresentation(logoImageView.image!)).to(equal(UIImagePNGRepresentation(UIImage(named: ColorModeProvider.current().logoImageName)!)))
             }
         }
     }

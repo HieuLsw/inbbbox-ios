@@ -17,6 +17,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
         case Like
         case Bucket
         case Comment
+        case Follow
     }
 
     let shotImageView = ShotImageView.newAutoLayoutView()
@@ -27,7 +28,17 @@ class ShotCollectionViewCell: UICollectionViewCell {
                                           secondImage: UIImage(named: "ic-bucket-swipe-filled"))
     let commentImageView = DoubleImageView(firstImage: UIImage(named: "ic-comment"),
                                            secondImage: UIImage(named: "ic-comment-filled"))
+    let followImageView = DoubleImageView(firstImage: UIImage(named: "ic-follow-swipe"),
+                                          secondImage: UIImage(named: "ic-follow-swipe-active"))
     let gifLabel = GifIndicatorView()
+    let messageLabel: UILabel = {
+        let l = UILabel()
+        l.font = UIFont.helveticaFont(.NeueBold, size: 15)
+        l.textColor = .whiteColor()
+        l.textAlignment = .Center
+        return l
+    }()
+    
 
     let shotContainer = UIView.newAutoLayoutView()
     let authorView = ShotAuthorCompactView.newAutoLayoutView()
@@ -39,18 +50,20 @@ class ShotCollectionViewCell: UICollectionViewCell {
     private(set) var bucketImageViewWidthConstraint: NSLayoutConstraint?
     private(set) var commentImageViewRightConstraint: NSLayoutConstraint?
     private(set) var commentImageViewWidthConstraint: NSLayoutConstraint?
+    private(set) var followImageViewWidthConstraint: NSLayoutConstraint?
     private var authorInfoHeightConstraint: NSLayoutConstraint?
 
     var viewClass = UIView.self
     var swipeCompletion: (Action -> Void)?
     weak var delegate: ShotCollectionViewCellDelegate?
+    var isRegisteredTo3DTouch = false
 
     private let panGestureRecognizer = UIPanGestureRecognizer()
 
-    private let doNothingActionRange = (min: CGFloat(-40), max: CGFloat(40))
-    private let likeActionRange = (min: CGFloat(40), max: CGFloat(130))
-    private let bucketActionRange = (min: CGFloat(130), max: CGFloat(180))
-    private let commentActionRange = (min: CGFloat(-80), max: CGFloat(-40))
+    private let likeActionRange = ActionRange(min: 40, max: 120)
+    private let bucketActionRange = ActionRange(min: 120, max: 170)
+    private let commentActionRange = ActionRange(min: -80, max: 0)
+    private let followActionRange = ActionRange(min: -170, max: -80)
     private let authorInfoHeight: CGFloat = 25
 
     private var didSetConstraints = false
@@ -65,6 +78,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    var enabledActions:[Action] = [.DoNothing, .Like, .Bucket, .Comment, .Follow]
 
     // MARK: - Life cycle
 
@@ -96,6 +110,13 @@ class ShotCollectionViewCell: UICollectionViewCell {
 
         commentImageView.configureForAutoLayout()
         shotContainer.addSubview(commentImageView)
+        
+        followImageView.configureForAutoLayout()
+        followImageView.alpha = 0
+        shotContainer.addSubview(followImageView)
+        
+        messageLabel.configureForAutoLayout()
+        shotContainer.addSubview(messageLabel)
 
         shotContainer.addSubview(shotImageView)
 
@@ -161,10 +182,21 @@ class ShotCollectionViewCell: UICollectionViewCell {
                             commentImageView.intrinsicContentSize().width)
             commentImageViewRightConstraint = commentImageView.autoPinEdgeToSuperviewEdge(.Right)
             commentImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
-
+            
+            followImageViewWidthConstraint = followImageView.autoSetDimension(.Width, toSize: 0)
+            followImageView.autoConstrainAttribute(.Height, toAttribute: .Width, ofView: followImageView,
+                    withMultiplier: followImageView.intrinsicContentSize().height /
+                            followImageView.intrinsicContentSize().width)
+            followImageView.autoAlignAxis(.Vertical, toSameAxisOfView: commentImageView)
+            followImageView.autoAlignAxisToSuperviewAxis(.Horizontal)
+            
             gifLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 10)
             gifLabel.autoPinEdgeToSuperviewEdge(.Right, withInset: 10)
 
+            messageLabel.autoAlignAxisToSuperviewAxis(.Vertical)
+            let messageHorizontalOffset = followImageView.intrinsicContentSize().height
+            messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: shotContainer, withOffset: messageHorizontalOffset)
+            
             didSetConstraints = true
         }
 
@@ -185,6 +217,7 @@ class ShotCollectionViewCell: UICollectionViewCell {
         shotImageView.image = nil
         shotImageView.originalImage = nil
         authorView.alpha = 0
+        enabledActions = [.DoNothing, .Like, .Bucket, .Comment, .Follow]
     }
 
     // MARK: - Public
@@ -209,16 +242,17 @@ class ShotCollectionViewCell: UICollectionViewCell {
         case .Began:
             self.delegate?.shotCollectionViewCellDidStartSwiping(self)
         case .Ended, .Cancelled, .Failed:
-            let xTranslation = panGestureRecognizer.translationInView(self.contentView).x
+            let xTranslation = adjustedXTranslation()
             let selectedAction = self.selectedActionForSwipeXTranslation(xTranslation)
             panGestureRecognizer.enabled = false
-            animateCellAction(selectedAction) {
+            displayMessageBasedOnAction(selectedAction)
+            animateCellAction(selectedAction) { [unowned self] in
                 self.swipeCompletion?(selectedAction)
                 self.delegate?.shotCollectionViewCellDidEndSwiping(self)
                 panGestureRecognizer.enabled = true
             }
         default:
-            let xTranslation = self.panGestureRecognizer.translationInView(self.contentView).x
+            let xTranslation = adjustedXTranslation()
             adjustConstraintsForSwipeXTranslation(xTranslation)
             adjustActionImageViewForXTranslation(xTranslation)
             previousXTranslation = xTranslation
@@ -226,9 +260,25 @@ class ShotCollectionViewCell: UICollectionViewCell {
     }
 
     // MARK: - Private Helpers
+    
+    private func adjustedXTranslation() -> CGFloat {
+        let likeOffset = likeActionRange.max - 40
+        let xTranslation = self.panGestureRecognizer.translationInView(self.contentView).x
+        if xTranslation < 0 && (!enabledActions.contains(.Comment) && !enabledActions.contains(.Follow)) {
+            return 0
+        } else if xTranslation > 0 && !enabledActions.contains(.Like) && !enabledActions.contains(.Bucket) {
+            return 0
+        } else if xTranslation > 0 && !enabledActions.contains(.Bucket) && xTranslation >= likeOffset {
+            return likeOffset
+        } else if xTranslation < 0 && !enabledActions.contains(.Follow) && xTranslation <= commentActionRange.min {
+            return commentActionRange.min
+        }
+        
+        return xTranslation
+    }
 
     private func adjustConstraintsForSwipeXTranslation(xTranslation: CGFloat) {
-        if xTranslation > bucketActionRange.max || xTranslation < commentActionRange.min {
+        if xTranslation > bucketActionRange.max || xTranslation < followActionRange.min {
             return
         }
 
@@ -237,60 +287,85 @@ class ShotCollectionViewCell: UICollectionViewCell {
         likeImageViewWidthConstraint?.constant = min(abs(xTranslation * 0.6),
                 likeImageView.intrinsicContentSize().width)
 
-        let secondActionWidthConstant = max((abs(xTranslation * 0.6) - likeActionRange.min), 0)
-        plusImageViewWidthConstraint?.constant = min(secondActionWidthConstant,
+        let secondLeftActionWidthConstant = max((abs(xTranslation * 0.6) - likeActionRange.min), 0)
+        plusImageViewWidthConstraint?.constant = min(secondLeftActionWidthConstant,
                 plusImageView.intrinsicContentSize().width)
         plusImageView.alpha = min((abs(xTranslation) - likeActionRange.min) / 70, 1)
 
-        bucketImageViewWidthConstraint?.constant = min(secondActionWidthConstant,
+        bucketImageViewWidthConstraint?.constant = min(secondLeftActionWidthConstant,
                 bucketImageView.intrinsicContentSize().width)
 
-        commentImageViewRightConstraint?.constant = -abs(xTranslation) * 0.2
-        commentImageViewWidthConstraint?.constant = min(abs(xTranslation * 0.6),
-                commentImageView.intrinsicContentSize().width)
+        let width = min(abs(xTranslation * 0.6), commentImageView.intrinsicContentSize().width)
+        commentImageViewWidthConstraint?.constant = width
+        commentImageViewRightConstraint?.constant = -((abs(xTranslation) * 0.5) - (width / 2))
+        
+        followImageViewWidthConstraint?.constant = min(abs(xTranslation * 0.6),
+                                                        followImageView.intrinsicContentSize().width)
     }
 
     private func adjustActionImageViewForXTranslation(xTranslation: CGFloat) {
-        if xTranslation >= likeActionRange.min && xTranslation > previousXTranslation &&
-                likeImageView.isFirstImageVisible() && !liked {
+        switch xTranslation {
+        case likeActionRange.min ..< CGFloat.max where xTranslation > previousXTranslation && likeImageView.isFirstImageVisible && !liked:
             UIView.animate(animations: {
                 self.likeImageView.displaySecondImageView()
             })
-        } else if xTranslation < likeActionRange.min && xTranslation < previousXTranslation &&
-                likeImageView.isSecondImageVisible() && !liked {
+        case -CGFloat.infinity ..< likeActionRange.min where xTranslation < previousXTranslation && likeImageView.isSecondImageVisible && !liked:
             UIView.animate(animations: {
                 self.likeImageView.displayFirstImageView()
             })
-        } else if xTranslation >= bucketActionRange.min && bucketImageView.isFirstImageVisible() {
+        case bucketActionRange.min ..< CGFloat.max where bucketImageView.isFirstImageVisible:
             UIView.animate(animations: {
                 self.bucketImageView.displaySecondImageView()
             })
-        } else if xTranslation < bucketActionRange.min && bucketImageView.isSecondImageVisible() {
+        case -CGFloat.infinity ..< bucketActionRange.min where bucketImageView.isSecondImageVisible:
             UIView.animate(animations: {
                 self.bucketImageView.displayFirstImageView()
             })
-        } else if xTranslation <= commentActionRange.max && xTranslation < previousXTranslation &&
-                commentImageView.isFirstImageVisible() {
+        case commentActionRange.mid ... commentActionRange.max where commentImageView.isSelfOrSecondImageVisible:
             UIView.animate(animations: {
-                self.commentImageView.displaySecondImageView()
-            })
-        } else if xTranslation > commentActionRange.max && xTranslation > previousXTranslation &&
-                commentImageView.isSecondImageVisible() {
-            UIView.animate(animations: {
+                self.displayComment()
                 self.commentImageView.displayFirstImageView()
             })
+        case commentActionRange.min...commentActionRange.mid:
+            UIView.animate(animations: {
+                self.displayComment()
+                self.commentImageView.displaySecondImageView()
+            })
+        case followActionRange.mid ... followActionRange.max where followImageView.isSelfOrSecondImageVisible:
+            UIView.animate(animations: {
+                self.displayFollow()
+                self.followImageView.displayFirstImageView()
+            })
+        case -CGFloat.infinity ..< followActionRange.mid:
+            UIView.animate(animations: {
+                self.followImageView.displaySecondImageView()
+            })
+        default: break
         }
+    }
+    
+    private func displayComment() {
+        commentImageView.alpha = 1
+        followImageView.alpha = 0
+    }
+    
+    private func displayFollow() {
+        commentImageView.alpha = 0
+        followImageView.alpha = 1
     }
 
     private func selectedActionForSwipeXTranslation(xTranslation: CGFloat) -> Action {
-        if doNothingActionRange.min ... doNothingActionRange.max ~= xTranslation {
-            return .DoNothing
-        } else if likeActionRange.min ... likeActionRange.max ~= xTranslation {
+        switch xTranslation {
+        case likeActionRange.min ... likeActionRange.max:
             return .Like
-        } else if xTranslation > likeActionRange.max {
+        case likeActionRange.max ..< CGFloat.infinity:
             return .Bucket
-        } else {
+        case commentActionRange.min ... commentActionRange.mid:
             return .Comment
+        case -CGFloat.infinity ..< followActionRange.mid:
+            return .Follow
+        default:
+            return .DoNothing
         }
     }
 
@@ -300,13 +375,15 @@ class ShotCollectionViewCell: UICollectionViewCell {
             bucketImageView.hidden = true
             plusImageView.hidden = true
             commentImageView.hidden = true
+            followImageView.hidden = true
             viewClass.animateWithDescriptor(ShotCellLikeActionAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
         case .Bucket:
             commentImageView.hidden = true
+            followImageView.hidden = true
             viewClass.animateWithDescriptor(ShotCellBucketActionAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
-        case .Comment:
+        case .Comment, .Follow:
             likeImageView.hidden = true
             plusImageView.hidden = true
             bucketImageView.hidden = true
@@ -315,6 +392,21 @@ class ShotCollectionViewCell: UICollectionViewCell {
         default:
             viewClass.animateWithDescriptor(ShotCellInitialStateAnimationDescriptor(shotCell: self,
                     swipeCompletion: completion))
+        }
+    }
+    
+    private func displayMessageBasedOnAction(action: Action) {
+        switch action {
+        case .Like:
+            messageLabel.text = NSLocalizedString("ShotCollectionCell.Like", comment: "Shown when user perform like action")
+        case .Bucket:
+            messageLabel.text = NSLocalizedString("ShotCollectionCell.Bucket", comment: "Shown when user perform add to bucket action")
+        case .Comment:
+            messageLabel.text = NSLocalizedString("ShotCollectionCell.Comment", comment: "Shown when user perform comment action")
+        case .Follow:
+            messageLabel.text = NSLocalizedString("ShotCollectionCell.Follow", comment: "Shown when user perform follow action")
+        case .DoNothing:
+            messageLabel.text = ""
         }
     }
 
@@ -337,6 +429,6 @@ extension ShotCollectionViewCell: UIGestureRecognizerDelegate {
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWithGestureRecognizer
                            otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return false
     }
 }

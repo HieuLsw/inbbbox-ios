@@ -15,6 +15,8 @@ import MessageUI
 final class ShotDetailsViewController: UIViewController {
 
     var shouldScrollToMostRecentMessage = false
+    var shouldShowKeyboardAtStart = false
+    var shotIndex = 0
 
     var shotDetailsView: ShotDetailsView! {
         return view as? ShotDetailsView
@@ -25,8 +27,12 @@ final class ShotDetailsViewController: UIViewController {
     private(set) var header: ShotDetailsHeaderView?
     private var footer: ShotDetailsFooterView?
     private(set) var scroller = ScrollViewAutoScroller()
+    private(set) var operationalCell: ShotDetailsOperationCollectionViewCell?
     private var onceTokenForShouldScrollToMessagesOnOpen = dispatch_once_t(0)
     private var modalTransitionAnimator: ZFModalTransitionAnimator?
+    
+    var willDismissDetailsCompletionHandler: (Int -> Void)?
+    var updatedShotInfo: ((ShotType) -> ())?
 
     init(shot: ShotType) {
         self.viewModel = ShotDetailsViewModel(shot: shot)
@@ -66,7 +72,10 @@ final class ShotDetailsViewController: UIViewController {
         shotDetailsView.shouldShowCommentComposerView = viewModel.isCommentingAvailable
 
         firstly {
-            viewModel.loadAllComments()
+            viewModel.loadAttachments()
+        }.then {
+            self.header?.setNeedsDisplay()
+            return self.viewModel.loadAllComments()
         }.then { () -> Void in
             self.grayOutFooterIfNeeded()
             self.shotDetailsView.collectionView.reloadData()
@@ -92,9 +101,19 @@ final class ShotDetailsViewController: UIViewController {
                 self.viewModel.isCommentingAvailable ? self.shotDetailsView.commentComposerView.makeActive() :
                         self.scroller.scrollToBottomAnimated(true)
             }
+            if self.shouldShowKeyboardAtStart && self.viewModel.isCommentingAvailable {
+                AsyncWrapper().main {
+                    self.shotDetailsView.commentComposerView.textField.becomeFirstResponder()
+                }
+            }
         }
 
         AnalyticsManager.trackScreen(.ShotDetailsView)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        willDismissDetailsCompletionHandler?(shotIndex)
     }
 
     func scrollViewWillEndDragging(scrollView: UIScrollView,
@@ -120,6 +139,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
         if viewModel.isShotOperationIndex(indexPath.row) {
             let cell = collectionView.dequeueReusableClass(ShotDetailsOperationCollectionViewCell.self,
                     forIndexPath: indexPath, type: .Cell)
+            operationalCell = cell
 
             let likeSelectableView = cell.operationView.likeSelectableView
             let bucketSelectableView = cell.operationView.bucketSelectableView
@@ -135,10 +155,12 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             setLikeStateInSelectableView(likeSelectableView)
             setBucketStatusInSelectableView(bucketSelectableView)
 
+            setLikesCountForLabel(cell.operationView.likeCounterLabel)
+            setBucketsCountForLabel(cell.operationView.bucketCounterLabel)
+
             return cell
 
         } else if viewModel.isDescriptionIndex(indexPath.row) {
-
             let cell = collectionView.dequeueReusableClass(ShotDetailsDescriptionCollectionViewCell.self,
                     forIndexPath: indexPath, type: .Cell)
 
@@ -158,7 +180,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
                     forIndexPath: indexPath, type: .Cell)
 
             let data = viewModel.displayableDataForCommentAtIndex(indexPath.row)
-
+            cell.likedByMe = data.likedByMe
             cell.authorLabel.setText(data.author)
             if let comment = data.comment {
                 cell.setCommentLabelAttributedText(comment)
@@ -169,12 +191,19 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             }
             cell.dateLabel.attributedText = data.date
             cell.avatarView.imageView.loadImageFromURL(data.avatarURL,
-                                                       placeholderImage: UIImage(named: "ic-comments-nopicture"))
+                                                    placeholderImage: UIImage(named: "ic-comments-nopicture"))
+            cell.likesCountLabel.attributedText = data.likesCount
             cell.deleteActionHandler = { [weak self] in
-                self?.deleteCommentAtIndexPath(indexPath)
+                self?.deleteComment(atIndexPath: indexPath)
             }
             cell.reportActionHandler = { [weak self] in
-                self?.reportCommentAtIndexPath(indexPath)
+                self?.reportComment(atIndexPath: indexPath)
+            }
+            cell.likeActionHandler = { [weak self] in
+                self?.likeComment(atIndexPath: indexPath)
+            }
+            cell.unlikeActionHandler = { [weak self] in
+                self?.unlikeComment(atIndexPath: indexPath)
             }
             cell.avatarView.delegate = self
             cell.delegate = self
@@ -196,7 +225,7 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             return footer!
         }
 
-        if header == nil && kind == UICollectionElementKindSectionHeader {
+        if kind == UICollectionElementKindSectionHeader {
             header = collectionView.dequeueReusableClass(ShotDetailsHeaderView.self, forIndexPath: indexPath,
                     type: .Header)
             if viewModel.shot.animated {
@@ -228,6 +257,13 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             header?.imageDidTap = { [weak self] in
                 self?.presentShotFullscreen()
+            }
+            
+            header?.showAttachments = viewModel.shot.attachmentsCount != 0
+            header?.attachments = viewModel.attachments
+            header?.attachmentDidTap = { [weak self] cell, attachment in
+                self?.header?.selectedAttachment = attachment
+                self?.presentFullScreenAttachment(cell)
             }
         }
 
@@ -290,9 +326,7 @@ extension ShotDetailsViewController: UICollectionViewDelegateFlowLayout {
 extension ShotDetailsViewController {
 
     func animateHeader(start start: Bool) {
-        if let imageView = header?.imageView as? AnimatableShotImageView {
-            start ? imageView.startAnimatingGIF() : imageView.stopAnimatingGIF()
-        }
+        start ? header?.imageView.startAnimating() : header?.imageView.stopAnimating()
     }
 
     func hideUnusedCommentEditingViews() {
@@ -305,6 +339,13 @@ extension ShotDetailsViewController {
 
     func presentProfileViewControllerForUser(user: UserType) {
 
+        if let profileController = (self.presentingViewController as? UINavigationController)?.topViewController
+                    as? ProfileViewController where profileController.isDisplayingUser(user) {
+            animateHeader(start: false)
+            dismissViewControllerAnimated(true, completion: nil)
+            return
+        }
+
         let profileViewController = ProfileViewController(user: user)
         let navigationController = UINavigationController(rootViewController: profileViewController)
 
@@ -314,11 +355,33 @@ extension ShotDetailsViewController {
         }
         presentViewController(navigationController, animated: true, completion: nil)
     }
+    
+    func customizeFor3DTouch(hidden: Bool) {
+        shotDetailsView.customizeFor3DTouch(hidden)
+    }
 }
 
 // MARK: Private extension
 
 private extension ShotDetailsViewController {
+
+    func refreshWithShot(shot: ShotType) {
+    
+        if let operationalCell = self.operationalCell {
+            operationalCell.operationView.likeCounterLabel.text = "\(shot.likesCount)"
+            operationalCell.operationView.bucketCounterLabel.text = "\(shot.bucketsCount)"
+        }
+        self.updatedShotInfo?(shot)
+    }
+
+    func refreshLikesBucketsCounter() {
+
+        firstly {
+            self.viewModel.checkDetailOfShot()
+        }.then { shot in
+            self.refreshWithShot(shot)
+        }
+    }
 
     func setLikeStateInSelectableView(view: ActivityIndicatorSelectableView) {
         handleSelectableViewStatus(view) {
@@ -330,6 +393,14 @@ private extension ShotDetailsViewController {
         handleSelectableViewStatus(view) {
             self.viewModel.checkShotAffiliationToUserBuckets()
         }
+    }
+    
+    func setLikesCountForLabel(label: UILabel) {
+        label.text = "\(viewModel.shot.likesCount)"
+    }
+
+    func setBucketsCountForLabel(label: UILabel) {
+        label.text = "\(viewModel.shot.bucketsCount)"
     }
 
     func handleSelectableViewStatus(view: ActivityIndicatorSelectableView, withAction action: (() -> Promise<Bool>)) {
@@ -346,7 +417,7 @@ private extension ShotDetailsViewController {
     }
 
     func likeSelectableViewDidTap(view: ActivityIndicatorSelectableView) {
-
+        
         view.startAnimating()
 
         firstly {
@@ -354,6 +425,7 @@ private extension ShotDetailsViewController {
         }.then { isShotLikedByUser in
             view.selected = isShotLikedByUser
         }.always {
+            self.refreshLikesBucketsCounter()
             view.stopAnimating()
         }
     }
@@ -367,15 +439,17 @@ private extension ShotDetailsViewController {
         }.then { result -> Void in
             if let bucketNumber = result.bucketsNumber where !result.removed {
                 let mode: ShotBucketsViewControllerMode = bucketNumber == 0 ? .AddToBucket : .RemoveFromBucket
-                self.presentShotBucketsViewControllerWithMode(mode)
+                self.presentShotBucketsViewControllerWithMode(mode, onModalCompletion: {
+                    self.refreshLikesBucketsCounter()
+                })
             } else {
+                self.refreshLikesBucketsCounter()
                 view.selected = false
             }
         }.always {
             view.stopAnimating()
         }.error { error in
-            let alert = UIAlertController.addRemoveShotToBucketFail()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }
     }
 
@@ -393,11 +467,11 @@ private extension ShotDetailsViewController {
         let dribbbleImageRatio = CGFloat(0.75)
         return CGSize(
             width: floor(collectionView.bounds.width),
-            height: ceil(collectionView.bounds.width * dribbbleImageRatio + heightForCollapsedCollectionViewHeader)
+            height: ceil(collectionView.bounds.width * dribbbleImageRatio + heightForCollapsedCollectionViewHeader) + viewModel.attachmentContainerHeight()
         )
     }
 
-    func deleteCommentAtIndexPath(indexPath: NSIndexPath) {
+    func deleteComment(atIndexPath indexPath: NSIndexPath) {
         let isAllowedToDisplaySeparator = viewModel.isAllowedToDisplaySeparator
         firstly {
             viewModel.deleteCommentAtIndex(indexPath.item)
@@ -408,12 +482,11 @@ private extension ShotDetailsViewController {
             }
             self.shotDetailsView.collectionView.deleteItemsAtIndexPaths(indexPaths)
         }.error { error in
-            let alert = UIAlertController.unableToDeleteComment()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.deleteCommentFailed, canBeDismissedByUser: true)
         }
     }
 
-    func reportCommentAtIndexPath(indexPath: NSIndexPath) {
+    func reportComment(atIndexPath indexPath: NSIndexPath) {
 
         guard MFMailComposeViewController.canSendMail() else {
             let alert = UIAlertController.emailAccountNotFound()
@@ -435,16 +508,39 @@ private extension ShotDetailsViewController {
         composer.navigationBar.tintColor = .whiteColor()
     }
 
-    func presentShotBucketsViewControllerWithMode(mode: ShotBucketsViewControllerMode) {
+    func likeComment(atIndexPath indexPath: NSIndexPath) {
+        firstly {
+            viewModel.performLikeOperationForComment(atIndexPath: indexPath)
+        }.then {
+            self.viewModel.checkLikeStatusForComment(atIndexPath: indexPath, force: true)
+        }.then { isLiked -> Void in
+            self.viewModel.setLikeStatusForComment(atIndexPath: indexPath, withValue: isLiked)
+            self.shotDetailsView.collectionView.reloadItemsAtIndexPaths([indexPath])
+        }
+    }
+
+    func unlikeComment(atIndexPath indexPath: NSIndexPath) {
+        firstly {
+            viewModel.performUnlikeOperationForComment(atIndexPath: indexPath)
+        }.then {
+            self.viewModel.checkLikeStatusForComment(atIndexPath: indexPath, force: true)
+        }.then { isLiked -> Void in
+            self.viewModel.setLikeStatusForComment(atIndexPath: indexPath, withValue: isLiked)
+            self.shotDetailsView.collectionView.reloadItemsAtIndexPaths([indexPath])
+        }
+    }
+
+    func presentShotBucketsViewControllerWithMode(mode: ShotBucketsViewControllerMode, onModalCompletion completion:(() -> Void)? = nil) {
 
         shotDetailsView.commentComposerView.makeInactive()
 
         let shotBucketsViewController = ShotBucketsViewController(shot: viewModel.shot, mode: mode)
         animateHeader(start: false)
-        shotBucketsViewController.dismissClosure = { [weak self] in
+        shotBucketsViewController.willDismissViewControllerClosure = { [weak self] in
             self?.animateHeader(start: true)
             self?.viewModel.clearBucketsData()
             self?.shotDetailsView.collectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: 0, inSection: 0)])
+            completion?()
         }
 
         modalTransitionAnimator =
@@ -458,7 +554,31 @@ private extension ShotDetailsViewController {
 
         guard let header = header else { return }
 
-        let imageViewer = ImageViewer(imageProvider: self, displacedView: header.imageView)
+        var imageViewer: ImageViewer {
+            if viewModel.shot.animated {
+                let url = viewModel.shot.shotImage.hidpiURL ?? viewModel.shot.shotImage.normalURL
+                return ImageViewer(imageProvider: self, displacedView: header.imageView, animatedUrl: url)
+            } else {
+                return ImageViewer(imageProvider: self, displacedView: header.imageView)
+            }
+        }
+
+        presentImageViewer(imageViewer)
+    }
+    
+    func presentFullScreenAttachment(displacedView: UIView) {
+        /* 
+         To prevent glitchy animation we are adding placeholder view
+         from where animation will start but without showing thumbnail 
+         image in show animation.
+         */
+        let view = UIView(frame: displacedView.frame)
+        view.backgroundColor = .clearColor()
+        displacedView.superview?.addSubview(view)
+        let imageViewer = ImageViewer(imageProvider: header!, displacedView: view)
+        imageViewer.dismissCompletionBlock = {
+            view.removeFromSuperview()
+        }
         presentImageViewer(imageViewer)
     }
 

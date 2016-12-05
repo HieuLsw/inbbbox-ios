@@ -30,6 +30,11 @@ final class ShotDetailsFormatter {
 
         return formatter
     }()
+    
+    
+    private static var colorMode: ColorModeType {
+        return Settings.Customization.CurrentColorMode == .DayMode ? DayMode() : NightMode()
+    }
 
     class func attributedStringForHeaderWithLinkRangeFromShot(shot: ShotType)
                     -> (attributedString: NSAttributedString, userLinkRange: NSRange?, teamLinkRange: NSRange?) {
@@ -71,7 +76,7 @@ final class ShotDetailsFormatter {
         style.minimumLineHeight = 20
 
         mutableBody.addAttributes([
-                NSForegroundColorAttributeName: UIColor.grayColor(),
+                NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsDescriptionViewColorTextColor,
                 NSFontAttributeName: UIFont.systemFontOfSize(15),
                 NSParagraphStyleAttributeName: style
         ], range: NSRange(location: 0, length: mutableBody.length))
@@ -89,7 +94,7 @@ final class ShotDetailsFormatter {
         let range = NSRange(location: 0, length: mutableBody.length)
 
         mutableBody.addAttributes([
-                NSForegroundColorAttributeName: UIColor.grayColor(),
+                NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentContentTextColor,
                 NSFontAttributeName: UIFont.systemFontOfSize(ShotDetailsFormatterBigFontSize)
         ], range: range)
 
@@ -98,15 +103,22 @@ final class ShotDetailsFormatter {
 
     class func commentDateForComment(comment: CommentType) -> NSAttributedString {
         return NSAttributedString(string: commentDateFormatter.stringFromDate(comment.createdAt), attributes: [
-                NSForegroundColorAttributeName: UIColor.followeeTextGrayColor(),
+                NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentDateTextColor,
                 NSFontAttributeName: UIFont.helveticaFont(.Neue, size: 10)
         ])
     }
 
     class func commentAuthorForComment(comment: CommentType) -> NSAttributedString {
         return NSAttributedString(string: comment.user.name ?? comment.user.username, attributes: [
-                NSForegroundColorAttributeName: UIColor.textDarkColor(),
+                NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentAuthorTextColor,
                 NSFontAttributeName: UIFont.helveticaFont(.NeueMedium, size: 16)
+        ])
+    }
+
+    class func commentLikesCountForComment(comment: CommentType) -> NSAttributedString {
+        return NSAttributedString(string: "\(comment.likesCount)", attributes: [
+            NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentLikesCountTextColor,
+            NSFontAttributeName: UIFont.helveticaFont(.Neue, size: 10)
         ])
     }
 }
@@ -115,7 +127,7 @@ private extension ShotDetailsFormatter {
 
     class func appendTitleAttributedString(mutableAttributedString: NSMutableAttributedString, shot: ShotType) {
         let titleAttributedString = NSAttributedString(string: shot.title,
-                attributes: [NSForegroundColorAttributeName: UIColor.blackColor(),
+                attributes: [NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewTitleLabelTextColor,
                              NSFontAttributeName: UIFont.boldSystemFontOfSize(15)])
         mutableAttributedString.appendAttributedString(titleAttributedString)
         mutableAttributedString.appendAttributedString(NSAttributedString.newLineAttributedString())
@@ -128,9 +140,9 @@ private extension ShotDetailsFormatter {
         let bigFont = UIFont.systemFontOfSize(ShotDetailsFormatterBigFontSize)
         let smallFont = UIFont.systemFontOfSize(ShotDetailsFormatterSmallFontSize)
         let authorAttributedString = NSMutableAttributedString(
-        string: prefixString + " " + author, attributes: [NSForegroundColorAttributeName: UIColor.pinkColor(),
+        string: prefixString + " " + author, attributes: [NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewAuthorLinkColor,
                                                           NSFontAttributeName: bigFont])
-        authorAttributedString.setAttributes([NSForegroundColorAttributeName: UIColor.grayColor(),
+        authorAttributedString.setAttributes([NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewAuthorNotLinkColor,
                                               NSFontAttributeName: smallFont],
                 range: NSRange(location: 0, length: prefixString.characters.count))
         let userLinkRange = NSRange(location: mutableAttributedString.length + prefixString.characters.count,
@@ -145,10 +157,10 @@ private extension ShotDetailsFormatter {
                 comment: "Preposition describing for who shot was made.")
         let font = UIFont.systemFontOfSize(ShotDetailsFormatterBigFontSize)
         let teamAttributedString = NSMutableAttributedString(
-        string: prefixString + " " + team, attributes: [NSForegroundColorAttributeName: UIColor.pinkColor(),
+        string: prefixString + " " + team, attributes: [NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewAuthorLinkColor,
                                                         NSFontAttributeName: font])
         teamAttributedString.setAttributes([
-                NSForegroundColorAttributeName: UIColor.grayColor(),
+                NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewAuthorNotLinkColor,
                 NSFontAttributeName: UIFont.systemFontOfSize(ShotDetailsFormatterSmallFontSize)
         ], range: NSRange(location: 0, length: prefixString.characters.count))
         let teamLinkRange = NSRange(location: mutableAttributedString.length + prefixString.characters.count,
@@ -163,7 +175,7 @@ private extension ShotDetailsFormatter {
                 comment: "Preposition describing when shot was made.")
         let font = UIFont.systemFontOfSize(ShotDetailsFormatterSmallFontSize)
         let dateAttributedString = NSAttributedString(
-        string: prefixString + " " + dateSting, attributes: [NSForegroundColorAttributeName: UIColor.grayColor(),
+        string: prefixString + " " + dateSting, attributes: [NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewAuthorNotLinkColor,
                                                              NSFontAttributeName: font])
         mutableAttributedString.appendAttributedString(dateAttributedString)
     }

@@ -9,7 +9,9 @@
 import CoreData
 
 func setUpInMemoryManagedObjectContext() -> NSManagedObjectContext {
-    let managedObjectModel = NSManagedObjectModel.mergedModelFromBundles([NSBundle.mainBundle()])!
+    let modelPath = NSBundle.mainBundle().pathForResource("StoreData", ofType: "momd")
+    
+    let managedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath!))!
     
     let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
     

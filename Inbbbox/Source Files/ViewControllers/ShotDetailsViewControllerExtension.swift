@@ -17,7 +17,11 @@ import PromiseKit
 extension ShotDetailsViewController: ImageProvider {
 
     func provideImage(completion: UIImage? -> Void) {
-        completion(header?.imageView.image)
+        if !viewModel.shot.animated {
+            if let image = header?.imageView.image {
+                completion(image)
+            }
+        }
     }
 }
 
@@ -67,8 +71,7 @@ extension ShotDetailsViewController: CommentComposerViewDelegate {
         }.always {
             view.stopAnimation()
         }.error { error in
-            let alert = UIAlertController.unableToAddComment()
-            self.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.addingCommentFailed, canBeDismissedByUser: true)
         }
     }
 
@@ -86,11 +89,34 @@ extension ShotDetailsViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        !decelerate ? animateHeader(start: true) : {}()
+        !decelerate ? {
+            animateHeader(start: true)
+            checkForCommentsLikes()
+        }() : {}()
     }
 
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         animateHeader(start: true)
+        checkForCommentsLikes()
+    }
+
+    private func checkForCommentsLikes() {
+        let visibleCells = shotDetailsView.collectionView.indexPathsForVisibleItems()
+
+        for indexPath in visibleCells {
+            let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
+
+            if index >= 0 && index < viewModel.comments.count {
+                firstly {
+                    viewModel.checkLikeStatusForComment(atIndexPath: indexPath, force: false)
+                }.then { isLiked -> Void in
+                    self.viewModel.setLikeStatusForComment(atIndexPath: indexPath, withValue: isLiked)
+                    if isLiked {
+                        self.shotDetailsView.collectionView.reloadItemsAtIndexPaths([indexPath])
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -164,13 +190,21 @@ extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClic
         guard let url = URLDetector.detectUrlFromGestureRecognizer(gestureRecognizer,
                                                                    textContainer: textContainer,
                                                                    layoutManager: layoutManager) else { return }
-
+        handleTappedUrl(url)
+        
+    }
+    
+    func urlInLabelTapped(url: NSURL) {
+        handleTappedUrl(url)
+    }
+    
+    private func handleTappedUrl(url: NSURL) {
         if viewModel.shouldOpenUserDetailsFromUrl(url) {
             if let identifier = url.absoluteString.componentsSeparatedByString("/").last {
                 firstly {
                     viewModel.userForId(identifier)
-                }.then { [weak self] user in
-                    self?.presentProfileViewControllerForUser(user)
+                    }.then { [weak self] user in
+                        self?.presentProfileViewControllerForUser(user)
                 }
             }
         } else {
@@ -185,4 +219,5 @@ protocol UICollectionViewCellWithLabelContainingClickableLinksDelegate: class {
 
     func labelContainingClickableLinksDidTap(gestureRecognizer: UITapGestureRecognizer,
                                              textContainer: NSTextContainer, layoutManager: NSLayoutManager)
+    func urlInLabelTapped(url: NSURL)
 }

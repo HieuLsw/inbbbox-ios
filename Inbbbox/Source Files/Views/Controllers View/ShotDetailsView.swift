@@ -22,7 +22,6 @@ class ShotDetailsView: UIView {
     var topLayoutGuideOffset = CGFloat(0)
 
     private let collectionViewCornerWrapperView = UIView.newAutoLayoutView()
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
     let keyboardResizableView = KeyboardResizableView.newAutoLayoutView()
     private var didSetConstraints = false
 
@@ -37,11 +36,8 @@ class ShotDetailsView: UIView {
         collectionView.clipsToBounds = true
 
         super.init(frame: frame)
-
+        
         backgroundColor = .clearColor()
-
-        blurView.configureForAutoLayout()
-        addSubview(blurView)
 
         collectionViewCornerWrapperView.backgroundColor = .clearColor()
         collectionViewCornerWrapperView.clipsToBounds = true
@@ -62,8 +58,6 @@ class ShotDetailsView: UIView {
 
         if !didSetConstraints {
             didSetConstraints = true
-
-            blurView.autoPinEdgesToSuperviewEdges()
 
             let commentComposerViewHeight = CGFloat(61)
             keyboardResizableView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsZero, excludingEdge: .Bottom)
@@ -92,5 +86,11 @@ class ShotDetailsView: UIView {
         let mask = CAShapeLayer()
         mask.path = path.CGPath
         collectionViewCornerWrapperView.layer.mask = mask
+    }
+    
+    // MARK: public
+    
+    func customizeFor3DTouch(hidden: Bool) {
+        backgroundColor = hidden ? .backgroundGrayColor() : .clearColor()
     }
 }

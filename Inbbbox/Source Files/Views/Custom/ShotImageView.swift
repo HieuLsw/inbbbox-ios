@@ -8,7 +8,6 @@
 
 import UIKit
 import PureLayout
-import Gifu
 import Haneke
 
 class ShotImageView: UIImageView {

@@ -49,7 +49,7 @@
 "CenterButtonTabBar.Following" = "Os autores seguidos";
 
 /* Main view, bottom bar */
-"CenterButtonTabBar.Account" = "Conta";
+"CenterButtonTabBar.Settings" = "Configurações";
 
 /********* AcknowledgementsViewController *********/
 
@@ -122,6 +122,9 @@
 
 /********* CommentEditView *********/
 
+/* Mark selected comment as liked. */
+"CommentEditView.Like" = "Curtir";
+
 /* Cancel editing comment. */
 "CommentEditView.Cancel" = "Anule";
 
@@ -171,8 +174,11 @@
 /* Displayed when user device is not capable of/configured to send emails. */
 "UIAlertControllerExtension.EmailError" = "Não podemos enviar um e-mail com o seu aviso sobre o conteúdo proibido porque não foi configurada nenhuma conta de e-mail.";
 
+/* Displayed when user device is not capable of/configured to send emails, shown when trying to send feedback. */
+"UIAlertControllerExtension.CantSendFeedback" = "A tua conta e-mail não está configurada. Envie uma mensagem para inbbbox@netguru.co";
+
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = " ¡Ai! Não podemos baixar as fotos agora.";
+"UIAlertControllerExtension.UnableToDownload" = "Descarregar projetos de Dribbble";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -185,7 +191,7 @@
 /********* SettingsViewModel *********/
 
 /* Title for account screen */
-"SettingsViewModel.Account" = "Conta";
+"SettingsViewModel.Account" = "Conta & Configuração";
 
 /* Button text allowing user to create new account. */
 "SettingsViewModel.CreateAccount" = "Crie uma conta Dribbble";
@@ -226,6 +232,21 @@
 /* User Settings, show author. */
 "SettingsViewModel.DisplayAuthor" = "Mostrar Autor na tela de inicio";
 
+/* User Setting, night mode */
+"SettingsViewModel.NightMode" = "Modo noturno";
+
+/* User Settings, feedback section title. */
+"SettingsViewModel.Feedback" = "FEEDBACK";
+
+/* User Settings, send your feedback button. */
+"SettingsViewModel.SendFeedback" = "Envie-nos as suas sugestões";
+
+/* User Settings, feedback sent. */
+"SettingsViewModel.FeedbackSent" = "Obrigado, a tua opinião foi enviada.";
+
+/* Title of flash message, when user turn off all sources */
+"SettingsViewModel.AllSources" = "Espaço para as informações sobre as fontes.";
+
 /* Title of group of buttons for customization settings */
 "SettingsViewController.Customization" = "Personalização";
 
@@ -253,6 +274,9 @@
 
 /* Dismiss error alert. */
 "ShotsCollectionViewController.Dismiss" = "Feche";
+
+/* Error shown when no stream sources were selected. */
+"ShotsCollectionViewController.NoShotsErrorLabel" = "Escolha pelo menos\numa fonte \nnas configurações";
 
 /********** ProfileHeaderView *********/
 
@@ -309,3 +333,16 @@
 "ShotsOnboardingStateHandler.Onboarding-Step1" = "onboarding-step1-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step2" = "onboarding-step2-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pt";
+"ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pt";
+"ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pt";
+"ShotsOnboardingStateHandler.Skip" = "Skip this step";
+
+/********* ShotsCollectionBackgroundView *********/
+
+"BackgroundView.ShowingYou" = "Mostrando:";
+
+/********* ShotCollectionCell *********/
+"ShotCollectionCell.Like" = "Adicionado aos favoridos!";
+"ShotCollectionCell.Bucket" = "Curtido e adicionado ao balde!";
+"ShotCollectionCell.Comment" = "Comentando…";
+"ShotCollectionCell.Follow" = "Está a seguir ao autor!";

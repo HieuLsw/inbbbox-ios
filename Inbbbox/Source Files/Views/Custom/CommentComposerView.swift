@@ -18,8 +18,8 @@ class CommentComposerView: UIView {
 
     weak var delegate: CommentComposerViewDelegate?
 
+    let textField = UITextField.newAutoLayoutView()
     private let cornerWrapperView = UIView.newAutoLayoutView()
-    private let textField = UITextField.newAutoLayoutView()
     private var didUpdateConstraints = false
     private var sendButton: UIButton? {
         return textField.rightView as? UIButton
@@ -27,20 +27,21 @@ class CommentComposerView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
+        let currentMode = ColorModeProvider.current()
         backgroundColor = .clearColor()
-        layer.shadowColor = UIColor(white: 0, alpha: 0.1).CGColor
+        layer.shadowColor = currentMode.shadowColor.CGColor
         layer.shadowRadius = 3
         layer.shadowOpacity = 1
 
         cornerWrapperView.clipsToBounds = true
-        cornerWrapperView.backgroundColor = .RGBA(246, 248, 248, 1)
+        cornerWrapperView.backgroundColor = currentMode.commentComposerViewBackground
         addSubview(cornerWrapperView)
 
-        textField.backgroundColor = .RGBA(246, 248, 248, 1)
-        textField.placeholder = NSLocalizedString("CommentComposerView.TypeComment",
-                comment: "Placeholder text, for comment text field.")
-        textField.tintColor = UIColor(red: 0.3522, green: 0.3513, blue: 0.3722, alpha: 1.0)
+        textField.backgroundColor = currentMode.commentComposerViewBackground
+        textField.attributedPlaceholder = CommentComposerFormatter.placeholderForMode(currentMode)
+        textField.textColor = currentMode.shotDetailsCommentContentTextColor
+        textField.tintColor = .RGBA(90, 90, 95, 1)
         textField.setLeftPadding(10)
         textField.delegate = self
         textField.autocorrectionType = .No
@@ -156,7 +157,7 @@ private extension CommentComposerView {
     }
 
     var activityIndicatorView: UIActivityIndicatorView {
-        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: ColorModeProvider.current().activityIndicatorViewStyle)
         activityIndicatorView.frame = CGRect(x: 0, y: 0, width: 65, height: 40)
         activityIndicatorView.color = .pinkColor()
         activityIndicatorView.startAnimating()

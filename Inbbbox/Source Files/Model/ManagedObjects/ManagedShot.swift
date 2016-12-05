@@ -22,6 +22,7 @@ class ManagedShot: NSManagedObject {
     @NSManaged var mngd_commentsCount: UInt
     @NSManaged var mngd_bucketsCount: UInt
     @NSManaged var mngd_team: ManagedTeam?
+    @NSManaged var mngd_attachmentsCount: UInt
 
     @NSManaged var liked: Bool
     @NSManaged var projects: NSSet?
@@ -46,4 +47,5 @@ extension ManagedShot: ShotType {
     var commentsCount: UInt { return mngd_commentsCount }
     var bucketsCount: UInt { return mngd_bucketsCount }
     var team: TeamType? { return mngd_team }
+    var attachmentsCount: UInt { return mngd_attachmentsCount }
 }

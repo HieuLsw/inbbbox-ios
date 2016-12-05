@@ -15,6 +15,8 @@ struct CommentDisplayableData {
     let comment: NSAttributedString?
     let date: NSAttributedString
     let avatarURL: NSURL?
+    var likesCount: NSAttributedString
+    var likedByMe: Bool
 }
 
 final class ShotDetailsViewModel {
@@ -27,6 +29,7 @@ final class ShotDetailsViewModel {
     var userProvider = APIUsersProvider()
     var bucketsRequester = BucketsRequester()
     var shotsRequester = ShotsRequester()
+    var attachmentsProvider = APIAttachmentsProvider()
 
     var itemsCount: Int {
 
@@ -43,7 +46,11 @@ final class ShotDetailsViewModel {
     }
 
     private var cachedFormattedComments = [CommentDisplayableData]()
+    private var cachedFormattedTitle: NSAttributedString?
+    private var cachedFormattedDescription: NSAttributedString?
+    
     var comments = [CommentType]()
+    var attachments = [Attachment]()
     private var userBucketsForShot = [BucketType]()
     private var isShotLikedByMe: Bool?
     private var userBucketsForShotCount: Int?
@@ -87,11 +94,21 @@ final class ShotDetailsViewModel {
 extension ShotDetailsViewModel {
 
     var attributedShotTitleForHeader: NSAttributedString {
-        return ShotDetailsFormatter.attributedStringForHeaderWithLinkRangeFromShot(shot).attributedString
+
+        if let cachedFormattedTitle = cachedFormattedTitle {
+            return cachedFormattedTitle
+        }
+        cachedFormattedTitle = ShotDetailsFormatter.attributedStringForHeaderWithLinkRangeFromShot(shot).attributedString
+        return cachedFormattedTitle!
     }
 
     var attributedShotDescription: NSAttributedString? {
-        return ShotDetailsFormatter.attributedShotDescriptionFromShot(shot)
+
+        if let cachedFormattedDescription = cachedFormattedDescription {
+            return cachedFormattedDescription
+        }
+        cachedFormattedDescription = ShotDetailsFormatter.attributedShotDescriptionFromShot(shot)
+        return cachedFormattedDescription!
     }
 
     var hasDescription: Bool {
@@ -119,12 +136,7 @@ extension ShotDetailsViewModel {
         if !existsCachedComment {
 
             let comment = comments[indexWithOffset]
-            let displayableData = CommentDisplayableData(
-            author: ShotDetailsFormatter.commentAuthorForComment(comment),
-                    comment: ShotDetailsFormatter.attributedCommentBodyForComment(comment),
-                    date: ShotDetailsFormatter.commentDateForComment(comment),
-                    avatarURL: comment.user.avatarURL
-            )
+            let displayableData = createDisplayableData(withComment: comment)
 
             cachedFormattedComments.append(displayableData)
         }
@@ -134,6 +146,18 @@ extension ShotDetailsViewModel {
 
     func userForCommentAtIndex(index: Int) -> UserType {
         return comments[self.indexInCommentArrayBasedOnItemIndex(index)].user
+    }
+
+    private func createDisplayableData(withComment comment: CommentType) -> CommentDisplayableData {
+        let displayableData = CommentDisplayableData(
+            author: ShotDetailsFormatter.commentAuthorForComment(comment),
+            comment: ShotDetailsFormatter.attributedCommentBodyForComment(comment),
+            date: ShotDetailsFormatter.commentDateForComment(comment),
+            avatarURL: comment.user.avatarURL,
+            likesCount: ShotDetailsFormatter.commentLikesCountForComment(comment),
+            likedByMe: comment.likedByMe
+        )
+        return displayableData
     }
 
 }
@@ -172,6 +196,10 @@ extension ShotDetailsViewModel {
                 fulfill(isShotLikedByMe)
             }.error(reject)
         }
+    }
+
+    func checkDetailOfShot() -> Promise<ShotType> {
+        return shotsRequester.fetchShotDetails(shot)
     }
 }
 
@@ -286,7 +314,7 @@ extension ShotDetailsViewModel {
     }
 
     func loadAllComments() -> Promise<Void> {
-
+        loadAttachments()
         return Promise<Void> { fulfill, reject in
 
             firstly {
@@ -346,6 +374,68 @@ extension ShotDetailsViewModel {
                      separator
         return report
     }
+
+    func performLikeOperationForComment(atIndexPath indexPath: NSIndexPath) -> Promise<Void> {
+
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
+        let comment = comments[index]
+
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                commentsRequester.likeComment(comment, forShot: shot)
+            }.then(fulfill).error(reject)
+        }
+    }
+
+    func performUnlikeOperationForComment(atIndexPath indexPath: NSIndexPath) -> Promise<Void> {
+
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
+        let comment = comments[index]
+
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                commentsRequester.unlikeComment(comment, forShot: shot)
+            }.then(fulfill).error(reject)
+        }
+    }
+
+    func checkLikeStatusForComment(atIndexPath indexPath: NSIndexPath, force: Bool) -> Promise<Bool> {
+
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
+        let comment = comments[index]
+
+        if force || !comment.checkedForLike {
+            return Promise<Bool> { fulfill, reject in
+
+                firstly {
+                    commentsRequester.checkIfLikeComment(comment, forShot: shot)
+                }.then(fulfill).error(reject)
+            }
+        }
+
+        return Promise(comment.likedByMe)
+    }
+
+    func setLikeStatusForComment(atIndexPath indexPath: NSIndexPath, withValue isLiked: Bool) {
+
+        let index = indexInCommentArrayBasedOnItemIndex(indexPath.row)
+        var comment = comments[index]
+
+        if comment.likedByMe != isLiked {
+            let diff = isLiked ? 1 : -1
+            comment.likesCount = comment.likesCount + diff
+
+            comment.likedByMe = isLiked
+
+            let displayableData = createDisplayableData(withComment: comment)
+            cachedFormattedComments[index] = displayableData
+        }
+
+        comment.checkedForLike = true
+        comments[index] = comment
+    }
 }
 
 extension ShotDetailsViewModel {
@@ -384,4 +474,38 @@ extension ShotDetailsViewModel: URLToUserProvider, UserToURLProvider {
     func userForId(identifier: String) -> Promise<UserType> {
         return userProvider.provideUser(identifier)
     }
+}
+
+// MARK: Attachments handling
+
+extension ShotDetailsViewModel {
+    
+    /*
+     Returns height for attachment Container in shot details view.
+     0 is returned if there is no attachments.
+     */
+    func attachmentContainerHeight() -> CGFloat {
+        return shot.attachmentsCount == 0 ? 0 : 70
+    }
+    
+    /*
+     Downloads attachments for shot and saves them into attachment property.
+     */
+    func loadAttachments() -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+            if (shot.attachmentsCount == 0) {
+                fulfill()
+                return
+            }
+            firstly {
+                attachmentsProvider.provideAttachmentsForShot(shot)
+            }.then { attachments -> Void in
+                if let attachments = attachments {
+                    self.attachments = attachments
+                }
+                fulfill()
+            }.error(reject)
+        }
+    }
+    
 }

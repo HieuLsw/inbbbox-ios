@@ -21,7 +21,7 @@ final class LazyImageProvider {
                                      teaserImageCompletion: UIImage -> Void,
                                      normalImageCompletion: (UIImage -> Void)? = nil,
                                      hidpiImageCompletion: (UIImage -> Void)? = nil) {
-
+        
         firstly {
             loadImageFromURL(urls.teaserURL)
         }.then { image -> Void in

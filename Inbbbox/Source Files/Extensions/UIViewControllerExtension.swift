@@ -23,3 +23,23 @@ extension UIViewController {
         return (view as? T)!
     }
 }
+
+extension UIViewController {
+    
+    /// Registers a given view as a source for receiving 3D Touch events. There can be
+    /// multiple views registered inside one view controllers but one view cannot be 
+    /// registered multiple times.
+    ///
+    /// - parameter view: UIView to be registered as a source
+    ///
+    /// - returns: Boolean value which describes if a registration succeeded
+    func registerTo3DTouch(view: UIView) -> Bool {
+        if traitCollection.forceTouchCapability == .Available {
+            if let previewingSelf = self as? UIViewControllerPreviewingDelegate {
+                registerForPreviewingWithDelegate(previewingSelf, sourceView: view)
+                return true
+            }
+        }
+        return false
+    }
+}

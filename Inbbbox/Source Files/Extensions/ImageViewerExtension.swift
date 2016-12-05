@@ -24,4 +24,20 @@ extension ImageViewer {
 
         self.init(imageProvider: imageProvider, configuration: configuration, displacedView: displacedView)
     }
+
+    /// Initialize `ImageViewer` using default configuration for animated urls
+    ///
+    /// - parameter imageProvider: Object that conforms to protocol `ImageProvider`.
+    /// - parameter displacedView: View that should be displaced.
+    /// - parameter animatedUrl: Url with animated gif image
+    convenience init(imageProvider: ImageProvider, displacedView: UIView, animatedUrl: NSURL) {
+
+        self.init(imageProvider: imageProvider, displacedView: displacedView)
+
+        let animatableImageView = AnimatableShotImageView(frame: CGRect.zero)
+        animatableImageView.backgroundColor = .clearColor()
+        animatableImageView.loadAnimatableShotFromUrl(animatedUrl)
+
+        self.imageView = animatableImageView
+    }
 }

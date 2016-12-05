@@ -58,6 +58,11 @@ protocol ShotsStateHandler: UICollectionViewDataSource, UICollectionViewDelegate
      Does't work if collectionViewInteractionEnabled is false.
      */
     var collectionViewScrollEnabled: Bool { get }
+    
+    /**
+     Indicates if no shots view should be displayed
+     */
+    var shouldShowNoShotsView: Bool { get }
 
     /**
      Do any necessary steps to prepare yourself for presenting data.
@@ -69,4 +74,5 @@ protocol ShotsStateHandler: UICollectionViewDataSource, UICollectionViewDelegate
      ShotsCollectionViewController calls this action after downloading shots or state changes.
      */
     func presentData()
+    
 }

@@ -27,7 +27,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         collectionView.registerClass(LargeUserCollectionViewCell.self, type: .Cell)
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
-        self.title = viewModel.title
+        navigationItem.title = viewModel.title
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -60,11 +60,15 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
             cell.numberOfShotsLabel.text = cellData.numberOfShots
+            cell.updateImageViewsWith(ColorModeProvider.current().shotViewCellBackground)
             if cellData.shotsImagesURLs?.count > 0 {
                 cell.firstShotImageView.loadImageFromURL(cellData.shotsImagesURLs![0])
                 cell.secondShotImageView.loadImageFromURL(cellData.shotsImagesURLs![1])
                 cell.thirdShotImageView.loadImageFromURL(cellData.shotsImagesURLs![2])
                 cell.fourthShotImageView.loadImageFromURL(cellData.shotsImagesURLs![3])
+            }
+            if !cell.isRegisteredTo3DTouch {
+                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
             }
             return cell
         } else {
@@ -74,6 +78,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
             cell.numberOfShotsLabel.text = cellData.numberOfShots
+            cell.shotImageView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
             if let shotImage = cellData.firstShotImage {
 
                 let imageLoadingCompletion: UIImage -> Void = { [weak self] image in
@@ -88,6 +93,9 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
                     teaserImageCompletion: imageLoadingCompletion,
                     normalImageCompletion: imageLoadingCompletion
                 )
+            }
+            if !cell.isRegisteredTo3DTouch {
+                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
             }
             return cell
         }
@@ -128,14 +136,12 @@ extension FolloweesCollectionViewController: BaseCollectionViewViewModelDelegate
         collectionView?.reloadData()
 
         if viewModel.followees.isEmpty {
-            let alert = UIAlertController.generalError()
-            tabBarController?.presentViewController(alert, animated: true, completion: nil)
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
     func viewModelDidFailToLoadItems(error: ErrorType) {
-        let alert = UIAlertController.unableToDownloadItems()
-        tabBarController?.presentViewController(alert, animated: true, completion: nil)
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
     func viewModel(viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [NSIndexPath]) {
@@ -167,5 +173,37 @@ extension FolloweesCollectionViewController: DZNEmptyDataSetSource {
             )
             return emptyDataSetView
         }
+    }
+}
+
+extension FolloweesCollectionViewController: ColorModeAdaptable {
+    func adaptColorMode(mode: ColorModeType) {
+        collectionView?.reloadData()
+    }
+}
+
+// MARK: UIViewControllerPreviewingDelegate
+
+extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard
+            let indexPath = collectionView?.indexPathForItemAtPoint(previewingContext.sourceView.convertPoint(location, toView: collectionView)),
+            let cell = collectionView?.cellForItemAtIndexPath(indexPath)
+        else { return nil }
+        
+        previewingContext.sourceRect = cell.contentView.bounds
+        
+        
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
+        profileViewController.hidesBottomBarWhenPushed = true
+        
+        return profileViewController
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
 }

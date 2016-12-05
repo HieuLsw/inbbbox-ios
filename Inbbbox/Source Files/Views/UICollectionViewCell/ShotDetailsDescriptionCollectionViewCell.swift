@@ -29,14 +29,12 @@ class ShotDetailsDescriptionCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        contentView.backgroundColor = UIColor.whiteColor()
-
         descriptionLabel.numberOfLines = 0
         descriptionLabel.userInteractionEnabled = true
         descriptionLabel.linkAttributes = [NSForegroundColorAttributeName : UIColor.pinkColor()]
         contentView.addSubview(descriptionLabel)
 
-        separatorView.backgroundColor = .separatorGrayColor()
+        separatorView.backgroundColor = ColorModeProvider.current().shotDetailsSeparatorColor
         contentView.addSubview(separatorView)
     }
 
