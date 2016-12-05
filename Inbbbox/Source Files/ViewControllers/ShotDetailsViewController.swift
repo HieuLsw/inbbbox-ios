@@ -121,6 +121,7 @@ final class ShotDetailsViewController: UIViewController {
         super.viewWillDisappear(animated)
         header?.cancelAllAnimatedImageSettings()
         willDismissDetailsCompletionHandler?(shotIndex)
+        shotDetailsView?.hideKeyboard()
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
