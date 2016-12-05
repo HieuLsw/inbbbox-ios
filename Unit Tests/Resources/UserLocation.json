@@ -1,0 +1,16 @@
+{
+    "as": "fixture.name",
+    "city": "fixture.City",
+    "country": "fixture.Country",
+    "countryCode": "PL",
+    "isp": "fixture.ISP",
+    "lat": 52.9999,
+    "lon": 16.9999,
+    "org": "fixture.organisation",
+    "query": "192.168.0.0",
+    "region": "fixture.region",
+    "regionName": "fixture.regionName",
+    "status": "success",
+    "timezone": "fixture.timezone",
+    "zip": "fixture.zipCode"
+}

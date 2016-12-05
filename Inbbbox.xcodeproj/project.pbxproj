@@ -310,6 +310,13 @@
 		C61B8B971DDB122C00D94867 /* AttachmentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61B8B961DDB122C00D94867 /* AttachmentCollectionViewCell.swift */; };
 		C66C8BE91DD48A20005D63E6 /* FlashMessageTitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66C8BE81DD48A20005D63E6 /* FlashMessageTitles.swift */; };
 		C6745B7D1DB74371004D3D8E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6745B7C1DB74371004D3D8E /* AlertViewController.swift */; };
+		C6B095461DF17F65002806A0 /* NightModeHoursProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095451DF17F65002806A0 /* NightModeHoursProvider.swift */; };
+		C6B095481DF19F88002806A0 /* EstimatedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095471DF19F88002806A0 /* EstimatedLocation.swift */; };
+		C6B0954A1DF1AE71002806A0 /* EstimatedLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095491DF1AE71002806A0 /* EstimatedLocationProvider.swift */; };
+		C6B0954C1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0954B1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift */; };
+		C6B0954E1DF1C859002806A0 /* UserLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = C6B0954D1DF1C859002806A0 /* UserLocation.json */; };
+		C6B095501DF57EB2002806A0 /* NightModeHoursProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */; };
+		C6B095521DF583FA002806A0 /* EstimatedLocationProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095511DF583FA002806A0 /* EstimatedLocationProviderMock.swift */; };
 		C6B3E447E8EF8FFA08C91E08 /* ShotDetailsCollectionCollapsableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0001E808B13FB4F9C306EE /* ShotDetailsCollectionCollapsableHeader.swift */; };
 		C6E9D8B11DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */; };
 		C6F148831DBF926E0093FA24 /* EmptyShotsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F148821DBF926E0093FA24 /* EmptyShotsCollectionView.swift */; };
@@ -768,6 +775,13 @@
 		C61B8B961DDB122C00D94867 /* AttachmentCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewCell.swift; sourceTree = "<group>"; };
 		C66C8BE81DD48A20005D63E6 /* FlashMessageTitles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageTitles.swift; sourceTree = "<group>"; };
 		C6745B7C1DB74371004D3D8E /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
+		C6B095451DF17F65002806A0 /* NightModeHoursProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHoursProvider.swift; sourceTree = "<group>"; };
+		C6B095471DF19F88002806A0 /* EstimatedLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocation.swift; sourceTree = "<group>"; };
+		C6B095491DF1AE71002806A0 /* EstimatedLocationProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocationProvider.swift; sourceTree = "<group>"; };
+		C6B0954B1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocationProviderSpec.swift; sourceTree = "<group>"; };
+		C6B0954D1DF1C859002806A0 /* UserLocation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = UserLocation.json; sourceTree = "<group>"; };
+		C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHoursProviderSpec.swift; sourceTree = "<group>"; };
+		C6B095511DF583FA002806A0 /* EstimatedLocationProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocationProviderMock.swift; sourceTree = "<group>"; };
 		C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenStreamSourcesAnimatorSpec.swift; sourceTree = "<group>"; };
 		C6F148821DBF926E0093FA24 /* EmptyShotsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyShotsCollectionView.swift; sourceTree = "<group>"; };
 		C6F148841DC24D850093FA24 /* MainScreenStreamSourcesAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenStreamSourcesAnimator.swift; sourceTree = "<group>"; };
@@ -928,6 +942,8 @@
 				74E256BC1D9E888000AA5941 /* DeviceInfo.swift */,
 				307C5FA61DAE715E007219F9 /* UpdateableIndex.swift */,
 				BEA70EF91DD9C50C00868702 /* ActionRange.swift */,
+				C6B095451DF17F65002806A0 /* NightModeHoursProvider.swift */,
+				C6B095491DF1AE71002806A0 /* EstimatedLocationProvider.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -996,6 +1012,7 @@
 				4B222CC35CA6914327AE4C01 /* User.swift */,
 				305A85091DDAFE7F008EF410 /* DayMode.swift */,
 				305A850A1DDAFE7F008EF410 /* NightMode.swift */,
+				C6B095471DF19F88002806A0 /* EstimatedLocation.swift */,
 				7F4EB596A22469CD8E952645 /* ManagedObjects */,
 				7D92EA5C1F5A956915B1C43B /* Protocols */,
 			);
@@ -1038,6 +1055,7 @@
 				CB993016EF1BAC5798DA74AA /* Shot.json */,
 				07188CB96C935F062D896B24 /* Team.json */,
 				A98D27A5717BDF29E8B0510B /* User.json */,
+				C6B0954D1DF1C859002806A0 /* UserLocation.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1198,6 +1216,7 @@
 				497AACCD6ABF1ABC66D60392 /* BucketCollectionViewCellSpec.swift */,
 				B9C5F88B11663D6651324FF1 /* BucketsViewModelSpec.swift */,
 				41DAD4A8341D2DBBF839EF79 /* DefaultViewControllerPresenterSpec.swift */,
+				C6B0954B1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift */,
 				B34DC2963BC538E758A8E55F /* FolloweesViewModelSpec.swift */,
 				6760CD1173E9F6D4C4044BD7 /* FormatterSpec.swift */,
 				48C2356409F6DBA6CCCECB12 /* InitialShotsCollectionViewLayoutSpec.swift */,
@@ -1206,6 +1225,7 @@
 				B846DAF934E7B2D65792E07F /* ManagedShotsProviderSpec.swift */,
 				C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */,
 				3F14B4ED91D1574D59453775 /* NSAttributedStringExtensionSpec.swift */,
+				C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */,
 				64616F367934CAB66CC5B131 /* OAuthAuthorizableSpec.swift */,
 				3196E77844BB63271CD1D9BB /* PageableComponentSerializerSpec.swift */,
 				5BC7C4DA11B1EA7DD2433F93 /* PageableComponentSpec.swift */,
@@ -1525,6 +1545,7 @@
 				4E130E0E8DAA80912A8F8362 /* BucketsProviderMock.swift */,
 				445891027133FA0667ED3806 /* BucketsRequesterMock.swift */,
 				5C5E474F18708CBAF885EC19 /* CollectionViewMock.swift */,
+				C6B095511DF583FA002806A0 /* EstimatedLocationProviderMock.swift */,
 				B4EAADE0BC96B31283328294 /* ManagedShotsProviderMock.swift */,
 				12AF24D6B4F6285AD98F1C38 /* MockLoginService.swift */,
 				347F72831D292DAE84D32367 /* PanGestureRecognizerMock.swift */,
@@ -1815,6 +1836,7 @@
 				C60AA1BA1DDBB3D700E0A5AF /* Attachment.json in Resources */,
 				5AE4B28F1CAC5511004CB534 /* Buckets.json in Resources */,
 				5AE4B2901CAC5511004CB534 /* Comment.json in Resources */,
+				C6B0954E1DF1C859002806A0 /* UserLocation.json in Resources */,
 				5AE4B2931CAC5511004CB534 /* Project.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2150,6 +2172,7 @@
 				7E51C4B7CCD27909BE493A86 /* FollowUserQuery.swift in Sources */,
 				34113C4C88BA02CDE5DCD5A3 /* LikeQuery.swift in Sources */,
 				E2599CA55C5B7965E07CB90C /* PageableQuery.swift in Sources */,
+				C6B095461DF17F65002806A0 /* NightModeHoursProvider.swift in Sources */,
 				9620FED2CF51F1E225FC3EE3 /* ProjectsQuery.swift in Sources */,
 				742F7F7C45218BBF696179BD /* RemoveFromBucketQuery.swift in Sources */,
 				4A84AF49B7A0DBA94BF2D49D /* ShotLikedByMeQuery.swift in Sources */,
@@ -2217,6 +2240,7 @@
 				1A8703E28D4A5355D7758DC0 /* ShotBucketsViewController.swift in Sources */,
 				F7F8A182D0AA61C8FCA2C9BF /* ShotDetailsViewController.swift in Sources */,
 				305A85041DDAFD6A008EF410 /* ColorModeAdaptable.swift in Sources */,
+				C6B095481DF19F88002806A0 /* EstimatedLocation.swift in Sources */,
 				A7B3D3F746A094F24AA38C6C /* ShotsCollectionViewController.swift in Sources */,
 				7584EFD2730B01300585E5E8 /* TwoLayoutsCollectionViewController.swift in Sources */,
 				D8C4CA83F356EB5AFB912AA4 /* ProfileViewController.swift in Sources */,
@@ -2298,6 +2322,7 @@
 				0E4FFAF451A49014744B1438 /* DateCell.swift in Sources */,
 				7ED0BADDD63E7276D8E7C96D /* LabelCell.swift in Sources */,
 				926816F4900ADC283DCCAFAA /* SwitchCell.swift in Sources */,
+				C6B0954A1DF1AE71002806A0 /* EstimatedLocationProvider.swift in Sources */,
 				D768B854B709B8275B1FC330 /* AcknowledgementsViewController.swift in Sources */,
 				65BA20E6F5AE0C128423A28B /* Numeric.swift in Sources */,
 				65BA26749BA1A3DCEF27F481 /* AppDelegateExtension.swift in Sources */,
@@ -2381,6 +2406,7 @@
 				8165C6343D82FB9C367F0677 /* APIShotsRequesterMock.swift in Sources */,
 				97A44CC996A64CC87A242CDA /* AsyncWrapperMock.swift in Sources */,
 				463F4CD84E9E649B54C7643F /* BucketsProviderMock.swift in Sources */,
+				C6B095521DF583FA002806A0 /* EstimatedLocationProviderMock.swift in Sources */,
 				AD06F8E92197476566F01F4D /* BucketsRequesterMock.swift in Sources */,
 				CCBBD15819D4A213AFA940EF /* CollectionViewMock.swift in Sources */,
 				78DE6C2963EDD1E1C9BF9C59 /* ManagedShotsProviderMock.swift in Sources */,
@@ -2390,6 +2416,7 @@
 				2286B2C834EBDADAF9307955 /* ShotCollectionViewCellDelegateMock.swift in Sources */,
 				8EF4E9F350CC826C4F3BD01B /* ShotsAnimatorDelegateMock.swift in Sources */,
 				657A2D283E1D4CFC561EBADD /* ShotsAnimatorMock.swift in Sources */,
+				C6B095501DF57EB2002806A0 /* NightModeHoursProviderSpec.swift in Sources */,
 				89F6A18D88715072C7BABDE1 /* UserStorageMock.swift in Sources */,
 				4AFD4EB1EB2AC11E12FBF62D /* ViewControllerMock.swift in Sources */,
 				237CCD37767599FA1EA8505A /* ViewControllerPresenterMock.swift in Sources */,
@@ -2397,6 +2424,7 @@
 				65DE40F1593ED7E93D4101F9 /* AddToBucketQuerySpec.swift in Sources */,
 				3F59B98211E268445868DA3A /* CommentQuerySpec.swift in Sources */,
 				5A9C5878D7052F8F87E2CF97 /* CreateBucketQuerySpec.swift in Sources */,
+				C6B0954C1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift in Sources */,
 				3A0DA3C8F393CDE66C53EDB8 /* CreateCommentQuerySpec.swift in Sources */,
 				BE7A1741292D08D3D45BFAEF /* DeleteCommentQuerySpec.swift in Sources */,
 				2A11BC873A9EB4E33936FCD8 /* FolloweesQuerySpec.swift in Sources */,
