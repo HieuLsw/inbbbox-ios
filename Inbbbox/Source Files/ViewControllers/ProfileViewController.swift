@@ -388,8 +388,8 @@ private extension ProfileViewController {
 
 extension ProfileViewController: UIViewControllerPreviewingDelegate {
 
-    fileprivate func peekPopPresent(viewControllerToCommit: UIViewController) {
-        if let viewModel = viewModel as? UserDetailsViewModel, let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
+    fileprivate func peekPopPresent(viewController: UIViewController) {
+        if let viewModel = viewModel as? UserDetailsViewModel, let detailsViewController = viewController as? ShotDetailsViewController {
             detailsViewController.customizeFor3DTouch(false)
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
@@ -401,7 +401,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
 
             present(pageViewController, animated: true, completion: nil)
         } else if (viewModel is TeamDetailsViewModel) {
-            navigationController?.pushViewController(viewControllerToCommit, animated: true)
+            navigationController?.pushViewController(viewController, animated: true)
         }
 
     }
@@ -429,7 +429,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        peekPopPresent(viewControllerToCommit: viewControllerToCommit)
+        peekPopPresent(viewController: viewControllerToCommit)
     }
 }
 
@@ -459,6 +459,6 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
     }
 
     func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
-        peekPopPresent(viewControllerToCommit: viewControllerToCommit)
+        peekPopPresent(viewController: viewControllerToCommit)
     }
 }
