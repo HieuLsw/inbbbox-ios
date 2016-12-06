@@ -33,17 +33,20 @@ class NightModeHoursProviderSpec: QuickSpec {
                 var sunriseComponents: DateComponents?
                 var sunsetComponents: DateComponents?
                 _ = sut.sunStateHours(for: date).then { hours -> Void in
-                    sunriseComponents = NSCalendar.current.dateComponents([.hour, .minute, .second], from: hours.nextSunrise)
-                    sunsetComponents = NSCalendar.current.dateComponents([.hour, .minute, .second], from: hours.nextSunset)
+                    let timeZone = TimeZone(abbreviation: "GMT")!
+                    var calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+                    calendar.timeZone = timeZone
+                    sunriseComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunrise)
+                    sunsetComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunset)
                 }
-                //correct sunrise time at 01.01.1970 is 08:02:45
+                //correct sunrise time at 01.01.1970 is 07:02:45
                 expect(sunriseComponents).toNotEventually(beNil())
-                expect(sunriseComponents!.hour).toEventually(equal(8))
+                expect(sunriseComponents!.hour).toEventually(equal(7))
                 expect(sunriseComponents!.minute).toEventually(equal(2))
                 expect(sunriseComponents!.second).toEventually(equal(45))
                 
-                //correct sunset time at 01.01.1970 is 15:49:11
-                expect(sunsetComponents!.hour).toEventually(equal(15))
+                //correct sunset time at 01.01.1970 is 14:49:11
+                expect(sunsetComponents!.hour).toEventually(equal(14))
                 expect(sunsetComponents!.minute).toEventually(equal(49))
                 expect(sunsetComponents!.second).toEventually(equal(11))
             }
