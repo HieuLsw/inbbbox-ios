@@ -22,7 +22,7 @@ class NightModeHoursProviderSpec: QuickSpec {
         
         beforeEach {
             locationMock = EstimatedLocationProviderMock()
-            sut = NightModeHoursProvider(locationProvider: locationMock)
+            sut = NightModeHoursProvider(locationProvider: locationMock, timeZone: TimeZone(abbreviation: "GMT")!)
         }
         
         describe("When checking next sun state hours") {
@@ -42,7 +42,7 @@ class NightModeHoursProviderSpec: QuickSpec {
                 expect(sunriseComponents!.minute).toEventually(equal(2))
                 expect(sunriseComponents!.second).toEventually(equal(45))
                 
-                //correct sunset time at 01.01.1970 is 14:49:11
+                //correct sunset time at 01.01.1970 is 15:49:11
                 expect(sunsetComponents!.hour).toEventually(equal(15))
                 expect(sunsetComponents!.minute).toEventually(equal(49))
                 expect(sunsetComponents!.second).toEventually(equal(11))
