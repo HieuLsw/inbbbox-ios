@@ -51,7 +51,7 @@ class CommentEditView: UIView {
     let deleteButton = UIButton()
     let deleteLabel = UILabel()
     let contentView: UIView = {
-        if Settings.Customization.CurrentColorMode == .NightMode {
+        if Settings.Customization.CurrentColorMode == .nightMode {
             return UIView.withColor(ColorModeProvider.current().shotDetailsCommentCollectionViewCellBackground)
         } else {
             return UIVisualEffectView(effect: UIBlurEffect(style: .light))
