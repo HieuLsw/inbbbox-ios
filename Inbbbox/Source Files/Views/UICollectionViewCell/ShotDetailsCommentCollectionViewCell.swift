@@ -136,20 +136,17 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
             avatarView.autoSetDimensions(to: avatarView.frame.size)
             avatarView.autoPinEdge(toSuperviewEdge: .bottom, withInset: insets.bottom, relation: .greaterThanOrEqual)
 
-            authorLabel.autoPinEdge(.top, to: .top, of: authorLabel.superview!, withOffset: insets.top)
-            authorLabel.autoPinEdge(.left, to: .right, of: avatarView,
-                    withOffset: horizontalSpaceBetweenAvatarAndText)
+            authorLabel.autoPinEdge(.top, to: .top, of: avatarView)
+            authorLabel.autoPinEdge(.left, to: .right, of: avatarView, withOffset: horizontalSpaceBetweenAvatarAndText)
             authorLabel.autoPinEdge(toSuperviewEdge: .right, withInset: insets.right)
-            authorLabel.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
 
             commentLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: verticalSpacing)
-            commentLabel.autoPinEdge(.bottom, to: .top, of: dateLabel)
             commentLabel.autoPinEdge(.left, to: .left, of: authorLabel)
             commentLabel.autoPinEdge(.right, to: .right, of: authorLabel, withOffset: insets.right)
 
-            dateLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: insets.bottom)
+            dateLabel.autoPinEdge(.top, to: .bottom, of: commentLabel, withOffset: verticalSpacing, relation: .greaterThanOrEqual)
             dateLabel.autoPinEdge(.left, to: .left, of: authorLabel)
-            dateLabel.autoSetDimension(.height, toSize: 26, relation: .greaterThanOrEqual)
+            dateLabel.autoPinEdge(.bottom, to: .bottom, of: separatorView, withOffset: -verticalSpacing)
 
             likesCountLabel.autoAlignAxis(.horizontal, toSameAxisOf: dateLabel)
             likesCountLabel.autoPinEdge(.right, to: .right, of: self, withOffset: -insets.right)
