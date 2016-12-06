@@ -74,7 +74,7 @@ extension SimpleShotsCollectionViewController {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegate {
-    fileprivate func commit(viewControllerToCommit: UIViewController) {
+    fileprivate func peekPopPresent(viewControllerToCommit: UIViewController) {
         if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
             let viewModel = viewModel {
             detailsViewController.customizeFor3DTouch(false)
@@ -108,7 +108,7 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        commit(viewControllerToCommit: viewControllerToCommit)
+        peekPopPresent(viewControllerToCommit: viewControllerToCommit)
     }
 }
 
@@ -134,7 +134,7 @@ extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
     }
 
     func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
-        commit(viewControllerToCommit: viewControllerToCommit)
+        peekPopPresent(viewControllerToCommit: viewControllerToCommit)
     }
 }
 

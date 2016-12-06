@@ -246,7 +246,7 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
         guard
             let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView?.cellForItem(at: indexPath)
-            else { return nil }
+        else { return nil }
 
         previewingContext.sourceRect = cell.contentView.bounds
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
