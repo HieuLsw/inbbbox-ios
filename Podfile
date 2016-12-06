@@ -44,7 +44,8 @@ target 'Inbbbox' do
   pod 'ImageViewer', :git => 'https://github.com/Siemian/ImageViewer'
   #fork because of styling private properties
   pod 'AOAlertController', :git => 'https://github.com/0legAdamov/AOAlertController', :tag => 'v1.2.1'
-  pod 'PeekPop', :git => 'https://github.com/Myrenkar/PeekPop', :tag => '0.1.7'
+  #fork until lib will show view controller instead of screenshot
+  pod 'PeekPop', :git => 'https://github.com/Myrenkar/PeekPop', :tag => '0.1.8'
 
   target 'Unit Tests' do
     inherit! :search_paths

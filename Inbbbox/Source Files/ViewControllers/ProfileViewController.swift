@@ -387,7 +387,26 @@ private extension ProfileViewController {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension ProfileViewController: UIViewControllerPreviewingDelegate {
-    
+
+    fileprivate func commit(viewControllerToCommit: UIViewController) {
+        if let viewModel = viewModel as? UserDetailsViewModel,
+            let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
+            detailsViewController.customizeFor3DTouch(false)
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            modalTransitionAnimator?.behindViewScale = 1
+
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .custom
+
+            present(pageViewController, animated: true, completion: nil)
+        } else if (viewModel as? TeamDetailsViewModel) != nil {
+            navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        }
+
+    }
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)) else { return nil }
@@ -419,21 +438,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        if let viewModel = viewModel as? UserDetailsViewModel,
-            let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
-            detailsViewController.customizeFor3DTouch(false)
-            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
-            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-            modalTransitionAnimator?.behindViewScale = 1
-            
-            pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .custom
-            
-            present(pageViewController, animated: true, completion: nil)
-        } else if (viewModel as? TeamDetailsViewModel) != nil {
-            navigationController?.pushViewController(viewControllerToCommit, animated: true)
-        }
+        commit(viewControllerToCommit: viewControllerToCommit)
     }
 }
 
@@ -470,7 +475,7 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
         return nil
     }
 
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
-
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        commit(viewControllerToCommit: viewControllerToCommit)
     }
 }

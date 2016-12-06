@@ -210,7 +210,7 @@ extension FolloweesCollectionViewController: ColorModeAdaptable {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate {
-    
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
@@ -232,18 +232,21 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
 // MARK: PeekPopPreviewingDelegate
 
 extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
-        navigationController?.pushViewController(viewControllerToCommit, animated: true)
-    }
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+
         guard
             let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView?.cellForItem(at: indexPath)
-            else { return nil }
+        else { return nil }
 
         previewingContext.sourceRect = cell.contentView.bounds
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
+        profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
 }

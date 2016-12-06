@@ -212,7 +212,7 @@ extension BucketsCollectionViewController: DZNEmptyDataSetSource {
 extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
+
         guard
             let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView?.cellForItem(at: indexPath)
@@ -249,11 +249,10 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
             else { return nil }
 
         previewingContext.sourceRect = cell.contentView.bounds
-
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
 
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
 

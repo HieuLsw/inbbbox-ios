@@ -74,7 +74,22 @@ extension SimpleShotsCollectionViewController {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegate {
-    
+    fileprivate func commit(viewControllerToCommit: UIViewController) {
+        if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
+            let viewModel = viewModel {
+            detailsViewController.customizeFor3DTouch(false)
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            modalTransitionAnimator?.behindViewScale = 1
+
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .custom
+
+            tabBarController?.present(pageViewController, animated: true, completion: nil)
+        }
+    }
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
@@ -93,33 +108,21 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
-            let viewModel = viewModel {
-            detailsViewController.customizeFor3DTouch(false)
-            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
-            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-            modalTransitionAnimator?.behindViewScale = 1
-            
-            pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .custom
-            
-            tabBarController?.present(pageViewController, animated: true, completion: nil)
-        }
+        commit(viewControllerToCommit: viewControllerToCommit)
     }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
 
 extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
+
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
             let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView?.cellForItem(at: indexPath),
             let viewModel = viewModel
-            else { return nil }
+        else { return nil }
 
         previewingContext.sourceRect = cell.contentView.bounds
 
@@ -130,21 +133,8 @@ extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
         return detailsViewController
     }
 
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
-
-        if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
-            let viewModel = viewModel {
-            detailsViewController.customizeFor3DTouch(false)
-            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
-            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-            modalTransitionAnimator?.behindViewScale = 1
-
-            pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .custom
-
-            tabBarController?.present(pageViewController, animated: true, completion: nil)
-        }
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        commit(viewControllerToCommit: viewControllerToCommit)
     }
 }
 
