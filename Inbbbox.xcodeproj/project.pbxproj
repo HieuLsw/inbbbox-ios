@@ -1783,7 +1783,7 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 9HJ69C5G9K;
 						LastSwiftMigration = 0810;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					5E3A98351AA73A6500CE2F20 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -2559,7 +2559,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
+				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
 				PRODUCT_NAME = Inbbbox;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2683,12 +2683,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
+				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2819,15 +2820,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9HJ69C5G9K;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
+				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
 				PRODUCT_NAME = Inbbbox;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "20e6c87d-aa34-4324-b6a7-7a9c0d011ac9";
+				PROVISIONING_PROFILE_SPECIFIER = "Inbbbox Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -2906,11 +2907,12 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
+				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
