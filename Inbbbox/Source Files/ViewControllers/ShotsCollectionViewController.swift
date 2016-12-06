@@ -65,6 +65,7 @@ extension ShotsCollectionViewController {
         configureForCurrentStateHandler()
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
+        setupSkipButton()
         
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
@@ -361,5 +362,31 @@ private extension ShotsCollectionViewController {
         } else {
             showStreamSources()
         }
+    }
+}
+
+// MARK: OnboardingSkipable
+
+extension ShotsCollectionViewController: OnboardingSkipButtonHandlerDelegate {
+    
+    func shouldSkipButtonAppear() {
+        skipButtonAnimator?.showButton()
+    }
+    
+    func shouldSkipButtonDisappear() {
+        skipButtonAnimator?.hideButton()
+    }
+}
+
+private extension ShotsCollectionViewController {
+    
+    func setupSkipButton() {
+        guard let background = collectionView?.backgroundView as? ShotsCollectionBackgroundView else { return }
+        background.skipButton.addTarget(self, action: #selector(skipStep), for: .touchUpInside)
+    }
+    
+    @objc func skipStep() {
+        guard let onboardingHandler = stateHandler as? ShotsOnboardingStateHandler else { return }
+        onboardingHandler.skipOnboardingStep()
     }
 }
