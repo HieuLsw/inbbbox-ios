@@ -11,6 +11,7 @@ import PromiseKit
 import CoreLocation
 import SwiftyJSON
 import Solar
+import SwiftyUserDefaults
 
 enum NightModeHoursProviderError: Error {
     case couldNotCalculate
@@ -21,15 +22,43 @@ struct SunStateHours {
     let nextSunset: Date
 }
 
+extension DefaultsKeys {
+    static let nextSunrise = DefaultsKey<Date?>("nextSunrise")
+    static let nextSunset = DefaultsKey<Date?>("nextSunset")
+}
+
 // Provides informations about estimated time of
 // sunrise and sundown in users location
 final class NightModeHoursProvider {
     
     private static let secondsInDay = 24 * 60 * 60
-    let locationProvider: EstimatedLocationProvider
     
-    init(locationProvider: EstimatedLocationProvider = EstimatedLocationProvider()) {
+    class var nextSunrise: Date? {
+        get {
+            return Defaults[.nextSunrise]
+        }
+        
+        set(value) {
+            Defaults[.nextSunrise] = value
+        }
+    }
+    
+    class var nextSunset: Date? {
+        get {
+            return Defaults[.nextSunset]
+        }
+        
+        set(value) {
+            Defaults[.nextSunset] = value
+        }
+    }
+    
+    fileprivate let locationProvider: EstimatedLocationProvider
+    fileprivate let timeZone: TimeZone
+    
+    init(locationProvider: EstimatedLocationProvider = EstimatedLocationProvider(), timeZone: TimeZone = TimeZone.autoupdatingCurrent) {
         self.locationProvider = locationProvider
+        self.timeZone = timeZone
     }
     
     ///
@@ -56,14 +85,16 @@ final class NightModeHoursProvider {
                 let latitude = location.latitude
                 let longitude = location.longitude
                     
-                let solar = Solar(forDate:date, withTimeZone: TimeZone.autoupdatingCurrent, latitude: latitude, longitude: longitude)
-                let solarTomorrow = Solar(forDate: date.addingTimeInterval(TimeInterval(NightModeHoursProvider.secondsInDay)), withTimeZone: TimeZone.autoupdatingCurrent, latitude: latitude, longitude: longitude)
+                let solar = Solar(forDate:date, withTimeZone: self.timeZone, latitude: latitude, longitude: longitude)
+                let solarTomorrow = Solar(forDate: date.addingTimeInterval(TimeInterval(NightModeHoursProvider.secondsInDay)), withTimeZone: self.timeZone, latitude: latitude, longitude: longitude)
                 
                 let nextSunrise = solar?.sunrise?.compare(date) == .orderedDescending ? solar?.sunrise : solarTomorrow?.sunrise
                 
                 let nextSunset = solar?.sunset?.compare(date) == .orderedDescending ? solar?.sunset : solarTomorrow?.sunset
                 
                 if let sunrise = nextSunrise, let sunset = nextSunset {
+                    NightModeHoursProvider.nextSunrise = sunrise
+                    NightModeHoursProvider.nextSunset = sunset
                     fulfill(SunStateHours(nextSunrise: sunrise, nextSunset: sunset))
                 } else {
                     reject(NightModeHoursProviderError.couldNotCalculate)
@@ -71,5 +102,17 @@ final class NightModeHoursProvider {
 
             }.catch(execute: reject)
         }
+    }
+    
+    class func currentColorModeBasedOnTime() -> ColorMode? {
+        if let sunrise = NightModeHoursProvider.nextSunrise, let sunset = NightModeHoursProvider.nextSunset {
+            
+            let date = Date()
+            let timeUntilSunset = sunset.timeIntervalSince(date)
+            let timeUntilSunrise = sunrise.timeIntervalSince(date)
+            return timeUntilSunset < timeUntilSunrise ? .dayMode : .nightMode
+            
+        }
+        return nil
     }
 }

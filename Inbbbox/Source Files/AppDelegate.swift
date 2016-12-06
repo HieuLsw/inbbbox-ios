@@ -48,7 +48,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             launchedShortcut = shortcut
             shouldPerformAdditionalDelegateHandling = false
         }
-
+        let nightModeHoursProvider = NightModeHoursProvider()
+        nightModeHoursProvider.nextSunStateHours().then { times -> Void in
+            // we use 5s offset to be sure that this will fire after correct sunrise/sunset time
+            let untilSunrise: TimeInterval = times.nextSunrise.timeIntervalSince(Date()) + 5
+            Timer.scheduledTimer(timeInterval: untilSunrise, target: BlockOperation(block: {
+                ColorModeProvider.setup()
+            }), selector: #selector(BlockOperation.main), userInfo: nil, repeats: false)
+            
+            let untilSunset = times.nextSunset.timeIntervalSince(Date()) + 5
+            Timer.scheduledTimer(timeInterval: untilSunset, target: BlockOperation(block: {
+                ColorModeProvider.setup()
+            }), selector: #selector(BlockOperation.main), userInfo: nil, repeats: false)
+            
+        }.catch { _ in }
+        
         return shouldPerformAdditionalDelegateHandling
     }
 

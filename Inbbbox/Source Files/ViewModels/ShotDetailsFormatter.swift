@@ -33,7 +33,7 @@ final class ShotDetailsFormatter {
     
     
     fileprivate static var colorMode: ColorModeType {
-        return Settings.Customization.CurrentColorMode == .DayMode ? DayMode() : NightMode()
+        return Settings.Customization.CurrentColorMode == .dayMode ? DayMode() : NightMode()
     }
 
     class func attributedStringForHeaderWithLinkRangeFromShot(_ shot: ShotType)
