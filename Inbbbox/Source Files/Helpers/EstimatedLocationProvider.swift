@@ -18,10 +18,10 @@ enum EstimatedLocationProviderError: Error {
 /// Relies on ip-api.com service.
 class EstimatedLocationProvider {
     
-    // ip-api.com is free to use. 
-    // Only limit is to not send more than 150 requests/min 
-    // because it will result in ban on requester IP.
-    // Docs: http://ip-api.com/docs/
+    /// ip-api.com is free to use.
+    /// Only limit is to not send more than 150 requests/min
+    /// because it will result in ban on requester IP.
+    /// Docs: http://ip-api.com/docs/
     fileprivate static let ipApiUrl = URL(string: "http://ip-api.com/json")
     
     ///
@@ -29,7 +29,7 @@ class EstimatedLocationProvider {
     /// Uses ip-api.com
     ///
     /// - Returns: Promise resolved with estimated distance
-    func obtainLocationBasedOnIp() -> Promise<(EstimatedLocation)> {
+    func obtainLocationBasedOnIp() -> Promise<EstimatedLocation> {
         return Promise<EstimatedLocation> { fulfill, reject in
             if let url = EstimatedLocationProvider.ipApiUrl {
                 let task = URLSession.inbbboxDefaultSession().dataTask(with: url, completionHandler: { (data, response, error) in
