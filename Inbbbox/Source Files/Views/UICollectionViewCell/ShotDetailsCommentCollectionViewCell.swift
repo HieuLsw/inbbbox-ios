@@ -137,17 +137,16 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
             avatarView.autoPinEdge(toSuperviewEdge: .bottom, withInset: insets.bottom, relation: .greaterThanOrEqual)
 
             authorLabel.autoPinEdge(.top, to: .top, of: avatarView)
-            authorLabel.autoPinEdge(.left, to: .right, of: avatarView,
-                    withOffset: horizontalSpaceBetweenAvatarAndText)
+            authorLabel.autoPinEdge(.left, to: .right, of: avatarView, withOffset: horizontalSpaceBetweenAvatarAndText)
             authorLabel.autoPinEdge(toSuperviewEdge: .right, withInset: insets.right)
 
             commentLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: verticalSpacing)
             commentLabel.autoPinEdge(.left, to: .left, of: authorLabel)
             commentLabel.autoPinEdge(.right, to: .right, of: authorLabel, withOffset: insets.right)
-
+            
+            dateLabel.autoPinEdge(.top, to: .bottom, of: commentLabel, withOffset: verticalSpacing, relation: .greaterThanOrEqual)
             dateLabel.autoPinEdge(.left, to: .left, of: authorLabel)
             dateLabel.autoPinEdge(.bottom, to: .bottom, of: separatorView, withOffset: -verticalSpacing)
-            dateLabel.autoSetDimension(.height, toSize: 26, relation: .greaterThanOrEqual)
 
             likesCountLabel.autoAlignAxis(.horizontal, toSameAxisOf: dateLabel)
             likesCountLabel.autoPinEdge(.right, to: .right, of: self, withOffset: -insets.right)
