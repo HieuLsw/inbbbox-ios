@@ -143,7 +143,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
             commentLabel.autoPinEdge(.top, to: .bottom, of: authorLabel, withOffset: verticalSpacing)
             commentLabel.autoPinEdge(.left, to: .left, of: authorLabel)
             commentLabel.autoPinEdge(.right, to: .right, of: authorLabel, withOffset: insets.right)
-            
+
             dateLabel.autoPinEdge(.top, to: .bottom, of: commentLabel, withOffset: verticalSpacing, relation: .greaterThanOrEqual)
             dateLabel.autoPinEdge(.left, to: .left, of: authorLabel)
             dateLabel.autoPinEdge(.bottom, to: .bottom, of: separatorView, withOffset: -verticalSpacing)
