@@ -10,6 +10,7 @@ import UIKit
 import PromiseKit
 import ZFDragableModalTransition
 import DZNEmptyDataSet
+import PeekPop
 
 class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
 
@@ -18,6 +19,7 @@ class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
 
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexesToUpdateCellImage = [Int]()
+    fileprivate var peekPop: PeekPop?
 }
 
 // MARK: Lifecycle
@@ -54,6 +56,8 @@ extension SimpleShotsCollectionViewController {
         }
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -70,7 +74,22 @@ extension SimpleShotsCollectionViewController {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegate {
-    
+    fileprivate func peekPopPresent(viewController: UIViewController) {
+        if let detailsViewController = viewController as? ShotDetailsViewController,
+            let viewModel = viewModel {
+            detailsViewController.customizeFor3DTouch(false)
+            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
+            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+            modalTransitionAnimator?.behindViewScale = 1
+
+            pageViewController.transitioningDelegate = modalTransitionAnimator
+            pageViewController.modalPresentationStyle = .custom
+
+            tabBarController?.present(pageViewController, animated: true, completion: nil)
+        }
+    }
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
@@ -89,20 +108,33 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        if let detailsViewController = viewControllerToCommit as? ShotDetailsViewController,
-            let viewModel = viewModel {
-            detailsViewController.customizeFor3DTouch(false)
-            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
-            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-            modalTransitionAnimator?.behindViewScale = 1
-            
-            pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .custom
-            
-            tabBarController?.present(pageViewController, animated: true, completion: nil)
-        }
+        peekPopPresent(viewController: viewControllerToCommit)
+    }
+}
+
+// MARK: UIViewControllerPreviewingDelegate
+
+extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+
+        guard
+            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView?.cellForItem(at: indexPath),
+            let viewModel = viewModel
+        else { return nil }
+
+        previewingContext.sourceRect = cell.contentView.bounds
+
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
+        detailsViewController.customizeFor3DTouch(true)
+        detailsViewController.shotIndex = indexPath.item
+
+        return detailsViewController
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        peekPopPresent(viewController: viewControllerToCommit)
     }
 }
 

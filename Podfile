@@ -45,6 +45,8 @@ target 'Inbbbox' do
   #fork because of styling private properties
   pod 'AOAlertController', :git => 'https://github.com/0legAdamov/AOAlertController', :tag => 'v1.2.1'
   pod 'Solar', '~> 1.0.0'
+  #fork until this will be discussed and merged https://github.com/marmelroy/PeekPop/pull/32/
+  pod 'PeekPop', :git => 'https://github.com/Myrenkar/PeekPop', :tag => '0.1.8'
 
   target 'Unit Tests' do
     inherit! :search_paths

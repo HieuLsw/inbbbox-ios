@@ -9,6 +9,8 @@
 import UIKit
 import ZFDragableModalTransition
 import PromiseKit
+import PeekPop
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -37,6 +39,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
     fileprivate var header: ProfileHeaderView?
 
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
+
+    fileprivate var peekPop: PeekPop?
 
     var dismissClosure: (() -> Void)?
 
@@ -116,6 +120,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
                 for: .default
 			)
         }
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
 
         setupBackButton()
         viewModel.downloadInitialItems()
@@ -381,52 +387,78 @@ private extension ProfileViewController {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension ProfileViewController: UIViewControllerPreviewingDelegate {
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
-        guard let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)) else { return nil }
-        
-        if let viewModel = viewModel as? UserDetailsViewModel {
-            guard let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
-            
-            previewingContext.sourceRect = cell.contentView.bounds
-            
-            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
-            controller.customizeFor3DTouch(true)
-            controller.shotIndex = indexPath.item
-            
-            return controller
-        } else if let viewModel = viewModel as? TeamDetailsViewModel {
-            if let collectionView = collectionView,
-                collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
-                guard let cell = collectionView.cellForItem(at: indexPath) else { return nil }
-                previewingContext.sourceRect = cell.contentView.bounds
-            } else {
-                guard let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
-                previewingContext.sourceRect = cell.contentView.bounds
-            }
-            
-            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
-        }
-        
-        return nil
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        if let viewModel = viewModel as? UserDetailsViewModel,
-            let detailsViewController = viewControllerToCommit as? ShotDetailsViewController {
+
+    fileprivate func peekPopPresent(viewController: UIViewController) {
+        if let viewModel = viewModel as? UserDetailsViewModel, let detailsViewController = viewController as? ShotDetailsViewController {
             detailsViewController.customizeFor3DTouch(false)
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
             modalTransitionAnimator?.behindViewScale = 1
-            
+
             pageViewController.transitioningDelegate = modalTransitionAnimator
             pageViewController.modalPresentationStyle = .custom
-            
+
             present(pageViewController, animated: true, completion: nil)
-        } else if (viewModel as? TeamDetailsViewModel) != nil {
-            navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        } else if (viewModel is TeamDetailsViewModel) {
+            navigationController?.pushViewController(viewController, animated: true)
         }
+
+    }
+
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+
+        guard
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
+            else { return nil }
+
+        if let viewModel = viewModel as? UserDetailsViewModel {
+            previewingContext.sourceRect = cell.contentView.bounds
+            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+            controller.customizeFor3DTouch(true)
+            controller.shotIndex = indexPath.item
+
+            return controller
+        } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
+            previewingContext.sourceRect = cell.contentView.bounds
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+        }
+        return nil
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        peekPopPresent(viewController: viewControllerToCommit)
+    }
+}
+
+// MARK: PeekPopPreviewingDelegate
+
+extension ProfileViewController: PeekPopPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
+        else { return nil }
+
+        if let viewModel = viewModel as? UserDetailsViewModel {
+            previewingContext.sourceRect = cell.contentView.bounds
+            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+            controller.customizeFor3DTouch(true)
+            controller.shotIndex = indexPath.item
+
+            return controller
+        } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
+            previewingContext.sourceRect = cell.contentView.bounds
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+        }
+        return nil
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        peekPopPresent(viewController: viewControllerToCommit)
     }
 }

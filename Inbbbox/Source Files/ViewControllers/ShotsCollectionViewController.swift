@@ -5,6 +5,7 @@
 import UIKit
 import PromiseKit
 import SwiftyUserDefaults
+import PeekPop
 
 class ShotsCollectionViewController: UICollectionViewController {
 
@@ -20,6 +21,7 @@ class ShotsCollectionViewController: UICollectionViewController {
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
+    fileprivate var peekPop: PeekPop?
 
     // MARK: Life cycle
 
@@ -64,6 +66,9 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
+        
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
     
     
@@ -295,6 +300,30 @@ extension ShotsCollectionViewController: UIViewControllerPreviewingDelegate {
         }
     }
 }
+
+// MARK: PeekPopPreviewingDelegate
+
+extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard
+            let visibleCell = collectionView?.visibleCells.first,
+            let normalStateHandler = stateHandler as? ShotsNormalStateHandler,
+            let indexPath = collectionView?.indexPathsForVisibleItems.first
+        else { return nil }
+
+        previewingContext.sourceRect = visibleCell.contentView.bounds
+
+        return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
+        if let normalStateHandler = stateHandler as? ShotsNormalStateHandler {
+            normalStateHandler.popViewController(viewControllerToCommit)
+        }
+    }
+}
+
 
 // MARK: Stream sources animations
 
