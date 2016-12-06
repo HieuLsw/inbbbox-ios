@@ -30,6 +30,7 @@ enum StreamSourceKey: String {
 enum CustomizationKey: String {
     case ShowAuthorOnHomeScreen = "ShowAuthorOnHomeScreen"
     case NightMode = "NightModeStatus"
+    case AutoNightMode = "AutoNightMode"
     case ColorMode = "CurrentColorMode"
 }
 
