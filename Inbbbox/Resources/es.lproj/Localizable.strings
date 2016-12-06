@@ -235,6 +235,9 @@
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Modo nocturno";
 
+/* User Setting, auto night mode */
+"SettingsViewModel.AutoNightMode" = "$Auto Night Mode";
+
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
 
