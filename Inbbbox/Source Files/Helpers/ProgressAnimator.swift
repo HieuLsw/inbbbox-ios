@@ -23,7 +23,7 @@ class ProgressAnimator {
     /// Time span between frame updates
     fileprivate var timeTick = 0.01
     /// Completion handler when currentFrameIndex reach maximumFrameIndex
-    fileprivate var onDidCompleteAnimation: (()->Void)?
+    fileprivate var onDidCompleteAnimation: (() -> Void)?
     /// Timer that swaps images
     fileprivate var timer: Timer!
     // MARK: Public
@@ -45,22 +45,33 @@ class ProgressAnimator {
     /// - parameter progress:   Progress value between 0.0 - 1.0. If you pass higher value than 1.0 it will be
     ///                         locked to 1.0 value
     /// - parameter complete:   Block that is called when currentFrameIndex reache maximumFrameIndex
-    func updateProgress(progress: Float, onComplete complete: (()->Void)? = nil) {
+    func updateProgress(progress: Float, onComplete complete: (() -> Void)? = nil) {
+        onDidCompleteAnimation = complete
         
-        let newFrameLimit = interpolateProgress(progress: min(1.0, progress))
-        guard maximumFrameIndex < newFrameLimit  else {
+        guard progress < 1.0 else {
+            maximumFrameIndex = maximumImageCount
+            if !timer.isValid {
+                recreateTimer()
+            }
             return
         }
         
+        let newFrameLimit = interpolate(progress: min(1.0, progress))
+        
+        guard maximumFrameIndex < newFrameLimit else { return }
+        
         maximumFrameIndex = newFrameLimit
-        onDidCompleteAnimation = complete
         if !timer.isValid && currentFrameIndex < maximumImageCount  {
-            timer = Timer.scheduledTimer(timeInterval: timeTick, target: self, selector: #selector(self.updateFrame), userInfo: nil, repeats: true)
+            recreateTimer()
         }
     }
 }
 
 fileprivate extension ProgressAnimator {
+    
+    func recreateTimer() {
+        timer = Timer.scheduledTimer(timeInterval: timeTick, target: self, selector: #selector(self.updateFrame), userInfo: nil, repeats: true)
+    }
     
     @objc func updateFrame(timer: Timer) {
         guard currentFrameIndex <= maximumFrameIndex && isFrameInBounds() else {
@@ -80,7 +91,7 @@ fileprivate extension ProgressAnimator {
         return currentFrameIndex <= maximumImageCount
     }
     
-    func interpolateProgress(progress: Float) -> Int {
+    func interpolate(progress: Float) -> Int {
         let maximum = Float(maximumImageCount)
         let animationFrameKey = maximum * progress
         return Int(animationFrameKey)

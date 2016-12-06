@@ -16,6 +16,7 @@ class ShotsCollectionViewController: UICollectionViewController {
     let initialState: State = Defaults[.onboardingPassed] ? .initialAnimations : .onboarding
     var stateHandler: ShotsStateHandler
     var backgroundAnimator: MainScreenStreamSourcesAnimator?
+    var skipButtonAnimator: OnboardingSkipButtonAnimator?
     let shotsProvider = ShotsProvider()
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
@@ -58,6 +59,7 @@ extension ShotsCollectionViewController {
         let backgroundView = ShotsCollectionBackgroundView()
         collectionView?.backgroundView = backgroundView
         backgroundAnimator = MainScreenStreamSourcesAnimator(view: backgroundView)
+        skipButtonAnimator = OnboardingSkipButtonAnimator(view: backgroundView)
         collectionView?.registerClass(ShotCollectionViewCell.self, type: .cell)
 
         configureForCurrentStateHandler()
@@ -216,7 +218,7 @@ extension ShotsCollectionViewController: ShotsStateHandlerDelegate {
 
 // MARK: Private methods
 
-private extension ShotsCollectionViewController {
+fileprivate extension ShotsCollectionViewController {
 
     func configureForCurrentStateHandler() {
         stateHandler.shotsCollectionViewController = self
@@ -238,6 +240,8 @@ private extension ShotsCollectionViewController {
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)
             }
+        } else if let onboardingStateHandler = stateHandler as? ShotsOnboardingStateHandler {
+            onboardingStateHandler.skipDelegate = self
         }
     }
 

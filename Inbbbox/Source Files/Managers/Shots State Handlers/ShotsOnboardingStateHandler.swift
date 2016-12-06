@@ -14,6 +14,7 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     
     weak var shotsCollectionViewController: ShotsCollectionViewController?
     weak var delegate: ShotsStateHandlerDelegate?
+    weak var skipDelegate: OnboardingSkipButtonHandlerDelegate?
     let onboardingSteps: [(image: UIImage?, action: ShotCollectionViewCell.Action)]
 
 
@@ -52,7 +53,7 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     }
 
     func prepareForPresentingData() {
-        // Do nothing, all set.
+        self.disablePrefetching()
     }
 
     func presentData() {
@@ -72,6 +73,11 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
             (image: UIImage(named: step4), action: ShotCollectionViewCell.Action.follow),
             (image: UIImage(named: step5), action: ShotCollectionViewCell.Action.doNothing),
         ]
+    }
+    
+    func skipOnboardingStep() {
+        guard let collectionView = shotsCollectionViewController?.collectionView else { return }
+        collectionView.animateToNextCell()
     }
 }
 
@@ -102,6 +108,7 @@ extension ShotsOnboardingStateHandler {
         if indexPath.row == onboardingSteps.count {
             scrollViewAnimationsCompletion = {
                 Defaults[.onboardingPassed] = true
+                self.enablePrefetching()
                 self.delegate?.shotsStateHandlerDidInvalidate(self)
             }
         }
@@ -111,7 +118,7 @@ extension ShotsOnboardingStateHandler {
         guard indexPath.row == onboardingSteps.count - 1 else {
             return
         }
-        collectionView.animateToNextCell()
+        skipOnboardingStep()
     }
 }
 
@@ -156,6 +163,14 @@ private extension ShotsOnboardingStateHandler {
             }
             
         }
+
+        let currentStep = onboardingSteps[indexPath.row].action
+
+        switch currentStep {
+        case .follow: skipDelegate?.shouldSkipButtonAppear()
+        default: skipDelegate?.shouldSkipButtonDisappear()
+        }
+        
         return cell
     }
     
@@ -165,6 +180,18 @@ private extension ShotsOnboardingStateHandler {
         }.then { user in
             self.connectionsRequester.followUser(user)
         }.catch { _ in }
+    }
+
+    func enablePrefetching() {
+        if #available(iOS 10.0, *) {
+            self.shotsCollectionViewController?.collectionView?.isPrefetchingEnabled = true
+        }
+    }
+
+    func disablePrefetching() {
+        if #available(iOS 10.0, *) {
+            self.shotsCollectionViewController?.collectionView?.isPrefetchingEnabled = false
+        }
     }
 }
 

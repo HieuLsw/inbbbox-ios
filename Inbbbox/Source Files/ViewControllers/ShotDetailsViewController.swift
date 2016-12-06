@@ -119,7 +119,9 @@ final class ShotDetailsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        header?.cancelAllAnimatedImageSettings()
         willDismissDetailsCompletionHandler?(shotIndex)
+        shotDetailsView?.hideKeyboard()
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
@@ -149,7 +151,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
 
             let likeSelectableView = cell.operationView.likeSelectableView
             let bucketSelectableView = cell.operationView.bucketSelectableView
-
+            let shareButton = cell.operationView.shareButton
+			
             likeSelectableView.tapHandler = { [weak self] in
                 self?.likeSelectableViewDidTap(likeSelectableView)
             }
@@ -157,6 +160,8 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             bucketSelectableView.tapHandler = { [weak self] in
                 self?.bucketSelectableViewDidTap(bucketSelectableView)
             }
+			
+            shareButton.addTarget(self, action: #selector(shareButtonDidTap), for: .touchUpInside)
 
             setLikeStateInSelectableView(likeSelectableView)
             setBucketStatusInSelectableView(bucketSelectableView)
@@ -557,7 +562,9 @@ private extension ShotDetailsViewController {
     }
 
     func presentShotFullscreen() {
-        guard let header = header else { return }
+
+        guard let header = header, header.isDoneFetchingImage  else { return }
+
         
         let url = viewModel.shot.shotImage.hidpiURL ?? viewModel.shot.shotImage.normalURL
         if viewModel.shot.animated {
@@ -597,5 +604,10 @@ private extension ShotDetailsViewController {
 
     dynamic func closeButtonDidTap(_: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    dynamic func shareButtonDidTap() {
+        let activityViewController = UIActivityViewController(activityItems: [viewModel.shot.htmlUrl], applicationActivities: nil)
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
