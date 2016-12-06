@@ -16,6 +16,8 @@ struct ShotsCollectionBackgroundViewSpacing {
     static let showingYouHiddenVerticalSpacing = CGFloat(60)
     
     static let containerDefaultVerticalSpacing = CGFloat(70)
+    
+    static let skipButtonBottomInset = CGFloat(119)
 }
 
 class ShotsCollectionSourceItem {
@@ -52,6 +54,7 @@ class ShotsCollectionBackgroundView: UIView {
     
     var showingYouVerticalConstraint: NSLayoutConstraint?
     var logoVerticalConstraint: NSLayoutConstraint?
+    let skipButton = UIButton()
 
 //    MARK: - Life cycle
 
@@ -61,18 +64,9 @@ class ShotsCollectionBackgroundView: UIView {
         logoImageView.configureForAutoLayout()
         addSubview(logoImageView)
         
-        followingItem.label.text = NSLocalizedString("SettingsViewModel.Following", comment: "User settings, enable following")
-        newTodayItem.label.text = NSLocalizedString("SettingsViewModel.NewToday", comment: "User settings, enable new today")
-        popularTodayItem.label.text = NSLocalizedString("SettingsViewModel.Popular", comment: "User settings, enable popular")
-        debutsItem.label.text = NSLocalizedString("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
-        for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
-            item.label.textAlignment = .center
-            item.label.font = UIFont.helveticaFont(.neueLight, size: 15)
-            item.label.textColor = UIColor.RGBA(143, 142, 148, 1)
-            item.label.alpha = 0
-            containerView.addSubview(item.label)
-        }
-        addSubview(containerView)
+        setupItems()
+        setupShowingYouLabel()
+        setupSkipButton()
         
         showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
         showingYouLabel.font = UIFont.helveticaFont(.neue, size: 15)
@@ -111,6 +105,9 @@ class ShotsCollectionBackgroundView: UIView {
                 }
             }
             
+            skipButton.autoAlignAxis(toSuperviewAxis: .vertical)
+            skipButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: ShotsCollectionBackgroundViewSpacing.skipButtonBottomInset)
+            
             didSetConstraints = true
         }
 
@@ -140,5 +137,40 @@ extension ShotsCollectionBackgroundView {
             }
         }
         return items
+    }
+}
+
+fileprivate extension ShotsCollectionBackgroundView {
+
+    func setupItems() {
+        followingItem.label.text = NSLocalizedString("SettingsViewModel.Following", comment: "User settings, enable following")
+        newTodayItem.label.text = NSLocalizedString("SettingsViewModel.NewToday", comment: "User settings, enable new today")
+        popularTodayItem.label.text = NSLocalizedString("SettingsViewModel.Popular", comment: "User settings, enable popular")
+        debutsItem.label.text = NSLocalizedString("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
+        for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
+            item.label.textAlignment = .center
+            item.label.font = UIFont.helveticaFont(.neueLight, size: 15)
+            item.label.textColor = UIColor.RGBA(143, 142, 148, 1)
+            item.label.alpha = 0
+            containerView.addSubview(item.label)
+        }
+        addSubview(containerView)
+    }
+    
+    func setupShowingYouLabel() {
+        showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
+        showingYouLabel.font = UIFont.helveticaFont(.neue, size: 15)
+        showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
+        showingYouLabel.alpha = 0
+        addSubview(showingYouLabel)
+    }
+    
+    func setupSkipButton() {
+        skipButton.setTitle(NSLocalizedString("ShotsOnboardingStateHandler.Skip", comment: "Onboarding user is skipping step"), for: .normal)
+        skipButton.titleLabel?.font = UIFont.helveticaFont(.neueLight, size: 16)
+        skipButton.setTitleColor(UIColor.black, for: .normal)
+        skipButton.isHidden = true
+        skipButton.alpha = 0
+        addSubview(skipButton)
     }
 }

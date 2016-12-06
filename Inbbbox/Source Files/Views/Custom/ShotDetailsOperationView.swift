@@ -21,6 +21,7 @@ class ShotDetailsOperationView: UIView {
 
     let likeSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
     let bucketSelectableView = ActivityIndicatorSelectableView.newAutoLayout()
+    let shareButton = UIButton.newAutoLayout()
     let likeCounterLabel = UILabel.newAutoLayout()
     let bucketCounterLabel = UILabel.newAutoLayout()
 
@@ -36,6 +37,9 @@ class ShotDetailsOperationView: UIView {
         bucketSelectableView.setImage(UIImage(named: "ic-bucket-details-active"), forState: .selected)
         bucketSelectableView.setImage(UIImage(named: "ic-bucket-details"), forState: .deselected)
         addSubview(bucketSelectableView)
+		
+        shareButton.setImage(UIImage(named: "ic-share"), for: .normal)
+        addSubview(shareButton)
 
         for label in [likeCounterLabel, bucketCounterLabel] {
             
@@ -57,17 +61,17 @@ class ShotDetailsOperationView: UIView {
     }
 
     override func updateConstraints() {
-
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            let offset = CGFloat(40)
+            let offset = CGFloat(65)
             likeSelectableView.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!,
                     withOffset: -offset)
-            bucketSelectableView.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!,
+            bucketSelectableView.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!)
+            shareButton.autoAlignAxis(.vertical, toSameAxisOf: likeSelectableView.superview!,
                     withOffset: offset)
 
-            [likeSelectableView, bucketSelectableView].forEach {
+            [likeSelectableView, bucketSelectableView, shareButton].forEach {
                 $0.autoAlignAxis(.horizontal, toSameAxisOf: self, withOffset: -5)
                 $0.autoSetDimensions(to: selectableViewSize)
             }

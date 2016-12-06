@@ -292,6 +292,8 @@
 		BE5712571DCA2DE000358745 /* FlashMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5712561DCA2DE000358745 /* FlashMessageView.swift */; };
 		BE5712591DCA2DEB00358745 /* FlashMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5712581DCA2DEB00358745 /* FlashMessageTypes.swift */; };
 		BE57125B1DCA2E9200358745 /* FlashMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE57125A1DCA2E9200358745 /* FlashMessage.swift */; };
+		BE71499C1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE71499B1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift */; };
+		BE71499E1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE71499D1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift */; };
 		BE7A1741292D08D3D45BFAEF /* DeleteCommentQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C949299AFC25FEF29D2F7EF /* DeleteCommentQuerySpec.swift */; };
 		BEA70EFA1DD9C50C00868702 /* ActionRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA70EF91DD9C50C00868702 /* ActionRange.swift */; };
 		BF48E9481F8839521F829A1F /* APITeamsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFFC0840E460B99F665C2C5 /* APITeamsProviderSpec.swift */; };
@@ -760,6 +762,8 @@
 		BE5712561DCA2DE000358745 /* FlashMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageView.swift; sourceTree = "<group>"; };
 		BE5712581DCA2DEB00358745 /* FlashMessageTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageTypes.swift; sourceTree = "<group>"; };
 		BE57125A1DCA2E9200358745 /* FlashMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessage.swift; sourceTree = "<group>"; };
+		BE71499B1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingSkipButtonHandlerDelegate.swift; sourceTree = "<group>"; };
+		BE71499D1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingSkipButtonAnimator.swift; sourceTree = "<group>"; };
 		BEA70EF91DD9C50C00868702 /* ActionRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionRange.swift; sourceTree = "<group>"; };
 		C26227A4CC4CB0D73BEEF058 /* FollowersQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FollowersQuery.swift; sourceTree = "<group>"; };
 		C28A7631D86F1074E2F49E9C /* ShotDetailsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotDetailsViewController.swift; sourceTree = "<group>"; };
@@ -1022,6 +1026,7 @@
 		3A6269AEF2F4AAAB03BCBF8A /* Animators */ = {
 			isa = PBXGroup;
 			children = (
+				BE71499D1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift */,
 				9EF5A1E64DF11E8974F82DA5 /* AutoScrollableShotsAnimator.swift */,
 				BBB97AF8C48AB0EC4ECB90DC /* LoginViewAnimations.swift */,
 				EBEA5EF5490AF23C82A7DC91 /* LoginViewAnimator.swift */,
@@ -1317,6 +1322,7 @@
 			isa = PBXGroup;
 			children = (
 				CD769AEEBDEAA16B127985CF /* AutoSizable.swift */,
+				BE71499B1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift */,
 				3F93BA6AA99E90D52C6A09F6 /* AvatarSettable.swift */,
 				A2E5B60CC31149625D73BB73 /* BaseCollectionViewViewModel.swift */,
 				305A85071DDAFDBC008EF410 /* ColorModeType.swift */,
@@ -1777,6 +1783,7 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 9HJ69C5G9K;
 						LastSwiftMigration = 0810;
+						ProvisioningStyle = Automatic;
 					};
 					5E3A98351AA73A6500CE2F20 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -2073,6 +2080,7 @@
 				B26A0E2EAE6E3A4CB7916482 /* UICollectionViewExtension.swift in Sources */,
 				EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */,
 				94BCC8C5DBEFE5830CC0CC5C /* UIColorExtension.swift in Sources */,
+				BE71499E1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift in Sources */,
 				F0BEBDD71CDA24E200AA391C /* TeamDetailsViewModel.swift in Sources */,
 				8C3BDA4E0AEC8E1C9489095F /* UIFontExtension.swift in Sources */,
 				5867E4FA2C0B1DCBEE5F4CFA /* UIImageExtension.swift in Sources */,
@@ -2297,6 +2305,7 @@
 				47202DC678BCFA2A60843E99 /* ShotDetailsHeaderView.swift in Sources */,
 				AE909CB5FE0DCDBD3F3A400E /* ShotDetailsOperationView.swift in Sources */,
 				378908C5510BB5541FB60D7C /* ShotImageView.swift in Sources */,
+				BE71499C1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift in Sources */,
 				0CBCB5AB38C1413ACD226FD9 /* ShotsCollectionBackgroundView.swift in Sources */,
 				2670412B8802A0C735FBF283 /* DoubleImageView.swift in Sources */,
 				993B955A86C797E40BF7D498 /* ProfileHeaderView.swift in Sources */,
@@ -2543,13 +2552,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
@@ -2668,13 +2681,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2689,16 +2703,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "$(ASSETCATALOG_COMPILER_APPICON_NAME)";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9HJ69C5G9K;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
-				PROVISIONING_PROFILE = "7f91b3e5-1b31-402c-ac62-dfc7ce9ccfb3";
-				PROVISIONING_PROFILE_SPECIFIER = "Inbbbox Staging";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
@@ -2804,15 +2819,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9HJ69C5G9K;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
-				PROVISIONING_PROFILE = "12578a8b-2366-46b0-80c8-66e5bc1b862d";
-				PROVISIONING_PROFILE_SPECIFIER = "Inbbbox Development";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -2889,12 +2904,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
+				PRODUCT_BUNDLE_IDENTIFIER = "$PRODUCT_BUNDLE_IDENTIFIER";
 				PRODUCT_NAME = Inbbbox;
 				SWIFT_OBJC_BRIDGING_HEADER = "Supporting Files/Inbbbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

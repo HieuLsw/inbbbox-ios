@@ -13,10 +13,12 @@ import Haneke
 import Async
 
 class AnimatableShotImageView: FLAnimatedImageView {
+
     let downloader = DataDownloader()
 
     fileprivate let progressAnimator = ProgressAnimator(imageBaseName: "loadgif_", imageCount: 59)
     fileprivate var didSetupConstraints = false
+    
     var hiddenProgressView: Bool {
         get {
             return progressAnimator.progressImageView.isHidden
@@ -71,6 +73,10 @@ class AnimatableShotImageView: FLAnimatedImageView {
             data in
             self.setImageWithData(data)
         })
+    }
+    
+    func cancelLoadingImage() {
+        downloader.cancelAllFetching()
     }
 
     fileprivate func fetchWithURL(_ url: URL) {
