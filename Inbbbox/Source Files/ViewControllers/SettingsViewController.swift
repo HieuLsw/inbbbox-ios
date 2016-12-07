@@ -129,24 +129,7 @@ extension SettingsViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-
-        let notificationsTitle = NSLocalizedString("SettingsViewController.Notifications",
-                                                   comment: "Title of group of buttons for notifications settings")
-        let streamSourcesTitle = NSLocalizedString("SettingsViewController.StreamSource",
-                                                   comment: "Title of group of buttons for stream source settings")
-        let customizationTitle = NSLocalizedString("SettingsViewController.Customization",
-                                                   comment: "Title of group of buttons for customization settings")
-        let feedbackTitle = NSLocalizedString("SettingsViewModel.Feedback",
-                                                   comment: "Title of group of buttons for sending feedback")
-
-        switch section {
-            case 0: return viewModel.userMode == .loggedUser ? notificationsTitle : nil
-            case 1: return viewModel.userMode == .loggedUser ? streamSourcesTitle : notificationsTitle
-            case 2: return viewModel.userMode == .loggedUser ? customizationTitle : streamSourcesTitle
-            case 3: return viewModel.userMode == .loggedUser ? feedbackTitle : customizationTitle
-            case 4: return viewModel.userMode == .loggedUser ? nil : feedbackTitle
-            default: return nil
-        }
+        return viewModel.titleFor(section: section)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -168,6 +151,10 @@ extension SettingsViewController {
             labelItem.onSelect?()
         }
         tableView.deselectRowIfSelectedAnimated(true)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return viewModel.heightForHeaderIn(section: section)
     }
 }
 

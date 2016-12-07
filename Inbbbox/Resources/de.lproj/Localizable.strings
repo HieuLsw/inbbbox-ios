@@ -194,7 +194,10 @@
 "SettingsViewModel.Account" = "Konto & Einstellungen";
 
 /* Button text allowing user to create new account. */
-"SettingsViewModel.CreateAccount" = "Dribbble-Benutzerkonto anlegen ";
+"SettingsViewModel.CreateAccount" = "Dribbble-Benutzerkonto anlegen";
+
+/* Button text allowing so see his profile. */
+"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
 
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "Debüts";

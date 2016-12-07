@@ -196,6 +196,9 @@
 /* Button text allowing user to create new account. */
 "SettingsViewModel.CreateAccount" = "Załóż konto Dribbble";
 
+/* Button text allowing so see his profile. */
+"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
+
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "Debiuty";
 
