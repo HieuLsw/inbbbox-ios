@@ -9,6 +9,8 @@
 import UIKit
 import PromiseKit
 import DZNEmptyDataSet
+import PeekPop
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -37,6 +39,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     fileprivate let viewModel = FolloweesViewModel()
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
+    fileprivate var peekPop: PeekPop?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +51,9 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
         navigationItem.title = viewModel.title
+
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -204,7 +210,7 @@ extension FolloweesCollectionViewController: ColorModeAdaptable {
 // MARK: UIViewControllerPreviewingDelegate
 
 extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate {
-    
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard
@@ -213,16 +219,34 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
         else { return nil }
         
         previewingContext.sourceRect = cell.contentView.bounds
-        
-        
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
-        
         return profileViewController
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
+    }
+}
+
+// MARK: PeekPopPreviewingDelegate
+
+extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
+
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+
+        guard
+            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView?.cellForItem(at: indexPath)
+        else { return nil }
+
+        previewingContext.sourceRect = cell.contentView.bounds
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
+        profileViewController.hidesBottomBarWhenPushed = true
+        return profileViewController
+    }
+
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
 }

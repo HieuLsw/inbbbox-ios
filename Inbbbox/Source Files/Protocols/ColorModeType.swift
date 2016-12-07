@@ -116,6 +116,7 @@ protocol ColorModeType {
     var cellSeparator: UIColor { get }
     var activityIndicatorViewStyle: UIActivityIndicatorViewStyle { get }
     var visualEffectBlurType: UIBlurEffectStyle { get }
+    var collectionViewBackgroundColor: UIColor { get }
     
     func isEqualTo(_ other: ColorModeType) -> Bool
 }

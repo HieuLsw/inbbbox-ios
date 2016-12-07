@@ -82,6 +82,12 @@ class Settings {
             get { return Settings.boolForKey(.NightMode) }
             set { Settings.setValue(newValue as AnyObject?, forKey: .NightMode) }
         }
+        
+        /// Indicates if "showing author on homescreen" is enabled.
+        static var AutoNightMode: Bool {
+            get { return Settings.boolForKey(.AutoNightMode) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .AutoNightMode) }
+        }
 
         /// Indicates what color mode is currently set.
         /// - SeeAlso: `ColorMode`
@@ -89,7 +95,7 @@ class Settings {
             get {
                 let savedSetting = Settings.stringForKey(.ColorMode)
                 let colorMode = ColorMode(rawValue: savedSetting)
-                return colorMode != nil ? colorMode! : .DayMode
+                return colorMode != nil ? colorMode! : .dayMode
             }
             set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .ColorMode) }
         }

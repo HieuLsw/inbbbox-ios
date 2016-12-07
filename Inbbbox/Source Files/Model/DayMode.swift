@@ -109,7 +109,7 @@ struct DayMode: ColorModeType {
         return .black
     }
     
-    // MARK: Swich Cell
+    // MARK: Switch Cell
     var switchCellTintColor: UIColor {
         return .RGBA(143, 142, 148, 1)
     }
@@ -289,6 +289,10 @@ struct DayMode: ColorModeType {
     
     var visualEffectBlurType: UIBlurEffectStyle {
         return .light
+    }
+
+    var collectionViewBackgroundColor: UIColor {
+        return .backgroundGrayColor()
     }
     
     func isEqualTo(_ other: ColorModeType) -> Bool {

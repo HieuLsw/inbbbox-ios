@@ -9,8 +9,8 @@
 import Foundation
 
 enum ColorMode: String {
-    case DayMode
-    case NightMode
+    case dayMode
+    case nightMode
 }
 
 final class ColorModeProvider {
@@ -18,8 +18,12 @@ final class ColorModeProvider {
     // MARK: Internal
 
     class func setup() {
-        let currentMode = Settings.Customization.CurrentColorMode
-        select(currentMode)
+        if let mode = NightModeHoursProvider.currentColorModeBasedOnTime(), Settings.Customization.AutoNightMode {
+            select(mode)
+        } else {
+            let currentMode = Settings.Customization.CurrentColorMode
+            select(currentMode)
+        }
     }
 
     class func change(to mode: ColorMode) {
@@ -30,8 +34,8 @@ final class ColorModeProvider {
     class func current() -> ColorModeType {
         let currentMode = Settings.Customization.CurrentColorMode
         switch currentMode {
-        case .DayMode: return DayMode()
-        case .NightMode: return NightMode()
+        case .dayMode: return DayMode()
+        case .nightMode: return NightMode()
         }
     }
 
@@ -39,11 +43,11 @@ final class ColorModeProvider {
 
     fileprivate class func select(_ mode: ColorMode) {
         switch mode {
-            case .DayMode:
+            case .dayMode:
                 let mode = DayMode()
                 ColorModeProvider.adaptInterface(to: mode)
                 ColorModeProvider.adaptInterfaceToCustomViews(to: mode)
-            case .NightMode:
+            case .nightMode:
                 let mode = NightMode()
                 ColorModeProvider.adaptInterface(to: mode)
                 ColorModeProvider.adaptInterfaceToCustomViews(to: mode)
@@ -69,8 +73,7 @@ final class ColorModeProvider {
         ShotDetailsCommentCollectionViewCell.appearance().backgroundColor = mode.shotDetailsCommentCollectionViewCellBackground
         ProfileHeaderView.appearance().backgroundColor = mode.profileHeaderViewBackground
 
-        UICollectionView.appearance(whenContainedInInstancesOf: [TwoLayoutsCollectionViewController.self]).backgroundColor = mode.twoLayoutsCollectionViewBackground
-        UICollectionView.appearance(whenContainedInInstancesOf: [BucketsCollectionViewController.self]).backgroundColor = mode.bucketsCollectionViewBackground
+        UICollectionView.appearance().backgroundColor = mode.collectionViewBackgroundColor
 
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().barStyle = .black

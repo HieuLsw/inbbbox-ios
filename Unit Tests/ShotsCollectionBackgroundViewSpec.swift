@@ -22,7 +22,7 @@ class ShotsCollectionBackgroundViewSpec: QuickSpec {
             var logoImageView: UIImageView!
 
             beforeEach {
-                ColorModeProvider.change(to: .DayMode)
+                ColorModeProvider.change(to: .dayMode)
                 sut = ShotsCollectionBackgroundView()
                 logoImageView = sut.logoImageView
             }
@@ -45,7 +45,7 @@ class ShotsCollectionBackgroundViewSpec: QuickSpec {
             var logoImageView: UIImageView!
             
             beforeEach {
-                ColorModeProvider.change(to: .NightMode)
+                ColorModeProvider.change(to: .nightMode)
                 sut = ShotsCollectionBackgroundView()
                 logoImageView = sut.logoImageView
             }
