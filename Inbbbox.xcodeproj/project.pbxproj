@@ -288,6 +288,8 @@
 		BB3929FA6C490D4294DC0F3C /* ViewMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B389E42C7B69120ECC42034 /* ViewMock.swift */; };
 		BC6B3E84D5D992DAB1793695 /* AutoScrollableShotsAnimatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A52A23BA4741CF6B4E3F10A /* AutoScrollableShotsAnimatorSpec.swift */; };
 		BD7EF5D032FDB57425DDE1B5 /* CustomTabBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DFB3DA4E8203C9B66344BB /* CustomTabBarItemView.swift */; };
+		BE455DB81DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE455DB71DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift */; };
+		BE455DBA1DF6AD22002D0D29 /* GifShot.json in Resources */ = {isa = PBXBuildFile; fileRef = BE455DB91DF6AD22002D0D29 /* GifShot.json */; };
 		BE5712551DCA2DD200358745 /* FlashMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5712541DCA2DD200358745 /* FlashMessageViewModel.swift */; };
 		BE5712571DCA2DE000358745 /* FlashMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5712561DCA2DE000358745 /* FlashMessageView.swift */; };
 		BE5712591DCA2DEB00358745 /* FlashMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5712581DCA2DEB00358745 /* FlashMessageTypes.swift */; };
@@ -751,6 +753,8 @@
 		BCD774838CC197571211DC4E /* APIProjectsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIProjectsProvider.swift; sourceTree = "<group>"; };
 		BD8DC1F4B61694B2EC222DEE /* APIBucketsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIBucketsProvider.swift; sourceTree = "<group>"; };
 		BE44284007590E9AE62066DA /* VerifiableSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerifiableSpec.swift; sourceTree = "<group>"; };
+		BE455DB71DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatableShotImageViewSpec.swift; sourceTree = "<group>"; };
+		BE455DB91DF6AD22002D0D29 /* GifShot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GifShot.json; sourceTree = "<group>"; };
 		BE5712541DCA2DD200358745 /* FlashMessageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageViewModel.swift; sourceTree = "<group>"; };
 		BE5712561DCA2DE000358745 /* FlashMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageView.swift; sourceTree = "<group>"; };
 		BE5712581DCA2DEB00358745 /* FlashMessageTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageTypes.swift; sourceTree = "<group>"; };
@@ -1040,6 +1044,7 @@
 				8DF654E4E2FA728096372DC0 /* FolloweeConnection.json */,
 				AA10BE569023512CB83FC822 /* FollowerConnection.json */,
 				7CAB35CC635AABCA5071EE38 /* Project.json */,
+				BE455DB91DF6AD22002D0D29 /* GifShot.json */,
 				CB993016EF1BAC5798DA74AA /* Shot.json */,
 				07188CB96C935F062D896B24 /* Team.json */,
 				A98D27A5717BDF29E8B0510B /* User.json */,
@@ -1227,6 +1232,7 @@
 				18646E2068B92E1E3ADD6D80 /* ShotCollectionViewCellSpec.swift */,
 				EAAA128F1DC3733D00E8B576 /* ShotDetailsPageViewControllerDataSourceSpec.swift */,
 				C2ADCFFD5DDF3B47FC025E19 /* ShotDetailsViewModelSpec.swift */,
+				BE455DB71DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift */,
 				117C93561E4C58105633DFDA /* ShotsAnimatorSpec.swift */,
 				B7CCFCBF07387130864BB26C /* ShotsCollectionBackgroundViewSpec.swift */,
 				8E10412C63CC20B8B116A67B /* ShotsCollectionViewFlowLayoutSpec.swift */,
@@ -1822,6 +1828,7 @@
 				C60AA1BA1DDBB3D700E0A5AF /* Attachment.json in Resources */,
 				5AE4B28F1CAC5511004CB534 /* Buckets.json in Resources */,
 				5AE4B2901CAC5511004CB534 /* Comment.json in Resources */,
+				BE455DBA1DF6AD22002D0D29 /* GifShot.json in Resources */,
 				5AE4B2931CAC5511004CB534 /* Project.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2344,6 +2351,7 @@
 				C6FDB61ECCFC6DA18056E4C2 /* LikesViewModelSpec.swift in Sources */,
 				91A5F4FAED6556884402B13B /* LocalNotificationRegistratorSpec.swift in Sources */,
 				F674FDFAF55C3D6EDC653140 /* ManagedShotsProviderSpec.swift in Sources */,
+				BE455DB81DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift in Sources */,
 				E25C737549914F232E8A8D9D /* NSAttributedStringExtensionSpec.swift in Sources */,
 				4A124C0D5C4A42C9A348F572 /* OAuthAuthorizableSpec.swift in Sources */,
 				5E6CC9E29CAB4EAE571D8E70 /* PageableComponentSerializerSpec.swift in Sources */,

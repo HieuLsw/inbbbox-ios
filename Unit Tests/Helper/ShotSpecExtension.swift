@@ -23,4 +23,10 @@ extension Shot {
         json["id"].string = identifier
         return Shot.map(json)
     }
+    
+    static func fixtureGifShotWithIdentifier(_ identifier: String) -> Shot {
+        var json = JSONSpecLoader.sharedInstance.jsonWithResourceName("GifShot")
+        json["id"].string = identifier
+        return Shot.map(json)
+    }
 }

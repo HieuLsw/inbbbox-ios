@@ -1,0 +1,29 @@
+{
+    "id": "fixture.identifier",
+    "title": "fixture.title.1",
+    "description": "fixture.description.1",
+    "animated": true,
+    "created_at" : "2016-01-25T08:19:14Z",
+    "user":  {
+        "id" : "fixture.id",
+        "name" : "fixture.name",
+        "username" : "fixture.username",
+        "avatar_url" : "fixture.avatar.url"
+    },
+    "images": {
+        "hidpi": "https://fixture.domain/fixture.image.hidpi.png",
+        "normal": "https://i.giphy.com/3o7aTFcgEGNbOpyVeU.gif",
+        "teaser": "https://fixture.domain/fixture.image.teaser.png"
+    },
+    "views_count" : 0,
+    "likes_count" : 1,
+    "comments_count" : 15,
+    "buckets_count" : 3,
+    "team" : {
+        "id" : "fixture.team.identifier",
+        "name" : "fixture.team.name",
+        "username" : "fixture.team.username",
+        "avatar_url" : "https:/fixture.team.host",
+        "created_at" : "2009-08-18T18:34:31Z"
+    }
+}
