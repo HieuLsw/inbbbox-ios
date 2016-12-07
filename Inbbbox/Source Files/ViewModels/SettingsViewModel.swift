@@ -132,11 +132,7 @@ class SettingsViewModel: GroupedListViewModel {
     }
     
     func heightForHeaderIn(section: Int) -> CGFloat {
-        let defaultHeight:CGFloat = 44.0
-        switch section {
-            case 0: return userMode == .loggedUser ? 0 : defaultHeight
-            default: return defaultHeight
-        }
+        return userMode == .loggedUser && section == 0 ? 0 : 44.0
     }
 }
 
