@@ -409,8 +409,8 @@ private extension ShotsNormalStateHandler {
         guard let collectionView = collectionViewLayout.collectionView, shotsCollectionViewController?.shots.count != 0 else {
             return
         }
-        
-        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
+
+        collectionView.reloadData()
     }
 
     func visibleShot() -> ShotType? {
