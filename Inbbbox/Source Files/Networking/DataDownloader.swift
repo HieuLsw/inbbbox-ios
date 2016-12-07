@@ -16,7 +16,7 @@ class DataDownloader: NSObject {
     fileprivate var progress: ((Float) -> Void)?
     fileprivate var completion: ((Data) -> Void)?
     fileprivate var session: URLSession?
-    fileprivate var tasks = [URLSessionTask]()
+    var tasks = [URLSessionTask]()
 
 
     /// Fetches data from given URL and gives information about progress and completion of operation.
@@ -71,8 +71,8 @@ extension DataDownloader: URLSessionDataDelegate {
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        tasks.remove(ifContains: task)
         guard error == nil else { return }
-        print("complete task \(task.hash)")
         completion?(self.data as Data)
     }
 }
