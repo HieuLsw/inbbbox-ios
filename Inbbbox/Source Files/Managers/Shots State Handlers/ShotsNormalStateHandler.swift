@@ -124,29 +124,21 @@ extension ShotsNormalStateHandler {
             switch action {
             case .like:
                 firstly {
-                    cell.liked = true
-                    return Promise(value: Void())
-                }.then {
-                    certainSelf.setLikesInAuthorView(for: cell)
-                }.then {
                     certainSelf.likeShot(shot)
                 }.then {
-                    certainSelf.didLikeShotCompletionHandler?()
+                    cell.liked = true
+                }.then {
+                    self?.didLikeShotCompletionHandler?()
                 }.catch { error in
                     cell.liked = false
-                    let _ = certainSelf.unsetLikesInAuthorView(for: cell)
                 }
             case .bucket:
                 firstly {
-                    cell.liked = true
-                    return Promise(value: Void())
-                }.then {
-                    certainSelf.setLikesInAuthorView(for: cell)
-                }.then {
                     certainSelf.likeShot(shot)
+                }.then {
+                    cell.liked = true
                 }.catch { error in
                     cell.liked = false
-                    let _ = certainSelf.unsetLikesInAuthorView(for: cell)
                 }
                 certainSelf.presentShotBucketsViewController(shot)
             case .comment:
@@ -462,18 +454,6 @@ private extension ShotsNormalStateHandler {
                 connectionsRequester.followUser(shot.user)
             }.then(execute: fulfill).catch(execute: reject)
         }
-    }
-
-    func setLikesInAuthorView(for cell: ShotCollectionViewCell) -> Promise<Void> {
-        cell.authorView.incrementLikesNumber()
-        cell.authorView.setLikesIconActive()
-        return Promise(value: Void())
-    }
-
-    func unsetLikesInAuthorView(for cell: ShotCollectionViewCell) -> Promise<Void> {
-        cell.authorView.decrementLikesNumber()
-        cell.authorView.setLikesIconInactive()
-        return Promise(value: Void())
     }
 }
 
