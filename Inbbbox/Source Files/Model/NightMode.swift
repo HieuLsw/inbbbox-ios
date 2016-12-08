@@ -137,6 +137,10 @@ struct NightMode: ColorModeType {
     var shotDetailsHeaderViewBackground: UIColor {
         return .darkGrayNightMode()
     }
+    
+    var shotDetailsAttachmentViewBackground: UIColor {
+        return .RGBA(51, 51, 51, 1)
+    }
 
     var shotDetailsOperationViewBackground: UIColor {
         return .darkGrayNightMode()

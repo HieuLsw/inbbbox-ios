@@ -273,8 +273,10 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             header?.showAttachments = viewModel.shot.attachmentsCount != 0
             header?.attachments = viewModel.attachments
             header?.attachmentDidTap = { [weak self] cell, attachment in
-                self?.header?.selectedAttachment = attachment
-                self?.presentFullScreenAttachment(cell)
+                if let cell = cell as? AttachmentCollectionViewCell {
+                    self?.header?.selectedAttachment = attachment
+                    self?.presentFullScreenAttachment(cell.imageView)
+                }
             }
         }
 
@@ -577,7 +579,7 @@ private extension ShotDetailsViewController {
         }
     }
     
-    func presentFullScreenAttachment(_ displacedView: UIView) {
+    func presentFullScreenAttachment(_ displacedView: UIImageView) {
         /* 
          To prevent glitchy animation we are adding placeholder view
          from where animation will start but without showing thumbnail 
@@ -588,8 +590,12 @@ private extension ShotDetailsViewController {
         }
         let placeholderView = UIImageView(frame: displacedView.frame)
         placeholderView.backgroundColor = .clear
+        placeholderView.image = UIImage(color: .black)
         displacedView.superview?.addSubview(placeholderView)
         let galleryProvider = GalleryViewProvider(imageUrls: [url], displacedView: placeholderView)
+        galleryProvider.galleryViewController.launchedCompletion = {
+            placeholderView.alpha = 0
+        }
         galleryProvider.galleryViewController.closedCompletion = {
             placeholderView.removeFromSuperview()
         }
