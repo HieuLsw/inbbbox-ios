@@ -61,18 +61,19 @@ class ShotImageView: UIImageView {
     }
 
     func applyBlur(_ blur: CGFloat = 0) {
-        if blur == 0 {
+        guard blur > 0 else {
             self.image = originalImage
             return
         }
-        let bluredImageUrl = imageUrl
+        
+        let blurredImageUrl = imageUrl
 
         DispatchQueue.global(qos: .default).async { [weak self] in
-           let bluredImage = self?.originalImage?.imageByBlurringImageWithBlur(blur)
+           let blurredImage = self?.originalImage?.imageByBlurringImageWithBlur(blur)
             DispatchQueue.main.async(execute: {
-                guard let bluredImage = bluredImage else { return }
-                if self?.imageUrl?.absoluteString == (bluredImageUrl as AnyObject).absoluteString {
-                    self?.image = bluredImage
+                guard let blurredImage = blurredImage else { return }
+                if self?.imageUrl?.absoluteString == blurredImageUrl?.absoluteString {
+                    self?.image = blurredImage
                 }
             })
         }
