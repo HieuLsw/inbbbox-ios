@@ -6,7 +6,7 @@ import Foundation
 import PromiseKit
 import ZFDragableModalTransition
 
-class ShotsNormalStateHandler: NSObject, ShotsStateHandler {
+class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
 
     let shotsRequester =  ShotsRequester()
     let likesProvider = APIShotsProvider(page: 1, pagination: 100)
@@ -452,6 +452,8 @@ private extension ShotsNormalStateHandler {
             
             firstly {
                 connectionsRequester.followUser(shot.user)
+            }.then {
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }
