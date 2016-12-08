@@ -17,7 +17,7 @@ enum ShotBucketsViewControllerMode {
     case removeFromBucket
 }
 
-class ShotBucketsViewController: UIViewController {
+class ShotBucketsViewController: UIViewController, Vibratable {
 
     var shotBucketsView: ShotBucketsView! {
         return view as? ShotBucketsView
@@ -312,6 +312,7 @@ private extension ShotBucketsViewController {
         }.then { () -> Void in
             self.willDismissViewControllerClosure?()
             self.dismiss(animated: true, completion: nil)
+            self.vibrate(feedbackType: .success)
         }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)
         }

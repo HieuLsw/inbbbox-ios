@@ -165,7 +165,7 @@ extension ShotDetailsViewModel {
 
 // MARK: Likes handling
 
-extension ShotDetailsViewModel {
+extension ShotDetailsViewModel: Vibratable {
 
     func performLikeOperation() -> Promise<Bool> {
         return Promise<Bool> { fulfill, reject in
@@ -176,6 +176,7 @@ extension ShotDetailsViewModel {
                     shotLiked ? shotsRequester.unlikeShot(shot) : shotsRequester.likeShot(shot)
                 }.then { _ -> Void in
                     self.isShotLikedByMe = !shotLiked
+                    self.vibrate(feedbackType: .success)
                     fulfill(!shotLiked)
                 }.catch(execute: reject)
             }

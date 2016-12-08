@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 
-class TeamDetailsViewModel: ProfileViewModel {
+class TeamDetailsViewModel: ProfileViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
@@ -96,6 +96,8 @@ class TeamDetailsViewModel: ProfileViewModel {
         return Promise<Void> { fulfill, reject in
             firstly {
                 connectionsRequester.followTeam(team)
+            }.then {
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }
