@@ -72,7 +72,7 @@ class SettingsTableHeaderView: UIView, Reusable, AvatarSettable {
     func setupUsernameLabel() {
         usernameLabel.textAlignment = .center
         usernameLabel.textColor = ColorModeProvider.current().settingsUsernameTextColor
-        usernameLabel.font = UIFont.helveticaFont(.neue, size: 23)
+        usernameLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 23)
         addSubview(usernameLabel)
     }
 }

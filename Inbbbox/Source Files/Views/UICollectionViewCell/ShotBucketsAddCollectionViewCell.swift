@@ -32,13 +32,13 @@ class ShotBucketsAddCollectionViewCell: UICollectionViewCell, Reusable {
         bucketNameLabel.configureForAutoLayout()
         bucketNameLabel.numberOfLines = 0
         bucketNameLabel.textColor = currentMode.shotDetailsBucketTextColor
-        bucketNameLabel.font = UIFont.helveticaFont(.neue, size: 17)
+        bucketNameLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 17)
         contentView.addSubview(bucketNameLabel)
 
         shotsCountLabel.configureForAutoLayout()
         shotsCountLabel.numberOfLines = 1
         shotsCountLabel.textColor = .followeeTextGrayColor()
-        shotsCountLabel.font = UIFont.helveticaFont(.neue, size: 17)
+        shotsCountLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 17)
         contentView.addSubview(shotsCountLabel)
 
         arrowImageView.image = UIImage(named: "ic-indicator-right")

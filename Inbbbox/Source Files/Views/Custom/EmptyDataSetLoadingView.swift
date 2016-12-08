@@ -34,7 +34,7 @@ class EmptyDataSetLoadingView: UIView {
 
         label.text = NSLocalizedString("EmptyDataSetLoadingView.Loading", comment: "Loading view, when empty data")
         label.textColor = .cellBackgroundColor()
-        label.font = UIFont.helveticaFont(.neueMedium, size: 25)
+        label.font = UIFont.sanFransiscoFont(withType: .medium, size: 25)
         label.textAlignment = .center
         label.alpha = 0.5
         addSubview(label)

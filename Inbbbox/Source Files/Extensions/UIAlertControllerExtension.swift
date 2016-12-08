@@ -19,10 +19,10 @@ extension UIAlertController {
         AOAlertSettings.sharedSettings.defaultActionColor = .pinkColor()
         AOAlertSettings.sharedSettings.cancelActionColor = .pinkColor()
 
-        AOAlertSettings.sharedSettings.messageFont = UIFont.helveticaFont(.neueMedium, size: 17)
-        AOAlertSettings.sharedSettings.defaultActionFont = UIFont.helveticaFont(.neue, size: 16)
-        AOAlertSettings.sharedSettings.cancelActionFont = UIFont.helveticaFont(.neue, size: 16)
-        AOAlertSettings.sharedSettings.destructiveActionFont = UIFont.helveticaFont(.neue, size: 16)
+        AOAlertSettings.sharedSettings.messageFont = UIFont.sanFransiscoFont(withType: .medium, size: 17)
+        AOAlertSettings.sharedSettings.defaultActionFont = UIFont.sanFransiscoFont(withType: .regular, size: 16)
+        AOAlertSettings.sharedSettings.cancelActionFont = UIFont.sanFransiscoFont(withType: .regular, size: 16)
+        AOAlertSettings.sharedSettings.destructiveActionFont = UIFont.sanFransiscoFont(withType: .regular, size: 16)
 
     }
 

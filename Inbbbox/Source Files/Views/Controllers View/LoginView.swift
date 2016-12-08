@@ -42,7 +42,7 @@ class LoginView: UIView {
         loginButton.backgroundColor = UIColor.white
         loginButton.layer.cornerRadius = cornerRadius
         loginButton.setTitleColor(UIColor.pinkColor(), for: .normal)
-        loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
+        loginButton.titleLabel?.font = UIFont.sanFransiscoFont(withType: .medium, size: 14)
         loginButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         loginButton.titleLabel?.textAlignment = NSTextAlignment.center
         loginButton.titleEdgeInsets.left = 2.5 * cornerRadius
@@ -56,25 +56,25 @@ class LoginView: UIView {
         loginAsGuestButton.layer.borderWidth = 1
         loginAsGuestButton.layer.borderColor = UIColor.white.cgColor
         loginAsGuestButton.setTitleColor(UIColor.white, for: .normal)
-        loginButton.titleLabel?.font = UIFont.helveticaFont(.neueMedium, size: 14)
+        loginButton.titleLabel?.font = UIFont.sanFransiscoFont(withType: .medium, size: 14)
         addSubview(loginAsGuestButton)
 
         sloganLabel.text = NSLocalizedString("LoginView.Slogan", comment: "Slogan")
         sloganLabel.textAlignment = .center
         sloganLabel.textColor = defaultWhiteColor
-        sloganLabel.font = UIFont.helveticaFont(.neueLight, size: 25)
+        sloganLabel.font = UIFont.sanFransiscoFont(withType: .light, size: 25)
         addSubview(sloganLabel)
 
         loadingLabel.text = NSLocalizedString("LoginView.Loading", comment: "")
         loadingLabel.textAlignment = .center
         loadingLabel.textColor = defaultWhiteColor
-        loadingLabel.font = UIFont.helveticaFont(.neue, size: 12)
+        loadingLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 12)
         addSubview(loadingLabel)
 
         copyrightlabel.text = NSLocalizedString("LoginView.Copyright", comment:"Describes copyright holder")
         copyrightlabel.textAlignment = .center
         copyrightlabel.textColor = defaultWhiteColor
-        copyrightlabel.font = UIFont.helveticaFont(.neueMedium, size: 12)
+        copyrightlabel.font = UIFont.sanFransiscoFont(withType: .medium, size: 12)
         addSubview(copyrightlabel)
     }
 

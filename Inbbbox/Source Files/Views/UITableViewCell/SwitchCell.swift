@@ -19,7 +19,7 @@ class SwitchCell: UITableViewCell, Reusable {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+        titleLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 17)
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 

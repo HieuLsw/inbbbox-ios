@@ -85,7 +85,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
         dateLabel.numberOfLines = 0
         contentView.addSubview(dateLabel)
 
-        likesCountLabel.font = UIFont.helveticaFont(.neue, size: 10)
+        likesCountLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 10)
         likesCountLabel.textColor = ColorModeProvider.current().shotDetailsCommentLikesCountTextColor
 
         contentView.addSubview(likesImageView)
@@ -219,7 +219,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
     func setLinkInAuthorLabel(_ URL: URL, delegate: TTTAttributedLabelDelegate) {
         let linkAttributes = [
                 NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentAuthorTextColor,
-                NSFontAttributeName: UIFont.helveticaFont(.neueMedium, size: 16)
+                NSFontAttributeName: UIFont.sanFransiscoFont(withType: .medium, size: 16)
         ]
         let authorText = authorLabel.text ?? ""
         let range = NSRange(location: 0, length: authorText.characters.count)

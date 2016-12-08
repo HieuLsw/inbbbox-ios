@@ -32,7 +32,7 @@ class EmptyShotsCollectionView: UIView {
         descriptionLabel.text = NSLocalizedString("ShotsCollectionViewController.NoShotsErrorLabel", comment: "Select at least 1 \nstream source \nin the settings")
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
-        descriptionLabel.font = UIFont.helveticaFont(.neueLight, size: 25)
+        descriptionLabel.font = UIFont.sanFransiscoFont(withType: .light, size: 25)
         descriptionLabel.textColor = UIColor.cellBackgroundColor()
         addSubview(descriptionLabel)
         

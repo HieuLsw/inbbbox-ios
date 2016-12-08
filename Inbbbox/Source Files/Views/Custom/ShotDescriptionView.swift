@@ -88,7 +88,7 @@ class ShotDescriptionView: UIView {
 
     fileprivate func setupDescriptionLabel() {
         descriptionLabel.text = descriptionText?.string
-        descriptionLabel.font = UIFont.helveticaFont(.neue, size: 15)
+        descriptionLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 15)
         descriptionLabel.textColor = UIColor.textLightColor()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.backgroundColor = backgroundColor

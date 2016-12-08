@@ -27,7 +27,7 @@ class ShotBucketsActionCollectionViewCell: UICollectionViewCell, Reusable {
         button.setTitleColor(.pinkColor(), for: .normal)
         button.setTitleColor(.textLightColor(), for: .disabled)
         button.setTitleColor(.pinkColor(alpha: 0.5), for: .highlighted)
-        button.titleLabel?.font = UIFont.helveticaFont(.neue, size: 16)
+        button.titleLabel?.font = UIFont.sanFransiscoFont(withType: .regular, size: 16)
         contentView.addSubview(button)
 
         setNeedsUpdateConstraints()
