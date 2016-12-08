@@ -38,9 +38,9 @@ class EstimatedLocationProvider {
                     }
                     if let location = self.estimatedLocationFrom(data: data) {
                         fulfill(location)
+                    } else {
+                        reject(EstimatedLocationProviderError.couldNotParseData)
                     }
-                    
-                    reject(EstimatedLocationProviderError.couldNotParseData)
                 })
                 task.resume()
             }
