@@ -118,7 +118,7 @@ final class FlashMessage {
 
         if let viewController = flashMessageView.viewController, let currentNavigationController = navigationControllerFrom(viewController) {
             if !isNavigationBarHiddenIn(currentNavigationController) && flashMessageView.messagePosition != .navigationBarOverlay {
-                flashMessageView.displayInView?.insertSubview(flashMessageView, belowSubview: currentNavigationController.navigationBar)
+                flashMessageView.displayInView?.addSubview(flashMessageView)
                 verticalOffset = currentNavigationController.navigationBar.bounds.size.height
             } else {
                 flashMessageView.displayInView?.addSubview(flashMessageView)

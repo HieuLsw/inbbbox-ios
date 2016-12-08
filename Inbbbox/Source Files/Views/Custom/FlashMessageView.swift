@@ -176,10 +176,7 @@ final class FlashMessageView: UIView {
     }
     
     fileprivate func setupPosition() {
-//        guard let viewController = viewController else {
-//            return
-//        }
-        
+
         let screenWidth = displayInView?.bounds.size.width ?? 0
         let actualHeight = updateHeightOfMessageView()
         

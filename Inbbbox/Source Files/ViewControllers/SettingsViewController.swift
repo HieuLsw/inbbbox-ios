@@ -78,7 +78,6 @@ extension SettingsViewController: AlertDisplayable {
 
 extension SettingsViewController: FlashMessageDisplayable {
     func displayFlashMessage(_ model: FlashMessageViewModel) {
-//        FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true)
         FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true, shouldBeDisplayedInViewController: false)
     }
 }
