@@ -72,7 +72,7 @@ class ShotBucketsHeaderView: UICollectionReusableView, Reusable {
 
         headerTitleLabel.backgroundColor = .clear
         headerTitleLabel.textColor = .white
-        headerTitleLabel.font = .helveticaFont(.neueMedium, size: 16)
+        headerTitleLabel.font = UIFont.sanFransiscoFont(withType: .medium, size: 16)
         addSubview(headerTitleLabel)
 
         addSubview(closeButtonView)
