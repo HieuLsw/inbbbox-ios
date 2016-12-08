@@ -27,7 +27,8 @@ class GalleryViewProvider {
                 GalleryConfigurationItem.thumbnailsButtonMode(.none),
                 GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
                 GalleryConfigurationItem.blurDismissDuration(0.1),
-                GalleryConfigurationItem.blurDismissDelay(0)]
+                GalleryConfigurationItem.blurDismissDelay(0),
+                GalleryConfigurationItem.presentationStyle(.displacement)]
     }()
     
     lazy var galleryViewController: GalleryViewController = {
