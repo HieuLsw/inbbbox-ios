@@ -50,6 +50,14 @@ final class FlashMessageView: UIView {
     
     /// The view controller this message is displayed in
     weak var viewController: UIViewController?
+
+    /// View that message will be displayed in. Based on displayInViewController
+    var displayInView: UIView? {
+        return displayInViewController ? viewController?.view : UIApplication.shared.keyWindow
+    }
+    
+    /// Flag for view if you want to display message in view or current keyWindow
+    var displayInViewController: Bool = true
     
     /// The duration of the displayed message.
     var duration: FlashMessageDuration = .automatic
@@ -92,7 +100,7 @@ final class FlashMessageView: UIView {
     /// - parameter position:  The position of the message on the screen
     /// - parameter dismissingEnabled:  Should this message be dismissed when the user taps/swipes it?
     /// - parameter style:  Override default/global style
-    init(viewController: UIViewController, title: String, duration: FlashMessageDuration?, position: FlashMessageNotificationPosition, style customStyle: Style?, dismissingEnabled: Bool, callback: (()-> Void)?) {
+    init(viewController: UIViewController?, title: String, duration: FlashMessageDuration?, position: FlashMessageNotificationPosition, style customStyle: Style?, dismissingEnabled: Bool, displayInViewController: Bool, callback: (()-> Void)?) {
         
         self.style = customStyle ?? FlashMessageView.defaultStyle
         self.title = title
@@ -100,6 +108,7 @@ final class FlashMessageView: UIView {
         self.viewController = viewController
         self.messagePosition = position
         self.callback = callback
+        self.displayInViewController = displayInViewController
         self.padding = messagePosition == .navigationBarOverlay ? style.padding + 10 : style.padding
         super.init(frame: CGRect.zero)
         
@@ -167,16 +176,13 @@ final class FlashMessageView: UIView {
     }
     
     fileprivate func setupPosition() {
-        guard let viewController = viewController else {
-            return
-        }
-        
-        let screenWidth = viewController.view.bounds.size.width
+
+        let screenWidth = displayInView?.bounds.size.width ?? 0
         let actualHeight = updateHeightOfMessageView()
         
         var topPosition = -actualHeight
         if messagePosition == .bottom {
-            topPosition = viewController.view.bounds.size.height
+            topPosition = displayInView?.bounds.size.height ?? 0
         }
         
         frame = CGRect(x: 0.0, y: topPosition, width: screenWidth, height: actualHeight)
@@ -198,11 +204,8 @@ final class FlashMessageView: UIView {
     // MARK: Private methods
     
     fileprivate func updateHeightOfMessageView() -> CGFloat {
-        guard let viewController = viewController else {
-            return 0
-        }
         
-        let screenWidth = viewController.view.bounds.size.width
+        let screenWidth = displayInView?.bounds.size.width ?? 0
         titleLabel.frame = CGRect(x: textSpaceLeft, y: padding, width: screenWidth - padding - textSpaceLeft - textSpaceRight, height: 0.0)
         titleLabel.sizeToFit()
         
@@ -215,7 +218,7 @@ final class FlashMessageView: UIView {
         // increase frame of background view because of the spring animation
         if messagePosition == .top {
             var topOffset: CGFloat = 0.0
-            let navigationController: UINavigationController? = viewController as? UINavigationController ?? viewController.navigationController
+            let navigationController: UINavigationController? = viewController as? UINavigationController ?? viewController?.navigationController
             
             if let navigationController = navigationController {
                 let isNavigationBarHidden =  navigationController.isNavigationBarHidden || navigationController.navigationBar.isHidden
