@@ -18,16 +18,6 @@ final class FlashMessage {
     /// Set a custom view for the notification
     var customizeMessageView: ((FlashMessageView) -> Void)?
     
-    /// Use this property to set a default view controller to display the messages in
-    var defaultViewController: UIViewController  {
-        get {
-            return _defaultViewController ?? UIApplication.shared.keyWindow!.rootViewController!
-        }
-        set {
-            _defaultViewController = newValue
-        }
-    }
-    
     fileprivate let displayTime = 1.5
     fileprivate let extraDisplayTimePerPixel = 0.04
     fileprivate let animationDuration = 0.3
@@ -43,7 +33,6 @@ final class FlashMessage {
     fileprivate var queuedMessages: [FlashMessageView] {
         return messages
     }
-    fileprivate weak var _defaultViewController :UIViewController?
     
     // MARK: Lifecycle
     
@@ -56,18 +45,19 @@ final class FlashMessage {
     /// - parameter overrideStyle:      Override default styles using this style struct, it has highest priority.
     /// - parameter dismissingEnabled:  Should the message be dismissed when the user taps/swipes it
     /// - parameter callback:           The block that should be executed, when the user tapped on the message/
-    func showNotification(inViewController viewController: UIViewController? = nil, title: String, duration: FlashMessageDuration = .automatic, atPosition messagePosition: FlashMessageNotificationPosition = .top, overrideStyle: FlashMessageView.Style? = nil, canBeDismissedByUser dismissingEnabled: Bool = true, callback: (() -> Void)? = nil) {
+    func showNotification(inViewController viewController: UIViewController? = nil, title: String, duration: FlashMessageDuration = .automatic, atPosition messagePosition: FlashMessageNotificationPosition = .top, overrideStyle: FlashMessageView.Style? = nil, canBeDismissedByUser dismissingEnabled: Bool = true, shouldBeDisplayedInViewController: Bool = true , callback: (() -> Void)? = nil) {
         
         if let messageTitle = messages.last?.title, title == messageTitle {
             return
         }
         let messageView  = FlashMessageView(
-            viewController: viewController ?? defaultViewController,
+            viewController: viewController,
             title: title,
             duration: duration,
             position: messagePosition,
             style: overrideStyle,
             dismissingEnabled: dismissingEnabled,
+            displayInViewController: shouldBeDisplayedInViewController,
             callback: callback
         )
         
@@ -117,28 +107,28 @@ final class FlashMessage {
     
     fileprivate func fadeInCurrentNotification() {
         messages = messages.flatMap {
-            $0.viewController != nil ? $0 : nil
+            $0.viewController == nil && UIApplication.shared.keyWindow == nil ? nil : $0
         }
-        guard let flashMessageView = messages.first, let viewController = flashMessageView.viewController else {
+        guard let flashMessageView = messages.first else {
             return
         }
         
         notificationActive = true
         var verticalOffset: CGFloat = 0.0
 
-        if let currentNavigationController = navigationControllerFrom(viewController) {
+        if let viewController = flashMessageView.viewController, let currentNavigationController = navigationControllerFrom(viewController) {
             if !isNavigationBarHiddenIn(currentNavigationController) && flashMessageView.messagePosition != .navigationBarOverlay {
-                viewController.view?.insertSubview(flashMessageView, belowSubview: currentNavigationController.navigationBar)
+                flashMessageView.displayInView?.insertSubview(flashMessageView, belowSubview: currentNavigationController.navigationBar)
                 verticalOffset = currentNavigationController.navigationBar.bounds.size.height
             } else {
-                viewController.view?.addSubview(flashMessageView)
+                flashMessageView.displayInView?.addSubview(flashMessageView)
             }
             
             if checkIfViewIsUnderStatusBar(currentNavigationController) {
                 verticalOffset += barHeightBasedOnMessagePositionIn(flashMessageView)
             }
         } else {
-            viewController.view?.addSubview(flashMessageView)
+            flashMessageView.displayInView?.addSubview(flashMessageView)
             verticalOffset = flashMessageView.frame.height
         }
         
@@ -151,7 +141,8 @@ final class FlashMessage {
     fileprivate func calculateEndPointForFadeInBasedOn(_ flashMessageView: FlashMessageView, andVerticaOffset verticalOffset: CGFloat) -> CGPoint {
         if flashMessageView.messagePosition != .bottom {
             let height = flashMessageView.frame.height - minimalInset
-            return CGPoint(x: flashMessageView.center.x, y: offsetHeightForMessage + verticalOffset + height / 2.0)
+            let offestHeight = flashMessageView.displayInViewController ? offsetHeightForMessage : 0
+            return CGPoint(x: flashMessageView.center.x, y: offestHeight + verticalOffset + (height / 2.0))
         } else {
             let height = flashMessageView.viewController?.view.bounds.size.height ?? 0.0
             var y = height - flashMessageView.frame.height / 2.0
@@ -221,7 +212,7 @@ final class FlashMessage {
     }
     
     @objc fileprivate func fadeOutNotification(_ flashMessageView: FlashMessageView, animationFinishedBlock animationFinished: (() -> Void)?) {
-        guard let viewController = flashMessageView.viewController else {
+        guard let view = flashMessageView.displayInView else {
             if self.messages.count > 0 {
                 self.messages.remove(at: 0)
             }
@@ -235,7 +226,7 @@ final class FlashMessage {
         if flashMessageView.messagePosition != .bottom {
             fadeOutToPoint = CGPoint(x: flashMessageView.center.x, y: -flashMessageView.frame.height / 2.0)
         } else {
-            fadeOutToPoint = CGPoint(x: flashMessageView.center.x, y: viewController.view.bounds.size.height + flashMessageView.frame.height / 2.0)
+            fadeOutToPoint = CGPoint(x: flashMessageView.center.x, y: view.bounds.size.height + flashMessageView.frame.height / 2.0)
         }
         UIView.animate(withDuration: animationDuration, animations: {
                 flashMessageView.center = fadeOutToPoint

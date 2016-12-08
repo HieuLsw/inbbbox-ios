@@ -65,6 +65,8 @@ extension SettingsViewController: ModelUpdatable {
     }
 }
 
+// MARK: AlertDisplayable
+
 extension SettingsViewController: AlertDisplayable {
 
     func displayAlert(_ alert: AOAlertController) {
@@ -72,9 +74,12 @@ extension SettingsViewController: AlertDisplayable {
     }
 }
 
+// MARK: FlashMessageDisplayable
+
 extension SettingsViewController: FlashMessageDisplayable {
     func displayFlashMessage(_ model: FlashMessageViewModel) {
-        FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true)
+//        FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true)
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: model.title, canBeDismissedByUser: true, shouldBeDisplayedInViewController: false)
     }
 }
 
