@@ -134,7 +134,7 @@ class SettingsViewModelSpec: QuickSpec {
                 }
 
                 describe("first item") {
-                    it("should be ? item") {
+                    it("should be label item") {
                         let item = sut.sections[4][0]
                         expect(item is LabelItem).to(beTrue())
                     }
@@ -148,7 +148,7 @@ class SettingsViewModelSpec: QuickSpec {
                 }
                 
                 describe("first item") {
-                    it("should be ? item") {
+                    it("should be label item") {
                         let item = sut.sections[5][0]
                         expect(item is LabelItem).to(beTrue())
                     }
@@ -183,7 +183,7 @@ class SettingsViewModelSpec: QuickSpec {
                 }
                 
                 describe("first item") {
-                    it("should be switch item") {
+                    it("should be label item") {
                         let item = sut.sections[0][0]
                         expect(item is LabelItem).to(beTrue())
                     }
@@ -281,7 +281,7 @@ class SettingsViewModelSpec: QuickSpec {
                 }
 
                 describe("first item") {
-                    it("should be ? item") {
+                    it("should be label item") {
                         let item = sut.sections[4][0]
                         expect(item is LabelItem).to(beTrue())
                     }
@@ -295,7 +295,7 @@ class SettingsViewModelSpec: QuickSpec {
                 }
                 
                 describe("first item") {
-                    it("should be ? item") {
+                    it("should be label item") {
                         let item = sut.sections[5][0]
                         expect(item is LabelItem).to(beTrue())
                     }
