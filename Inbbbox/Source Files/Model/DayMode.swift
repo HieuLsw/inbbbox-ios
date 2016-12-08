@@ -141,6 +141,10 @@ struct DayMode: ColorModeType {
     var shotDetailsHeaderViewBackground: UIColor {
         return .RGBA(246, 248, 248, 1)
     }
+    
+    var shotDetailsAttachmentViewBackground: UIColor {
+        return .RGBA(43, 49, 51, 1)
+    }
 
     var shotDetailsOperationViewBackground: UIColor {
         return .RGBA(246, 248, 248, 1)
