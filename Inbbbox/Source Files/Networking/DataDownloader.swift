@@ -36,7 +36,6 @@ class DataDownloader: NSObject {
                                          delegate: self,
                                          delegateQueue: nil)
         if let task = session?.dataTask(with: url) {
-            print("add new task \(task.hash)")
             tasks.append(task)
             task.resume()
         }

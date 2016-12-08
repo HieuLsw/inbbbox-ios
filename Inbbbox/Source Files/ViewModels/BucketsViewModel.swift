@@ -156,8 +156,13 @@ extension BucketsViewModel {
                 let allShotsImagesURLs = shots.map {
                     $0.shotImage.teaserURL
                 }
-                self.shotsImagesURLs = Array(Array(Array(repeating: allShotsImagesURLs,
-                        count: 4).joined())[0 ... 3]) as [URL]?
+
+                if allShotsImagesURLs.count >= 4 {
+                    self.shotsImagesURLs = Array(allShotsImagesURLs.prefix(4))
+                } else {
+                    let repeatedValues = Array(repeating: allShotsImagesURLs, count: 4).flatMap{$0}
+                    self.shotsImagesURLs = Array(repeatedValues.prefix(4))
+                }
             } else {
                 self.shotsImagesURLs = nil
             }
