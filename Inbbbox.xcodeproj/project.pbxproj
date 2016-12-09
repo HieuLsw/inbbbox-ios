@@ -188,6 +188,7 @@
 		6EE3ADF049521783584147F1 /* CommentSpecExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07447536EECCE679E481DD12 /* CommentSpecExtension.swift */; };
 		706212225CCFF89D35423D58 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D86F0D3CB41BCD1D56D9AC5 /* AvatarView.swift */; };
 		70A9390D8C1FC18E771C9A21 /* FollowUserQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A8EC52138981168880334D /* FollowUserQuerySpec.swift */; };
+		7375CF971DFABFC400E9A299 /* NightModeHoursProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */; };
 		738000923C392AA96CEB1C32 /* APIBucketsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74061C3F8179787B1B2A764F /* APIBucketsProviderSpec.swift */; };
 		741557631DA7D54500767008 /* ShotLikesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741557621DA7D54500767008 /* ShotLikesQuery.swift */; };
 		742F7F7C45218BBF696179BD /* RemoveFromBucketQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1B71814BD31275DACE75B1 /* RemoveFromBucketQuery.swift */; };
@@ -316,7 +317,6 @@
 		C6745B7D1DB74371004D3D8E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6745B7C1DB74371004D3D8E /* AlertViewController.swift */; };
 		C6A336791DF749D200357D2A /* SettingsItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A336781DF749D200357D2A /* SettingsItemsProvider.swift */; };
 		C6A3367C1DF74A2E00357D2A /* EstimatedLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */; };
-		C6A3367D1DF74A2E00357D2A /* NightModeHoursProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */; };
 		C6B095481DF19F88002806A0 /* EstimatedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095471DF19F88002806A0 /* EstimatedLocation.swift */; };
 		C6B0954C1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0954B1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift */; };
 		C6B0954E1DF1C859002806A0 /* UserLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = C6B0954D1DF1C859002806A0 /* UserLocation.json */; };
@@ -2204,6 +2204,7 @@
 				B4106314FAE6A26929E31986 /* AutoSizable.swift in Sources */,
 				EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */,
 				F0EE2870B58F0E2F0AEF5922 /* AvatarSettable.swift in Sources */,
+				7375CF971DFABFC400E9A299 /* NightModeHoursProvider.swift in Sources */,
 				4BF656476671DC5B75114E81 /* BaseCollectionViewViewModel.swift in Sources */,
 				305A85061DDAFD90008EF410 /* ColorModeProvider.swift in Sources */,
 				29DDC14156FF381F6D4084FC /* InfoShotsCellConfigurable.swift in Sources */,
