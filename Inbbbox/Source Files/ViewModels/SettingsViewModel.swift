@@ -37,40 +37,8 @@ class SettingsViewModel: GroupedListViewModel {
     fileprivate weak var delegate: ModelUpdatable?
     fileprivate weak var alertDelegate: AlertDisplayable?
     fileprivate weak var flashMessageDelegate: FlashMessageDisplayable?
-
-    fileprivate let createAccountTitle = NSLocalizedString("SettingsViewModel.CreateAccount",
-                                                       comment: "Button text allowing user to create new account.")
-    fileprivate let reminderTitle = NSLocalizedString("SettingsViewModel.EnableDailyReminders",
-                                                  comment: "User settings, enable daily reminders")
-    fileprivate let reminderDateTitle = NSLocalizedString("SettingsViewModel.SendDailyReminders",
-                                                      comment: "User settings, send daily reminders")
-    fileprivate let followingStreamSourceTitle = NSLocalizedString("SettingsViewModel.Following",
-                                                               comment: "User settings, enable following")
-    fileprivate let newTodayStreamSourceTitle = NSLocalizedString("SettingsViewModel.NewToday",
-                                                              comment: "User settings, enable new today.")
-    fileprivate let popularTodayStreamSourceTitle = NSLocalizedString("SettingsViewModel.Popular",
-                                                                  comment: "User settings, enable popular today.")
-    fileprivate let debutsStreamSourceTitle = NSLocalizedString("SettingsViewModel.Debuts",
-                                                            comment: "User settings, show debuts.")
-    fileprivate let shotAuthorTitle = NSLocalizedString("SettingsViewModel.DisplayAuthor",
-                                                    comment: "User Settings, show author.")
-    fileprivate let nightModeTitle = NSLocalizedString("SettingsViewModel.NightMode", comment: "User Settings, night mode.")
-    fileprivate let autoNightModeTitle = NSLocalizedString("SettingsViewModel.AutoNightMode", comment: "User Settings, auto night mode.")
-    fileprivate let sendFeedbackTitle = NSLocalizedString("SettingsViewModel.SendFeedback",
-                                                    comment: "User Settings, send settings.")
-
-    fileprivate let createAccountItem: LabelItem
-    fileprivate let reminderItem: SwitchItem
-    fileprivate let reminderDateItem: DateItem
-    fileprivate let followingStreamSourceItem: SwitchItem
-    fileprivate let newTodayStreamSourceItem: SwitchItem
-    fileprivate let popularTodayStreamSourceItem: SwitchItem
-    fileprivate let debutsStreamSourceItem: SwitchItem
-    fileprivate let showAuthorItem: SwitchItem
-    fileprivate let nightModeItem: SwitchItem
-    fileprivate let autoNightModeItem: SwitchItem
-    fileprivate let acknowledgementItem: LabelItem
-    fileprivate let sendFeedbackItem: LabelItem
+    
+    fileprivate let allItems = SettingsItemsProvider()
     
     var loggedInUser: User? {
         return UserStorage.currentUser
@@ -85,44 +53,22 @@ class SettingsViewModel: GroupedListViewModel {
         flashMessageDelegate = delegate as? FlashMessageDisplayable
         userMode = UserStorage.isUserSignedIn ? .loggedUser : .demoUser
 
-        // MARK: Create items
-
-        createAccountItem = LabelItem(title: createAccountTitle)
-
-        reminderItem = SwitchItem(title: reminderTitle, enabled: Settings.Reminder.Enabled)
-        reminderDateItem = DateItem(title: reminderDateTitle, date: Settings.Reminder.Date)
-
-        followingStreamSourceItem = SwitchItem(title: followingStreamSourceTitle,
-                enabled: Settings.StreamSource.Following)
-        newTodayStreamSourceItem = SwitchItem(title: newTodayStreamSourceTitle,
-                enabled: Settings.StreamSource.NewToday)
-        popularTodayStreamSourceItem = SwitchItem(title: popularTodayStreamSourceTitle,
-                                                  enabled: Settings.StreamSource.PopularToday)
-
-        debutsStreamSourceItem = SwitchItem(title: debutsStreamSourceTitle, enabled: Settings.StreamSource.Debuts)
-
-        showAuthorItem = SwitchItem(title: shotAuthorTitle, enabled: Settings.Customization.ShowAuthor)
-        nightModeItem = SwitchItem(title: nightModeTitle, enabled: Settings.Customization.NightMode)
-        autoNightModeItem = SwitchItem(title: autoNightModeTitle, enabled: Settings.Customization.AutoNightMode)
-        sendFeedbackItem = LabelItem(title: sendFeedbackTitle)
-
-        let aTitle = NSLocalizedString("SettingsViewModel.AcknowledgementsButton", comment: "Acknowledgements button")
-        acknowledgementItem = LabelItem(title: aTitle)
         var items: [[GroupItem]]
         if userMode == .loggedUser {
-            items = [[reminderItem, reminderDateItem],
-                     [followingStreamSourceItem, newTodayStreamSourceItem,
-                      popularTodayStreamSourceItem, debutsStreamSourceItem],
-                     [showAuthorItem, nightModeItem, autoNightModeItem],
-                     [sendFeedbackItem],
-                     [acknowledgementItem]]
+            items = [[allItems.showMyProfileItem],
+                     [allItems.reminderItem, allItems.reminderDateItem],
+                     [allItems.followingStreamSourceItem, allItems.newTodayStreamSourceItem,
+                      allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
+                     [allItems.showAuthorItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.sendFeedbackItem],
+                     [allItems.acknowledgementItem]]
         } else {
-            items = [[createAccountItem],
-                     [reminderItem, reminderDateItem],
-                     [newTodayStreamSourceItem, popularTodayStreamSourceItem, debutsStreamSourceItem],
-                     [showAuthorItem, nightModeItem, autoNightModeItem],
-                     [sendFeedbackItem],
-                     [acknowledgementItem]]
+            items = [[allItems.createAccountItem],
+                     [allItems.reminderItem, allItems.reminderDateItem],
+                     [allItems.newTodayStreamSourceItem, allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
+                     [allItems.showAuthorItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.sendFeedbackItem],
+                     [allItems.acknowledgementItem]]
         }
 
         // MARK: Super init
@@ -155,15 +101,38 @@ class SettingsViewModel: GroupedListViewModel {
     }
 
     func updateStatus() {
-        reminderItem.enabled = Settings.Reminder.Enabled
+        allItems.reminderItem.enabled = Settings.Reminder.Enabled
         if let date = Settings.Reminder.Date {
-            reminderDateItem.date = date
+            allItems.reminderDateItem.date = date
         }
-        followingStreamSourceItem.enabled = Settings.StreamSource.Following
-        newTodayStreamSourceItem.enabled = Settings.StreamSource.NewToday
-        popularTodayStreamSourceItem.enabled = Settings.StreamSource.PopularToday
-        debutsStreamSourceItem.enabled = Settings.StreamSource.Debuts
-        showAuthorItem.enabled = Settings.Customization.ShowAuthor
+        allItems.followingStreamSourceItem.enabled = Settings.StreamSource.Following
+        allItems.newTodayStreamSourceItem.enabled = Settings.StreamSource.NewToday
+        allItems.popularTodayStreamSourceItem.enabled = Settings.StreamSource.PopularToday
+        allItems.debutsStreamSourceItem.enabled = Settings.StreamSource.Debuts
+        allItems.showAuthorItem.enabled = Settings.Customization.ShowAuthor
+    }
+    
+    func titleFor(section: Int) -> String? {
+        let notificationsTitle = NSLocalizedString("SettingsViewController.Notifications",
+                                                   comment: "Title of group of buttons for notifications settings")
+        let streamSourcesTitle = NSLocalizedString("SettingsViewController.StreamSource",
+                                                   comment: "Title of group of buttons for stream source settings")
+        let customizationTitle = NSLocalizedString("SettingsViewController.Customization",
+                                                   comment: "Title of group of buttons for customization settings")
+        let feedbackTitle = NSLocalizedString("SettingsViewModel.Feedback",
+                                              comment: "Title of group of buttons for sending feedback")
+        
+        switch section {
+            case 1: return notificationsTitle
+            case 2: return streamSourcesTitle
+            case 3: return customizationTitle
+            case 4: return feedbackTitle
+            default: return nil
+        }
+    }
+    
+    func heightForHeaderIn(section: Int) -> CGFloat {
+        return userMode == .loggedUser && section == 0 ? 0 : 44.0
     }
 }
 
@@ -172,17 +141,24 @@ class SettingsViewModel: GroupedListViewModel {
 private extension SettingsViewModel {
 
     func configureItemsActions() {
-        createAccountItem.onSelect = {
+        allItems.createAccountItem.onSelect = {
             [weak self] in
             self?.settingsViewController?.authenticateUser()
         }
+        
+        allItems.showMyProfileItem.onSelect = { [weak self] in
+            if let user = self?.loggedInUser {
+                let viewController = ProfileViewController(user: user)
+                self?.settingsViewController?.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
 
-        acknowledgementItem.onSelect = {
+        allItems.acknowledgementItem.onSelect = {
             [weak self] in
             self?.settingsViewController?.presentAcknowledgements()
         }
         
-        sendFeedbackItem.onSelect = {
+        allItems.sendFeedbackItem.onSelect = {
             [weak self] in
             if MFMailComposeViewController.canSendMail() {
                 let mailComposer = MFMailComposeViewController()
@@ -199,7 +175,7 @@ private extension SettingsViewModel {
 
         // MARK: onValueChanged blocks
 
-        reminderItem.valueChanged = {
+        allItems.reminderItem.valueChanged = {
             newValue in
             Settings.Reminder.Enabled = newValue
             if newValue == true {
@@ -214,50 +190,50 @@ private extension SettingsViewModel {
             AnalyticsManager.trackSettingChanged(.dailyRemainderEnabled, state: newValue)
         }
 
-        reminderDateItem.onValueChanged = { date -> Void in
-            if self.reminderItem.enabled {
+        allItems.reminderDateItem.onValueChanged = { date -> Void in
+            if self.allItems.reminderItem.enabled {
                 self.registerLocalNotification()
             }
             Settings.Reminder.Date = date
         }
 
-        followingStreamSourceItem.valueChanged = { newValue in
+        allItems.followingStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.Following = newValue
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.followingStreamSource, state: newValue)
         }
 
-        newTodayStreamSourceItem.valueChanged = { newValue in
+        allItems.newTodayStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.NewToday = newValue
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.newTodayStreamSource, state: newValue)
         }
 
-        popularTodayStreamSourceItem.valueChanged = { newValue in
+        allItems.popularTodayStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.PopularToday = newValue
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.popularTodayStreamSource, state: newValue)
         }
 
-        debutsStreamSourceItem.valueChanged = { newValue in
+        allItems.debutsStreamSourceItem.valueChanged = { newValue in
             Settings.StreamSource.Debuts = newValue
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.debutsStreamSource, state: newValue)
         }
 
-        showAuthorItem.valueChanged = { newValue in
+        allItems.showAuthorItem.valueChanged = { newValue in
             Settings.Customization.ShowAuthor = newValue
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.authorOnHomeScreen, state: newValue)
         }
         
-        nightModeItem.valueChanged = { newValue in
+        allItems.nightModeItem.valueChanged = { newValue in
             Settings.Customization.NightMode = newValue
             ColorModeProvider.change(to: newValue ? .nightMode : .dayMode)
             AnalyticsManager.trackSettingChanged(.nightMode, state: newValue)
         }
         
-        autoNightModeItem.valueChanged = { newValue in
+        allItems.autoNightModeItem.valueChanged = { newValue in
             Settings.Customization.AutoNightMode = newValue
             AnalyticsManager.trackSettingChanged(.autoNightMode, state: newValue)
         }
@@ -279,15 +255,15 @@ private extension SettingsViewModel {
     func registerLocalNotification() {
 
         let localNotification = LocalNotificationRegistrator.registerNotification(
-        forUserID: loggedInUser?.identifier ?? "userID", time: reminderDateItem.date)
+        forUserID: loggedInUser?.identifier ?? "userID", time: allItems.reminderDateItem.date)
 
         if localNotification == nil {
 
             alertDelegate?.displayAlert(preparePermissionsAlert())
 
-            reminderItem.enabled = false
+            allItems.reminderItem.enabled = false
             Settings.Reminder.Enabled = false
-            delegate?.didChangeItemsAtIndexPaths(indexPathsForItems([reminderItem])!)
+            delegate?.didChangeItemsAtIndexPaths(indexPathsForItems([allItems.reminderItem])!)
         }
     }
 

@@ -130,16 +130,16 @@ struct NightMode: ColorModeType {
         return .darkGrayNightMode()
     }
     
-    var bucketsCollectionViewBackground: UIColor {
-        return .darkGrayNightMode()
-    }
-    
     var emptyBucketImageName: String {
         return "ic-bucket-emptystate-night"
     }
 
     var shotDetailsHeaderViewBackground: UIColor {
         return .darkGrayNightMode()
+    }
+    
+    var shotDetailsAttachmentViewBackground: UIColor {
+        return .RGBA(51, 51, 51, 1)
     }
 
     var shotDetailsOperationViewBackground: UIColor {
@@ -162,7 +162,11 @@ struct NightMode: ColorModeType {
     var twoLayoutsCollectionViewBackground: UIColor {
         return .darkGrayNightMode()
     }
-    
+
+    var bucketsCollectionViewBackground: UIColor {
+        return .darkGrayNightMode()
+    }
+
     // MARK: Shot Detail
     var shotDetailsHeaderViewTitleLabelTextColor: UIColor {
         return .white
@@ -289,6 +293,10 @@ struct NightMode: ColorModeType {
     
     var visualEffectBlurType: UIBlurEffectStyle {
         return .dark
+    }
+
+    var collectionViewBackgroundColor: UIColor {
+        return .darkGrayNightMode()
     }
     
     func isEqualTo(_ other: ColorModeType) -> Bool {

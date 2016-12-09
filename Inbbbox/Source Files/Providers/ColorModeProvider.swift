@@ -73,8 +73,7 @@ final class ColorModeProvider {
         ShotDetailsCommentCollectionViewCell.appearance().backgroundColor = mode.shotDetailsCommentCollectionViewCellBackground
         ProfileHeaderView.appearance().backgroundColor = mode.profileHeaderViewBackground
 
-        UICollectionView.appearance(whenContainedInInstancesOf: [TwoLayoutsCollectionViewController.self]).backgroundColor = mode.twoLayoutsCollectionViewBackground
-        UICollectionView.appearance(whenContainedInInstancesOf: [BucketsCollectionViewController.self]).backgroundColor = mode.bucketsCollectionViewBackground
+        UICollectionView.appearance().backgroundColor = mode.collectionViewBackgroundColor
 
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().barStyle = .black

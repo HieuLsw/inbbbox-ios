@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 
-class UserDetailsViewModel: ProfileViewModel {
+class UserDetailsViewModel: ProfileViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
@@ -100,6 +100,8 @@ class UserDetailsViewModel: ProfileViewModel {
 
             firstly {
                 connectionsRequester.followUser(user)
+            }.then {
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }

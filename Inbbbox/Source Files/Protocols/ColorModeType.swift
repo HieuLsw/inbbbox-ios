@@ -60,6 +60,7 @@ protocol ColorModeType {
 
     // MARK: Shot Details
     var shotDetailsHeaderViewBackground: UIColor { get }
+    var shotDetailsAttachmentViewBackground: UIColor { get }
     var shotDummySpaceBackground: UIColor { get }
     var shotDetailsOperationViewBackground: UIColor { get }
     var shotDetailsDescriptionCollectionViewCellBackground: UIColor { get }
@@ -116,6 +117,7 @@ protocol ColorModeType {
     var cellSeparator: UIColor { get }
     var activityIndicatorViewStyle: UIActivityIndicatorViewStyle { get }
     var visualEffectBlurType: UIBlurEffectStyle { get }
+    var collectionViewBackgroundColor: UIColor { get }
     
     func isEqualTo(_ other: ColorModeType) -> Bool
 }

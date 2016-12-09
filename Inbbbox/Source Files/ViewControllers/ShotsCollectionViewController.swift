@@ -7,7 +7,7 @@ import PromiseKit
 import SwiftyUserDefaults
 import PeekPop
 
-class ShotsCollectionViewController: UICollectionViewController {
+class ShotsCollectionViewController: UICollectionViewController, Vibratable {
 
     enum State {
         case onboarding, initialAnimations, normal
@@ -234,9 +234,11 @@ fileprivate extension ShotsCollectionViewController {
         if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, let centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
             normalStateHandler.didLikeShotCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.likes)
+                self.vibrate(feedbackType: .success)
             }
             normalStateHandler.didAddShotToBucketCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.buckets)
+                self.vibrate(feedbackType: .success)
             }
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)

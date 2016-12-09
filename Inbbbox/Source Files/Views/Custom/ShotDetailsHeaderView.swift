@@ -106,7 +106,7 @@ class ShotDetailsHeaderView: UICollectionReusableView, Reusable {
 
         setNeedsUpdateConstraints()
         
-        attachmentContainer.backgroundColor = UIColor.RGBA(43, 49, 51, 1)
+        attachmentContainer.backgroundColor = ColorModeProvider.current().shotDetailsAttachmentViewBackground
         insertSubview(attachmentContainer, aboveSubview: titleLabel)
         
         attachmentsCollectionView.register(AttachmentCollectionViewCell.self, forCellWithReuseIdentifier: AttachmentCollectionViewCell.identifier)
