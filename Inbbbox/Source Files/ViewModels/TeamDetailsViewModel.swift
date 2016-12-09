@@ -39,6 +39,7 @@ class TeamDetailsViewModel: ProfileViewModel {
     fileprivate let connectionsRequester = APIConnectionsRequester()
     fileprivate let teamsProvider = APITeamsProvider()
     fileprivate let shotsProvider = ShotsProvider()
+    fileprivate var teamMembersDuringDownload = [UserType]()
 
     fileprivate let team: TeamType
 
@@ -53,33 +54,21 @@ class TeamDetailsViewModel: ProfileViewModel {
         }.then { teamMembers -> Void in
             if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers
-                self.downloadShots(teamMembers)
                 self.delegate?.viewModelDidLoadInitialItems()
             }
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
+    
+    func downloadItemsForNextPage() { /* empty */ }
 
-    func downloadItemsForNextPage() {
-
-        firstly {
-            teamsProvider.nextPage()
-        }.then { teamMembers -> Void in
-            if let teamMembers = teamMembers, teamMembers.count > 0 {
-                let indexes = teamMembers.enumerated().map { index, _ in
-                    return index + self.teamMembers.count
-                }
-                self.teamMembers.append(contentsOf: teamMembers)
-                let indexPaths = indexes.map {
-                    IndexPath(row: ($0), section: 0)
-                }
-                self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
-                self.downloadShots(teamMembers)
-            }
-        }.catch { error in
-            self.notifyDelegateAboutFailure(error)
-        }
+    func downloadItem(at index: Int) {
+        guard teamMembers.count > index else { return }
+        let member = teamMembers[index]
+        guard !teamMembersDuringDownload.contains(where: { (m) -> Bool in return m == member }) else { return }
+        
+        downloadShots(for: member)
     }
 
     func isProfileFollowedByMe() -> Promise<Bool> {
@@ -157,31 +146,44 @@ extension TeamDetailsViewModel {
 }
 
 private extension TeamDetailsViewModel {
-    func downloadShots(_ teamMembers: [UserType]) {
+    func downloadShots(for teamMembers: [UserType]) {
         for member in teamMembers {
-            firstly {
-                shotsProvider.provideShotsForUser(member)
-            }.then { shots -> Void in
-                var indexOfMember: Int?
-                for (index, item) in self.teamMembers.enumerated() {
-                    if item.identifier == member.identifier {
-                        indexOfMember = index
-                        break
-                    }
-                }
-
-                guard let index = indexOfMember else { return }
-
-                if let shots = shots {
-                    self.memberIndexedShots[index] = shots
-                } else {
-                    self.memberIndexedShots[index] = [ShotType]()
-                }
-                let indexPath = IndexPath(row: index, section: 0)
-                self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
-            }.catch { error in
-                self.notifyDelegateAboutFailure(error)
-            }
+            downloadShots(for: member)
         }
     }
+    
+    func downloadShots(for member: UserType) {
+        teamMembersDuringDownload.append(member)
+        firstly {
+            shotsProvider.provideShotsForUser(member)
+        }.then { shots -> Void in
+            var indexOfMember: Int?
+            for (index, item) in self.teamMembers.enumerated() {
+                if item.identifier == member.identifier {
+                    indexOfMember = index
+                    break
+                }
+            }
+            
+            guard let index = indexOfMember else { return }
+            
+            if let shots = shots {
+                self.memberIndexedShots[index] = shots
+            } else {
+                self.memberIndexedShots[index] = [ShotType]()
+            }
+            let indexPath = IndexPath(row: index, section: 0)
+            self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+        }.catch { error in
+            self.notifyDelegateAboutFailure(error)
+        }.always {
+            self.removeFromFolloweesDuringDownload(member)
+        }
+    }
+    
+    func removeFromFolloweesDuringDownload(_ followee: UserType) {
+        guard let indexForRemove = teamMembersDuringDownload.index(where: { (f) -> Bool in return f == followee }) else { return }
+        teamMembersDuringDownload.remove(at: indexForRemove)
+    }
+
 }

@@ -45,6 +45,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
     var dismissClosure: (() -> Void)?
 
     var modalTransitionAnimator: ZFModalTransitionAnimator?
+    
+    var userAlreadyFollowed = false
 
     override var containsHeader: Bool {
         return true
@@ -131,14 +133,13 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         super.viewDidAppear(animated)
 
         guard viewModel.shouldShowFollowButton else { return }
-
-        firstly {
-            viewModel.isProfileFollowedByMe()
-        }.then { followed in
-            self.header?.userFollowed = followed
-        }.then { _ in
-            self.header?.stopActivityIndicator()
-        }.catch { _ in }
+        
+        guard !userAlreadyFollowed else {
+            userIsAlreadyFollowed()
+            return
+        }
+        
+        checkIfUserIsFollowed()
     }
 }
 
@@ -291,8 +292,16 @@ extension ProfileViewController {
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.itemsCount - 1 {
-            viewModel.downloadItemsForNextPage()
+        
+        switch viewModel {
+        case is UserDetailsViewModel:
+            if indexPath.row == viewModel.itemsCount - 1 {
+                (viewModel as! UserDetailsViewModel).downloadItemsForNextPage()
+            }
+        case is TeamDetailsViewModel:
+            (viewModel as! TeamDetailsViewModel).downloadItem(at: indexPath.row)
+        default:
+            break
         }
     }
 
@@ -381,6 +390,21 @@ private extension ProfileViewController {
     dynamic func didTapLeftBarButtonItem() {
         dismissClosure?()
         dismiss(animated: true, completion: nil)
+    }
+    
+    func userIsAlreadyFollowed() {
+        header?.userFollowed = userAlreadyFollowed
+        self.header?.stopActivityIndicator()
+    }
+    
+    func checkIfUserIsFollowed() {
+        firstly {
+            viewModel.isProfileFollowedByMe()
+        }.then { followed in
+            self.header?.userFollowed = followed
+        }.then { _ in
+            self.header?.stopActivityIndicator()
+        }.catch { _ in }
     }
 }
 

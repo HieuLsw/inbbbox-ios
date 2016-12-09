@@ -79,7 +79,9 @@ class UserDetailsViewModel: ProfileViewModel {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     // MARK: Users section
 
     func isProfileFollowedByMe() -> Promise<Bool> {
