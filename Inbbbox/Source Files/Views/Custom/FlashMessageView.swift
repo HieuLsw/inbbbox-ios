@@ -66,7 +66,7 @@ final class FlashMessageView: UIView {
         return Style(
             backgroundColor: UIColor.black,
             textColor: UIColor.white,
-            titleFont: UIFont.sanFransiscoFont(ofSize: 16)
+            titleFont: UIFont.systemFont(ofSize: 16)
         )
     }()
     
@@ -159,7 +159,7 @@ final class FlashMessageView: UIView {
         titleLabel.textColor = fontColor
         titleLabel.backgroundColor = UIColor.clear
         
-        titleLabel.font = style.titleFont ?? UIFont.sanFransiscoFont(withType: .bold, size: 14)
+        titleLabel.font = style.titleFont ?? UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         addSubview(titleLabel)

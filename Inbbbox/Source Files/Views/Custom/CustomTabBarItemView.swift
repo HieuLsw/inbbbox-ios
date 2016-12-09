@@ -15,7 +15,7 @@ class CustomTabBarItemView: UIView {
     init(name: String? = nil, icon: UIImage?) {
         super.init(frame: CGRect.zero)
 
-        nameLabel.font = UIFont.sanFransiscoFont(ofSize: 10)
+        nameLabel.font = UIFont.systemFont(ofSize: 10)
         nameLabel.textColor = ColorModeProvider.current().tabBarNormalItemTextColor
         nameLabel.text = name
         addSubview(nameLabel)

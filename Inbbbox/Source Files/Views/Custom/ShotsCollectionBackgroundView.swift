@@ -69,7 +69,7 @@ class ShotsCollectionBackgroundView: UIView {
         setupSkipButton()
         
         showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
-        showingYouLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 15)
+        showingYouLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
         showingYouLabel.alpha = 0
         addSubview(showingYouLabel)
@@ -149,7 +149,7 @@ fileprivate extension ShotsCollectionBackgroundView {
         debutsItem.label.text = NSLocalizedString("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
         for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
             item.label.textAlignment = .center
-            item.label.font = UIFont.sanFransiscoFont(withType: .light, size: 15)
+            item.label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
             item.label.textColor = UIColor.RGBA(143, 142, 148, 1)
             item.label.alpha = 0
             containerView.addSubview(item.label)
@@ -159,7 +159,7 @@ fileprivate extension ShotsCollectionBackgroundView {
     
     func setupShowingYouLabel() {
         showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
-        showingYouLabel.font = UIFont.sanFransiscoFont(withType: .regular, size: 15)
+        showingYouLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
         showingYouLabel.alpha = 0
         addSubview(showingYouLabel)
@@ -167,7 +167,7 @@ fileprivate extension ShotsCollectionBackgroundView {
     
     func setupSkipButton() {
         skipButton.setTitle(NSLocalizedString("ShotsOnboardingStateHandler.Skip", comment: "Onboarding user is skipping step"), for: .normal)
-        skipButton.titleLabel?.font = UIFont.sanFransiscoFont(withType: .light, size: 16)
+        skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightLight)
         skipButton.setTitleColor(UIColor.black, for: .normal)
         skipButton.isHidden = true
         skipButton.alpha = 0

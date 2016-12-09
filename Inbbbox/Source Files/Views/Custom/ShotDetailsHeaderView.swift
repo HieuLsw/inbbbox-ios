@@ -214,7 +214,7 @@ class ShotDetailsHeaderView: UICollectionReusableView, Reusable {
     func setLinkInTitle(_ URL: URL, range: NSRange, delegate: TTTAttributedLabelDelegate) {
         let linkAttributes = [
                 NSForegroundColorAttributeName: UIColor.pinkColor(),
-                NSFontAttributeName: UIFont.sanFransiscoFont(ofSize: 14)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 14)
         ]
         titleLabel.linkAttributes = linkAttributes
         titleLabel.activeLinkAttributes = linkAttributes

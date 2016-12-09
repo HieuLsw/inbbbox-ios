@@ -72,7 +72,7 @@ class ShotBucketsHeaderView: UICollectionReusableView, Reusable {
 
         headerTitleLabel.backgroundColor = .clear
         headerTitleLabel.textColor = .white
-        headerTitleLabel.font = UIFont.sanFransiscoFont(withType: .medium, size: 16)
+        headerTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         addSubview(headerTitleLabel)
 
         addSubview(closeButtonView)
@@ -161,7 +161,7 @@ class ShotBucketsHeaderView: UICollectionReusableView, Reusable {
     func setLinkInTitle(_ URL: URL, range: NSRange, delegate: TTTAttributedLabelDelegate) {
         let linkAttributes = [
                 NSForegroundColorAttributeName: UIColor.pinkColor(),
-                NSFontAttributeName: UIFont.sanFransiscoFont(ofSize: 14)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 14)
         ]
         titleLabel.linkAttributes = linkAttributes
         titleLabel.activeLinkAttributes = linkAttributes

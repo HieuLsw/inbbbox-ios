@@ -37,11 +37,11 @@ class BaseInfoShotsCollectionViewCell: UICollectionViewCell {
      func commonInit() {
 
         nameLabel.textColor = UIColor.pinkColor()
-        nameLabel.font = UIFont.sanFransiscoFont(withType: .medium, size: 13)
+        nameLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
         infoView.addSubview(nameLabel)
 
         numberOfShotsLabel.textColor = UIColor.followeeTextGrayColor()
-        numberOfShotsLabel.font = UIFont.sanFransiscoFont(ofSize: 10)
+        numberOfShotsLabel.font = UIFont.systemFont(ofSize: 10)
         infoView.addSubview(numberOfShotsLabel)
 
         shotsView.layer.cornerRadius = 5

@@ -49,7 +49,7 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         if shouldShowButton {
             button.setTitleColor(.white, for: UIControlState())
             button.setTitleColor(UIColor(white: 1, alpha: 0.2), for: .highlighted)
-            button.titleLabel?.font = UIFont.sanFransiscoFont(withType: .regular, size: 14)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
             button.layer.borderColor = UIColor.white.cgColor
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 13, bottom: 5, right: 13)
             button.layer.borderWidth = 1

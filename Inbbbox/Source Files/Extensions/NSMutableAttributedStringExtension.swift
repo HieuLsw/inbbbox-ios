@@ -19,7 +19,7 @@ extension NSMutableAttributedString {
     ///
     /// - returns: Attributed string based on given string.
     class func emptyDataSetStyledString(_ string: String) -> NSMutableAttributedString {
-        let attributes = [NSFontAttributeName: UIFont.sanFransiscoFont(withType: .light, size: 25),
+        let attributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 25, weight: UIFontWeightLight),
                NSForegroundColorAttributeName: UIColor.cellBackgroundColor()]
         return NSMutableAttributedString(string: string, attributes: attributes)
     }

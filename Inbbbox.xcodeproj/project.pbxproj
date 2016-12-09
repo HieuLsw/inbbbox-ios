@@ -229,7 +229,6 @@
 		8BB7A817EF3D83F73906B368 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B75854D574F24ACCF457CB1 /* ViewControllerPresenter.swift */; };
 		8BF3559B4E11B923E5D74DF8 /* ShotsNormalStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C293E57C35C383AA44755DAF /* ShotsNormalStateHandler.swift */; };
 		8BF8A3D101DD2E4C488CE1B8 /* MockLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AF24D6B4F6285AD98F1C38 /* MockLoginService.swift */; };
-		8C3BDA4E0AEC8E1C9489095F /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */; };
 		8C723DA788966C5624A43DC4 /* ShotCellBucketActionAnimationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D958BDB728EAB2BFFB89B /* ShotCellBucketActionAnimationDescriptor.swift */; };
 		8DAAA291E8C2D16BB9FDDDF6 /* ShotCellCommentActionAnimationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57297BA499364ABC0CC7A863 /* ShotCellCommentActionAnimationDescriptor.swift */; };
 		8E1019DBE20EA2A2DBDB8BEB /* BucketsViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C5F88B11663D6651324FF1 /* BucketsViewModelSpec.swift */; };
@@ -532,7 +531,6 @@
 		37CA97648E23F476DA3DF992 /* Acknowledgements.html */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.html; path = Acknowledgements.html; sourceTree = "<group>"; };
 		38A27AB2A3879BEF5DA9B3DA /* Formatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		38E0191B8D67413A4A701EB7 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		394D84B62CE78D2653A1DE8A /* Buckets.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Buckets.json; sourceTree = "<group>"; };
 		397297ADA0D7B1F46850C1D2 /* DoubleImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DoubleImageView.swift; sourceTree = "<group>"; };
 		3A188D9F1CB69C9000E5B011 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -983,7 +981,6 @@
 				76AEBEF3E99213A31557B276 /* UIAlertControllerExtension.swift */,
 				4DEF2820F1D86943E822D3AA /* UICollectionViewExtension.swift */,
 				924CF41C504ED7174FA661DF /* UIColorExtension.swift */,
-				3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */,
 				70A22688C61F1F08F321055C /* UIImageExtension.swift */,
 				1893BC17D59800EAB75DBF92 /* UIImageViewExtension.swift */,
 				2F59A124425AD6181A4B6CF2 /* UINavigationControllerExtension.swift */,
@@ -2082,7 +2079,6 @@
 				94BCC8C5DBEFE5830CC0CC5C /* UIColorExtension.swift in Sources */,
 				BE71499E1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift in Sources */,
 				F0BEBDD71CDA24E200AA391C /* TeamDetailsViewModel.swift in Sources */,
-				8C3BDA4E0AEC8E1C9489095F /* UIFontExtension.swift in Sources */,
 				5867E4FA2C0B1DCBEE5F4CFA /* UIImageExtension.swift in Sources */,
 				21DD0E6EFEEAE9F66E0B0C7D /* UIImageViewExtension.swift in Sources */,
 				F0FD0A841CBE496400735933 /* SimpleShotsCollectionViewController.swift in Sources */,

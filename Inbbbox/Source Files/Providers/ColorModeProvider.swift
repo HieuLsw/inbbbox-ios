@@ -88,7 +88,7 @@ final class ColorModeProvider {
         
         FlashMessageView.defaultStyle = FlashMessageView.Style(backgroundColor: mode.flashMessageBackgroundColor,
                 textColor: mode.flashMessageTextColor,
-                titleFont: UIFont.sanFransiscoFont(withType: .regular, size:14),
+                titleFont: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
                 roundedCorners: [.bottomLeft, .bottomRight], roundSize: CGSize(width: 10, height: 10), padding: 25.0)
         ColorModeProvider.resetViews()
     }
