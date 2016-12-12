@@ -33,7 +33,7 @@ class ShotCollectionViewCell: UICollectionViewCell, Reusable {
     let gifLabel = GifIndicatorView()
     let messageLabel: UILabel = {
         let l = UILabel()
-        l.font = UIFont.helveticaFont(.neueBold, size: 15)
+        l.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightBold)
         l.textColor = .white
         l.textAlignment = .center
         return l
