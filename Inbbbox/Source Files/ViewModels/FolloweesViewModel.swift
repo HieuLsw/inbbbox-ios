@@ -55,7 +55,7 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
         
         downloadShots(for: followee)
     }
-    
+
     func followeeCollectionViewCellViewData(_ indexPath: IndexPath) -> FolloweeCollectionViewCellViewData {
         return FolloweeCollectionViewCellViewData(followee: followees[indexPath.row],
                 shots: followeesIndexedShots[indexPath.row])
