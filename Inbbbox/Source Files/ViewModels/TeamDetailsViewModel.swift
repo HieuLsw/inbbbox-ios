@@ -97,7 +97,7 @@ class TeamDetailsViewModel: ProfileViewModel, Vibratable {
             firstly {
                 connectionsRequester.followTeam(team)
             }.then {
-                self.vibrate(feedbackType: .success)
+                self.vibrate(with: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }

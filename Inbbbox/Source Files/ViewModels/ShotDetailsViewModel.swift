@@ -176,7 +176,7 @@ extension ShotDetailsViewModel: Vibratable {
                     shotLiked ? shotsRequester.unlikeShot(shot) : shotsRequester.likeShot(shot)
                 }.then { _ -> Void in
                     self.isShotLikedByMe = !shotLiked
-                    self.vibrate(feedbackType: .success)
+                    self.vibrate(with: .success)
                     fulfill(!shotLiked)
                 }.catch(execute: reject)
             }

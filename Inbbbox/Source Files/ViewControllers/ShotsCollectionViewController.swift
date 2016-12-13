@@ -66,9 +66,7 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
-        
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+        add3DSupportForOlderDevices()
     }
     
     
@@ -234,11 +232,11 @@ fileprivate extension ShotsCollectionViewController {
         if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, let centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
             normalStateHandler.didLikeShotCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.likes)
-                self.vibrate(feedbackType: .success)
+                self.vibrate(with: .success)
             }
             normalStateHandler.didAddShotToBucketCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.buckets)
-                self.vibrate(feedbackType: .success)
+                self.vibrate(with: .success)
             }
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)
@@ -277,6 +275,12 @@ fileprivate extension ShotsCollectionViewController {
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
     }
+    
+    func add3DSupportForOlderDevices() {
+        guard traitCollection.forceTouchCapability == .unavailable else { return }
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
@@ -309,12 +313,15 @@ extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
-            let visibleCell = collectionView?.visibleCells.first,
+            let collectionView = collectionView,
+            let visibleCell = collectionView.visibleCells.first,
             let normalStateHandler = stateHandler as? ShotsNormalStateHandler,
-            let indexPath = collectionView?.indexPathsForVisibleItems.first
+            let indexPath = collectionView.indexPathsForVisibleItems.first
         else { return nil }
 
-        previewingContext.sourceRect = visibleCell.contentView.bounds
+        let frame = visibleCell.contentView.frame
+        let origin = collectionView.convert(visibleCell.frame.origin, to: view)
+        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
 
         return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
     }
