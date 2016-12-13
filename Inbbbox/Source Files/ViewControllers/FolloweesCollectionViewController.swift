@@ -52,8 +52,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         viewModel.delegate = self
         navigationItem.title = viewModel.title
 
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
+        support3DTouchIfNeeded()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -149,6 +148,15 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     }
 }
 
+private extension FolloweesCollectionViewController {
+    
+    func support3DTouchIfNeeded() {
+        guard DeviceInfo.notsupports3DTouch() else { return }
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+    }
+}
+
 extension FolloweesCollectionViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
@@ -236,11 +244,15 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
-            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
-            let cell = collectionView?.cellForItem(at: indexPath)
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        previewingContext.sourceRect = cell.contentView.bounds
+        let frame = cell.frame
+        let origin = collectionView.convert(cell.frame.origin, to: view)
+        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController

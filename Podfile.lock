@@ -22,7 +22,7 @@ PODS:
   - Mockingjay/XCTest (2.0.0):
     - Mockingjay/Core
   - Nimble (5.1.1)
-  - PeekPop (0.1.8)
+  - PeekPop (1.0.0)
   - PromiseKit (4.0.5):
     - PromiseKit/Foundation (= 4.0.5)
     - PromiseKit/QuartzCore (= 4.0.5)
@@ -59,7 +59,7 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mockingjay (~> 2.0)
   - Nimble (~> 5.0)
-  - PeekPop (from `https://github.com/Myrenkar/PeekPop`, tag `0.1.8`)
+  - PeekPop (from `https://github.com/Myrenkar/PeekPop`, tag `0.1.9`)
   - PromiseKit (~> 4.0)
   - PureLayout (~> 3.0)
   - Quick (~> 0.10)
@@ -85,7 +85,7 @@ EXTERNAL SOURCES:
     :path: Pods/CocoaPodsKeys
   PeekPop:
     :git: https://github.com/Myrenkar/PeekPop
-    :tag: 0.1.8
+    :tag: 0.1.9
 
 CHECKOUT OPTIONS:
   AOAlertController:
@@ -102,7 +102,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Siemian/ImageViewer
   PeekPop:
     :git: https://github.com/Myrenkar/PeekPop
-    :tag: 0.1.8
+    :tag: 0.1.9
 
 SPEC CHECKSUMS:
   AOAlertController: 937352719e3e9df03f0b6b9903665e1eaa76a558
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mockingjay: 7122a3fc0597aa63438e4cd9b71b7bc8aac05b87
   Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
-  PeekPop: 952f7193c35a1eacc041add712a24d54284b053d
+  PeekPop: f8d70aeefdc676881e04f388638e5e6751e0c354
   PromiseKit: 593b5e24ded6cbb1ebc708bc2c3428a8a5632d91
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
   Quick: 5d290df1c69d5ee2f0729956dcf0fd9a30447eaa
@@ -131,6 +131,6 @@ SPEC CHECKSUMS:
   URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 3fd4783905568764c9e9b2e2fc63ff2680e4bfb6
+PODFILE CHECKSUM: 04668a7d4fec4e677bae95c420a31872b3bc95ad
 
 COCOAPODS: 1.1.1
