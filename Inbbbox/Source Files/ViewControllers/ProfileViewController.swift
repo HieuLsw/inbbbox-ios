@@ -124,7 +124,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
 
         setupBackButton()
-        support3DTouchIfNeeded()
+        add3DSupportForOlderDevices()
         viewModel.downloadInitialItems()
     }
 
@@ -384,8 +384,8 @@ private extension ProfileViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func support3DTouchIfNeeded() {
-        guard DeviceInfo.notsupports3DTouch() else { return }
+    func add3DSupportForOlderDevices() {
+        guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }

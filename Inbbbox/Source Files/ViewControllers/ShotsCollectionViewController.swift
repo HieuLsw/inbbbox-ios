@@ -66,7 +66,7 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
-        support3DTouchIfNeeded()
+        add3DSupportForOlderDevices()
     }
     
     
@@ -276,8 +276,8 @@ fileprivate extension ShotsCollectionViewController {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
     }
     
-    func support3DTouchIfNeeded() {
-        guard DeviceInfo.notsupports3DTouch() else { return }
+    func add3DSupportForOlderDevices() {
+        guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }

@@ -57,7 +57,7 @@ extension SimpleShotsCollectionViewController {
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
         
-        support3DTouchIfNeeded()
+        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,8 +73,8 @@ extension SimpleShotsCollectionViewController {
 
 private extension SimpleShotsCollectionViewController {
     
-    func support3DTouchIfNeeded() {
-        guard DeviceInfo.notsupports3DTouch() else { return }
+    func add3DSupportForOlderDevices() {
+        guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
