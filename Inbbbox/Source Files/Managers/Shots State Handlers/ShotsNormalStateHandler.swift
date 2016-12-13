@@ -9,10 +9,9 @@ import ZFDragableModalTransition
 class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
 
     let shotsRequester =  ShotsRequester()
-    let likesProvider = APIShotsProvider(page: 1, pagination: 100)
+    let likesProvider = ShotsProvider()
     var modalTransitionAnimator: ZFModalTransitionAnimator?
     var likedShots = [ShotType]()
-    fileprivate let likesToFetch: UInt = 200
 
     weak var shotsCollectionViewController: ShotsCollectionViewController?
     weak var delegate: ShotsStateHandlerDelegate?
@@ -124,7 +123,7 @@ extension ShotsNormalStateHandler {
             switch action {
             case .like:
                 firstly {
-                    certainSelf.likeShot(shot)
+                    certainSelf.likeShot(shot, at: indexPath.row)
                 }.then {
                     cell.liked = true
                 }.then {
@@ -134,7 +133,7 @@ extension ShotsNormalStateHandler {
                 }
             case .bucket:
                 firstly {
-                    certainSelf.likeShot(shot)
+                    certainSelf.likeShot(shot, at: indexPath.row)
                 }.then {
                     cell.liked = true
                 }.catch { error in
@@ -329,7 +328,7 @@ private extension ShotsNormalStateHandler {
         return likedShot.first ?? shot
     }
 
-    func likeShot(_ shot: ShotType) -> Promise<Void> {
+    func likeShot(_ shot: ShotType, at index: Int) -> Promise<Void> {
         if isShotLiked(shot) {
             return Promise<Void> { fulfill, _ in
                 fulfill()
@@ -339,6 +338,14 @@ private extension ShotsNormalStateHandler {
         return Promise() { fulfill, reject in
             firstly {
                 shotsRequester.likeShot(shot)
+            }.then {
+                self.shotsRequester.fetchShotDetails(shot)
+            }.then { updatedShot -> Void in
+                if let updatedShot = updatedShot as? Shot {
+                    SharedCache.likedShots.append(updatedShot)
+                }
+
+                _ = self.updateShots(with: updatedShot, at: index)
             }.then {
                 self.fetchLikedShots()
             }.then { () -> Void in
@@ -350,15 +357,20 @@ private extension ShotsNormalStateHandler {
         }
     }
 
+    func updateShots(with shot: ShotType, at index: Int) -> Promise<Void> {
+        shotsCollectionViewController?.shots[index] = shot
+        return Promise(value: Void())
+    }
+
     func fetchLikedShots() -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
             firstly {
-                likesProvider.provideLikedShots(likesToFetch)
+                likesProvider.provideMyLikedShots()
             }.then { shots -> Void in
                 if let shots = shots {
                     self.likedShots = shots
                 }
-                }.then(execute: fulfill).catch(execute: reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 

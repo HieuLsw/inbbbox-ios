@@ -384,7 +384,9 @@ private extension ShotDetailsViewController {
             operationalCell.operationView.likeCounterLabel.text = "\(shot.likesCount)"
             operationalCell.operationView.bucketCounterLabel.text = "\(shot.bucketsCount)"
         }
-        self.updatedShotInfo?(shot)
+
+        updatedShotInfo?(shot)
+        viewModel.updateCache(with: shot)
     }
 
     func refreshLikesBucketsCounter() {
