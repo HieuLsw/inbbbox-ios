@@ -232,11 +232,11 @@ fileprivate extension ShotsCollectionViewController {
         if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, let centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
             normalStateHandler.didLikeShotCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.likes)
-                self.vibrate(feedbackType: .success)
+                self.vibrate(with: .success)
             }
             normalStateHandler.didAddShotToBucketCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.buckets)
-                self.vibrate(feedbackType: .success)
+                self.vibrate(with: .success)
             }
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)

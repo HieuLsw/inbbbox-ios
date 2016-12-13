@@ -7,14 +7,14 @@
 //
 
 protocol Vibratable {
-    func vibrate(feedbackType feedbackType: UINotificationFeedbackType)
+    func vibrate(with type: UINotificationFeedbackType)
 }
 
 extension Vibratable {
-    func vibrate(feedbackType feedbackType: UINotificationFeedbackType) {
+    func vibrate(with type: UINotificationFeedbackType) {
         if #available(iOS 10.0, *) {
             let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(feedbackType)
+            generator.notificationOccurred(type)
         }
     }
 }
