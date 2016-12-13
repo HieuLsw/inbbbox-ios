@@ -60,7 +60,9 @@ class LikesViewModel: SimpleShotsViewModel {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     func emptyCollectionDescriptionAttributes() -> EmptyCollectionViewDescription {
         let description = EmptyCollectionViewDescription(
             firstLocalizedString: NSLocalizedString("LikesCollectionView.EmptyData.FirstLocalizedString",

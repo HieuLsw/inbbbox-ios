@@ -75,7 +75,9 @@ class BucketsViewModel: BaseCollectionViewViewModel {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     func downloadShots(_ buckets: [BucketType]) {
         for bucket in buckets {
             firstly {
