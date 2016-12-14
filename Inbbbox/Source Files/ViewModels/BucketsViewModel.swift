@@ -13,12 +13,12 @@ import PromiseKit
 class BucketsViewModel: BaseCollectionViewViewModel {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
-    let shotsProvider = ShotsProvider()
     let title = NSLocalizedString("CenterButtonTabBar.Buckets", comment:"Main view, bottom bar & view title")
     var buckets = [BucketType]()
     var bucketsIndexedShots = [Int: [ShotType]]()
     fileprivate let bucketsProvider = BucketsProvider()
     fileprivate let bucketsRequester = BucketsRequester()
+    fileprivate let shotsProvider = ShotsProvider()
     fileprivate var userMode: UserMode
 
     var itemsCount: Int {
@@ -40,6 +40,7 @@ class BucketsViewModel: BaseCollectionViewViewModel {
                     bucketsShouldBeReloaded = false
                 }
                 self.buckets = buckets
+                self.downloadShots(buckets)
             }
             if bucketsShouldBeReloaded {
                 self.delegate?.viewModelDidLoadInitialItems()
@@ -68,45 +69,48 @@ class BucketsViewModel: BaseCollectionViewViewModel {
                     IndexPath(row: ($0), section: 0)
                 }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
+                self.downloadShots(buckets)
             }
         }.catch { error in
             self.notifyDelegateAboutFailure(error)
         }
     }
 
-    func downloadShots(_ bucket: BucketType) {
-        firstly {
-            shotsProvider.provideShotsForBucket(bucket)
-        }.then {
-            shots -> Void in
-            var bucketShotsShouldBeReloaded = true
-            var indexOfBucket: Int?
-            for (index, item) in self.buckets.enumerated() {
-                if item.identifier == bucket.identifier {
-                    indexOfBucket = index
-                    break
+    func downloadShots(_ buckets: [BucketType]) {
+        for bucket in buckets {
+            firstly {
+                shotsProvider.provideShotsForBucket(bucket)
+            }.then {
+                shots -> Void in
+                var bucketShotsShouldBeReloaded = true
+                var indexOfBucket: Int?
+                for (index, item) in self.buckets.enumerated() {
+                    if item.identifier == bucket.identifier {
+                        indexOfBucket = index
+                        break
+                    }
                 }
-            }
-            guard let index = indexOfBucket else {
-                return
-            }
+                guard let index = indexOfBucket else {
+                    return
+                }
 
-            if let oldShots = self.bucketsIndexedShots[index], let newShots = shots {
-                bucketShotsShouldBeReloaded = oldShots != newShots
-            }
+                if let oldShots = self.bucketsIndexedShots[index], let newShots = shots {
+                    bucketShotsShouldBeReloaded = oldShots != newShots
+                }
 
-            if let shots = shots {
-                self.bucketsIndexedShots[index] = shots
-            } else {
-                self.bucketsIndexedShots[index] = [ShotType]()
-            }
+                if let shots = shots {
+                    self.bucketsIndexedShots[index] = shots
+                } else {
+                    self.bucketsIndexedShots[index] = [ShotType]()
+                }
 
-            if bucketShotsShouldBeReloaded {
-                let indexPath = IndexPath(row: index, section: 0)
-                self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                if bucketShotsShouldBeReloaded {
+                    let indexPath = IndexPath(row: index, section: 0)
+                    self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                }
+            }.catch { error in
+                self.notifyDelegateAboutFailure(error)
             }
-        }.catch { error in
-            self.notifyDelegateAboutFailure(error)
         }
     }
 

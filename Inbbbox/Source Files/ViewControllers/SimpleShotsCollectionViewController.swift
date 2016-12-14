@@ -29,12 +29,10 @@ extension SimpleShotsCollectionViewController {
     /// Use this `init` to display shots from given bucket.
     ///
     /// - parameter bucket: Bucket to display shots for.
-    /// - parameter shots: Already downloaded shots to display.
-    /// - parameter shotsProvider: Shots provider to fetch next pages of shots.
-    convenience init(bucket: BucketType, shots: [ShotType]?, shotsProvider: ShotsProvider) {
+    convenience init(bucket: BucketType) {
         self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
                 twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
-        self.viewModel = BucketContentViewModel(bucket: bucket, shotsProvider: shotsProvider, shots: shots)
+        self.viewModel = BucketContentViewModel(bucket: bucket)
     }
 
     /// Use this `init` to display liked shots.
@@ -69,9 +67,7 @@ extension SimpleShotsCollectionViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if viewModel?.shots.count == 0 {
-            viewModel?.downloadInitialItems()
-        }
+        viewModel?.downloadInitialItems()
     }
 }
 
