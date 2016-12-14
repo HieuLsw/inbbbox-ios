@@ -34,6 +34,7 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
     var reportActionHandler: (() -> Void)?
     var likeActionHandler: (() -> Void)?
     var unlikeActionHandler: (() -> Void)?
+    var editActionHandler: (() -> Void)?
 
     let avatarView = AvatarView(size: avatarSize, bordered: false)
     let authorLabel = TTTAttributedLabel.newAutoLayout()
@@ -93,10 +94,11 @@ class ShotDetailsCommentCollectionViewCell: UICollectionViewCell, Reusable {
 
         editView.cancelButton.addTarget(self,
                 action: #selector(cancelButtonDidTap(_:)), for: .touchUpInside)
-        contentView.addSubview(editView)
-
         editView.likeButton.addTarget(self,
                 action: #selector(likeButtonDidTap(_:)), for: .touchUpInside)
+        editView.editButton.addTarget(self,
+                  action: #selector(editButtonDidTap(_:)), for: .touchUpInside)
+        
         contentView.addSubview(editView)
         
         separatorView.backgroundColor = ColorModeProvider.current().cellSeparator
@@ -250,6 +252,9 @@ extension ShotDetailsCommentCollectionViewCell {
         likedByMe ? unlikeActionHandler?() : likeActionHandler?()
     }
 
+    func editButtonDidTap(_: UIButton) {
+        editActionHandler?()
+    }
 }
 
 extension ShotDetailsCommentCollectionViewCell: TTTAttributedLabelDelegate {

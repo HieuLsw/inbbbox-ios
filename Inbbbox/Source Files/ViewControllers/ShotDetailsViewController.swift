@@ -216,6 +216,10 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             cell.unlikeActionHandler = { [weak self] in
                 self?.unlikeComment(atIndexPath: indexPath)
             }
+            cell.editActionHandler = { [weak self] in
+                self?.editComment(at: indexPath)
+            }
+            
             cell.avatarView.delegate = self
             cell.delegate = self
 
@@ -541,6 +545,10 @@ private extension ShotDetailsViewController {
             self.viewModel.setLikeStatusForComment(atIndexPath: indexPath, withValue: isLiked)
             self.shotDetailsView.collectionView.reloadItems(at: [indexPath])
         }.catch { _ in }
+    }
+    
+    func editComment(at indexPath: IndexPath) {
+        print("editing comment \(indexPath.row)")
     }
 
     func presentShotBucketsViewControllerWithMode(_ mode: ShotBucketsViewControllerMode, onModalCompletion completion:(() -> Void)? = nil) {
