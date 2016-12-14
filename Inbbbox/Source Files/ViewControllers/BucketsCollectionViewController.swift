@@ -97,17 +97,19 @@ class BucketsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                            willDisplay cell: UICollectionViewCell,
                    forItemAt indexPath: IndexPath) {
+        viewModel.downloadShots(viewModel.buckets[indexPath.row])
         if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
-             didSelectItemAt indexPath: IndexPath) {
-        let bucketContentCollectionViewController =
-                SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.row])
-        navigationController?.pushViewController(bucketContentCollectionViewController,
-                animated: true)
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let bucketContentCollectionViewController = SimpleShotsCollectionViewController(
+            bucket: viewModel.buckets[indexPath.row],
+            shots: viewModel.bucketsIndexedShots[indexPath.row],
+            shotsProvider: viewModel.shotsProvider
+        )
+        navigationController?.pushViewController(bucketContentCollectionViewController, animated: true)
     }
 
     // MARK: Configuration
