@@ -15,7 +15,7 @@ class ORLoginLabel: UILabel {
 
         textAlignment = .center
         textColor = UIColor.RGBA(249, 212, 226, 1)
-        font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightMedium)
+        font = UIFont.helveticaFont(.neueMedium, size: 11)
         text = NSLocalizedString("ORLoginLabel.OR", comment: "Visible as a text allowing user to choose login method.")
     }
 
