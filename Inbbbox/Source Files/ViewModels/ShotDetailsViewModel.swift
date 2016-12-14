@@ -167,6 +167,12 @@ extension ShotDetailsViewModel {
 
 extension ShotDetailsViewModel: Vibratable {
 
+    func updateCache(with shot: ShotType) {
+        if let shot = shot as? Shot, let shotLiked = isShotLikedByMe {
+            shotLiked ? SharedCache.likedShots.append(shot): SharedCache.likedShots.remove(shot)
+        }
+    }
+
     func performLikeOperation() -> Promise<Bool> {
         return Promise<Bool> { fulfill, reject in
 

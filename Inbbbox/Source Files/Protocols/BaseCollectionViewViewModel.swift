@@ -15,6 +15,7 @@ protocol BaseCollectionViewViewModel {
 
     func downloadInitialItems()
     func downloadItemsForNextPage()
+    func downloadItem(at index:Int)
 }
 
 protocol BaseCollectionViewViewModelDelegate: class {

@@ -33,7 +33,9 @@ class CenterButtonTabBarController: UITabBarController {
     convenience init() {
         self.init(nibName: nil, bundle: nil)
 
-        let likesViewController = UINavigationController(rootViewController: SimpleShotsCollectionViewController())
+        let likesViewController = SimpleShotsCollectionViewController()
+        likesViewController.viewModel?.downloadInitialItems()
+        let likesNavigationViewController = UINavigationController(rootViewController: likesViewController)
         let bucketsViewController =  UINavigationController(rootViewController: BucketsCollectionViewController())
 
         let followeesViewController = UINavigationController(
@@ -48,7 +50,7 @@ class CenterButtonTabBarController: UITabBarController {
         let settingsViewController = UINavigationController(rootViewController: self.settingsViewController)
 
         viewControllers = [
-            likesViewController,
+            likesNavigationViewController,
             bucketsViewController,
             shotsCollectionViewController,
             followeesViewController,

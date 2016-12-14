@@ -19,7 +19,8 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
     fileprivate let connectionsProvider = APIConnectionsProvider()
     fileprivate let shotsProvider = ShotsProvider()
     fileprivate var userMode: UserMode
-
+    fileprivate var followeesDuringDownload = [Followee]()
+    
     fileprivate let netguruTeam = Team(identifier: "653174", name: "", username: "", avatarURL: nil, createdAt: Date())
 
     var itemsCount: Int {
@@ -38,64 +39,21 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
         }.then { followees -> Void in
             if let followees = followees, followees != self.followees || followees.count == 0 {
                 self.followees = followees
-                self.downloadShots(followees)
                 self.delegate?.viewModelDidLoadInitialItems()
             }
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
-
-    func downloadItemsForNextPage() {
-
-        firstly {
-            UserStorage.isUserSignedIn ? connectionsProvider.nextPage() : teamsProvider.nextPage()
-        }.then {
-            followees -> Void in
-            if let followees = followees, followees.count > 0 {
-                let indexes = followees.enumerated().map {
-                    index, _ in
-                    return index + self.followees.count
-                }
-                self.followees.append(contentsOf: followees)
-                let indexPaths = indexes.map {
-                    IndexPath(row: ($0), section: 0)
-                }
-                self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
-                self.downloadShots(followees)
-            }
-        }.catch { error in
-            self.notifyDelegateAboutFailure(error)
-        }
-    }
-
-    func downloadShots(_ followees: [Followee]) {
-        for followee in followees {
-            firstly {
-                shotsProvider.provideShotsForUser(followee)
-            }.then {
-                shots -> Void in
-                var indexOfFollowee: Int?
-                for (index, item) in self.followees.enumerated() {
-                    if item.identifier == followee.identifier {
-                        indexOfFollowee = index
-                        break
-                    }
-                }
-                guard let index = indexOfFollowee else {
-                    return
-                }
-                if let shots = shots {
-                    self.followeesIndexedShots[index] = shots
-                } else {
-                    self.followeesIndexedShots[index] = [ShotType]()
-                }
-                let indexPath = IndexPath(row: index, section: 0)
-                self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
-            }.catch { error in
-                self.notifyDelegateAboutFailure(error)
-            }
-        }
+    
+    func downloadItemsForNextPage() { /* empty */ }
+    
+    func downloadItem(at index: Int) {
+        guard followees.count > index else { return }
+        let followee = followees[index]
+        guard !followeesDuringDownload.contains(where: { (f) -> Bool in return f == followee }) else { return }
+        
+        downloadShots(for: followee)
     }
 
     func followeeCollectionViewCellViewData(_ indexPath: IndexPath) -> FolloweeCollectionViewCellViewData {
@@ -111,6 +69,50 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
             delegate?.viewModelDidLoadInitialItems()
         }
     }
+}
+
+private extension FolloweesViewModel {
+    
+    func downloadShots(for followees: [Followee]) {
+        for followee in followees {
+            downloadShots(for: followee)
+        }
+    }
+    
+    func downloadShots(for followee: Followee) {
+        followeesDuringDownload.append(followee)
+        firstly {
+            shotsProvider.provideShotsForUser(followee)
+        }.then { shots -> Void in
+            var indexOfFollowee: Int?
+            for (index, item) in self.followees.enumerated() {
+                if item.identifier == followee.identifier {
+                    indexOfFollowee = index
+                    break
+                }
+            }
+            guard let index = indexOfFollowee else {
+                return
+            }
+            if let shots = shots {
+                self.followeesIndexedShots[index] = shots
+            } else {
+                self.followeesIndexedShots[index] = [ShotType]()
+            }
+            let indexPath = IndexPath(row: index, section: 0)
+            self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+        }.catch { error in
+            self.notifyDelegateAboutFailure(error)
+        }.always {
+            self.removeFromFolloweesDuringDownload(followee)
+        }
+    }
+    
+    func removeFromFolloweesDuringDownload(_ followee: Followee) {
+        guard let indexForRemove = followeesDuringDownload.index(where: { (f) -> Bool in return f == followee }) else { return }
+        followeesDuringDownload.remove(at: indexForRemove)
+    }
+
 }
 
 extension FolloweesViewModel {

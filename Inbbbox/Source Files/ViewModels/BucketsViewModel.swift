@@ -74,6 +74,8 @@ class BucketsViewModel: BaseCollectionViewViewModel {
         }
     }
 
+    func downloadItem(at index: Int) { /* empty */ }
+
     func downloadShots(_ bucket: BucketType) {
         firstly {
             shotsProvider.provideShotsForBucket(bucket)

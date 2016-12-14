@@ -79,7 +79,9 @@ class UserDetailsViewModel: ProfileViewModel, Vibratable {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     // MARK: Users section
 
     func isProfileFollowedByMe() -> Promise<Bool> {

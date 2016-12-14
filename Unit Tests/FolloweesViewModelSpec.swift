@@ -52,19 +52,20 @@ class FolloweesViewModelSpec: QuickSpec {
                 let cellData = sut.followeeCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureFolloweeName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
-                expect(cellData.shotsImagesURLs).to(equal(fixtureImagesURLs))
                 expect(cellData.avatarURL).to(equal(fixtureAvatarURL))
             }
         }
 
-        describe("When downloading data for next page") {
+        describe("When downloading data for next visible cells") {
 
             beforeEach {
-                sut.downloadItemsForNextPage()
+                sut.downloadInitialItems()
+                sut.downloadItem(at: 0)
+                sut.downloadItem(at: 1)
             }
 
             it("should have proper number of shots") {
-                expect(sut.itemsCount).to(equal(3))
+                expect(sut.itemsCount).to(equal(2))
             }
 
             it("should return proper shot data for index path") {
@@ -76,16 +77,16 @@ class FolloweesViewModelSpec: QuickSpec {
                 expect(cellData.avatarURL).to(equal(fixtureAvatarURL))
             }
         }
-
-        /// In this test, we won't override `downloadItemsForNextPage` method.
-        describe("When truly downloading data for next page") {
-
+        
+        describe("When truly downloading data for next cell") {
+            
             let fakeDelegate = ViewModelDelegate()
 
             beforeEach {
                 sut.delegate = fakeDelegate
                 sut.shouldCallNextPageDownloadSuper = true
-                sut.downloadItemsForNextPage()
+                sut.downloadInitialItems()
+                sut.downloadItem(at: 0)
             }
 
             it("should notify delegate about failure") {
@@ -104,22 +105,14 @@ private class FolloweesViewModelMock: FolloweesViewModel {
     override func downloadInitialItems() {
         let followee = User.fixtureUser()
         followees = [followee, followee]
-        downloadShots(followees)
     }
-
-    override func downloadItemsForNextPage() {
-        let followee = User.fixtureUser()
-        followees = [followee, followee, followee]
-        downloadShots(followees)
-
-        if shouldCallNextPageDownloadSuper {
-            super.downloadItemsForNextPage()
+    
+    override func downloadItem(at index: Int) {
+        guard !shouldCallNextPageDownloadSuper else {
+            super.downloadItem(at: 1)
+            return
         }
-    }
-
-    override func downloadShots(_ followees: [Followee]) {
-        for index in 0...followees.count - 1 {
-            followeesIndexedShots[index] = [Shot.fixtureShot()]
-        }
+        
+        followeesIndexedShots[index] = [Shot.fixtureShot()]
     }
 }
