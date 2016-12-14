@@ -81,15 +81,19 @@ class ShotsProviderSpec: QuickSpec {
                     let apiShot = Shot.fixtureShotWithIdentifier("fixture api shot identifier")
                     apiShotsProviderMock.provideMyLikedShotsStub.on(any(), return: Promise<[ShotType]?> { fulfill, _ in fulfill([apiShot]) })
                     sut.apiShotsProvider = apiShotsProviderMock
-
-                    firstly {
-                        sut.provideMyLikedShots()
-                    }.then { shots in
-                        likedShots = shots
-                    }.catch { _ in }
                 }
 
                 it("should return proper shots") {
+
+                    waitUntil { done in
+                        firstly {
+                            sut.provideMyLikedShots()
+                        }.then { shots -> Void in
+                            likedShots = shots
+                            done()
+                        }.catch { _ in }
+                    }
+
                     expect(likedShots.count).toEventually(equal(1))
                     let firstShot = likedShots[0]
                     expect(firstShot.identifier).toEventually(equal("fixture api shot identifier"))

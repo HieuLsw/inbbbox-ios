@@ -8,9 +8,18 @@ import PromiseKit
 
 class ShotsProvider {
 
-    var apiShotsProvider = APIShotsProvider()
+    var apiShotsProvider = APIShotsProvider(page: 1, pagination: 30)
     var managedShotsProvider = ManagedShotsProvider()
     var userStorageClass = UserStorage.self
+
+    private var providing: ProviderType?
+
+    /// This enum helps to decide to which Cache insert shots after invoking `nextPage()` method.
+    /// - SeeAlso: nextPage()
+    private enum ProviderType {
+        case likedShots
+        case other
+    }
 
     func provideShots() -> Promise<[ShotType]?> {
         return apiShotsProvider.provideShots()
@@ -18,7 +27,23 @@ class ShotsProvider {
 
     func provideMyLikedShots() -> Promise<[ShotType]?> {
         if userStorageClass.isUserSignedIn {
-            return apiShotsProvider.provideMyLikedShots()
+            return Promise<[ShotType]?> { fulfill, reject in
+                if SharedCache.likedShots.elements.count > 0 {
+                    return fulfill(SharedCache.likedShots.elements)
+                }
+
+                firstly {
+                    providing = .likedShots
+                    return Promise(value: Void())
+                }.then {
+                    self.apiShotsProvider.provideMyLikedShots()
+                }.then { shots -> Void in
+                    if let shots = shots {
+                        SharedCache.likedShots.add(shots.flatMap { $0 as? Shot })
+                    }
+                    fulfill(shots)
+                }.catch(execute: reject)
+            }
         }
         return managedShotsProvider.provideMyLikedShots()
     }
@@ -50,7 +75,19 @@ class ShotsProvider {
     }
 
     func nextPage() -> Promise<[ShotType]?> {
-        return apiShotsProvider.nextPage()
+        return Promise<[ShotType]?> { fulfill, reject in
+            firstly {
+                apiShotsProvider.nextPage()
+            }.then { shots -> Void in
+                if let providing = self.providing, let shots = shots {
+                    switch providing {
+                    case .likedShots: SharedCache.likedShots.append(contentsOf: shots.flatMap { $0 as? Shot })
+                    default: break
+                    }
+                }
+                fulfill(shots)
+            }.catch(execute: reject)
+        }
     }
 
     func previousPage() -> Promise<[ShotType]?> {
