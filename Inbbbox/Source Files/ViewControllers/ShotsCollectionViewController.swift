@@ -285,7 +285,6 @@ fileprivate extension ShotsCollectionViewController {
     }
     
     func addSupport3DForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
@@ -327,9 +326,7 @@ extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
             let indexPath = collectionView.indexPathsForVisibleItems.first
         else { return nil }
 
-        let frame = visibleCell.contentView.frame
-        let origin = collectionView.convert(visibleCell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = visibleCell.frame
 
         return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
     }

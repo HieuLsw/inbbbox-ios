@@ -255,9 +255,7 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = cell.frame
         
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true

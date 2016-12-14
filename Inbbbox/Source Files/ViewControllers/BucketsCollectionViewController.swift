@@ -161,7 +161,6 @@ private extension BucketsCollectionViewController {
     }
     
     func addSupport3DForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
@@ -264,9 +263,7 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = cell.frame
         
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
