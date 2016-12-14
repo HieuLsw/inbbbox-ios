@@ -16,6 +16,8 @@ class BucketsViewModelSpec: QuickSpec {
     override func spec() {
         
         var sut: BucketsViewModelMock!
+        let fixtureImageURL = URL(string: "https://fixture.domain/fixture.image.teaser.png")
+        let fixtureImagesURLs: [URL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
         let fixtureBucketName = "fixture.name"
         let fixtureNumberOfShots = "250 shots"
         
@@ -49,6 +51,7 @@ class BucketsViewModelSpec: QuickSpec {
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
+                expect(cellData.shotsImagesURLs).to(equal(fixtureImagesURLs))
             }
         }
         
@@ -67,6 +70,7 @@ class BucketsViewModelSpec: QuickSpec {
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
+                expect(cellData.shotsImagesURLs).to(equal(fixtureImagesURLs))
             }
         }
 
@@ -97,28 +101,22 @@ private class BucketsViewModelMock: BucketsViewModel {
     override func downloadInitialItems() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket]
-        buckets.forEach { downloadShots($0) }
+        downloadShots(buckets)
     }
     
     override func downloadItemsForNextPage() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket, bucket]
-        buckets.forEach { downloadShots($0) }
+        downloadShots(buckets)
 
         if shouldCallNextPageDownloadSuper {
             super.downloadItemsForNextPage()
         }
     }
     
-    override func downloadShots(_ bucket: BucketType) {
-        var indexOfBucket: Int?
-        for (index, item) in self.buckets.enumerated() {
-            if item.identifier == bucket.identifier {
-                indexOfBucket = index
-                break
-            }
+    override func downloadShots(_ buckets: [BucketType]) {
+        for index in 0...buckets.count - 1 {
+            bucketsIndexedShots[index] = [Shot.fixtureShot()]
         }
-        guard let index = indexOfBucket else { return }
-        bucketsIndexedShots[index] = [Shot.fixtureShot()]
     }
 }
