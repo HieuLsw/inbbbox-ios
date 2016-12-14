@@ -101,22 +101,28 @@ private class BucketsViewModelMock: BucketsViewModel {
     override func downloadInitialItems() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket]
-        downloadShots(buckets)
+        buckets.forEach { downloadShots($0) }
     }
     
     override func downloadItemsForNextPage() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket, bucket]
-        downloadShots(buckets)
+        buckets.forEach { downloadShots($0) }
 
         if shouldCallNextPageDownloadSuper {
             super.downloadItemsForNextPage()
         }
     }
     
-    override func downloadShots(_ buckets: [BucketType]) {
-        for index in 0...buckets.count - 1 {
-            bucketsIndexedShots[index] = [Shot.fixtureShot()]
+    override func downloadShots(_ bucket: BucketType) {
+        var indexOfBucket: Int?
+        for (index, item) in self.buckets.enumerated() {
+            if item.identifier == bucket.identifier {
+                indexOfBucket = index
+                break
+            }
         }
+        guard let index = indexOfBucket else { return }
+        bucketsIndexedShots[index] = [Shot.fixtureShot()]
     }
 }
