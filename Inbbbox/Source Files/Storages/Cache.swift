@@ -16,7 +16,7 @@ struct SharedCache {
     }
 }
 
-class Cache<T: Equatable> {
+final class Cache<T: Equatable> {
 
     /// Array containing elements.
     private(set) var elements = [T]()
