@@ -13,8 +13,8 @@ import PromiseKit
 class BucketContentViewModel: SimpleShotsViewModel {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
-    var shots = [ShotType]()
-    fileprivate let shotsProvider = ShotsProvider()
+    var shots: [ShotType]
+    fileprivate let shotsProvider: ShotsProvider
     fileprivate var userMode: UserMode
     fileprivate var bucket: BucketType
 
@@ -26,9 +26,11 @@ class BucketContentViewModel: SimpleShotsViewModel {
         return bucket.name
     }
 
-    init(bucket: BucketType) {
+    init(bucket: BucketType, shotsProvider: ShotsProvider? = nil, shots: [ShotType]? = nil) {
         userMode = UserStorage.isUserSignedIn ? .loggedUser : .demoUser
         self.bucket = bucket
+        self.shotsProvider = shotsProvider ?? ShotsProvider()
+        self.shots = shots ?? [ShotType]()
     }
 
     func downloadInitialItems() {
