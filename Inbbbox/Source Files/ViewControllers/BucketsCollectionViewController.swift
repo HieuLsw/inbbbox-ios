@@ -222,7 +222,11 @@ extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
         
         previewingContext.sourceRect = cell.contentView.bounds
         
-        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
+        return SimpleShotsCollectionViewController(
+            bucket: viewModel.buckets[indexPath.row],
+            shots: viewModel.bucketsIndexedShots[indexPath.row],
+            shotsProvider: viewModel.shotsProvider
+        )
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
@@ -251,7 +255,11 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
         else { return nil }
 
         previewingContext.sourceRect = cell.contentView.bounds
-        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
+        return SimpleShotsCollectionViewController(
+            bucket: viewModel.buckets[indexPath.row],
+            shots: viewModel.bucketsIndexedShots[indexPath.row],
+            shotsProvider: viewModel.shotsProvider
+        )
     }
 
     func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
