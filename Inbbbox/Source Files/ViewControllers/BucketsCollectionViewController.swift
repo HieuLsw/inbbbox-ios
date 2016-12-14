@@ -21,6 +21,7 @@ class BucketsCollectionViewController: UICollectionViewController {
 
     fileprivate var currentColorMode = ColorModeProvider.current()
     fileprivate var peekPop: PeekPop?
+    fileprivate var didCheckedSupport3DForOlderDevices = false
     // MARK: - Lifecycle
 
     convenience init() {
@@ -39,8 +40,6 @@ class BucketsCollectionViewController: UICollectionViewController {
         }
         collectionView.registerClass(BucketCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +51,8 @@ class BucketsCollectionViewController: UICollectionViewController {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
         AnalyticsManager.trackScreen(.bucketsView)
+        
+        addSupport3DForOlderDevicesIfNeeded()
         
         cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }
@@ -153,7 +154,13 @@ class BucketsCollectionViewController: UICollectionViewController {
 
 private extension BucketsCollectionViewController {
     
-    func add3DSupportForOlderDevices() {
+    func addSupport3DForOlderDevicesIfNeeded() {
+        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
+        addSupport3DForOlderDevices()
+        didCheckedSupport3DForOlderDevices = true
+    }
+    
+    func addSupport3DForOlderDevices() {
         guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)

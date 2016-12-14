@@ -22,6 +22,7 @@ class ShotsCollectionViewController: UICollectionViewController, Vibratable {
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
     fileprivate var peekPop: PeekPop?
+    fileprivate var didCheckedSupport3DForOlderDevices = false
 
     // MARK: Life cycle
 
@@ -66,7 +67,6 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
-        add3DSupportForOlderDevices()
     }
     
     
@@ -80,6 +80,8 @@ extension ShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        addSupport3DForOlderDevicesIfNeeded()
+        
         AnalyticsManager.trackScreen(.shotsView)
 
         if (!didSetupAnimation) {
@@ -276,7 +278,13 @@ fileprivate extension ShotsCollectionViewController {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
     }
     
-    func add3DSupportForOlderDevices() {
+    func addSupport3DForOlderDevicesIfNeeded() {
+        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
+        addSupport3DForOlderDevices()
+        didCheckedSupport3DForOlderDevices = true
+    }
+    
+    func addSupport3DForOlderDevices() {
         guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)

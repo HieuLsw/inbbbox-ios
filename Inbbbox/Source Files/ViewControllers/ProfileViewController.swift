@@ -41,6 +41,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
 
     fileprivate var peekPop: PeekPop?
+    
+    fileprivate var didCheckedSupport3DForOlderDevices = false
 
     var dismissClosure: (() -> Void)?
 
@@ -124,13 +126,14 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
 
         setupBackButton()
-        add3DSupportForOlderDevices()
         viewModel.downloadInitialItems()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        addSupport3DForOlderDevicesIfNeeded()
+        
         guard viewModel.shouldShowFollowButton else { return }
 
         firstly {
@@ -384,7 +387,13 @@ private extension ProfileViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func add3DSupportForOlderDevices() {
+    func addSupport3DForOlderDevicesIfNeeded() {
+        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
+        addSupport3DForOlderDevices()
+        didCheckedSupport3DForOlderDevices = true
+    }
+    
+    func addSupport3DForOlderDevices() {
         guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)

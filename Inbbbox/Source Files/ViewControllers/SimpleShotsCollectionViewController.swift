@@ -20,6 +20,7 @@ class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexesToUpdateCellImage = [Int]()
     fileprivate var peekPop: PeekPop?
+    fileprivate var didCheckedSupport3DForOlderDevices = false
 }
 
 // MARK: Lifecycle
@@ -56,8 +57,6 @@ extension SimpleShotsCollectionViewController {
         }
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-        
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -68,12 +67,19 @@ extension SimpleShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel?.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded()
     }
 }
 
 private extension SimpleShotsCollectionViewController {
     
-    func add3DSupportForOlderDevices() {
+    func addSupport3DForOlderDevicesIfNeeded() {
+        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
+        addSupport3DForOlderDevices()
+        didCheckedSupport3DForOlderDevices = true
+    }
+    
+    func addSupport3DForOlderDevices() {
         guard traitCollection.forceTouchCapability == .unavailable else { return }
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)

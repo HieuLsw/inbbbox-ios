@@ -40,6 +40,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
     fileprivate var peekPop: PeekPop?
+    fileprivate var didCheckedSupport3DForOlderDevices = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +52,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
         navigationItem.title = viewModel.title
-
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +62,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded()
         AnalyticsManager.trackScreen(.followeesView)
     }
 
@@ -150,8 +150,14 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
 
 private extension FolloweesCollectionViewController {
     
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
+    func addSupport3DForOlderDevicesIfNeeded() {
+        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
+        addSupport3DForOlderDevices()
+        didCheckedSupport3DForOlderDevices = true
+    }
+    
+    
+    func addSupport3DForOlderDevices() {
         peekPop = PeekPop(viewController: self)
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
