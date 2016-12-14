@@ -59,7 +59,7 @@ class ShotAuthorCompactView: UIView {
 
         avatarView.backgroundColor = .clear
         [authorLabel, likesLabel, commentsLabel].forEach { (label) in
-            label.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
+            label.font = UIFont.helveticaFont(.neue, size: 10)
             label.textColor = .followeeTextGrayColor()
         }
 

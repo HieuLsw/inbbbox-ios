@@ -453,7 +453,7 @@ private extension ShotsNormalStateHandler {
             firstly {
                 connectionsRequester.followUser(shot.user)
             }.then {
-                self.vibrate(with: .success)
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }

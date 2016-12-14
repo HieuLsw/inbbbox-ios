@@ -124,7 +124,6 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
         _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
 
         setupBackButton()
-        add3DSupportForOlderDevices()
         viewModel.downloadInitialItems()
     }
 
@@ -383,12 +382,6 @@ private extension ProfileViewController {
         dismissClosure?()
         dismiss(animated: true, completion: nil)
     }
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
-    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
@@ -451,17 +444,15 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
-        
         if let viewModel = viewModel as? UserDetailsViewModel {
+            previewingContext.sourceRect = cell.contentView.bounds
             let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
             controller.customizeFor3DTouch(true)
             controller.shotIndex = indexPath.item
 
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
+            previewingContext.sourceRect = cell.contentView.bounds
             return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil

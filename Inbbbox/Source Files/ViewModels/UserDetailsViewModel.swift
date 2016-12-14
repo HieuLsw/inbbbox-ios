@@ -101,7 +101,7 @@ class UserDetailsViewModel: ProfileViewModel, Vibratable {
             firstly {
                 connectionsRequester.followUser(user)
             }.then {
-                self.vibrate(with: .success)
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }

@@ -33,7 +33,7 @@ class ShotBucketsSelectCollectionViewCell: UICollectionViewCell, Reusable {
         bucketNameLabel.configureForAutoLayout()
         bucketNameLabel.numberOfLines = 0
         bucketNameLabel.textColor = ColorModeProvider.current().shotDetailsBucketTextColor
-        bucketNameLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+        bucketNameLabel.font = UIFont.helveticaFont(.neue, size: 17)
         contentView.addSubview(bucketNameLabel)
 
         selectImageView.image = UIImage(named: "select")
