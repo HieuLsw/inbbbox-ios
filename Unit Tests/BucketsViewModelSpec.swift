@@ -51,7 +51,6 @@ class BucketsViewModelSpec: QuickSpec {
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
-                expect(cellData.shotsImagesURLs).to(equal(fixtureImagesURLs))
             }
         }
         
@@ -70,7 +69,6 @@ class BucketsViewModelSpec: QuickSpec {
                 let cellData = sut.bucketCollectionViewCellViewData(indexPath)
                 expect(cellData.name).to(equal(fixtureBucketName))
                 expect(cellData.numberOfShots).to(equal(fixtureNumberOfShots))
-                expect(cellData.shotsImagesURLs).to(equal(fixtureImagesURLs))
             }
         }
 
