@@ -37,7 +37,7 @@ class BaseInfoShotsCollectionViewCell: UICollectionViewCell {
      func commonInit() {
 
         nameLabel.textColor = UIColor.pinkColor()
-        nameLabel.font = UIFont.systemFont(ofSize: 13, weight:UIFontWeightMedium)
+        nameLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
         infoView.addSubview(nameLabel)
 
         numberOfShotsLabel.textColor = UIColor.followeeTextGrayColor()

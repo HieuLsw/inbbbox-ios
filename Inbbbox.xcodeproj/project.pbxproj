@@ -188,6 +188,7 @@
 		6EE3ADF049521783584147F1 /* CommentSpecExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07447536EECCE679E481DD12 /* CommentSpecExtension.swift */; };
 		706212225CCFF89D35423D58 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D86F0D3CB41BCD1D56D9AC5 /* AvatarView.swift */; };
 		70A9390D8C1FC18E771C9A21 /* FollowUserQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A8EC52138981168880334D /* FollowUserQuerySpec.swift */; };
+		7375CF971DFABFC400E9A299 /* NightModeHoursProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */; };
 		738000923C392AA96CEB1C32 /* APIBucketsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74061C3F8179787B1B2A764F /* APIBucketsProviderSpec.swift */; };
 		741557631DA7D54500767008 /* ShotLikesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741557621DA7D54500767008 /* ShotLikesQuery.swift */; };
 		742F7F7C45218BBF696179BD /* RemoveFromBucketQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1B71814BD31275DACE75B1 /* RemoveFromBucketQuery.swift */; };
@@ -230,7 +231,6 @@
 		8BB7A817EF3D83F73906B368 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B75854D574F24ACCF457CB1 /* ViewControllerPresenter.swift */; };
 		8BF3559B4E11B923E5D74DF8 /* ShotsNormalStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C293E57C35C383AA44755DAF /* ShotsNormalStateHandler.swift */; };
 		8BF8A3D101DD2E4C488CE1B8 /* MockLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AF24D6B4F6285AD98F1C38 /* MockLoginService.swift */; };
-		8C3BDA4E0AEC8E1C9489095F /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */; };
 		8C723DA788966C5624A43DC4 /* ShotCellBucketActionAnimationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D958BDB728EAB2BFFB89B /* ShotCellBucketActionAnimationDescriptor.swift */; };
 		8DAAA291E8C2D16BB9FDDDF6 /* ShotCellCommentActionAnimationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57297BA499364ABC0CC7A863 /* ShotCellCommentActionAnimationDescriptor.swift */; };
 		8E1019DBE20EA2A2DBDB8BEB /* BucketsViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C5F88B11663D6651324FF1 /* BucketsViewModelSpec.swift */; };
@@ -317,7 +317,6 @@
 		C6745B7D1DB74371004D3D8E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6745B7C1DB74371004D3D8E /* AlertViewController.swift */; };
 		C6A336791DF749D200357D2A /* SettingsItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A336781DF749D200357D2A /* SettingsItemsProvider.swift */; };
 		C6A3367C1DF74A2E00357D2A /* EstimatedLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */; };
-		C6A3367D1DF74A2E00357D2A /* NightModeHoursProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */; };
 		C6B095481DF19F88002806A0 /* EstimatedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095471DF19F88002806A0 /* EstimatedLocation.swift */; };
 		C6B0954C1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0954B1DF1C617002806A0 /* EstimatedLocationProviderSpec.swift */; };
 		C6B0954E1DF1C859002806A0 /* UserLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = C6B0954D1DF1C859002806A0 /* UserLocation.json */; };
@@ -536,7 +535,6 @@
 		37CA97648E23F476DA3DF992 /* Acknowledgements.html */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.html; path = Acknowledgements.html; sourceTree = "<group>"; };
 		38A27AB2A3879BEF5DA9B3DA /* Formatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		38E0191B8D67413A4A701EB7 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		394D84B62CE78D2653A1DE8A /* Buckets.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Buckets.json; sourceTree = "<group>"; };
 		397297ADA0D7B1F46850C1D2 /* DoubleImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DoubleImageView.swift; sourceTree = "<group>"; };
 		3A188D9F1CB69C9000E5B011 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -989,7 +987,6 @@
 				76AEBEF3E99213A31557B276 /* UIAlertControllerExtension.swift */,
 				4DEF2820F1D86943E822D3AA /* UICollectionViewExtension.swift */,
 				924CF41C504ED7174FA661DF /* UIColorExtension.swift */,
-				3944A2053BD9D078A27E91B1 /* UIFontExtension.swift */,
 				70A22688C61F1F08F321055C /* UIImageExtension.swift */,
 				1893BC17D59800EAB75DBF92 /* UIImageViewExtension.swift */,
 				2F59A124425AD6181A4B6CF2 /* UINavigationControllerExtension.swift */,
@@ -2096,8 +2093,6 @@
 				94BCC8C5DBEFE5830CC0CC5C /* UIColorExtension.swift in Sources */,
 				BE71499E1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift in Sources */,
 				F0BEBDD71CDA24E200AA391C /* TeamDetailsViewModel.swift in Sources */,
-				8C3BDA4E0AEC8E1C9489095F /* UIFontExtension.swift in Sources */,
-				C6A3367D1DF74A2E00357D2A /* NightModeHoursProvider.swift in Sources */,
 				5867E4FA2C0B1DCBEE5F4CFA /* UIImageExtension.swift in Sources */,
 				21DD0E6EFEEAE9F66E0B0C7D /* UIImageViewExtension.swift in Sources */,
 				F0FD0A841CBE496400735933 /* SimpleShotsCollectionViewController.swift in Sources */,
@@ -2209,6 +2204,7 @@
 				B4106314FAE6A26929E31986 /* AutoSizable.swift in Sources */,
 				EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */,
 				F0EE2870B58F0E2F0AEF5922 /* AvatarSettable.swift in Sources */,
+				7375CF971DFABFC400E9A299 /* NightModeHoursProvider.swift in Sources */,
 				4BF656476671DC5B75114E81 /* BaseCollectionViewViewModel.swift in Sources */,
 				305A85061DDAFD90008EF410 /* ColorModeProvider.swift in Sources */,
 				29DDC14156FF381F6D4084FC /* InfoShotsCellConfigurable.swift in Sources */,

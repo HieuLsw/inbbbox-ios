@@ -40,8 +40,7 @@ class BucketsCollectionViewController: UICollectionViewController {
         collectionView.registerClass(BucketCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
 
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
+        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -154,6 +153,15 @@ class BucketsCollectionViewController: UICollectionViewController {
     }
 }
 
+private extension BucketsCollectionViewController {
+    
+    func add3DSupportForOlderDevices() {
+        guard traitCollection.forceTouchCapability == .unavailable else { return }
+        peekPop = PeekPop(viewController: self)
+        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+    }
+}
+
 extension BucketsCollectionViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
@@ -250,11 +258,15 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
-            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
-            let cell = collectionView?.cellForItem(at: indexPath)
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        previewingContext.sourceRect = cell.contentView.bounds
+        let frame = cell.frame
+        let origin = collectionView.convert(cell.frame.origin, to: view)
+        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        
         return SimpleShotsCollectionViewController(
             bucket: viewModel.buckets[indexPath.row],
             shots: viewModel.bucketsIndexedShots[indexPath.row],
