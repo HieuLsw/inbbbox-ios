@@ -11,7 +11,7 @@ import PromiseKit
 import DZNEmptyDataSet
 import PeekPop
 
-class BucketsCollectionViewController: UICollectionViewController {
+class BucketsCollectionViewController: UICollectionViewController, Support3DTouch {
 
     fileprivate let viewModel = BucketsViewModel()
     fileprivate var shouldShowLoadingView = true
@@ -20,8 +20,8 @@ class BucketsCollectionViewController: UICollectionViewController {
     fileprivate let animationCycleInterval = 6.0
 
     fileprivate var currentColorMode = ColorModeProvider.current()
-    fileprivate var peekPop: PeekPop?
-    fileprivate var didCheckedSupport3DForOlderDevices = false
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
     // MARK: - Lifecycle
 
     convenience init() {
@@ -52,7 +52,7 @@ class BucketsCollectionViewController: UICollectionViewController {
         viewModel.downloadInitialItems()
         AnalyticsManager.trackScreen(.bucketsView)
         
-        addSupport3DForOlderDevicesIfNeeded()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }
@@ -149,20 +149,6 @@ class BucketsCollectionViewController: UICollectionViewController {
                 randomCell.makeRotationOnImages()
             }
         }
-    }
-}
-
-private extension BucketsCollectionViewController {
-    
-    func addSupport3DForOlderDevicesIfNeeded() {
-        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
-        addSupport3DForOlderDevices()
-        didCheckedSupport3DForOlderDevices = true
-    }
-    
-    func addSupport3DForOlderDevices() {
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 }
 

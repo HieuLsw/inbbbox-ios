@@ -32,7 +32,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class ProfileViewController: TwoLayoutsCollectionViewController {
+class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     fileprivate var viewModel: ProfileViewModel!
 
@@ -40,9 +40,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
 
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
 
-    fileprivate var peekPop: PeekPop?
-    
-    fileprivate var didCheckedSupport3DForOlderDevices = false
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     var dismissClosure: (() -> Void)?
 
@@ -130,7 +129,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        addSupport3DForOlderDevicesIfNeeded()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         guard viewModel.shouldShowFollowButton else { return }
 
@@ -383,17 +382,6 @@ private extension ProfileViewController {
     dynamic func didTapLeftBarButtonItem() {
         dismissClosure?()
         dismiss(animated: true, completion: nil)
-    }
-    
-    func addSupport3DForOlderDevicesIfNeeded() {
-        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
-        addSupport3DForOlderDevices()
-        didCheckedSupport3DForOlderDevices = true
-    }
-    
-    func addSupport3DForOlderDevices() {
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 }
 

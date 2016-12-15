@@ -7,7 +7,7 @@ import PromiseKit
 import SwiftyUserDefaults
 import PeekPop
 
-class ShotsCollectionViewController: UICollectionViewController, Vibratable {
+class ShotsCollectionViewController: UICollectionViewController, Vibratable, Support3DTouch {
 
     enum State {
         case onboarding, initialAnimations, normal
@@ -21,8 +21,8 @@ class ShotsCollectionViewController: UICollectionViewController, Vibratable {
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
-    fileprivate var peekPop: PeekPop?
-    fileprivate var didCheckedSupport3DForOlderDevices = false
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     // MARK: Life cycle
 
@@ -80,7 +80,7 @@ extension ShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        addSupport3DForOlderDevicesIfNeeded()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         AnalyticsManager.trackScreen(.shotsView)
 
@@ -276,17 +276,6 @@ fileprivate extension ShotsCollectionViewController {
     
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
-    }
-    
-    func addSupport3DForOlderDevicesIfNeeded() {
-        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
-        addSupport3DForOlderDevices()
-        didCheckedSupport3DForOlderDevices = true
-    }
-    
-    func addSupport3DForOlderDevices() {
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 }
 

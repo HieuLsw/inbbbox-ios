@@ -12,15 +12,15 @@ import ZFDragableModalTransition
 import DZNEmptyDataSet
 import PeekPop
 
-class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
+class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     var viewModel: SimpleShotsViewModel?
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexesToUpdateCellImage = [Int]()
-    fileprivate var peekPop: PeekPop?
-    fileprivate var didCheckedSupport3DForOlderDevices = false
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 }
 
 // MARK: Lifecycle
@@ -67,21 +67,7 @@ extension SimpleShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel?.downloadInitialItems()
-        addSupport3DForOlderDevicesIfNeeded()
-    }
-}
-
-private extension SimpleShotsCollectionViewController {
-    
-    func addSupport3DForOlderDevicesIfNeeded() {
-        guard traitCollection.forceTouchCapability == .unavailable, !didCheckedSupport3DForOlderDevices  else { return }
-        addSupport3DForOlderDevices()
-        didCheckedSupport3DForOlderDevices = true
-    }
-    
-    func addSupport3DForOlderDevices() {
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
     }
 }
 
