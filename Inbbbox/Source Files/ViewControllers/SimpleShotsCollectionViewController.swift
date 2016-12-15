@@ -165,8 +165,8 @@ extension SimpleShotsCollectionViewController {
         let cellData = viewModel!.shotCollectionViewCellViewData(indexPath)
 
         indexesToUpdateCellImage.append(indexPath.row)
-        lazyLoadImage(cellData.shotImage, atIndexPath: indexPath)
-        
+        lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
+
         if !cell.isRegisteredTo3DTouch {
             cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
         }
@@ -279,18 +279,15 @@ extension SimpleShotsCollectionViewController: ColorModeAdaptable {
 
 private extension SimpleShotsCollectionViewController {
 
-    func lazyLoadImage(_ shotImage: ShotImageType, atIndexPath indexPath: IndexPath) {
+    func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell, atIndexPath indexPath: IndexPath) {
         let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
             guard let certainSelf = self, certainSelf.indexesToUpdateCellImage.contains(indexPath.row) else {
                 return
             }
 
-            typealias cellType = SimpleShotCollectionViewCell
-            if let cell = certainSelf.collectionView?.cellForItem(at: indexPath) as? cellType {
-                cell.shotImageView.image = nil
-                cell.shotImageView.image = image
-            }
+            cell.shotImageView.image = nil
+            cell.shotImageView.image = image
         }
 
         LazyImageProvider.lazyLoadImageFromURLs(
