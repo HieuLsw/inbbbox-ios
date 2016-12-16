@@ -198,6 +198,8 @@
 		749F37177406FA4671A31735 /* AutoScrollableShotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B525AA0CA1300E2FD55E9FFE /* AutoScrollableShotsView.swift */; };
 		74E256BD1D9E888000AA5941 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E256BC1D9E888000AA5941 /* DeviceInfo.swift */; };
 		753FD53914DBCC54D8DD260C /* Vibratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDB69B47193BA76493CC9 /* Vibratable.swift */; };
+		753FDA6EEE0A764933D2CDDE /* ProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */; };
+		753FDF9B3737040A4EB5D127 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD460D6E8FFFABBE4830B /* ProfileInfoView.swift */; };
 		7584EFD2730B01300585E5E8 /* TwoLayoutsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */; };
 		766D38BA2C3852B7445EC895 /* LargeUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAD56AC35062CE4A617CB43 /* LargeUserCollectionViewCell.swift */; };
 		76F65BA39C64306D4BCF8A2F /* AuthenticatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD177C29700D7947C096000 /* AuthenticatorError.swift */; };
@@ -657,7 +659,9 @@
 		7449D9851CAD4A7500E37CE9 /* UserToURLProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserToURLProvider.swift; sourceTree = "<group>"; };
 		7449D9871CAD4A8D00E37CE9 /* URLToUserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLToUserProvider.swift; sourceTree = "<group>"; };
 		74E256BC1D9E888000AA5941 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		753FD460D6E8FFFABBE4830B /* ProfileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
 		753FDB69B47193BA76493CC9 /* Vibratable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vibratable.swift; sourceTree = "<group>"; };
+		753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoViewController.swift; sourceTree = "<group>"; };
 		76AEBEF3E99213A31557B276 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		789EF40106C3C29A91C1C948 /* LikesViewModelSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LikesViewModelSpec.swift; sourceTree = "<group>"; };
 		790D6B821FA73BCA5944979D /* APIConnectionsRequesterSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIConnectionsRequesterSpec.swift; sourceTree = "<group>"; };
@@ -919,6 +923,7 @@
 				49C49B2C4518896BCC57E827 /* LoginView.swift */,
 				3B29F69F6E4A0B2729572C12 /* ShotBucketsView.swift */,
 				311AEE14AEDBB81210947F5D /* ShotDetailsView.swift */,
+				753FD460D6E8FFFABBE4830B /* ProfileInfoView.swift */,
 			);
 			path = "Controllers View";
 			sourceTree = "<group>";
@@ -1503,6 +1508,7 @@
 				042944E7496B50A9D5E53F51 /* ShotsCollectionViewController.swift */,
 				F0FD0A831CBE496400735933 /* SimpleShotsCollectionViewController.swift */,
 				246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */,
+				753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2346,6 +2352,8 @@
 				65BA20E6F5AE0C128423A28B /* Numeric.swift in Sources */,
 				65BA26749BA1A3DCEF27F481 /* AppDelegateExtension.swift in Sources */,
 				753FD53914DBCC54D8DD260C /* Vibratable.swift in Sources */,
+				753FDA6EEE0A764933D2CDDE /* ProfileInfoViewController.swift in Sources */,
+				753FDF9B3737040A4EB5D127 /* ProfileInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
