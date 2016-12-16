@@ -10,22 +10,16 @@ import PureLayout
 
 class ProfileInfoView: UIView {
 
-    private lazy var followersAmountView: UIView = { [unowned self] in
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .red
-        return view
+    private lazy var followersAmountView: UserStatisticView = {
+        UserStatisticView(statisticTitle: "Followers", statisticValue: "326")
     }()
 
-    private lazy var shotsAmountView: UIView = { [unowned self] in
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .green
-        return view
+    private lazy var shotsAmountView: UIView = {
+        UserStatisticView(statisticTitle: "Shots", statisticValue: "52")
     }()
 
-    private lazy var followingAmountView: UIView = { [unowned self] in
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .blue
-        return view
+    private lazy var followingAmountView: UIView = {
+        UserStatisticView(statisticTitle: "Following", statisticValue: "154")
     }()
 
     private lazy var statisticsStackView: UIStackView = { [unowned self] in
@@ -40,7 +34,9 @@ class ProfileInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(statisticsStackView)
-        statisticsStackView.autoPinEdgesToSuperviewEdges()
+        statisticsStackView.autoPinEdge(toSuperviewEdge: .top)
+        statisticsStackView.autoPinEdge(toSuperviewEdge: .left)
+        statisticsStackView.autoPinEdge(toSuperviewEdge: .right)
     }
 
     @available(*, unavailable, message: "Use init(frame:) instead")

@@ -15,6 +15,7 @@ class ProfileInfoViewController: UIViewController {
 
     override func loadView() {
         view = ProfileInfoView(frame: .zero)
+        view.backgroundColor = .white
     }
 
 
