@@ -16,30 +16,6 @@ class ProfileInfoView: UIView {
 
     private lazy var followingAmountView: UIView = UserStatisticView(statisticTitle: "Following", statisticValue: "154")
 
-    private lazy var separator1: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separatorGrayColor()
-        return view
-    }()
-
-    private lazy var separator2: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separatorGrayColor()
-        return view
-    }()
-
-    private lazy var horizontalSeparator1: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separatorGrayColor()
-        return view
-    }()
-
-    private lazy var horizontalSeparator2: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separatorGrayColor()
-        return view
-    }()
-
     private lazy var statisticsStackView: UIStackView = { [unowned self] in
         let stackView = UIStackView(
             arrangedSubviews: [
