@@ -7,7 +7,7 @@ import PromiseKit
 import SwiftyUserDefaults
 import PeekPop
 
-class ShotsCollectionViewController: UICollectionViewController, Vibratable {
+class ShotsCollectionViewController: UICollectionViewController, Vibratable, Support3DTouch {
 
     enum State {
         case onboarding, initialAnimations, normal
@@ -21,7 +21,8 @@ class ShotsCollectionViewController: UICollectionViewController, Vibratable {
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     // MARK: Life cycle
 
@@ -66,7 +67,6 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
-        add3DSupportForOlderDevices()
     }
     
     
@@ -80,6 +80,8 @@ extension ShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
+        
         AnalyticsManager.trackScreen(.shotsView)
 
         if (!didSetupAnimation) {
@@ -275,12 +277,6 @@ fileprivate extension ShotsCollectionViewController {
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
     }
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
-    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
@@ -319,9 +315,7 @@ extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
             let indexPath = collectionView.indexPathsForVisibleItems.first
         else { return nil }
 
-        let frame = visibleCell.contentView.frame
-        let origin = collectionView.convert(visibleCell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = visibleCell.frame
 
         return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
     }

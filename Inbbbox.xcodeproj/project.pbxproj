@@ -299,6 +299,7 @@
 		BE71499E1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE71499D1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift */; };
 		BE7A1741292D08D3D45BFAEF /* DeleteCommentQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C949299AFC25FEF29D2F7EF /* DeleteCommentQuerySpec.swift */; };
 		BEA70EFA1DD9C50C00868702 /* ActionRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA70EF91DD9C50C00868702 /* ActionRange.swift */; };
+		BEDB0ACC1E02E24A001510C7 /* Support3DTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDB0ACB1E02E24A001510C7 /* Support3DTouch.swift */; };
 		BF48E9481F8839521F829A1F /* APITeamsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFFC0840E460B99F665C2C5 /* APITeamsProviderSpec.swift */; };
 		C0EE2D8640F65C4539FC86A1 /* ShotBucketsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73ED7991095A44326D902553 /* ShotBucketsFooterView.swift */; };
 		C11B3B8DECEEDFD228F6C0E6 /* GifIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B622AEA1C27A1940BA8A811 /* GifIndicatorView.swift */; };
@@ -770,6 +771,7 @@
 		BE71499B1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingSkipButtonHandlerDelegate.swift; sourceTree = "<group>"; };
 		BE71499D1DE85E2F007442CF /* OnboardingSkipButtonAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingSkipButtonAnimator.swift; sourceTree = "<group>"; };
 		BEA70EF91DD9C50C00868702 /* ActionRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionRange.swift; sourceTree = "<group>"; };
+		BEDB0ACB1E02E24A001510C7 /* Support3DTouch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Support3DTouch.swift; sourceTree = "<group>"; };
 		C26227A4CC4CB0D73BEEF058 /* FollowersQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FollowersQuery.swift; sourceTree = "<group>"; };
 		C28A7631D86F1074E2F49E9C /* ShotDetailsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotDetailsViewController.swift; sourceTree = "<group>"; };
 		C293E57C35C383AA44755DAF /* ShotsNormalStateHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotsNormalStateHandler.swift; sourceTree = "<group>"; };
@@ -1346,6 +1348,7 @@
 				30C184641CC674920032798C /* DefaultImage.swift */,
 				F0BEBDD81CDB3E9800AA391C /* ProfileViewModel.swift */,
 				753FDB69B47193BA76493CC9 /* Vibratable.swift */,
+				BEDB0ACB1E02E24A001510C7 /* Support3DTouch.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2247,6 +2250,7 @@
 				303A578B1D0FE47A00D760A3 /* SafariAuthorizable.swift in Sources */,
 				FCEDCF731A097C32FD5BCB64 /* StoreData.xcdatamodeld in Sources */,
 				5811B161DEB0097D40429851 /* StoreData.xcdatamodel in Sources */,
+				BEDB0ACC1E02E24A001510C7 /* Support3DTouch.swift in Sources */,
 				748A5DF73FD3E3F28BF2B145 /* BucketsCollectionViewController.swift in Sources */,
 				F077D0941CD23457008948A9 /* URLDetector.swift in Sources */,
 				1DD0039A410C9A2E849931D4 /* CenterButtonTabBarController.swift in Sources */,
