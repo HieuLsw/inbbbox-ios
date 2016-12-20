@@ -71,6 +71,8 @@ class ProfileInfoView: UIView {
     }
 
     private func setupLayout() {
+        backgroundColor = .white
+
         addSubview(headerStackView)
         headerStackView.autoPinEdge(toSuperviewEdge: .top)
         headerStackView.autoPinEdge(toSuperviewEdge: .left)
