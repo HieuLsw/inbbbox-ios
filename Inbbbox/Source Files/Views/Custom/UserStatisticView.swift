@@ -10,17 +10,17 @@ import PureLayout
 
 class UserStatisticView: UIView {
 
-    private lazy var statisticValueLabel: UILabel = { [unowned self] in
-        self.getLabel(fontSize: 24, textColor: .textDarkColor())
+    private lazy var valueLabel: UILabel = { [unowned self] in
+        self.label(fontSize: 24, textColor: .textDarkColor())
     }()
 
-    private lazy var statisticTitleLabel: UILabel = { [unowned self] in
-        self.getLabel(fontSize: 12, textColor: .textLightGrayColor())
+    private lazy var titleLabel: UILabel = { [unowned self] in
+        self.label(fontSize: 12, textColor: .textLightGrayColor())
     }()
 
     private lazy var stackView: UIStackView = { [unowned self] in
         let stackView = UIStackView(
-            arrangedSubviews: [self.statisticValueLabel, self.statisticTitleLabel]
+            arrangedSubviews: [self.valueLabel, self.titleLabel]
         )
 
         stackView.axis = .vertical
@@ -35,10 +35,10 @@ class UserStatisticView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(statisticTitle: String, statisticValue: String) {
+    init(title: String, value: String) {
         super.init(frame: .zero)
-        statisticTitleLabel.text = statisticTitle
-        statisticValueLabel.text = statisticValue
+        titleLabel.text = title
+        valueLabel.text = value
         setupLayout()
     }
 
@@ -48,7 +48,7 @@ class UserStatisticView: UIView {
         stackView.autoPinEdgesToSuperviewEdges()
     }
 
-    private func getLabel(fontSize: CGFloat, textColor: UIColor) -> UILabel {
+    private func label(fontSize: CGFloat, textColor: UIColor) -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: fontSize, weight: UIFontWeightMedium)

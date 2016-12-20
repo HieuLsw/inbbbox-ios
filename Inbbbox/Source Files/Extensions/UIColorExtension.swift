@@ -91,6 +91,16 @@ extension UIColor {
     class func textLightGrayColor() -> UIColor {
         return RGBA(100, 100, 100, 1)
     }
+
+    /// Returns brand text gray color.
+    class func textGrayColor() -> UIColor {
+        return RGBA(148, 147, 153, 1)
+    }
+
+    /// Returns brand text medium gray color.
+    class func textMediumGrayColor() -> UIColor {
+        return RGBA(127, 127, 127, 1)
+    }
     
     // MARK: Night Mode
     
