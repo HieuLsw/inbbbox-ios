@@ -85,7 +85,11 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
             name: user.name ?? "",
             username: user.username,
             avatarURL: user.avatarURL,
-            createdAt: Date()
+            createdAt: Date(),
+            followersCount: user.followersCount,
+            followingsCount: user.followingsCount,
+            bio: user.bio,
+            location: user.location
         )
         self.init(team: team)
     }

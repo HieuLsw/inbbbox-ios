@@ -32,7 +32,9 @@ class ProfileInfoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsAmount
+        profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
+        profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
+        profileInfoView.followingAmountView.valueLabel.text = viewModel.followingsCount
     }
 
     override func loadView() {

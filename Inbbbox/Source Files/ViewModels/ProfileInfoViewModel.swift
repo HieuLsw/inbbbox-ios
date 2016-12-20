@@ -11,8 +11,16 @@ class ProfileInfoViewModel {
 
     private let user: UserType
 
-    var shotsAmount: String {
+    var shotsCount: String {
         return String(user.shotsCount)
+    }
+
+    var followersCount: String {
+        return String(user.followersCount)
+    }
+
+    var followingsCount: String {
+        return String(user.followingsCount)
     }
 
     init(user: UserType) {

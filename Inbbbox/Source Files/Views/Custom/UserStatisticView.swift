@@ -10,7 +10,7 @@ import PureLayout
 
 class UserStatisticView: UIView {
 
-    private lazy var valueLabel: UILabel = { [unowned self] in
+    private(set) lazy var valueLabel: UILabel = { [unowned self] in
         self.label(fontSize: 24, textColor: .textDarkColor())
     }()
 
@@ -35,10 +35,9 @@ class UserStatisticView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(title: String, value: String) {
+    init(title: String) {
         super.init(frame: .zero)
         titleLabel.text = title
-        valueLabel.text = value
         setupLayout()
     }
 

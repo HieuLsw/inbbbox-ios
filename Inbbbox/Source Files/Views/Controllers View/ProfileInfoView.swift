@@ -10,13 +10,10 @@ import PureLayout
 
 class ProfileInfoView: UIView {
 
-    private lazy var followersAmountView = UserStatisticView(title: "Followers", value: "326")
-
-    private lazy var shotsAmountView = UserStatisticView(title: "Shots", value: "52")
-
-    private lazy var followingAmountView = UserStatisticView(title: "Following", value: "154")
-
-    private lazy var locationView = LocationView(location: "Gdańsk, Poland")
+    let followersAmountView = UserStatisticView(title: "Followers")
+    let shotsAmountView = UserStatisticView(title: "Shots")
+    let followingAmountView = UserStatisticView(title: "Following")
+    let locationView = LocationView(location: "Gdańsk, Poland")
 
     private lazy var userDescription: UILabel = { [unowned self] in
         let label = UILabel()

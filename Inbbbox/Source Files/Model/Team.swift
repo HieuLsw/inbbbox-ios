@@ -16,6 +16,10 @@ struct Team: TeamType {
     let username: String
     let avatarURL: URL?
     let createdAt: Date
+    let followersCount: UInt
+    let followingsCount: UInt
+    let bio: String
+    let location: String
 
 }
 
@@ -30,7 +34,11 @@ extension Team: Mappable {
                 name: json[Key.Name.rawValue].stringValue,
                 username: json[Key.Username.rawValue].stringValue,
                 avatarURL: json[Key.Avatar.rawValue].URL,
-                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!
+                createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
+                followersCount: json[Key.FollowersCount.rawValue].uIntValue,
+                followingsCount: json[Key.FollowingsCount.rawValue].uIntValue,
+                bio: json[Key.Bio.rawValue].stringValue,
+                location: json[Key.Location.rawValue].stringValue
             )
         }
     }
@@ -41,6 +49,10 @@ extension Team: Mappable {
         case Username = "username"
         case Avatar = "avatar_url"
         case CreatedAt = "created_at"
+        case FollowersCount = "followers_count"
+        case FollowingsCount = "followings_count"
+        case Bio = "bio"
+        case Location = "location"
     }
 }
 

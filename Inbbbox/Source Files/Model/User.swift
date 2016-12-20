@@ -17,7 +17,10 @@ final class User: NSObject, UserType {
     let avatarURL: URL?
     let shotsCount: UInt
     let accountType: UserAccountType?
-
+    let followersCount: UInt
+    let followingsCount: UInt
+    let bio: String
+    let location: String
 
     init(json: JSON) {
         identifier = json[Key.Identifier.rawValue].stringValue
@@ -26,6 +29,10 @@ final class User: NSObject, UserType {
         avatarURL = json[Key.Avatar.rawValue].URL
         shotsCount = json[Key.ShotsCount.rawValue].uIntValue
         accountType = UserAccountType(rawValue: json[Key.AccountType.rawValue].stringValue)
+        followersCount = json[Key.FollowersCount.rawValue].uIntValue
+        followingsCount = json[Key.FollowingsCount.rawValue].uIntValue
+        bio = json[Key.Bio.rawValue].stringValue
+        location = json[Key.Location.rawValue].stringValue
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -40,6 +47,10 @@ final class User: NSObject, UserType {
             }
             return nil
         }()
+        followersCount = aDecoder.decodeObject(forKey: Key.FollowersCount.rawValue) as? UInt ?? 0
+        followingsCount = aDecoder.decodeObject(forKey: Key.FollowingsCount.rawValue) as? UInt ?? 0
+        bio = aDecoder.decodeObject(forKey: Key.Bio.rawValue) as? String ?? ""
+        location = aDecoder.decodeObject(forKey: Key.Location.rawValue) as? String ?? ""
     }
 
     func encode(with aCoder: NSCoder) {
@@ -49,6 +60,10 @@ final class User: NSObject, UserType {
         aCoder.encode(avatarURL, forKey: Key.Avatar.rawValue)
         aCoder.encode(shotsCount, forKey: Key.ShotsCount.rawValue)
         aCoder.encode(accountType?.rawValue, forKey: Key.AccountType.rawValue)
+        aCoder.encode(followersCount, forKey: Key.FollowersCount.rawValue)
+        aCoder.encode(followingsCount, forKey: Key.FollowingsCount.rawValue)
+        aCoder.encode(bio, forKey: Key.Bio.rawValue)
+        aCoder.encode(location, forKey: Key.Location.rawValue)
     }
 }
 
@@ -61,6 +76,10 @@ private extension User {
         case Avatar = "avatar_url"
         case ShotsCount = "shots_count"
         case AccountType = "type"
+        case FollowersCount = "followers_count"
+        case FollowingsCount = "followings_count"
+        case Bio = "bio"
+        case Location = "location"
     }
 }
 
