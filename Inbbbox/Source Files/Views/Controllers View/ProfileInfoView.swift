@@ -57,8 +57,12 @@ class ProfileInfoView: UIView {
         return stackView
     }()
 
+    var teamsCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: TeamsCollectionViewFlowLayout())
+    var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupCollectionView()
         setupLayout()
     }
 
@@ -84,6 +88,19 @@ class ProfileInfoView: UIView {
         userDescription.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
         userDescription.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
         userDescription.autoAlignAxis(.vertical, toSameAxisOf: headerStackView)
+
+        addSubview(teamsCollectionView)
+        teamsCollectionView.autoPinEdge(.top, to: .bottom, of: userDescription, withOffset: 12)
+        teamsCollectionView.autoPinEdge(toSuperviewEdge: .left)
+        teamsCollectionView.autoPinEdge(toSuperviewEdge: .right)
+        teamsCollectionView.autoPinEdge(toSuperviewEdge: .bottom)
+    }
+
+    private func setupCollectionView() {
+        teamsCollectionViewFlowLayout.headerReferenceSize = CGSize(width: frame.size.width, height: 60)
+
+        teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
+        teamsCollectionView.backgroundColor = .white
     }
 
 }

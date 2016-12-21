@@ -30,7 +30,7 @@ class UserStatisticView: UIView {
         return stackView
     }()
 
-    @available(*, unavailable, message: "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(title:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
