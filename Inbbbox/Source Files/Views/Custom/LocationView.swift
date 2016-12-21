@@ -12,12 +12,7 @@ class LocationView: UIView {
 
     let location: String
 
-    private lazy var earthImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "ic-location"))
-        imageView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
-        return imageView
-    }()
+    private lazy var earthImageView = UIImageView(image: UIImage(named: "ic-location"))
 
     private lazy var locationLabel: UILabel = { [unowned self] in
         let label = UILabel()
@@ -32,6 +27,7 @@ class LocationView: UIView {
             arrangedSubviews: [self.earthImageView, self.locationLabel]
         )
         stackView.axis = .horizontal
+        stackView.alignment = .center
         stackView.spacing = 8
         return stackView
     }()
@@ -48,8 +44,7 @@ class LocationView: UIView {
     }
 
     private func setupLayout() {
-        setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
         addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsetsMake(16, 0, 12, 0))
+        stackView.autoPinEdgesToSuperviewEdges()
     }
 }

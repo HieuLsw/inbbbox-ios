@@ -48,8 +48,7 @@ class ProfileInfoView: UIView {
             arrangedSubviews: [
                 SeparatorView(axis: .vertical, thickness: 0.5, color: .separatorGrayColor()),
                 self.statisticsStackView,
-                SeparatorView(axis: .vertical, thickness: 0.5, color: .separatorGrayColor()),
-                self.locationView
+                SeparatorView(axis: .vertical, thickness: 0.5, color: .separatorGrayColor())
             ]
         )
         stackView.axis = .vertical
@@ -57,7 +56,23 @@ class ProfileInfoView: UIView {
         return stackView
     }()
 
-    var teamsCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: TeamsCollectionViewFlowLayout())
+    private lazy var informationsStackView: UIStackView = { [unowned self] in
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                self.locationView,
+                self.userDescription,
+            ]
+        )
+        stackView.layoutMargins = UIEdgeInsetsMake(16, 0, 0, 12)
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 12
+
+        return stackView
+    }()
+
+    var teamsCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     override init(frame: CGRect) {
@@ -79,18 +94,13 @@ class ProfileInfoView: UIView {
         headerStackView.autoPinEdge(toSuperviewEdge: .left)
         headerStackView.autoPinEdge(toSuperviewEdge: .right)
 
-        addSubview(locationView)
-        locationView.autoPinEdge(.top, to: .bottom, of: headerStackView)
-        locationView.autoAlignAxis(.vertical, toSameAxisOf: headerStackView)
-
-        addSubview(userDescription)
-        userDescription.autoPinEdge(.top, to: .bottom, of: locationView)
-        userDescription.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
-        userDescription.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-        userDescription.autoAlignAxis(.vertical, toSameAxisOf: headerStackView)
+        addSubview(informationsStackView)
+        informationsStackView.autoPinEdge(.top, to: .bottom, of: headerStackView)
+        informationsStackView.autoPinEdge(toSuperviewEdge: .left)
+        informationsStackView.autoPinEdge(toSuperviewEdge: .right)
 
         addSubview(teamsCollectionView)
-        teamsCollectionView.autoPinEdge(.top, to: .bottom, of: userDescription, withOffset: 12)
+        teamsCollectionView.autoPinEdge(.top, to: .bottom, of: informationsStackView)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .left)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .right)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .bottom)
@@ -100,7 +110,7 @@ class ProfileInfoView: UIView {
         teamsCollectionViewFlowLayout.headerReferenceSize = CGSize(width: frame.size.width, height: 60)
 
         teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
-        teamsCollectionView.backgroundColor = .white
+        teamsCollectionView.backgroundColor = .green
     }
 
 }
