@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SeparatorView: UIView {
+final class SeparatorView: UIView {
 
     private let axis: Axis
 

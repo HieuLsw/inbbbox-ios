@@ -8,20 +8,21 @@
 import UIKit
 import PureLayout
 
-class ProfileInfoView: UIView {
+final class ProfileInfoView: UIView {
 
     let followersAmountView = UserStatisticView(title: "Followers")
     let shotsAmountView = UserStatisticView(title: "Shots")
     let followingAmountView = UserStatisticView(title: "Following")
-    let locationView = LocationView(location: "Gdańsk, Poland")
+    let locationView = LocationView()
 
-    private lazy var userDescription: UILabel = { [unowned self] in
+    private(set) lazy var bioLabel: UILabel = { [unowned self] in
         let label = UILabel()
+
         label.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         label.numberOfLines = 0
         label.textColor = .textMediumGrayColor()
         label.textAlignment = .center
-        label.text = "9 years experience Product Designer - shuma87@gmail.com"
+
         return label
     }()
 
@@ -60,10 +61,10 @@ class ProfileInfoView: UIView {
         let stackView = UIStackView(
             arrangedSubviews: [
                 self.locationView,
-                self.userDescription,
+                self.bioLabel,
             ]
         )
-        stackView.layoutMargins = UIEdgeInsetsMake(16, 0, 0, 12)
+        stackView.layoutMargins = UIEdgeInsetsMake(16, 0, 12, 0)
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -72,10 +73,12 @@ class ProfileInfoView: UIView {
         return stackView
     }()
 
-    var teamsCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+    private(set) var teamsCollectionView: UICollectionView
+    private(set) var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout
 
     override init(frame: CGRect) {
+        teamsCollectionViewFlowLayout = UICollectionViewFlowLayout()
+        teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
         super.init(frame: frame)
         setupCollectionView()
         setupLayout()
@@ -108,9 +111,10 @@ class ProfileInfoView: UIView {
 
     private func setupCollectionView() {
         teamsCollectionViewFlowLayout.headerReferenceSize = CGSize(width: frame.size.width, height: 60)
+        teamsCollectionViewFlowLayout.minimumInteritemSpacing = 0
+        teamsCollectionViewFlowLayout.minimumLineSpacing = 0
 
-        teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
-        teamsCollectionView.backgroundColor = .green
+        teamsCollectionView.backgroundColor = .white
     }
 
 }

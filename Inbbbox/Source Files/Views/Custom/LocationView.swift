@@ -5,20 +5,19 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-import PureLayout
 import UIKit
+import PureLayout
 
-class LocationView: UIView {
-
-    let location: String
+final class LocationView: UIView {
 
     private lazy var earthImageView = UIImageView(image: UIImage(named: "ic-location"))
 
-    private lazy var locationLabel: UILabel = { [unowned self] in
+    private(set) lazy var locationLabel: UILabel = { [unowned self] in
         let label = UILabel()
+
         label.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         label.textColor = .textGrayColor()
-        label.text = self.location
+
         return label
     }()
 
@@ -32,8 +31,7 @@ class LocationView: UIView {
         return stackView
     }()
 
-    init(location: String) {
-        self.location = location
+    init() {
         super.init(frame: .zero)
         setupLayout()
     }

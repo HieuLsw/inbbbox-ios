@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ProfileInfoViewController: UIViewController, UICollectionViewDelegate {
+final class ProfileInfoViewController: UIViewController, UICollectionViewDelegate {
 
-    let viewModel: ProfileInfoViewModel
+    fileprivate let viewModel: ProfileInfoViewModel
 
-    var profileInfoView: ProfileInfoView! {
+    private var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
     }
 
@@ -32,28 +32,34 @@ class ProfileInfoViewController: UIViewController, UICollectionViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        profileInfoView.teamsCollectionView.delegate = self
-        profileInfoView.teamsCollectionView.dataSource = self
-        profileInfoView.teamsCollectionView.register(TeamCollectionViewCell.self, forCellWithReuseIdentifier: TeamCollectionViewCell.identifier)
-        profileInfoView.teamsCollectionView.isScrollEnabled = false
-
-        profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
-        profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
-        profileInfoView.followingAmountView.valueLabel.text = viewModel.followingsCount
-
-        profileInfoView.teamsCollectionView.reloadData()
+        setupTeamsCollectionView()
+        setupUI()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
-        profileInfoView.teamsCollectionViewFlowLayout.minimumInteritemSpacing = 0
-        profileInfoView.teamsCollectionViewFlowLayout.minimumLineSpacing = 0
     }
 
     override func loadView() {
         view = ProfileInfoView(frame: .zero)
+    }
+
+    private func setupTeamsCollectionView() {
+        profileInfoView.teamsCollectionView.delegate = self
+        profileInfoView.teamsCollectionView.dataSource = self
+        profileInfoView.teamsCollectionView.isScrollEnabled = false
+        profileInfoView.teamsCollectionView.register(TeamCollectionViewCell.self, forCellWithReuseIdentifier: TeamCollectionViewCell.identifier)
+        profileInfoView.teamsCollectionView.register(TeamsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier)
+    }
+
+    private func setupUI() {
+        profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
+        profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
+        profileInfoView.followingAmountView.valueLabel.text = viewModel.followingsCount
+        profileInfoView.locationView.locationLabel.text = viewModel.location
+        profileInfoView.bioLabel.text = viewModel.bio
+        profileInfoView.locationView.isHidden = viewModel.shouldHideLocation
     }
 
 }
@@ -68,5 +74,11 @@ extension ProfileInfoViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TeamCollectionViewCell.identifier, for: indexPath)
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier, for: indexPath)
+        return header
+    }
+
 
 }

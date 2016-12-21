@@ -5,8 +5,8 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-import PureLayout
 import UIKit
+import PureLayout
 
 final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
 
@@ -14,9 +14,11 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
 
     private(set) lazy var nameLabel: UILabel = { [unowned self] in
         let label = UILabel()
+
         label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
         label.numberOfLines = 0
-        label.textColor = .textDarkGrayColor()
+        label.textColor = .textLightGrayColor()
+
         return label
     }()
 

@@ -5,9 +5,7 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-import Foundation
-
-class ProfileInfoViewModel {
+final class ProfileInfoViewModel {
 
     private let user: UserType
 
@@ -21,6 +19,18 @@ class ProfileInfoViewModel {
 
     var followingsCount: String {
         return String(user.followingsCount)
+    }
+
+    var location: String {
+        return user.location
+    }
+
+    var bio: String {
+        return user.bio
+    }
+
+    var shouldHideLocation: Bool {
+        return user.location.characters.count == 0
     }
 
     init(user: UserType) {
