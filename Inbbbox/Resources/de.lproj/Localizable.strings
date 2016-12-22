@@ -178,7 +178,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "Du hast die E-Mail nicht konfiguriert - keine Sorgen, schreib einfach an inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Projekt-Downloaden von Dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Projekt-Downloaden von Dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -352,3 +355,11 @@
 "ShotCollectionCell.Bucket" = "Den Likes und Album hinzugefügt!";
 "ShotCollectionCell.Comment" = "Momentan kommentiert…";
 "ShotCollectionCell.Follow" = "Dem Autor folgen!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Abonnierte Autoren";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

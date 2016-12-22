@@ -35,6 +35,18 @@ protocol UserType {
     /// Account type of User.
     /// Can be User, Player, Team.
     var accountType: UserAccountType? { get }
+
+    /// Number of user's followers
+    var followersCount: UInt { get }
+
+    /// Number of users followed by User.
+    var followingsCount: UInt { get }
+
+    /// Bio of the User.
+    var bio: String { get }
+
+    /// Location of the User.
+    var location: String { get }
 }
 
 func == (lhs: UserType, rhs: UserType) -> Bool {

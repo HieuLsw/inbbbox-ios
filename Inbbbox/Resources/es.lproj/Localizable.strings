@@ -178,7 +178,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "¿No tiene cliente de correo electrónico? - ningún problema, puede utilizar esta dirección de correo para enviarnos sus comentarios donde quiera: inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Descargar proyectos de dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Descargar proyectos de dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -353,3 +356,11 @@
 "ShotCollectionCell.Bucket" = "Te gusta y añadido a la cubeta!";
 "ShotCollectionCell.Comment" = "Comentando…";
 "ShotCollectionCell.Follow" = "Siguiendo al autor!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Siguiendo";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
