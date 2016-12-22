@@ -178,7 +178,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "A tua conta e-mail não está configurada. Envie uma mensagem para inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Descarregar projetos de Dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Descarregar projetos de Dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
