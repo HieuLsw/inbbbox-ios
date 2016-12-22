@@ -1,11 +1,9 @@
 //
-//  ShotsQuery.swift
+//  TeamsQuery.swift
 //  Inbbbox
 //
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
-
-import Foundation
 
 struct TeamsQuery: Query {
 

@@ -352,3 +352,11 @@
 "ShotCollectionCell.Bucket" = "Dodano do polubień i wiaderka!";
 "ShotCollectionCell.Comment" = "Komentowanie…";
 "ShotCollectionCell.Follow" = "Obserwujesz autora!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "Followers"; //$
+"ProfileInfoView.Shots" = "Shots"; //$
+"ProfileInfoView.Following" = "Obserwowani";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "On Teams"; //$

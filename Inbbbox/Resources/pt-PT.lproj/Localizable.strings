@@ -352,3 +352,11 @@
 "ShotCollectionCell.Bucket" = "Curtido e adicionado ao balde!";
 "ShotCollectionCell.Comment" = "Comentando…";
 "ShotCollectionCell.Follow" = "Está a seguir ao autor!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Os autores seguidos";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

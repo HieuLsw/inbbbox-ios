@@ -352,3 +352,11 @@
 "ShotCollectionCell.Bucket" = "Den Likes und Album hinzugefügt!";
 "ShotCollectionCell.Comment" = "Momentan kommentiert…";
 "ShotCollectionCell.Follow" = "Dem Autor folgen!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Abonnierte Autoren";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

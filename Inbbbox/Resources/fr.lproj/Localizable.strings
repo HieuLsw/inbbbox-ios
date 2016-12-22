@@ -353,3 +353,11 @@
 "ShotCollectionCell.Bucket" = "Aimer et ajouter à la liste des souhaits!";
 "ShotCollectionCell.Comment" = "Commenter…";
 "ShotCollectionCell.Follow" = "Tu observes l'auteur!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Auteurs observés";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

@@ -35,7 +35,7 @@ final class ProfileInfoViewController: UIViewController, UICollectionViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
+        setupUI()
         setupTeamsCollectionView()
         viewModel.refreshUserData()
     }

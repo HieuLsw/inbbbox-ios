@@ -10,9 +10,9 @@ import PureLayout
 
 final class ProfileInfoView: UIView {
 
-    let followersAmountView = UserStatisticView(title: "Followers")
-    let shotsAmountView = UserStatisticView(title: "Shots")
-    let followingAmountView = UserStatisticView(title: "Following")
+    let followersAmountView = UserStatisticView(title: NSLocalizedString("ProfileInfoView.Followers", comment: "Followers"))
+    let shotsAmountView = UserStatisticView(title: NSLocalizedString("ProfileInfoView.Shots", comment: "Shots"))
+    let followingAmountView = UserStatisticView(title: NSLocalizedString("ProfileInfoView.Following", comment: "Following"))
     let locationView = LocationView()
 
     private(set) lazy var bioLabel: UILabel = { [unowned self] in
