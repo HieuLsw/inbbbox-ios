@@ -12,24 +12,6 @@ import PromiseKit
 /// Provides interface for dribbble teams read API
 class APITeamsProvider: PageableProvider {
 
-    /**
-     Provides team's members.
-
-     - parameter team: Team to get members for.
-
-     - returns: Promise which resolves with users or nil.
-     */
-    func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
-
-        let query = TeamMembersQuery(team: team)
-        return Promise<[UserType]?> { fulfill, reject in
-            firstly {
-                firstPageForQueries([query], withSerializationKey: nil)
-            }.then { (users: [User]?) -> Void in
-                fulfill(users.flatMap { $0.map { $0 as UserType } })
-            }.catch(execute: reject)
-        }
-    }
 
     /**
      Provides logged user's teams.
@@ -44,6 +26,43 @@ class APITeamsProvider: PageableProvider {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (teams: [Team]?) -> Void in
                 fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
+     Provides next page of teams.
+
+     - Warning: You have to use any of provide... method first to be able to use this method.
+     Otherwise an exception will appear.
+
+     - returns: Promise which resolves with users or nil.
+     */
+    func teamsNextPage() -> Promise<[TeamType]?> {
+        return Promise <[TeamType]?> { fulfill, reject in
+            firstly {
+                nextPageFor(Team.self)
+            }.then { teams -> Void in
+                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
+     Provides team's members.
+
+     - parameter team: Team to get members for.
+
+    - returns: Promise which resolves with users or nil.
+    */
+    func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
+
+        let query = TeamMembersQuery(team: team)
+        return Promise<[UserType]?> { fulfill, reject in
+            firstly {
+                firstPageForQueries([query], withSerializationKey: nil)
+            }.then { (users: [User]?) -> Void in
+                fulfill(users.flatMap { $0.map { $0 as UserType } })
             }.catch(execute: reject)
         }
     }

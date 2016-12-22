@@ -50,6 +50,7 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
 
         nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: logoImageView)
         nameLabel.autoPinEdge(.left, to: .right, of: logoImageView, withOffset: 14)
+        nameLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 24)
     }
 
 }

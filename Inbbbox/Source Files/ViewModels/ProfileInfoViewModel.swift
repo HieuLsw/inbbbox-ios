@@ -80,7 +80,19 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     func downloadItemsForNextPage() {
-        // no-op
+        firstly {
+            teamsProvider.nextPage()
+        }.then { teams -> Void in
+            if let teams = teams, teams.count > 0 {
+                let indexPaths = teams.enumerated().map { index, _ in
+                    return IndexPath(row: (index + self.teams.count), section: 0)
+                }
+                self.teams.append(contentsOf: teams)
+                self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
+            }
+        }.catch { error in
+            self.delegate?.viewModelDidFailToLoadItems(error)
+        }
     }
 
     func team(forIndex index: Int) -> TeamType {

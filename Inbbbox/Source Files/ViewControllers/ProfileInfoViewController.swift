@@ -9,7 +9,7 @@ import Haneke
 import PromiseKit
 import UIKit
 
-final class ProfileInfoViewController: UIViewController, UICollectionViewDelegate {
+final class ProfileInfoViewController: UIViewController {
 
     fileprivate let viewModel: ProfileInfoViewModel
 
@@ -91,6 +91,16 @@ extension ProfileInfoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier, for: indexPath)
         return header
+    }
+
+}
+
+extension ProfileInfoViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        if (indexPath.row == viewModel.itemsCount - 1 && indexPath.row > 30) {
+            viewModel.downloadItemsForNextPage()
+        }
     }
 
 }
