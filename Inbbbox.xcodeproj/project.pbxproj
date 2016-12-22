@@ -201,10 +201,12 @@
 		753FD2C49FF80DF74066C0E2 /* TeamCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD1BD0CB2109B51D1C0F2 /* TeamCollectionViewCell.swift */; };
 		753FD49E50FD6E7E9DFBDEC0 /* ProfileInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */; };
 		753FD53914DBCC54D8DD260C /* Vibratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDB69B47193BA76493CC9 /* Vibratable.swift */; };
+		753FD9AF0BB7D2D91D52C799 /* TeamsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDF0EEC461556F1FE5493 /* TeamsProvider.swift */; };
 		753FD9EA0B66A4C38F0B0BC3 /* UserStatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD8133597AE27E1D245CD /* UserStatisticView.swift */; };
 		753FDA6EEE0A764933D2CDDE /* ProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */; };
 		753FDC31BAC8D10311FC8972 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD99B2457A82B7DF3C08F /* LocationView.swift */; };
 		753FDDDC65BF890104DA02D8 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FDC2205DDD353E0A5C180 /* SeparatorView.swift */; };
+		753FDE3ED9E2F34BF1FC2E68 /* TeamsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD1CAFF142FE566FCC6E6 /* TeamsQuery.swift */; };
 		753FDF9B3737040A4EB5D127 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753FD460D6E8FFFABBE4830B /* ProfileInfoView.swift */; };
 		7584EFD2730B01300585E5E8 /* TwoLayoutsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */; };
 		766D38BA2C3852B7445EC895 /* LargeUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAD56AC35062CE4A617CB43 /* LargeUserCollectionViewCell.swift */; };
@@ -666,6 +668,7 @@
 		7449D9871CAD4A8D00E37CE9 /* URLToUserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLToUserProvider.swift; sourceTree = "<group>"; };
 		74E256BC1D9E888000AA5941 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		753FD1BD0CB2109B51D1C0F2 /* TeamCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamCollectionViewCell.swift; sourceTree = "<group>"; };
+		753FD1CAFF142FE566FCC6E6 /* TeamsQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsQuery.swift; sourceTree = "<group>"; };
 		753FD460D6E8FFFABBE4830B /* ProfileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
 		753FD8133597AE27E1D245CD /* UserStatisticView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStatisticView.swift; sourceTree = "<group>"; };
 		753FD99B2457A82B7DF3C08F /* LocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
@@ -674,6 +677,7 @@
 		753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoViewModel.swift; sourceTree = "<group>"; };
 		753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoViewController.swift; sourceTree = "<group>"; };
 		753FDE24E749B5DEB472451B /* TeamsCollectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsCollectionHeaderView.swift; sourceTree = "<group>"; };
+		753FDF0EEC461556F1FE5493 /* TeamsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsProvider.swift; sourceTree = "<group>"; };
 		76AEBEF3E99213A31557B276 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		789EF40106C3C29A91C1C948 /* LikesViewModelSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LikesViewModelSpec.swift; sourceTree = "<group>"; };
 		790D6B821FA73BCA5944979D /* APIConnectionsRequesterSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIConnectionsRequesterSpec.swift; sourceTree = "<group>"; };
@@ -1336,6 +1340,7 @@
 				EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */,
 				EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */,
 				741557621DA7D54500767008 /* ShotLikesQuery.swift */,
+				753FD1CAFF142FE566FCC6E6 /* TeamsQuery.swift */,
 			);
 			path = Queries;
 			sourceTree = "<group>";
@@ -1385,6 +1390,14 @@
 				304F32541CCE3BDE002EE96B /* InfoPlist.strings */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		753FD51C0CF9A510D7FBE36C /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				753FDF0EEC461556F1FE5493 /* TeamsProvider.swift */,
+			);
+			path = Teams;
 			sourceTree = "<group>";
 		};
 		7BB1FD16BD47703DF7E3739C /* Storages */ = {
@@ -1437,6 +1450,7 @@
 				C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */,
 				C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */,
 				C6A336781DF749D200357D2A /* SettingsItemsProvider.swift */,
+				753FD51C0CF9A510D7FBE36C /* Teams */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -2378,6 +2392,8 @@
 				753FD49E50FD6E7E9DFBDEC0 /* ProfileInfoViewModel.swift in Sources */,
 				753FD2C49FF80DF74066C0E2 /* TeamCollectionViewCell.swift in Sources */,
 				753FD12A2ACFC7665AA69981 /* TeamsCollectionHeaderView.swift in Sources */,
+				753FDE3ED9E2F34BF1FC2E68 /* TeamsQuery.swift in Sources */,
+				753FD9AF0BB7D2D91D52C799 /* TeamsProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

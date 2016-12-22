@@ -5,19 +5,22 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
+import Haneke
+import PromiseKit
 import UIKit
 
 final class ProfileInfoViewController: UIViewController, UICollectionViewDelegate {
 
     fileprivate let viewModel: ProfileInfoViewModel
 
-    private var profileInfoView: ProfileInfoView! {
+    fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
     }
 
     init(user: UserType) {
-        self.viewModel = ProfileInfoViewModel(user: user)
+        viewModel = ProfileInfoViewModel(user: user)
         super.init(nibName: nil, bundle: nil)
+        viewModel.delegate = self
     }
 
     @available(*, unavailable, message: "Use init(user:) instead")
@@ -32,13 +35,19 @@ final class ProfileInfoViewController: UIViewController, UICollectionViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupUI()
         setupTeamsCollectionView()
-        setupUI()
+        viewModel.refreshUserData()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.downloadInitialItems()
     }
 
     override func loadView() {
@@ -53,13 +62,14 @@ final class ProfileInfoViewController: UIViewController, UICollectionViewDelegat
         profileInfoView.teamsCollectionView.register(TeamsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier)
     }
 
-    private func setupUI() {
+    fileprivate func setupUI() {
         profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
         profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
         profileInfoView.followingAmountView.valueLabel.text = viewModel.followingsCount
         profileInfoView.locationView.locationLabel.text = viewModel.location
         profileInfoView.bioLabel.text = viewModel.bio
         profileInfoView.locationView.isHidden = viewModel.shouldHideLocation
+        profileInfoView.teamsCollectionView.isHidden = viewModel.shouldHideTeams
     }
 
 }
@@ -67,11 +77,14 @@ final class ProfileInfoViewController: UIViewController, UICollectionViewDelegat
 extension ProfileInfoViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return viewModel.itemsCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TeamCollectionViewCell.identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TeamCollectionViewCell.identifier, for: indexPath) as! TeamCollectionViewCell
+        cell.nameLabel.text = viewModel.team(forIndex: indexPath.row).name
+        guard let url = viewModel.team(forIndex: indexPath.row).avatarURL else { return cell }
+        cell.logoImageView.hnk_setImageFromURL(url, format: Format<UIImage>(name: TeamCollectionViewCell.identifier))
         return cell
     }
 
@@ -80,5 +93,33 @@ extension ProfileInfoViewController: UICollectionViewDataSource {
         return header
     }
 
+}
+
+extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
+
+    func viewModelDidLoadInitialItems() {
+        profileInfoView.teamsCollectionView.reloadData()
+        setupUI()
+    }
+
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
+        profileInfoView.teamsCollectionView.reloadData()
+
+        if viewModel.isTeamsEmpty {
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
+        }
+    }
+
+    func viewModelDidFailToLoadItems(_ error: Error) {
+        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingTeamsFailed, canBeDismissedByUser: true)
+    }
+
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        profileInfoView.teamsCollectionView.insertItems(at: indexPaths)
+    }
+
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        profileInfoView.teamsCollectionView.reloadItems(at: [indexPath])
+    }
 
 }

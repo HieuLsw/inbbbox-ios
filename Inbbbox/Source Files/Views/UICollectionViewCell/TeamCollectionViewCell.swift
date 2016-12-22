@@ -5,8 +5,8 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-import UIKit
 import PureLayout
+import UIKit
 
 final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
 
@@ -30,8 +30,6 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        nameLabel.text = "Netguru"
-        logoImageView.image = UIImage(named: "ic-ball")
     }
 
     override func prepareForReuse() {
@@ -47,6 +45,8 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
         logoImageView.autoSetDimensions(to: CGSize(width: 45, height: 45))
         logoImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
         logoImageView.autoPinEdge(toSuperviewEdge: .left, withInset: 24)
+        logoImageView.layer.cornerRadius = 22.5
+        logoImageView.clipsToBounds = true
 
         nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: logoImageView)
         nameLabel.autoPinEdge(.left, to: .right, of: logoImageView, withOffset: 14)
