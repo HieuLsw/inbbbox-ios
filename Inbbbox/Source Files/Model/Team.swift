@@ -27,32 +27,32 @@ extension Team: Mappable {
     static var map: (JSON) -> Team {
         return { json in
 
-            let stringDate = json[Key.CreatedAt.rawValue].stringValue
+            let stringDate = json[Key.createdAt.rawValue].stringValue
 
             return Team(
-                identifier: json[Key.Identifier.rawValue].stringValue,
-                name: json[Key.Name.rawValue].stringValue,
-                username: json[Key.Username.rawValue].stringValue,
-                avatarURL: json[Key.Avatar.rawValue].URL,
+                identifier: json[Key.identifier.rawValue].stringValue,
+                name: json[Key.name.rawValue].stringValue,
+                username: json[Key.username.rawValue].stringValue,
+                avatarURL: json[Key.avatar.rawValue].URL,
                 createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
-                followersCount: json[Key.FollowersCount.rawValue].uIntValue,
-                followingsCount: json[Key.FollowingsCount.rawValue].uIntValue,
-                bio: json[Key.Bio.rawValue].stringValue,
-                location: json[Key.Location.rawValue].stringValue
+                followersCount: json[Key.followersCount.rawValue].uIntValue,
+                followingsCount: json[Key.followingsCount.rawValue].uIntValue,
+                bio: json[Key.bio.rawValue].stringValue,
+                location: json[Key.location.rawValue].stringValue
             )
         }
     }
 
     fileprivate enum Key: String {
-        case Identifier = "id"
-        case Name = "name"
-        case Username = "username"
-        case Avatar = "avatar_url"
-        case CreatedAt = "created_at"
-        case FollowersCount = "followers_count"
-        case FollowingsCount = "followings_count"
-        case Bio = "bio"
-        case Location = "location"
+        case identifier = "id"
+        case name = "name"
+        case username = "username"
+        case avatar = "avatar_url"
+        case createdAt = "created_at"
+        case followersCount = "followers_count"
+        case followingsCount = "followings_count"
+        case bio = "bio"
+        case location = "location"
     }
 }
 
