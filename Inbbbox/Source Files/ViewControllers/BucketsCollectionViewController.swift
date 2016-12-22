@@ -11,7 +11,7 @@ import PromiseKit
 import DZNEmptyDataSet
 import PeekPop
 
-class BucketsCollectionViewController: UICollectionViewController {
+class BucketsCollectionViewController: UICollectionViewController, Support3DTouch {
 
     fileprivate let viewModel = BucketsViewModel()
     fileprivate var shouldShowLoadingView = true
@@ -20,7 +20,8 @@ class BucketsCollectionViewController: UICollectionViewController {
     fileprivate let animationCycleInterval = 6.0
 
     fileprivate var currentColorMode = ColorModeProvider.current()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
     // MARK: - Lifecycle
 
     convenience init() {
@@ -39,8 +40,6 @@ class BucketsCollectionViewController: UICollectionViewController {
         }
         collectionView.registerClass(BucketCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +51,8 @@ class BucketsCollectionViewController: UICollectionViewController {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
         AnalyticsManager.trackScreen(.bucketsView)
+        
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }
@@ -148,15 +149,6 @@ class BucketsCollectionViewController: UICollectionViewController {
                 randomCell.makeRotationOnImages()
             }
         }
-    }
-}
-
-private extension BucketsCollectionViewController {
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 }
 
@@ -257,9 +249,7 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = cell.frame
         
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }

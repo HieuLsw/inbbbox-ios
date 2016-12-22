@@ -12,14 +12,15 @@ import ZFDragableModalTransition
 import DZNEmptyDataSet
 import PeekPop
 
-class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
+class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     var viewModel: SimpleShotsViewModel?
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexesToUpdateCellImage = [Int]()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 }
 
 // MARK: Lifecycle
@@ -56,8 +57,6 @@ extension SimpleShotsCollectionViewController {
         }
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-        
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -68,15 +67,7 @@ extension SimpleShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel?.downloadInitialItems()
-    }
-}
-
-private extension SimpleShotsCollectionViewController {
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
     }
 }
 
@@ -134,9 +125,7 @@ extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
             let viewModel = viewModel
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = cell.frame
 
         let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
         detailsViewController.customizeFor3DTouch(true)
