@@ -12,7 +12,7 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
 
     let logoImageView: UIImageView = UIImageView.newAutoLayout()
 
-    private let logoSize = 45.0
+    private let logoSize: CGFloat = 45.0
 
     private(set) lazy var nameLabel: UILabel = { [unowned self] in
         let label = UILabel()
@@ -47,7 +47,7 @@ final class TeamCollectionViewCell: UICollectionViewCell, Reusable {
         logoImageView.autoSetDimensions(to: CGSize(width: logoSize, height: logoSize))
         logoImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
         logoImageView.autoPinEdge(toSuperviewEdge: .left, withInset: 24)
-        logoImageView.layer.cornerRadius = CGFloat(logoSize) / CGFloat(2.0)
+        logoImageView.layer.cornerRadius = logoSize / 2
         logoImageView.clipsToBounds = true
 
         nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: logoImageView)
