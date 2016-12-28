@@ -11,6 +11,7 @@ import PromiseKit
 import ZFDragableModalTransition
 import ImageViewer
 import MessageUI
+import Async
 
 final class ShotDetailsViewController: UIViewController {
 
@@ -20,8 +21,8 @@ final class ShotDetailsViewController: UIViewController {
                         self.scroller.scrollToBottomAnimated(true)
             }
             if self.shouldShowKeyboardAtStart && self.viewModel.isCommentingAvailable {
-                AsyncWrapper().main {
-                    self.shotDetailsView.commentComposerView.textField.becomeFirstResponder()
+                Async.main(after: 0.1) {
+                    self.shotDetailsView.commentComposerView.makeActive()
                 }
             }
         }()
@@ -548,7 +549,7 @@ private extension ShotDetailsViewController {
     }
     
     func editComment(at indexPath: IndexPath) {
-        print("editing comment \(indexPath.row)")
+        shotDetailsView.commentComposerView.makeActive()
     }
 
     func presentShotBucketsViewControllerWithMode(_ mode: ShotBucketsViewControllerMode, onModalCompletion completion:(() -> Void)? = nil) {

@@ -47,6 +47,7 @@ target 'Inbbbox' do
   pod 'Solar', '~> 1.0.0'
   #fork until this will be discussed and merged https://github.com/marmelroy/PeekPop/pull/32/
   pod 'PeekPop', :git => 'https://github.com/Myrenkar/PeekPop', :tag => '0.1.9'
+  pod 'RichEditorView', :git => 'git@github.com:cjwirth/RichEditorView.git', :branch => 'swift-3'
 
   target 'Unit Tests' do
     inherit! :search_paths

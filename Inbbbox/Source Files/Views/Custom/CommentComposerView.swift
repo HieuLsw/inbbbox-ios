@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RichEditorView
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -38,12 +40,12 @@ class CommentComposerView: UIView {
 
     weak var delegate: CommentComposerViewDelegate?
 
-    let textField = UITextField.newAutoLayout()
+    let editorView = RichEditorView.newAutoLayout()
     fileprivate let cornerWrapperView = UIView.newAutoLayout()
     fileprivate var didUpdateConstraints = false
-    fileprivate var sendButton: UIButton? {
-        return textField.rightView as? UIButton
-    }
+    fileprivate let sendButton = UIButton(type: .custom)
+    fileprivate let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: ColorModeProvider.current().activityIndicatorViewStyle)
+    fileprivate let containerView = UIView.newAutoLayout()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,18 +60,30 @@ class CommentComposerView: UIView {
         cornerWrapperView.backgroundColor = currentMode.commentComposerViewBackground
         addSubview(cornerWrapperView)
 
-        textField.backgroundColor = currentMode.commentComposerViewBackground
-        textField.attributedPlaceholder = CommentComposerFormatter.placeholderForMode(currentMode)
-        textField.textColor = currentMode.shotDetailsCommentContentTextColor
-        textField.tintColor = .RGBA(90, 90, 95, 1)
-        textField.setLeftPadding(10)
-        textField.delegate = self
-        textField.autocorrectionType = .no
-        textField.rightViewMode = .always
-        textField.addTarget(self, action: #selector(textFieldValueDidChange(_:)),
-                        for: .editingChanged)
-        textField.rightView = button
-        cornerWrapperView.addSubview(textField)
+        editorView.webView.isOpaque = false
+        let editorViewBackgroundColor = currentMode.commentComposerViewBackground
+        editorView.setEditorBackgroundColor(editorViewBackgroundColor)
+        editorView.webView.backgroundColor = editorViewBackgroundColor
+
+        editorView.placeholder = CommentComposerFormatter.placeholderForMode(currentMode).string
+        editorView.setTextColor(currentMode.shotDetailsCommentContentTextColor)
+        editorView.webView.tintColor = .black
+        editorView.delegate = self
+
+        sendButton.configureForAutoLayout()
+        sendButton.isEnabled = false
+        sendButton.setImage(UIImage(named: "ic-sendmessage"), for: .normal)
+        sendButton.addTarget(self, action: #selector(addCommentButtonDidTap(_:)), for: .touchUpInside)
+
+        activityIndicatorView.color = .pinkColor()
+        activityIndicatorView.hidesWhenStopped = true
+
+        cornerWrapperView.addSubview(editorView)
+
+        containerView.backgroundColor = .clear
+        containerView.addSubview(sendButton)
+        containerView.addSubview(activityIndicatorView)
+        cornerWrapperView.addSubview(containerView)
     }
 
     override class var requiresConstraintBasedLayout: Bool {
@@ -86,14 +100,23 @@ class CommentComposerView: UIView {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            let inset = CGFloat(20)
+            cornerWrapperView.autoPinEdgesToSuperviewEdges()
 
-            cornerWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero,
-                    excludingEdge: .bottom)
-            cornerWrapperView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -inset)
+            editorView.autoPinEdge(toSuperviewEdge: .leading, withInset: 15)
+            editorView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 60)
+            editorView.autoCenterInSuperview()
+            editorView.autoSetDimension(.height, toSize: 25)
 
-            let insets = UIEdgeInsets(top: 5, left: 5, bottom: 5 + inset, right: 5)
-            textField.autoPinEdgesToSuperviewEdges(with: insets)
+            containerView.autoAlignAxis(.horizontal, toSameAxisOf: editorView)
+            containerView.autoPinEdge(.leading, to: .trailing, of: editorView)
+            containerView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 10)
+            containerView.autoMatch(.height, to: .height, of: editorView)
+
+            sendButton.autoPinEdge(toSuperviewEdge: .leading)
+            sendButton.autoAlignAxis(toSuperviewAxis: .horizontal)
+            sendButton.autoSetDimensions(to: CGSize(width: 45, height: 45))
+
+            activityIndicatorView.autoCenterInSuperview()
         }
 
         super.updateConstraints()
@@ -104,36 +127,34 @@ extension CommentComposerView {
 
     func addCommentButtonDidTap(_: UIButton) {
 
-        guard let text = textField.text, text.characters.count > 0 else {
+        guard editorView.html.characters.count > 0 else {
             return
         }
 
-        delegate?.didTapSendButtonInComposerView(self, comment: text)
+        delegate?.didTapSendButtonInComposerView(self, comment: editorView.html)
 
-        textField.text = nil
-        sendButton?.isEnabled = false
-    }
-
-    func textFieldValueDidChange(_ textField: UITextField) {
-        sendButton?.isEnabled = textField.text?.characters.count > 0
+        editorView.html = ""
+        sendButton.isEnabled = false
     }
 
     func startAnimation() {
-        textField.isEnabled = false
-        textField.rightView = activityIndicatorView
+        editorView.isEditingEnabled = false
+        sendButton.isHidden = true
+        activityIndicatorView.startAnimating()
     }
 
     func stopAnimation() {
-        textField.isEnabled = true
-        textField.rightView = button
+        editorView.isEditingEnabled = true
+        activityIndicatorView.stopAnimating()
+        sendButton.isHidden = false
     }
 
     func makeActive() {
-        textField.becomeFirstResponder()
+        editorView.focus()
     }
 
     func makeInactive() {
-        textField.resignFirstResponder()
+        editorView.blur()
     }
 
     func animateByRoundingCorners(_ round: Bool) {
@@ -144,46 +165,23 @@ extension CommentComposerView {
     }
 }
 
-extension CommentComposerView: UITextFieldDelegate {
+extension CommentComposerView: RichEditorDelegate {
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        textField.resignFirstResponder()
-        return true
-    }
-
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-
-        sendButton?.isEnabled = false
-        return true
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func richEditorTookFocus(_ editor: RichEditorView) {
         delegate?.commentComposerViewDidBecomeActive(self)
+    }
+
+    func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
+
+        if content.characters.count == 0 || content == "<br>" {
+            sendButton.isEnabled = false
+        } else {
+            sendButton.isEnabled = true
+        }
     }
 }
 
 private extension CommentComposerView {
-
-    var button: UIButton {
-        let button = UIButton(type: .custom)
-        button.isEnabled = false
-        button.frame = CGRect(x: 0, y: 0, width: 65, height: 40)
-        button.setImage(UIImage(named: "ic-sendmessage"), for: .normal)
-        button.addTarget(self, action: #selector(addCommentButtonDidTap(_:)),
-                for: .touchUpInside)
-
-        return button
-    }
-
-    var activityIndicatorView: UIActivityIndicatorView {
-        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: ColorModeProvider.current().activityIndicatorViewStyle)
-        activityIndicatorView.frame = CGRect(x: 0, y: 0, width: 65, height: 40)
-        activityIndicatorView.color = .pinkColor()
-        activityIndicatorView.startAnimating()
-
-        return activityIndicatorView
-    }
 
     func addCornerRadiusAnimation(_ fromValue: CGFloat, toValue: CGFloat, duration: CFTimeInterval) {
 
