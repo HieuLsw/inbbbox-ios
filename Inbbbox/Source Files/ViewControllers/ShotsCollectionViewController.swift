@@ -363,7 +363,9 @@ private extension ShotsCollectionViewController {
         if let condition = backgroundAnimator?.areStreamSourcesShown, condition == true {
             hideStreamSources()
         } else {
-            showStreamSources()
+            let vc = StreamSourceViewController()
+            vc.modalPresentationStyle = .overCurrentContext
+            present(vc, animated: true, completion: nil)
         }
     }
 }

@@ -2,6 +2,7 @@
 // Copyright (c) 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
+import PureLayout
 import UIKit
 
 struct ShotsCollectionBackgroundViewSpacing {
@@ -44,6 +45,7 @@ class ShotsCollectionBackgroundView: UIView {
     
     let logoImageView = UIImageView(image: UIImage(named: ColorModeProvider.current().logoImageName))
     let containerView = UIView()
+    let arrowImageView = UIImageView(image: UIImage(named: "ic-arrow"))
     
     let showingYouLabel = UILabel()
     
@@ -63,6 +65,8 @@ class ShotsCollectionBackgroundView: UIView {
 
         logoImageView.configureForAutoLayout()
         addSubview(logoImageView)
+        addSubview(arrowImageView)
+        arrowImageView.alpha = 0
         
         setupItems()
         setupShowingYouLabel()
@@ -86,6 +90,8 @@ class ShotsCollectionBackgroundView: UIView {
         if !didSetConstraints {
             logoVerticalConstraint = logoImageView.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.logoDefaultVerticalInset)
             logoImageView.autoAlignAxis(toSuperviewAxis: .vertical)
+            arrowImageView.autoPinEdge(.left, to: .right, of: logoImageView, withOffset: 12)
+            arrowImageView.autoAlignAxis(.horizontal, toSameAxisOf: logoImageView)
             showingYouVerticalConstraint = showingYouLabel.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.showingYouHiddenVerticalSpacing)
             showingYouLabel.autoAlignAxis(toSuperviewAxis: .vertical)
             showingYouLabel.autoSetDimension(.height, toSize: 29)

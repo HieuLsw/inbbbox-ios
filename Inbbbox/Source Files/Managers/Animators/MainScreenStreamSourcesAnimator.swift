@@ -34,7 +34,6 @@ final class MainScreenStreamSourcesAnimator {
         view.showingYouVerticalConstraint?.constant = ShotsCollectionBackgroundViewSpacing.showingYouDefaultVerticalSpacing
         
         UIView.animate(withDuration: animationDuration, delay: 0, options: options, animations: { [unowned self] in
-            
             self.view.showingYouLabel.alpha = 1
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -81,7 +80,11 @@ final class MainScreenStreamSourcesAnimator {
         UIView.animate(withDuration: 2 * animationDuration, delay: 0.1, options: options, animations:{ [unowned self] in
             self.view.logoImageView.alpha = 1
             self.view.layoutIfNeeded()
-        }, completion: nil)
+        }, completion: { [unowned self] finished in
+            if finished {
+                self.showArrow()
+            }
+        })
         
         let items = view.availableItems()
         for (index, item) in items.reversed().enumerated() {
@@ -131,5 +134,23 @@ final class MainScreenStreamSourcesAnimator {
         }
         view.layoutIfNeeded()
         areStreamSourcesShown = false
+    }
+    
+    private func showArrow() {
+        UIView.animate(withDuration: 5 * self.animationDuration, delay: 0.1, animations:{ [unowned self] in
+            self.view.arrowImageView.alpha = 1
+            self.view.layoutIfNeeded()
+        }, completion: { [unowned self] finished in
+            if finished {
+                self.hideArrow()
+            }
+        })
+    }
+
+    private func hideArrow() {
+        UIView.animate(withDuration: 25 * self.animationDuration, delay: 0.1, animations:{ [unowned self] in
+            self.view.arrowImageView.alpha = 0
+            self.view.layoutIfNeeded()
+        })
     }
 }
