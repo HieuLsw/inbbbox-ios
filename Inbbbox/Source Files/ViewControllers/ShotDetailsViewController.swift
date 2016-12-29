@@ -618,6 +618,7 @@ private extension ShotDetailsViewController {
     }
 
     dynamic func closeButtonDidTap(_: UIButton) {
+        shotDetailsView.commentComposerView.hideToolbar()
         dismiss(animated: true, completion: nil)
     }
     

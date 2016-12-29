@@ -47,6 +47,13 @@ class CommentComposerView: UIView {
     fileprivate let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: ColorModeProvider.current().activityIndicatorViewStyle)
     fileprivate let containerView = UIView.newAutoLayout()
 
+    fileprivate lazy var toolbar: RichEditorToolbar = {
+        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
+        let options: [RichEditorOptions] = [.undo, .redo, .bold, .italic, .strike, .underline, .orderedList, .unorderedList, .alignLeft, .alignCenter, .alignRight, .link]
+        toolbar.options = options
+        return toolbar
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -69,6 +76,9 @@ class CommentComposerView: UIView {
         editorView.setTextColor(currentMode.shotDetailsCommentContentTextColor)
         editorView.webView.tintColor = .black
         editorView.delegate = self
+        
+        editorView.inputAccessoryView = toolbar
+        toolbar.editor = editorView
 
         sendButton.configureForAutoLayout()
         sendButton.isEnabled = false
@@ -162,6 +172,10 @@ extension CommentComposerView {
         let fromValue: CGFloat = round ? 0 : 10
         let toValue: CGFloat = round ? 10 : 0
         addCornerRadiusAnimation(fromValue, toValue: toValue, duration: 0.3)
+    }
+
+    func hideToolbar() {
+        toolbar.removeFromSuperview()
     }
 }
 

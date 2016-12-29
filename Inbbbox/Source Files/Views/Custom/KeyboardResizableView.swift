@@ -75,10 +75,9 @@ class KeyboardResizableView: UIView {
 
         clipsToBounds = true
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear(_:)),
-        name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear(_:)),
-        name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
 
     @available(*, unavailable, message: "Use init() instead")
@@ -114,6 +113,12 @@ extension KeyboardResizableView {
             relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: true)
         }
         isKeyboardPresent = true
+    }
+
+    func keyboardWillChangeFrame(_ notification: Notification) {
+        if isKeyboardPresent {
+            relayoutViewWithParameters(parameters: notification.userInfo! as NSDictionary, keyboardPresence: true)
+        }
     }
 
     func keyboardWillDisappear(_ notification: Notification) {
