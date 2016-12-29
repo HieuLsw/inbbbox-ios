@@ -334,10 +334,13 @@ extension ShotDetailsViewModel {
     }
 
     func postComment(_ message: String) -> Promise<Void> {
+
+        let comment = HTMLTranslator.translateToDribbbleHTML(text: message)
+
         return Promise<Void> { fulfill, reject in
 
             firstly {
-                commentsRequester.postCommentForShot(shot, withText: message)
+                commentsRequester.postCommentForShot(shot, withText: comment)
             }.then { comment in
                 self.comments.append(comment)
             }.then(execute: fulfill).catch(execute: reject)
@@ -347,8 +350,10 @@ extension ShotDetailsViewModel {
     func update(comment message: String, at index: Int) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 
+            let comment = HTMLTranslator.translateToDribbbleHTML(text: message)
+
             firstly {
-                commentsRequester.updateComment(comments[index], forShot: shot, withText: message)
+                commentsRequester.updateComment(comments[index], forShot: shot, withText: comment)
             }.then { comment -> Void in
                 self.comments[index] = comment
                 self.cachedFormattedComments[index] = self.createDisplayableData(withComment: comment)

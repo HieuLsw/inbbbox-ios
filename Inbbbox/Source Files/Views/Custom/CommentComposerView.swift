@@ -48,7 +48,7 @@ class CommentComposerView: UIView {
     fileprivate let containerView = UIView.newAutoLayout()
     fileprivate lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
-        let options: [RichEditorOptions] = [.undo, .redo, .bold, .italic, .strike, .underline, .orderedList, .unorderedList, .alignLeft, .alignCenter, .alignRight, .link]
+        let options: [RichEditorOptions] = [.undo, .redo, .bold, .italic]
         toolbar.options = options
         return toolbar
     }()
