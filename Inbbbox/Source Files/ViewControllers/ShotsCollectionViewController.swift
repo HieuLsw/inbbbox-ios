@@ -367,9 +367,11 @@ private extension ShotsCollectionViewController {
         if let condition = backgroundAnimator?.areStreamSourcesShown, condition == true {
             hideStreamSources()
         } else {
-            let vc = StreamSourceViewController()
-            vc.modalPresentationStyle = .overCurrentContext
-            present(vc, animated: true, completion: nil)
+            let streamSourceViewController = StreamSourceViewController(didSelectStream: { [unowned self] in
+                self.reloadShots()
+            })
+            streamSourceViewController.modalPresentationStyle = .overCurrentContext
+            present(streamSourceViewController, animated: true, completion: nil)
         }
     }
 }

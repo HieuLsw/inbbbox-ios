@@ -9,14 +9,17 @@ import UIKit
 
 final class StreamSourceViewController: UIViewController {
 
-    fileprivate let viewModel: StreamSourceViewModel
+    private let viewModel: StreamSourceViewModel
     
-    fileprivate var profileInfoView: StreamSourceView! {
+    private var profileInfoView: StreamSourceView! {
         return view as? StreamSourceView
     }
     
-    init() {
-        viewModel = StreamSourceViewModel()
+    private let didSelectStream: () -> Void
+    
+    init(didSelectStream: @escaping () -> Void) {
+        self.didSelectStream = didSelectStream
+        self.viewModel = StreamSourceViewModel()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +37,8 @@ final class StreamSourceViewController: UIViewController {
         view = StreamSourceView(didSelectStreamSourceClosure: { [unowned self] streamSourceType in
             self.viewModel.didSelectStreamSource(streamSource: streamSourceType.rawValue)
             self.setupUI()
+            self.didSelectStream()
+            self.dismiss(animated: true, completion: nil)
         })
     }
  
