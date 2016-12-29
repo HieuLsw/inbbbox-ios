@@ -74,7 +74,6 @@ class CommentComposerView: UIView {
 
         editorView.placeholder = CommentComposerFormatter.placeholderForMode(currentMode).string
         editorView.setTextColor(currentMode.shotDetailsCommentContentTextColor)
-        editorView.webView.tintColor = .black
         editorView.delegate = self
 
         setupEditorAndToolbar()
@@ -176,6 +175,7 @@ extension CommentComposerView {
     func setupEditorAndToolbar() {
         editorView.inputAccessoryView = toolbar
         toolbar.editor = editorView
+        toolbar.tintColor = .pinkColor()
     }
 
     func animateByRoundingCorners(_ round: Bool) {
