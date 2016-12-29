@@ -126,10 +126,10 @@ class ShotsCollectionBackgroundView: UIView {
 extension ShotsCollectionBackgroundView {
     
     func prepareAnimatableContent() {
-        followingItem.visible = Settings.StreamSource.Following
-        newTodayItem.visible = Settings.StreamSource.NewToday
-        popularTodayItem.visible = Settings.StreamSource.PopularToday
-        debutsItem.visible = Settings.StreamSource.Debuts
+        followingItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.Following : Settings.StreamSource.SelectedStreamSource == .following
+        newTodayItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.NewToday : Settings.StreamSource.SelectedStreamSource == .newToday
+        popularTodayItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.PopularToday : Settings.StreamSource.SelectedStreamSource == .popularToday
+        debutsItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.Debuts : Settings.StreamSource.SelectedStreamSource == .debuts
         for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
             item.verticalSpacingConstraint?.constant = 0
         }
