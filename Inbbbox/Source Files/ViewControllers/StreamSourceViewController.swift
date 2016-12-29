@@ -35,7 +35,7 @@ final class StreamSourceViewController: UIViewController {
     
     override func loadView() {
         view = StreamSourceView(didSelectStreamSourceClosure: { [unowned self] streamSourceType in
-            self.viewModel.didSelectStreamSource(streamSource: streamSourceType.rawValue)
+            self.viewModel.didSelectStreamSource(streamSource: streamSourceType)
             self.setupUI()
             self.didSelectStream()
             self.dismiss(animated: true, completion: nil)

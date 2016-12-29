@@ -27,8 +27,8 @@ final class StreamSourceViewModel {
         return Settings.StreamSource.SelectedStreamSource == .mySet
     }
     
-    func didSelectStreamSource(streamSource: String) {
-        Settings.StreamSource.SelectedStreamSource = ShotsSource(rawValue: streamSource)!
+    func didSelectStreamSource(streamSource: ShotsSource) {
+        Settings.StreamSource.SelectedStreamSource = streamSource
     }
     
 }
