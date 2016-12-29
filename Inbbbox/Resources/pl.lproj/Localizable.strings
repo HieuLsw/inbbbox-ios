@@ -181,7 +181,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "Nie masz skonfigurowanego maila - bez obaw po prostu napisz na inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Pobieranie projektów z Dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Pobieranie projektów z Dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -330,7 +333,7 @@
 "LoginView.Loading" = "ŁADUJE...";
 
 /* Describes copyright holder */
-"LoginView.Copyright" = "Wszelkie prawa zastrzeżone (c) 2016 Netguru.co";
+"LoginView.Copyright" = "Wszelkie prawa zastrzeżone (c) 2016 Netguru";
 
 /********* EmptyDataSetLoadingView *********/
 
@@ -355,3 +358,11 @@
 "ShotCollectionCell.Bucket" = "Dodano do polubień i wiaderka!";
 "ShotCollectionCell.Comment" = "Komentowanie…";
 "ShotCollectionCell.Follow" = "Obserwujesz autora!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "Followers"; //$
+"ProfileInfoView.Shots" = "Shots"; //$
+"ProfileInfoView.Following" = "Obserwowani";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "On Teams"; //$

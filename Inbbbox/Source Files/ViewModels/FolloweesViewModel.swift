@@ -20,7 +20,7 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
     fileprivate let shotsProvider = ShotsProvider()
     fileprivate var userMode: UserMode
 
-    fileprivate let netguruTeam = Team(identifier: "653174", name: "", username: "", avatarURL: nil, createdAt: Date())
+    fileprivate let netguruTeam = Team(identifier: "653174", name: "", username: "", avatarURL: nil, createdAt: Date(), followersCount: 0, followingsCount: 0, bio: "", location: "")
 
     var itemsCount: Int {
         return followees.count

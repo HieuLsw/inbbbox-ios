@@ -16,6 +16,10 @@ class ManagedUser: NSManagedObject {
     @NSManaged var mngd_avatarURL: String?
     @NSManaged var mngd_shotsCount: UInt
     @NSManaged var mngd_accountType: String?
+    @NSManaged var mngd_followersCount: UInt
+    @NSManaged var mngd_followingsCount: UInt
+    @NSManaged var mngd_bio: String
+    @NSManaged var mngd_location: String
 }
 
 extension ManagedUser: UserType {
@@ -35,4 +39,8 @@ extension ManagedUser: UserType {
     var accountType: UserAccountType? {
         return mngd_accountType.flatMap { UserAccountType(rawValue: $0) }
     }
+    var followersCount: UInt { return mngd_followersCount }
+    var followingsCount: UInt { return mngd_followingsCount }
+    var bio: String { return mngd_bio }
+    var location: String { return mngd_location }
 }

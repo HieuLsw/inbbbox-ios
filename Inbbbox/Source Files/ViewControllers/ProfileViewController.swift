@@ -32,7 +32,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class ProfileViewController: TwoLayoutsCollectionViewController {
+class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     fileprivate var viewModel: ProfileViewModel!
 
@@ -40,7 +40,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
 
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
 
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     var dismissClosure: (() -> Void)?
 
@@ -85,7 +86,11 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
             name: user.name ?? "",
             username: user.username,
             avatarURL: user.avatarURL,
-            createdAt: Date()
+            createdAt: Date(),
+            followersCount: user.followersCount,
+            followingsCount: user.followingsCount,
+            bio: user.bio,
+            location: user.location
         )
         self.init(team: team)
     }
@@ -120,17 +125,16 @@ class ProfileViewController: TwoLayoutsCollectionViewController {
                 for: .default
 			)
         }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
 
         setupBackButton()
-        add3DSupportForOlderDevices()
         viewModel.downloadInitialItems()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
+        
         guard viewModel.shouldShowFollowButton else { return }
 
         firstly {
@@ -383,12 +387,6 @@ private extension ProfileViewController {
         dismissClosure?()
         dismiss(animated: true, completion: nil)
     }
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
-    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
@@ -451,10 +449,7 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
-        
+        previewingContext.sourceRect = cell.frame
         if let viewModel = viewModel as? UserDetailsViewModel {
             let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
             controller.customizeFor3DTouch(true)

@@ -32,14 +32,15 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
+class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     // MARK: - Lifecycle
 
     fileprivate let viewModel = FolloweesViewModel()
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +52,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
         navigationItem.title = viewModel.title
-
-        add3DSupportForOlderDevices()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +62,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         AnalyticsManager.trackScreen(.followeesView)
     }
 
@@ -145,15 +145,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         if let index = indexPathsNeededImageUpdate.index(of: indexPath) {
             indexPathsNeededImageUpdate.remove(at: index)
         }
-    }
-}
-
-private extension FolloweesCollectionViewController {
-    
-    func add3DSupportForOlderDevices() {
-        guard traitCollection.forceTouchCapability == .unavailable else { return }
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 }
 
@@ -249,9 +240,7 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let frame = cell.frame
-        let origin = collectionView.convert(cell.frame.origin, to: view)
-        previewingContext.sourceRect = CGRect(x: origin.x, y: origin.y, width: frame.width, height: frame.height)
+        previewingContext.sourceRect = cell.frame
         
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true

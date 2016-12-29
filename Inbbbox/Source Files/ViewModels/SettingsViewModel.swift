@@ -235,6 +235,7 @@ private extension SettingsViewModel {
         
         allItems.autoNightModeItem.valueChanged = { newValue in
             Settings.Customization.AutoNightMode = newValue
+            ColorModeProvider.setup()
             AnalyticsManager.trackSettingChanged(.autoNightMode, state: newValue)
         }
     }

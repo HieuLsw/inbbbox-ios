@@ -12,13 +12,49 @@ import PromiseKit
 /// Provides interface for dribbble teams read API
 class APITeamsProvider: PageableProvider {
 
+
+    /**
+     Provides logged user's teams.
+
+     - returns: Promise which resolves with teams or nil.
+     */
+    func provideTeamsOfCurrentUser() -> Promise<[TeamType]?> {
+
+        let query = TeamsQuery()
+        return Promise<[TeamType]?> { fulfill, reject in
+            firstly {
+                firstPageForQueries([query], withSerializationKey: nil)
+            }.then { (teams: [Team]?) -> Void in
+                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
+     Provides next page of teams.
+
+     - Warning: You have to use any of provide... method first to be able to use this method.
+     Otherwise an exception will appear.
+
+     - returns: Promise which resolves with users or nil.
+     */
+    func teamsNextPage() -> Promise<[TeamType]?> {
+        return Promise <[TeamType]?> { fulfill, reject in
+            firstly {
+                nextPageFor(Team.self)
+            }.then { teams -> Void in
+                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.catch(execute: reject)
+        }
+    }
+
     /**
      Provides team's members.
 
      - parameter team: Team to get members for.
 
-     - returns: Promise which resolves with users or nil.
-     */
+    - returns: Promise which resolves with users or nil.
+    */
     func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
 
         let query = TeamMembersQuery(team: team)
