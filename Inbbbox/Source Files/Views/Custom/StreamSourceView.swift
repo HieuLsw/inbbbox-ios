@@ -16,28 +16,28 @@ final class StreamSourceView: UIView {
         UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.dark))
     }()
     
-    private(set) var followingView: SingleStreamView = SingleStreamView(
+    private(set) lazy var followingView: SingleStreamView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Following", comment: ""),
         streamSource: .following
     )
     
-    private(set) var newTodayView = SingleStreamView(
+    private(set) lazy var newTodayView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.NewToday", comment: ""),
         streamSource: .newToday
     )
     
-    private(set) var popularTodayView = SingleStreamView(
+    private(set) lazy var popularTodayView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Popular", comment: ""),
         streamSource: .popularToday
     )
     
-    private(set) var debutsView = SingleStreamView(
+    private(set) lazy var debutsView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Debuts", comment: ""),
         streamSource: .debuts
     )
     
-    private(set) var mySetView = SingleStreamView(
-        streamName: "My set",
+    private(set) lazy var mySetView = SingleStreamView(
+        streamName: NSLocalizedString("SettingsViewModel.MySet", comment: ""),
         streamSource: .mySet
     )
     

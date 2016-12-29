@@ -256,6 +256,9 @@
 /* Body of alert, asking user to grant notifications permission. */
 "SettingsViewModel.AccessToNotifications" = "Musisz wyrazić zgodę aby uruchomić powiadomienia.";
 
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
+
 /********* SettingsViewController *********/
 
 /* Title of group of buttons for stream source settings */

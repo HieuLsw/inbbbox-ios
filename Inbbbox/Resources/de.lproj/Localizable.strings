@@ -273,6 +273,9 @@
 /* Title of group of buttons for customization settings */
 "SettingsViewController.Customization" = "Personalisieren";
 
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
+
 /********* ShotsCollectionViewController *********/
 
 /* Title of alert visible after upon error detection. */

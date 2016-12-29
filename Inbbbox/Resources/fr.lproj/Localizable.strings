@@ -257,6 +257,9 @@
 /* Title of flash message, when user turn off all sources */
 "SettingsViewModel.AllSources" = "Avec les paramètres actuels, vous ne verrez aucune publication. Renseignez au moins une source.";
 
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
+
 /********* SettingsViewController *********/
 
 /* Title of group of buttons for stream source settings */
