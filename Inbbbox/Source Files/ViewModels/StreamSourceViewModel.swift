@@ -5,7 +5,7 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-final class StreamSourceViewModel {
+struct StreamSourceViewModel {
     
     var isFollowingStreamSelected: Bool {
         return Settings.StreamSource.SelectedStreamSource == .following
