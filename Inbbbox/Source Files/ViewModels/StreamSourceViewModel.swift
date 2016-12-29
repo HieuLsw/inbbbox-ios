@@ -8,23 +8,27 @@
 final class StreamSourceViewModel {
     
     var isFollowingStreamSelected: Bool {
-        return Settings.StreamSource.Following && !Settings.StreamSource.MySet
+        return Settings.StreamSource.SelectedStreamSource == .following
     }
     
     var isNewTodayStreamSelected: Bool {
-        return Settings.StreamSource.NewToday && !Settings.StreamSource.MySet
+        return Settings.StreamSource.SelectedStreamSource == .newToday
     }
     
     var isPopularTodayStreamSelected: Bool {
-        return Settings.StreamSource.PopularToday && !Settings.StreamSource.MySet
+        return Settings.StreamSource.SelectedStreamSource == .popularToday
     }
     
     var isDebutsStreamSelected: Bool {
-        return Settings.StreamSource.Debuts && !Settings.StreamSource.MySet
+        return Settings.StreamSource.SelectedStreamSource == .debuts
     }
     
     var isMySetStreamSelected: Bool {
-        return Settings.StreamSource.MySet
+        return Settings.StreamSource.SelectedStreamSource == .mySet
+    }
+    
+    func didSelectStreamSource(streamSource: String) {
+        Settings.StreamSource.SelectedStreamSource = ShotsSource(rawValue: streamSource)!
     }
     
 }

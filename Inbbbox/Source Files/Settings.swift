@@ -45,16 +45,10 @@ class Settings {
             set { Settings.setValue(newValue as AnyObject?, forKey: .debutsStreamSourceOn) }
         }
         
-        /// Indicates if stream's source My set is on.
-        static var MySet: Bool {
-            get { return Defaults[StreamSourceKey.mySetStreamSourceOn.rawValue].bool ?? true }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .mySetStreamSourceOn) }
-        }
-        
         /// Indicates which one stream source is selected
-        static var SelectedStreamSource: StreamSourceKey? {
+        static var SelectedStreamSource: ShotsSource {
             get { return Settings.streamForKey(.selectedStreamSource) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .selectedStreamSource) }
+            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .selectedStreamSource) }
         }
         
     }
@@ -155,7 +149,7 @@ private extension Settings {
         return stringForKey(key.rawValue)
     }
 
-    static func streamForKey(_ key: CustomizationKey) -> StreamSourceKey? {
+    static func streamForKey(_ key: CustomizationKey) -> ShotsSource {
         return streamForKey(key.rawValue)
     }
     
@@ -173,8 +167,11 @@ private extension Settings {
         return Defaults[key].string ?? ""
     }
     
-    static func streamForKey(_ key: String) -> StreamSourceKey? {
-        return Defaults[key].object as! StreamSourceKey?
+    static func streamForKey(_ key: String) -> ShotsSource {
+        if let streamSourceType = Defaults[key].string {
+            return ShotsSource(rawValue: streamSourceType) ?? .mySet
+        }
+        return .mySet
     }
 }
 

@@ -8,35 +8,37 @@
 import PureLayout
 import UIKit
 
-class StreamSourceView: UIView {
+final class StreamSourceView: UIView {
+    
+    private let didSelectStreamSourceClosure: (ShotsSource) -> Void
     
     private lazy var blurView: UIVisualEffectView = {
         UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.dark))
     }()
     
-    private(set) lazy var followingView = SingleStreamView(
+    private(set) var followingView: SingleStreamView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Following", comment: ""),
-        streamSourceKey: .followingStreamSourceOn
+        streamSource: .following
     )
     
-    private(set) lazy var newTodayView = SingleStreamView(
+    private(set) var newTodayView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.NewToday", comment: ""),
-        streamSourceKey: .newTodayStreamSourceOn
+        streamSource: .newToday
     )
     
-    private(set) lazy var popularTodayView = SingleStreamView(
+    private(set) var popularTodayView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Popular", comment: ""),
-        streamSourceKey: .popularTodayStreamSourceOn
+        streamSource: .popularToday
     )
     
-    private(set) lazy var debutsView = SingleStreamView(
+    private(set) var debutsView = SingleStreamView(
         streamName: NSLocalizedString("SettingsViewModel.Debuts", comment: ""),
-        streamSourceKey: .debutsStreamSourceOn
+        streamSource: .debuts
     )
     
-    private(set) lazy var mySetView = SingleStreamView(
+    private(set) var mySetView = SingleStreamView(
         streamName: "My set",
-        streamSourceKey: .mySetStreamSourceOn
+        streamSource: .mySet
     )
     
     private lazy var stackView: UIStackView = { [unowned self] in
@@ -69,20 +71,22 @@ class StreamSourceView: UIView {
         return view
     }()
     
-    init() {
+    init(didSelectStreamSourceClosure: @escaping (ShotsSource) -> Void) {
+        self.didSelectStreamSourceClosure = didSelectStreamSourceClosure
         super.init(frame: .zero)
         setupBlur()
         setupProperties()
         setupHierarchy()
         setupConstraints()
+        setupSubvies()
     }
     
-    @available(*, unavailable, message: "Use init() instead")
+    @available(*, unavailable, message: "Use init(didSelectStreamSourceClosure:) instead")
     override init(frame: CGRect) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @available(*, unavailable, message: "Use init() instead")
+    @available(*, unavailable, message: "Use init(didSelectStreamSourceClosure:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -109,6 +113,12 @@ class StreamSourceView: UIView {
         roundedView.autoPinEdge(toSuperviewEdge: .left, withInset: 50)
         
         stackView.autoPinEdgesToSuperviewEdges()
+    }
+    
+    private func setupSubvies() {
+        [followingView, newTodayView, popularTodayView, debutsView, mySetView].forEach { [unowned self] singleStreamView in
+            singleStreamView.didSelectStreamSourceClosure = self.didSelectStreamSourceClosure
+        }
     }
     
 }

@@ -254,14 +254,7 @@ fileprivate extension ShotsCollectionViewController {
     }
 
     dynamic func didChangeStreamSourceSettings(_ notification: Notification) {
-        firstly {
-            refreshShotsData()
-        }.then { () -> Void in
-            self.collectionView?.reloadData()
-            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
-        }.catch { error in
-            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
-        }
+        reloadShots()
     }
 
     func refreshShotsData() -> Promise<Void> {
@@ -276,6 +269,17 @@ fileprivate extension ShotsCollectionViewController {
     
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
+    }
+    
+    func reloadShots() {
+        firstly {
+            refreshShotsData()
+        }.then { () -> Void in
+            self.collectionView?.reloadData()
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
+        }.catch { error in
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+        }
     }
 }
 

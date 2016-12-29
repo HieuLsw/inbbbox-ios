@@ -97,7 +97,7 @@ extension ProfileInfoViewController: UICollectionViewDataSource {
 
 extension ProfileInfoViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if (indexPath.row == viewModel.itemsCount - 1 && indexPath.row > 30) {
             viewModel.downloadItemsForNextPage()
         }

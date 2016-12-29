@@ -10,6 +10,10 @@ import UIKit
 
 final class SingleStreamView: UIView {
     
+    private let streamName: String
+    private let streamSource: ShotsSource
+    
+    var didSelectStreamSourceClosure: ((ShotsSource) -> Void)? = nil
     var isStreamSelected: Bool = false {
         didSet {
             checkmarkImageView.isHidden = !isStreamSelected
@@ -18,14 +22,9 @@ final class SingleStreamView: UIView {
         }
     }
     
-    private let streamName: String
-    
-    private let streamSourceKey: StreamSourceKey
-    
     private(set) lazy var checkmarkImageView: UIImageView = { [unowned self] in
         let imageView = UIImageView(image: UIImage(named: "ic-checkmark"))
         
-        imageView.isHidden = true
         imageView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
         
         return imageView
@@ -54,15 +53,15 @@ final class SingleStreamView: UIView {
         stackView.alignment = .center
         
         return stackView
-        }()
+    }()
     
-    init(streamName: String, streamSourceKey: StreamSourceKey) {
+    init(streamName: String, streamSource: ShotsSource) {
         self.streamName = streamName
-        self.streamSourceKey = streamSourceKey
+        self.streamSource = streamSource
         super.init(frame: .zero)
         setupHierarchy()
         setupConstraints()
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellTapped)))
+        setupActions()
     }
     
     @available(*, unavailable, message: "Use init() instead")
@@ -83,8 +82,12 @@ final class SingleStreamView: UIView {
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsetsMake(10, 16, 10, 16))
     }
     
-    dynamic private func cellTapped() {
-        print("cell")
+    private func setupActions() {
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapSingleSourceView)))
+    }
+    
+    dynamic private func didTapSingleSourceView() {
+        didSelectStreamSourceClosure?(streamSource)
     }
     
 }

@@ -31,11 +31,15 @@ final class StreamSourceViewController: UIViewController {
     }
     
     override func loadView() {
-        view = StreamSourceView()
+        view = StreamSourceView(didSelectStreamSourceClosure: { [unowned self] streamSourceType in
+            self.viewModel.didSelectStreamSource(streamSource: streamSourceType.rawValue)
+            self.setupUI()
+        })
     }
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        profileInfoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapOutsidePopup)))
         setupUI()
     }
     
@@ -45,8 +49,6 @@ final class StreamSourceViewController: UIViewController {
         profileInfoView.popularTodayView.isStreamSelected = viewModel.isPopularTodayStreamSelected
         profileInfoView.debutsView.isStreamSelected = viewModel.isDebutsStreamSelected
         profileInfoView.mySetView.isStreamSelected = viewModel.isMySetStreamSelected
-        
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapOutsidePopup)))
     }
     
     dynamic private func didTapOutsidePopup() {
