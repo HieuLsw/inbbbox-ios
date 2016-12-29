@@ -19,19 +19,21 @@ enum NotificationKey: String {
 
 /// Keys related to streams sources.
 enum StreamSourceKey: String {
-    case StreamSourceIsSet = "StreamSourceIsSet"
-    case FollowingStreamSourceOn = "FollowingStreamSourceOn"
-    case NewTodayStreamSourceOn = "NewTodayStreamSourceOn"
-    case PopularTodayStreamSourceOn = "PopularTodayStreamSourceOn"
-    case DebutsStreamSourceOn = "DebutsStreamSourceOn"
+    case streamSourceIsSet = "StreamSourceIsSet"
+    case followingStreamSourceOn = "FollowingStreamSourceOn"
+    case newTodayStreamSourceOn = "NewTodayStreamSourceOn"
+    case popularTodayStreamSourceOn = "PopularTodayStreamSourceOn"
+    case debutsStreamSourceOn = "DebutsStreamSourceOn"
+    case mySetStreamSourceOn = "MySetStreamSourceOn"
 }
 
 /// Keys related to customization settings.
 enum CustomizationKey: String {
-    case ShowAuthorOnHomeScreen = "ShowAuthorOnHomeScreen"
-    case NightMode = "NightModeStatus"
-    case AutoNightMode = "AutoNightMode"
-    case ColorMode = "CurrentColorMode"
+    case showAuthorOnHomeScreen = "ShowAuthorOnHomeScreen"
+    case nightMode = "NightModeStatus"
+    case autoNightMode = "AutoNightMode"
+    case colorMode = "CurrentColorMode"
+    case selectedStreamSource = "SelectedStreamSource"
 }
 
 extension DefaultsKeys {

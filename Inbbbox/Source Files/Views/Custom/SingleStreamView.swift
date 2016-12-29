@@ -8,15 +8,25 @@
 import PureLayout
 import UIKit
 
-class SingleStreamView: UIView {
+final class SingleStreamView: UIView {
+    
+    var isStreamSelected: Bool = false {
+        didSet {
+            checkmarkImageView.isHidden = !isStreamSelected
+            streamNameLabel.textColor = isStreamSelected ? .pinkColor() : .streamSourceGrayColor()
+            streamNameLabel.font = UIFont.systemFont(ofSize: 17, weight: isStreamSelected ? UIFontWeightSemibold : UIFontWeightRegular)
+        }
+    }
     
     private let streamName: String
     
-    private lazy var checkmarkImageView: UIImageView = { [unowned self] in
+    private let streamSourceKey: StreamSourceKey
+    
+    private(set) lazy var checkmarkImageView: UIImageView = { [unowned self] in
         let imageView = UIImageView(image: UIImage(named: "ic-checkmark"))
         
+        imageView.isHidden = true
         imageView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
         
         return imageView
     }()
@@ -24,7 +34,7 @@ class SingleStreamView: UIView {
     private(set) lazy var streamNameLabel: UILabel = { [unowned self] in
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         label.textColor = .streamSourceGrayColor()
         label.text = self.streamName
         label.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: .horizontal)
@@ -46,11 +56,13 @@ class SingleStreamView: UIView {
         return stackView
         }()
     
-    init(streamName: String) {
+    init(streamName: String, streamSourceKey: StreamSourceKey) {
         self.streamName = streamName
+        self.streamSourceKey = streamSourceKey
         super.init(frame: .zero)
         setupHierarchy()
         setupConstraints()
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellTapped)))
     }
     
     @available(*, unavailable, message: "Use init() instead")
@@ -69,6 +81,10 @@ class SingleStreamView: UIView {
     
     private func setupConstraints() {
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsetsMake(10, 16, 10, 16))
+    }
+    
+    dynamic private func cellTapped() {
+        print("cell")
     }
     
 }

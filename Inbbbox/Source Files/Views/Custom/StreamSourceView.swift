@@ -14,11 +14,30 @@ class StreamSourceView: UIView {
         UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.dark))
     }()
     
-    private lazy var followingView = SingleStreamView(streamName: "Follwing")
-    private lazy var newTodayView = SingleStreamView(streamName: "New today")
-    private lazy var popularTodayView = SingleStreamView(streamName: "Popular today")
-    private lazy var debutsView = SingleStreamView(streamName: "Debuts")
-    private lazy var mySetView = SingleStreamView(streamName: "My set")
+    private(set) lazy var followingView = SingleStreamView(
+        streamName: NSLocalizedString("SettingsViewModel.Following", comment: ""),
+        streamSourceKey: .followingStreamSourceOn
+    )
+    
+    private(set) lazy var newTodayView = SingleStreamView(
+        streamName: NSLocalizedString("SettingsViewModel.NewToday", comment: ""),
+        streamSourceKey: .newTodayStreamSourceOn
+    )
+    
+    private(set) lazy var popularTodayView = SingleStreamView(
+        streamName: NSLocalizedString("SettingsViewModel.Popular", comment: ""),
+        streamSourceKey: .popularTodayStreamSourceOn
+    )
+    
+    private(set) lazy var debutsView = SingleStreamView(
+        streamName: NSLocalizedString("SettingsViewModel.Debuts", comment: ""),
+        streamSourceKey: .debutsStreamSourceOn
+    )
+    
+    private(set) lazy var mySetView = SingleStreamView(
+        streamName: "My set",
+        streamSourceKey: .mySetStreamSourceOn
+    )
     
     private lazy var stackView: UIStackView = { [unowned self] in
         let stackView = UIStackView(
@@ -40,7 +59,7 @@ class StreamSourceView: UIView {
         return stackView
     }()
     
-    private lazy var roundedView: UIView = { [unowned self] in
+    private(set) lazy var roundedView: UIView = { [unowned self] in
         let view = UIView()
         
         view.backgroundColor = .white

@@ -351,6 +351,7 @@
 		D057E1F9B9C14D953F588D5E /* ShotsProviderConfigurationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1371EA5801DAD8C064104E /* ShotsProviderConfigurationSpec.swift */; };
 		D402ECB27C9F8A00D7A99966 /* APIRateLimitKeeperSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3811D02851653239353F8 /* APIRateLimitKeeperSpec.swift */; };
 		D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7658C28C0BDFCD056941617 /* ParametersSpec.swift */; };
+		D5B91B521E142060005628F6 /* StreamSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */; };
 		D5D167FF1E13E6A800E91BDA /* StreamSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */; };
 		D5D168011E13F22D00E91BDA /* StreamSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */; };
 		D5D168031E13F6D100E91BDA /* SingleStreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D168021E13F6D100E91BDA /* SingleStreamView.swift */; };
@@ -846,6 +847,7 @@
 		D4FF1834DBC26C763A50E414 /* BucketType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BucketType.swift; sourceTree = "<group>"; };
 		D598E9BB4EDCE86ADD7BB0A3 /* OAuthAuthorizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizable.swift; sourceTree = "<group>"; };
 		D5B8F4F4DC52ABC426E05B98 /* ShotBucketsActionCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotBucketsActionCollectionViewCell.swift; sourceTree = "<group>"; };
+		D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceViewModel.swift; sourceTree = "<group>"; };
 		D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceView.swift; sourceTree = "<group>"; };
 		D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceViewController.swift; sourceTree = "<group>"; };
 		D5D168021E13F6D100E91BDA /* SingleStreamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleStreamView.swift; sourceTree = "<group>"; };
@@ -1487,6 +1489,7 @@
 				3BEA03D83A79AA83801134F0 /* UserDetailsViewModel.swift */,
 				F0BEBDD61CDA24E200AA391C /* TeamDetailsViewModel.swift */,
 				753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */,
+				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2185,6 +2188,7 @@
 				76F65BA39C64306D4BCF8A2F /* AuthenticatorError.swift in Sources */,
 				F31EA74E971419AB99BA6E59 /* ShotsInitialAnimationsStateHandler.swift in Sources */,
 				8BF3559B4E11B923E5D74DF8 /* ShotsNormalStateHandler.swift in Sources */,
+				D5B91B521E142060005628F6 /* StreamSourceViewModel.swift in Sources */,
 				AA0980E8435C3E8A6AD3B550 /* ShotsOnboardingStateHandler.swift in Sources */,
 				1EDCAC8154145A11008202E1 /* ShotsStateHandlersProvider.swift in Sources */,
 				289979C64833AB48ECF925FD /* Bucket.swift in Sources */,
