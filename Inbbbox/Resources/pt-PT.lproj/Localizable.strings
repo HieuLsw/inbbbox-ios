@@ -229,6 +229,9 @@
 /* Redirect user to Settings app */
 "SettingsViewModel.Settings" = "Configuração";
 
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
+
 /********* Acknowledgements button *********/
 "SettingsViewModel.AcknowledgementsButton" = "Os reconhecimentos";
 

@@ -351,6 +351,10 @@
 		D057E1F9B9C14D953F588D5E /* ShotsProviderConfigurationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1371EA5801DAD8C064104E /* ShotsProviderConfigurationSpec.swift */; };
 		D402ECB27C9F8A00D7A99966 /* APIRateLimitKeeperSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3811D02851653239353F8 /* APIRateLimitKeeperSpec.swift */; };
 		D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7658C28C0BDFCD056941617 /* ParametersSpec.swift */; };
+		D5B91B521E142060005628F6 /* StreamSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */; };
+		D5D167FF1E13E6A800E91BDA /* StreamSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */; };
+		D5D168011E13F22D00E91BDA /* StreamSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */; };
+		D5D168031E13F6D100E91BDA /* SingleStreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D168021E13F6D100E91BDA /* SingleStreamView.swift */; };
 		D5E623A25BAE82D34C0FBF48 /* EmptyDataSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314F3954D042D6CC8A0A3D2 /* EmptyDataSetView.swift */; };
 		D63C79AF85CE9034D19A63ED /* UnlikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC044214048417BC6D62386 /* UnlikeQuery.swift */; };
 		D6C37F599AB84610C10FCD8B /* PageableProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24513C46414851CE9D8F0C82 /* PageableProviderSpec.swift */; };
@@ -843,6 +847,10 @@
 		D4FF1834DBC26C763A50E414 /* BucketType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BucketType.swift; sourceTree = "<group>"; };
 		D598E9BB4EDCE86ADD7BB0A3 /* OAuthAuthorizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizable.swift; sourceTree = "<group>"; };
 		D5B8F4F4DC52ABC426E05B98 /* ShotBucketsActionCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotBucketsActionCollectionViewCell.swift; sourceTree = "<group>"; };
+		D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceViewModel.swift; sourceTree = "<group>"; };
+		D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceView.swift; sourceTree = "<group>"; };
+		D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceViewController.swift; sourceTree = "<group>"; };
+		D5D168021E13F6D100E91BDA /* SingleStreamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleStreamView.swift; sourceTree = "<group>"; };
 		D70005436F785B56E1CC46B5 /* ShotImageType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotImageType.swift; sourceTree = "<group>"; };
 		D94359D4CACC352F3394D6C1 /* BucketCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BucketCollectionViewCell.swift; sourceTree = "<group>"; };
 		DBA3546F95B6EF1A72DCC5F0 /* AutoScrollableShotsDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutoScrollableShotsDataSource.swift; sourceTree = "<group>"; };
@@ -1481,6 +1489,7 @@
 				3BEA03D83A79AA83801134F0 /* UserDetailsViewModel.swift */,
 				F0BEBDD61CDA24E200AA391C /* TeamDetailsViewModel.swift */,
 				753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */,
+				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1540,6 +1549,7 @@
 				F0FD0A831CBE496400735933 /* SimpleShotsCollectionViewController.swift */,
 				246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */,
 				753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */,
+				D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1715,6 +1725,8 @@
 				753FDC2205DDD353E0A5C180 /* SeparatorView.swift */,
 				753FD99B2457A82B7DF3C08F /* LocationView.swift */,
 				753FDE24E749B5DEB472451B /* TeamsCollectionHeaderView.swift */,
+				D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */,
+				D5D168021E13F6D100E91BDA /* SingleStreamView.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -2129,6 +2141,7 @@
 				DB2360C6CCA9ABC62653E7DC /* StringExtension.swift in Sources */,
 				C61B8B951DDAEAE600D94867 /* AttachmentQuery.swift in Sources */,
 				9C8C715087F97CAF1CA2399D /* UIAlertControllerExtension.swift in Sources */,
+				D5D168031E13F6D100E91BDA /* SingleStreamView.swift in Sources */,
 				B26A0E2EAE6E3A4CB7916482 /* UICollectionViewExtension.swift in Sources */,
 				EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */,
 				94BCC8C5DBEFE5830CC0CC5C /* UIColorExtension.swift in Sources */,
@@ -2152,6 +2165,7 @@
 				C6745B7D1DB74371004D3D8E /* AlertViewController.swift in Sources */,
 				6E8D5FE8671AAA3A7C33E707 /* CustomTransitions.swift in Sources */,
 				3D204104176856D9C446230B /* DefaultViewControllerPresenter.swift in Sources */,
+				D5D167FF1E13E6A800E91BDA /* StreamSourceView.swift in Sources */,
 				74E256BD1D9E888000AA5941 /* DeviceInfo.swift in Sources */,
 				BE5712591DCA2DEB00358745 /* FlashMessageTypes.swift in Sources */,
 				3C92BB8AB599A001A3815697 /* Formatter.swift in Sources */,
@@ -2174,6 +2188,7 @@
 				76F65BA39C64306D4BCF8A2F /* AuthenticatorError.swift in Sources */,
 				F31EA74E971419AB99BA6E59 /* ShotsInitialAnimationsStateHandler.swift in Sources */,
 				8BF3559B4E11B923E5D74DF8 /* ShotsNormalStateHandler.swift in Sources */,
+				D5B91B521E142060005628F6 /* StreamSourceViewModel.swift in Sources */,
 				AA0980E8435C3E8A6AD3B550 /* ShotsOnboardingStateHandler.swift in Sources */,
 				1EDCAC8154145A11008202E1 /* ShotsStateHandlersProvider.swift in Sources */,
 				289979C64833AB48ECF925FD /* Bucket.swift in Sources */,
@@ -2204,6 +2219,7 @@
 				59290C9F2CCEA2A6D85C5E9F /* DribbbleNetworkService.swift in Sources */,
 				BE57125B1DCA2E9200358745 /* FlashMessage.swift in Sources */,
 				3BC8D5284656ECF2F51C26A7 /* HeaderAuthorizable.swift in Sources */,
+				D5D168011E13F22D00E91BDA /* StreamSourceViewController.swift in Sources */,
 				7449D9881CAD4A8D00E37CE9 /* URLToUserProvider.swift in Sources */,
 				F023FD901CD0D22100CA650D /* APIUsersProvider.swift in Sources */,
 				792F6175B792842F448E45A5 /* NetworkService.swift in Sources */,
