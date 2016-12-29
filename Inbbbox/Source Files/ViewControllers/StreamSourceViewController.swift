@@ -23,12 +23,12 @@ final class StreamSourceViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    @available(*, unavailable, message: "Use init() instead")
+    @available(*, unavailable, message: "Use init(didSelectStream:) instead")
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         fatalError("init(nibName:bundle:) has not been implemented")
     }
     
-    @available(*, unavailable, message: "Use init() instead")
+    @available(*, unavailable, message: "Use init(didSelectStream:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
