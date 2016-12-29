@@ -344,6 +344,18 @@ extension ShotDetailsViewModel {
         }
     }
 
+    func update(comment message: String, at index: Int) -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                commentsRequester.updateComment(comments[index], forShot: shot, withText: message)
+            }.then { comment -> Void in
+                self.comments[index] = comment
+                self.cachedFormattedComments[index] = self.createDisplayableData(withComment: comment)
+            }.then(execute: fulfill).catch(execute: reject)
+        }
+    }
+
     func deleteCommentAtIndex(_ index: Int) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
 

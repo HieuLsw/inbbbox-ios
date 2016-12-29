@@ -549,7 +549,10 @@ private extension ShotDetailsViewController {
     }
     
     func editComment(at indexPath: IndexPath) {
-        shotDetailsView.commentComposerView.makeActive()
+        if let comment = viewModel.displayableDataForCommentAtIndex(indexPath.row).comment {
+            let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
+            shotDetailsView.commentComposerView.makeActive(with: comment.string, index: index)
+        }
     }
 
     func presentShotBucketsViewControllerWithMode(_ mode: ShotBucketsViewControllerMode, onModalCompletion completion:(() -> Void)? = nil) {

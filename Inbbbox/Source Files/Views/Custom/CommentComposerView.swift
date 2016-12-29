@@ -33,7 +33,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 protocol CommentComposerViewDelegate: class {
     func commentComposerViewDidBecomeActive(_ view: CommentComposerView)
 
-    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String)
+    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String, whileEditing commentAtIndex: Int?)
 }
 
 class CommentComposerView: UIView {
@@ -46,13 +46,13 @@ class CommentComposerView: UIView {
     fileprivate let sendButton = UIButton(type: .custom)
     fileprivate let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: ColorModeProvider.current().activityIndicatorViewStyle)
     fileprivate let containerView = UIView.newAutoLayout()
-
     fileprivate lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
         let options: [RichEditorOptions] = [.undo, .redo, .bold, .italic, .strike, .underline, .orderedList, .unorderedList, .alignLeft, .alignCenter, .alignRight, .link]
         toolbar.options = options
         return toolbar
     }()
+    fileprivate var indexOfEditingComment: Int?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,9 +76,8 @@ class CommentComposerView: UIView {
         editorView.setTextColor(currentMode.shotDetailsCommentContentTextColor)
         editorView.webView.tintColor = .black
         editorView.delegate = self
-        
-        editorView.inputAccessoryView = toolbar
-        toolbar.editor = editorView
+
+        setupEditorAndToolbar()
 
         sendButton.configureForAutoLayout()
         sendButton.isEnabled = false
@@ -141,10 +140,11 @@ extension CommentComposerView {
             return
         }
 
-        delegate?.didTapSendButtonInComposerView(self, comment: editorView.html)
+        delegate?.didTapSendButtonInComposerView(self, comment: editorView.html, whileEditing: indexOfEditingComment)
 
         editorView.html = ""
         sendButton.isEnabled = false
+        indexOfEditingComment = nil
     }
 
     func startAnimation() {
@@ -159,12 +159,23 @@ extension CommentComposerView {
         sendButton.isHidden = false
     }
 
-    func makeActive() {
+    func makeActive(with text: String? = nil, index: Int? = nil) {
+        setupEditorAndToolbar()
         editorView.focus()
+        if let text = text, let index = index {
+            editorView.html = text
+            indexOfEditingComment = index
+        }
     }
 
     func makeInactive() {
         editorView.blur()
+        hideToolbar()
+    }
+
+    func setupEditorAndToolbar() {
+        editorView.inputAccessoryView = toolbar
+        toolbar.editor = editorView
     }
 
     func animateByRoundingCorners(_ round: Bool) {
@@ -176,6 +187,7 @@ extension CommentComposerView {
 
     func hideToolbar() {
         toolbar.removeFromSuperview()
+        editorView.inputAccessoryView = nil
     }
 }
 
