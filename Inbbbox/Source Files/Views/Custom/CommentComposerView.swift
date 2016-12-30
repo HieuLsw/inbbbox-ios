@@ -198,12 +198,7 @@ extension CommentComposerView: RichEditorDelegate {
     }
 
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
-
-        if content.characters.count == 0 || content == "<br>" {
-            sendButton.isEnabled = false
-        } else {
-            sendButton.isEnabled = true
-        }
+        sendButton.isEnabled = !(content.characters.count == 0 || content == "<br>")
     }
 }
 
