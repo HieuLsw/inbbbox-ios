@@ -347,7 +347,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pl";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pl";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pl";
-"ShotsOnboardingStateHandler.Skip" = "Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -360,9 +360,9 @@
 "ShotCollectionCell.Follow" = "Obserwujesz autora!";
 
 /********* ProfileInfoView *********/
-"ProfileInfoView.Followers" = "Followers"; //$
-"ProfileInfoView.Shots" = "Shots"; //$
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
 "ProfileInfoView.Following" = "Obserwowani";
 
 /********* TeamsCollectionHeaderView *********/
-"TeamsCollectionHeaderView.OnTeams" = "On Teams"; //$
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
