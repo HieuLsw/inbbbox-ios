@@ -8,23 +8,33 @@
 
 import Foundation
 
-class APIShotsProviderConfiguration {
-
-    enum ShotsSource {
-        case newToday, popularToday, debuts, following
-
-        var isActive: Bool {
-            switch self {
-                case .newToday: return Settings.StreamSource.NewToday
-                case .popularToday: return Settings.StreamSource.PopularToday
-                case .debuts: return Settings.StreamSource.Debuts
-                case .following: return Settings.StreamSource.Following
-            }
+enum ShotsSource: String {
+    
+    case newToday = "NewToday"
+    case popularToday = "PopularToday"
+    case debuts = "Debuts"
+    case following = "Following"
+    case mySet = "MySet"
+    
+    var isActive: Bool {
+        switch self {
+        case .newToday: return Settings.StreamSource.NewToday
+        case .popularToday: return Settings.StreamSource.PopularToday
+        case .debuts: return Settings.StreamSource.Debuts
+        case .following: return Settings.StreamSource.Following
+        case .mySet: return false
         }
     }
+    
+}
+
+class APIShotsProviderConfiguration {
 
     var sources: [ShotsSource] {
-        return [.newToday, .popularToday, .debuts, .following].filter { $0.isActive }
+        if Settings.StreamSource.SelectedStreamSource == .mySet {
+            return [.newToday, .popularToday, .debuts, .following].filter { $0.isActive }
+        }
+        return [Settings.StreamSource.SelectedStreamSource]
     }
 
     func queryByConfigurationForQuery(_ query: ShotsQuery, source: ShotsSource) -> ShotsQuery {
@@ -32,7 +42,7 @@ class APIShotsProviderConfiguration {
         switch source {
             case .newToday:
                 resultQuery.parameters["sort"] = "recent" as AnyObject?
-            case .popularToday:
+            case .popularToday, .mySet:
                 break
             case .debuts:
                 resultQuery.parameters["list"] = "debuts" as AnyObject?

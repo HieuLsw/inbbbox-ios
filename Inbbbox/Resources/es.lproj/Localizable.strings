@@ -259,6 +259,9 @@
 /* Title of flash message, when user turn off all sources */
 "SettingsViewModel.AllSources" = "Con la configuración actual no va a ver ningun shot. Asigne al menos una fuente.";
 
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
+
 /********* SettingsViewController *********/
 
 /* Title of group of buttons for stream source settings */

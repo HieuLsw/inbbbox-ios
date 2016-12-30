@@ -254,14 +254,7 @@ fileprivate extension ShotsCollectionViewController {
     }
 
     dynamic func didChangeStreamSourceSettings(_ notification: Notification) {
-        firstly {
-            refreshShotsData()
-        }.then { () -> Void in
-            self.collectionView?.reloadData()
-            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
-        }.catch { error in
-            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
-        }
+        reloadShots()
     }
 
     func refreshShotsData() -> Promise<Void> {
@@ -276,6 +269,17 @@ fileprivate extension ShotsCollectionViewController {
     
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
+    }
+    
+    func reloadShots() {
+        firstly {
+            refreshShotsData()
+        }.then { () -> Void in
+            self.collectionView?.reloadData()
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
+        }.catch { error in
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+        }
     }
 }
 
@@ -363,7 +367,11 @@ private extension ShotsCollectionViewController {
         if let condition = backgroundAnimator?.areStreamSourcesShown, condition == true {
             hideStreamSources()
         } else {
-            showStreamSources()
+            let streamSourceViewController = StreamSourceViewController(didSelectStream: { [unowned self] in
+                self.reloadShots()
+            })
+            streamSourceViewController.modalPresentationStyle = .overCurrentContext
+            present(streamSourceViewController, animated: true, completion: nil)
         }
     }
 }

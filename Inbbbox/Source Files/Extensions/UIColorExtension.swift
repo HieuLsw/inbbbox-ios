@@ -107,6 +107,11 @@ extension UIColor {
         return RGBA(38, 38, 38, 1)
     }
     
+    /// Returns brand stream source gray color.
+    class func streamSourceGrayColor() -> UIColor {
+        return RGBA(137, 142, 145, 1)
+    }
+    
     // MARK: Night Mode
     
     /// Returns brand text gray color used in followee cell in night mode.
