@@ -34,15 +34,25 @@ extension ShotDetailsViewController: ModalByDraggingClosable {
 
 extension ShotDetailsViewController: CommentComposerViewDelegate {
 
-    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String) {
+    func didTapSendButtonInComposerView(_ view: CommentComposerView, comment: String, whileEditing commentAtIndex: Int?) {
 
         view.startAnimation()
 
         let isAllowedToDisplaySeparator = viewModel.isAllowedToDisplaySeparator
+        let isUpdatingComment = commentAtIndex != nil
 
         firstly {
-            viewModel.postComment(comment)
+            if let index = commentAtIndex {
+                return viewModel.update(comment: comment, at: index)
+            }
+
+            return viewModel.postComment(comment)
         }.then { () -> Void in
+
+            if isUpdatingComment {
+                self.shotDetailsView.collectionView.reloadData()
+                return
+            }
 
             let numberOfItemsInFirstSection = self.shotDetailsView.collectionView.numberOfItems(inSection: 0)
             var indexPaths = [IndexPath(item: numberOfItemsInFirstSection, section: 0)]
@@ -57,6 +67,7 @@ extension ShotDetailsViewController: CommentComposerViewDelegate {
             })
         }.always {
             view.stopAnimation()
+            view.makeInactive()
         }.catch { error -> Void in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.addingCommentFailed, canBeDismissedByUser: true)
         }

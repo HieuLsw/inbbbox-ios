@@ -11,6 +11,7 @@ import PromiseKit
 import ZFDragableModalTransition
 import ImageViewer
 import MessageUI
+import Async
 
 final class ShotDetailsViewController: UIViewController {
 
@@ -20,8 +21,8 @@ final class ShotDetailsViewController: UIViewController {
                         self.scroller.scrollToBottomAnimated(true)
             }
             if self.shouldShowKeyboardAtStart && self.viewModel.isCommentingAvailable {
-                AsyncWrapper().main {
-                    self.shotDetailsView.commentComposerView.textField.becomeFirstResponder()
+                Async.main(after: 0.1) {
+                    self.shotDetailsView.commentComposerView.makeActive()
                 }
             }
         }()
@@ -216,6 +217,10 @@ extension ShotDetailsViewController: UICollectionViewDataSource {
             cell.unlikeActionHandler = { [weak self] in
                 self?.unlikeComment(atIndexPath: indexPath)
             }
+            cell.editActionHandler = { [weak self] in
+                self?.editComment(at: indexPath)
+            }
+            
             cell.avatarView.delegate = self
             cell.delegate = self
 
@@ -542,6 +547,13 @@ private extension ShotDetailsViewController {
             self.shotDetailsView.collectionView.reloadItems(at: [indexPath])
         }.catch { _ in }
     }
+    
+    func editComment(at indexPath: IndexPath) {
+        if let comment = viewModel.displayableDataForCommentAtIndex(indexPath.row).comment {
+            let index = viewModel.indexInCommentArrayBasedOnItemIndex(indexPath.row)
+            shotDetailsView.commentComposerView.makeActive(with: comment.string, index: index)
+        }
+    }
 
     func presentShotBucketsViewControllerWithMode(_ mode: ShotBucketsViewControllerMode, onModalCompletion completion:(() -> Void)? = nil) {
 
@@ -609,6 +621,7 @@ private extension ShotDetailsViewController {
     }
 
     dynamic func closeButtonDidTap(_: UIButton) {
+        shotDetailsView.commentComposerView.hideToolbar()
         dismiss(animated: true, completion: nil)
     }
     

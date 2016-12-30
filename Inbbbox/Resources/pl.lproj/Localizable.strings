@@ -134,6 +134,9 @@
 /* Editing comment, report. */
 "CommentEditView.Report" = "Zgłoś";
 
+/* Editing comment, edit. */
+"CommentEditView.Edit" = "Edytuj";
+
 /********* OAuthViewController *********/
 
 /* Cancel logging in. */
