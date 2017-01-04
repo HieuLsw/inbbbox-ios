@@ -351,6 +351,7 @@
 		D057E1F9B9C14D953F588D5E /* ShotsProviderConfigurationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1371EA5801DAD8C064104E /* ShotsProviderConfigurationSpec.swift */; };
 		D402ECB27C9F8A00D7A99966 /* APIRateLimitKeeperSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3811D02851653239353F8 /* APIRateLimitKeeperSpec.swift */; };
 		D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7658C28C0BDFCD056941617 /* ParametersSpec.swift */; };
+		D541FA0E1E1A967E00BF68E7 /* CarouselCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541FA0D1E1A967E00BF68E7 /* CarouselCollectionViewLayout.swift */; };
 		D5B91B521E142060005628F6 /* StreamSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */; };
 		D5D167FF1E13E6A800E91BDA /* StreamSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D167FE1E13E6A800E91BDA /* StreamSourceView.swift */; };
 		D5D168011E13F22D00E91BDA /* StreamSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */; };
@@ -845,6 +846,7 @@
 		D43EDA4877B493BA0964583D /* OneColumnCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OneColumnCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		D493EBA01C91E4521D11A489 /* UserStorageMock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserStorageMock.swift; sourceTree = "<group>"; };
 		D4FF1834DBC26C763A50E414 /* BucketType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BucketType.swift; sourceTree = "<group>"; };
+		D541FA0D1E1A967E00BF68E7 /* CarouselCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D598E9BB4EDCE86ADD7BB0A3 /* OAuthAuthorizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizable.swift; sourceTree = "<group>"; };
 		D5B8F4F4DC52ABC426E05B98 /* ShotBucketsActionCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotBucketsActionCollectionViewCell.swift; sourceTree = "<group>"; };
 		D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamSourceViewModel.swift; sourceTree = "<group>"; };
@@ -1591,6 +1593,7 @@
 				AB0001E808B13FB4F9C306EE /* ShotDetailsCollectionCollapsableHeader.swift */,
 				00D0A97D0A0BA8125148E7BA /* ShotsCollectionViewFlowLayout.swift */,
 				846DE6925FAE1730C60853C3 /* TwoColumnsCollectionViewFlowLayout.swift */,
+				D541FA0D1E1A967E00BF68E7 /* CarouselCollectionViewLayout.swift */,
 			);
 			path = "Collection View Layouts";
 			sourceTree = "<group>";
@@ -2219,6 +2222,7 @@
 				59290C9F2CCEA2A6D85C5E9F /* DribbbleNetworkService.swift in Sources */,
 				BE57125B1DCA2E9200358745 /* FlashMessage.swift in Sources */,
 				3BC8D5284656ECF2F51C26A7 /* HeaderAuthorizable.swift in Sources */,
+				D541FA0E1E1A967E00BF68E7 /* CarouselCollectionViewLayout.swift in Sources */,
 				D5D168011E13F22D00E91BDA /* StreamSourceViewController.swift in Sources */,
 				7449D9881CAD4A8D00E37CE9 /* URLToUserProvider.swift in Sources */,
 				F023FD901CD0D22100CA650D /* APIUsersProvider.swift in Sources */,
