@@ -32,14 +32,15 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
+class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     // MARK: - Lifecycle
 
     fileprivate let viewModel = FolloweesViewModel()
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +52,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
         collectionView.emptyDataSetSource = self
         viewModel.delegate = self
         navigationItem.title = viewModel.title
-
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +62,7 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         AnalyticsManager.trackScreen(.followeesView)
     }
 
@@ -242,11 +241,13 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
-            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
-            let cell = collectionView?.cellForItem(at: indexPath)
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        previewingContext.sourceRect = cell.contentView.bounds
+        previewingContext.sourceRect = cell.frame
+        
         let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController

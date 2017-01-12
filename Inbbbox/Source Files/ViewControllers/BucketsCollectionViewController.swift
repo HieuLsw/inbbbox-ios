@@ -11,7 +11,7 @@ import PromiseKit
 import DZNEmptyDataSet
 import PeekPop
 
-class BucketsCollectionViewController: UICollectionViewController {
+class BucketsCollectionViewController: UICollectionViewController, Support3DTouch {
 
     fileprivate let viewModel = BucketsViewModel()
     fileprivate var shouldShowLoadingView = true
@@ -20,7 +20,8 @@ class BucketsCollectionViewController: UICollectionViewController {
     fileprivate let animationCycleInterval = 6.0
 
     fileprivate var currentColorMode = ColorModeProvider.current()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
     // MARK: - Lifecycle
 
     convenience init() {
@@ -39,9 +40,6 @@ class BucketsCollectionViewController: UICollectionViewController {
         }
         collectionView.registerClass(BucketCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +51,8 @@ class BucketsCollectionViewController: UICollectionViewController {
         super.viewDidAppear(animated)
         viewModel.downloadInitialItems()
         AnalyticsManager.trackScreen(.bucketsView)
+        
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         cellsAnimateTimer = Timer.scheduledTimer(timeInterval: animationCycleInterval, target: self, selector: #selector(BucketsCollectionViewController.makeRandomRotation), userInfo: nil, repeats: true)
     }
@@ -97,19 +97,17 @@ class BucketsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                            willDisplay cell: UICollectionViewCell,
                    forItemAt indexPath: IndexPath) {
-        viewModel.downloadShots(viewModel.buckets[indexPath.row])
         if (indexPath.row == viewModel.itemsCount - 1) {
             viewModel.downloadItemsForNextPage()
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bucketContentCollectionViewController = SimpleShotsCollectionViewController(
-            bucket: viewModel.buckets[indexPath.row],
-            shots: viewModel.bucketsIndexedShots[indexPath.row],
-            shotsProvider: viewModel.shotsProvider
-        )
-        navigationController?.pushViewController(bucketContentCollectionViewController, animated: true)
+    override func collectionView(_ collectionView: UICollectionView,
+             didSelectItemAt indexPath: IndexPath) {
+        let bucketContentCollectionViewController =
+                SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.row])
+        navigationController?.pushViewController(bucketContentCollectionViewController,
+                animated: true)
     }
 
     // MARK: Configuration
@@ -222,11 +220,7 @@ extension BucketsCollectionViewController: UIViewControllerPreviewingDelegate {
         
         previewingContext.sourceRect = cell.contentView.bounds
         
-        return SimpleShotsCollectionViewController(
-            bucket: viewModel.buckets[indexPath.row],
-            shots: viewModel.bucketsIndexedShots[indexPath.row],
-            shotsProvider: viewModel.shotsProvider
-        )
+        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
@@ -250,16 +244,14 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
-            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
-            let cell = collectionView?.cellForItem(at: indexPath)
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        previewingContext.sourceRect = cell.contentView.bounds
-        return SimpleShotsCollectionViewController(
-            bucket: viewModel.buckets[indexPath.row],
-            shots: viewModel.bucketsIndexedShots[indexPath.row],
-            shotsProvider: viewModel.shotsProvider
-        )
+        previewingContext.sourceRect = cell.frame
+        
+        return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
 
     func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {

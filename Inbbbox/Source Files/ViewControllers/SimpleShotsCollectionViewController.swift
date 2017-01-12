@@ -12,14 +12,15 @@ import ZFDragableModalTransition
 import DZNEmptyDataSet
 import PeekPop
 
-class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController {
+class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
     var viewModel: SimpleShotsViewModel?
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     fileprivate var shouldShowLoadingView = true
     fileprivate var indexesToUpdateCellImage = [Int]()
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 }
 
 // MARK: Lifecycle
@@ -29,12 +30,10 @@ extension SimpleShotsCollectionViewController {
     /// Use this `init` to display shots from given bucket.
     ///
     /// - parameter bucket: Bucket to display shots for.
-    /// - parameter shots: Already downloaded shots to display.
-    /// - parameter shotsProvider: Shots provider to fetch next pages of shots.
-    convenience init(bucket: BucketType, shots: [ShotType]?, shotsProvider: ShotsProvider) {
+    convenience init(bucket: BucketType) {
         self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
                 twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
-        self.viewModel = BucketContentViewModel(bucket: bucket, shotsProvider: shotsProvider, shots: shots)
+        self.viewModel = BucketContentViewModel(bucket: bucket)
     }
 
     /// Use this `init` to display liked shots.
@@ -58,8 +57,6 @@ extension SimpleShotsCollectionViewController {
         }
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         collectionView.emptyDataSetSource = self
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,9 +66,8 @@ extension SimpleShotsCollectionViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if viewModel?.shots.count == 0 {
-            viewModel?.downloadInitialItems()
-        }
+        viewModel?.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
     }
 }
 
@@ -123,12 +119,13 @@ extension SimpleShotsCollectionViewController: PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
         guard
-            let indexPath = collectionView?.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
-            let cell = collectionView?.cellForItem(at: indexPath),
+            let collectionView = collectionView,
+            let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
+            let cell = collectionView.cellForItem(at: indexPath),
             let viewModel = viewModel
         else { return nil }
 
-        previewingContext.sourceRect = cell.contentView.bounds
+        previewingContext.sourceRect = cell.frame
 
         let detailsViewController = ShotDetailsViewController(shot: viewModel.shots[indexPath.item])
         detailsViewController.customizeFor3DTouch(true)
@@ -157,8 +154,8 @@ extension SimpleShotsCollectionViewController {
         let cellData = viewModel!.shotCollectionViewCellViewData(indexPath)
 
         indexesToUpdateCellImage.append(indexPath.row)
-        lazyLoadImage(cellData.shotImage, atIndexPath: indexPath)
-        
+        lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
+
         if !cell.isRegisteredTo3DTouch {
             cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
         }
@@ -271,18 +268,15 @@ extension SimpleShotsCollectionViewController: ColorModeAdaptable {
 
 private extension SimpleShotsCollectionViewController {
 
-    func lazyLoadImage(_ shotImage: ShotImageType, atIndexPath indexPath: IndexPath) {
+    func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell, atIndexPath indexPath: IndexPath) {
         let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
 
             guard let certainSelf = self, certainSelf.indexesToUpdateCellImage.contains(indexPath.row) else {
                 return
             }
 
-            typealias cellType = SimpleShotCollectionViewCell
-            if let cell = certainSelf.collectionView?.cellForItem(at: indexPath) as? cellType {
-                cell.shotImageView.image = nil
-                cell.shotImageView.image = image
-            }
+            cell.shotImageView.image = nil
+            cell.shotImageView.image = image
         }
 
         LazyImageProvider.lazyLoadImageFromURLs(

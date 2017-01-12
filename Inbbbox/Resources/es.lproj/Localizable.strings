@@ -178,7 +178,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "¿No tiene cliente de correo electrónico? - ningún problema, puede utilizar esta dirección de correo para enviarnos sus comentarios donde quiera: inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Descargar proyectos de dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Descargar proyectos de dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -252,6 +255,9 @@
 
 /* Title of flash message, when user turn off all sources */
 "SettingsViewModel.AllSources" = "Con la configuración actual no va a ver ningun shot. Asigne al menos una fuente.";
+
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
 
 /********* SettingsViewController *********/
 
@@ -327,7 +333,7 @@
 "LoginView.Loading" = "INICIANDO...";
 
 /* Describes copyright holder */
-"LoginView.Copyright" = "Contenido protegido por derechos de autor (c) 2016 Netguru.co";
+"LoginView.Copyright" = "Contenido protegido por derechos de autor (c) 2016 Netguru";
 
 /********* EmptyDataSetLoadingView *********/
 
@@ -342,7 +348,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-es";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-es";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-es";
-"ShotsOnboardingStateHandler.Skip" = "Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -353,3 +359,11 @@
 "ShotCollectionCell.Bucket" = "Te gusta y añadido a la cubeta!";
 "ShotCollectionCell.Comment" = "Comentando…";
 "ShotCollectionCell.Follow" = "Siguiendo al autor!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Siguiendo";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

@@ -106,21 +106,21 @@ final class ShotDetailsFormatter {
     class func commentDateForComment(_ comment: CommentType) -> NSAttributedString {
         return NSAttributedString(string: commentDateFormatter.string(from: comment.createdAt as Date), attributes: [
                 NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentDateTextColor,
-                NSFontAttributeName: UIFont.helveticaFont(.neue, size: 10)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         ])
     }
 
     class func commentAuthorForComment(_ comment: CommentType) -> NSAttributedString {
         return NSAttributedString(string: comment.user.name ?? comment.user.username, attributes: [
                 NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentAuthorTextColor,
-                NSFontAttributeName: UIFont.helveticaFont(.neueMedium, size: 16)
+                NSFontAttributeName: UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         ])
     }
 
     class func commentLikesCountForComment(_ comment: CommentType) -> NSAttributedString {
         return NSAttributedString(string: "\(comment.likesCount)", attributes: [
             NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsCommentLikesCountTextColor,
-            NSFontAttributeName: UIFont.helveticaFont(.neue, size: 10)
+            NSFontAttributeName: UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         ])
     }
 }

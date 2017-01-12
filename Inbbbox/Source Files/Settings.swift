@@ -17,33 +17,40 @@ class Settings {
 
         /// Indicates if streams' sources are initially set.
         static var IsSet: Bool {
-            get { return Settings.boolForKey(.StreamSourceIsSet) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .StreamSourceIsSet) }
+            get { return Settings.boolForKey(.streamSourceIsSet) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .streamSourceIsSet) }
         }
 
         /// Indicates if stream's source for Following is on.
         static var Following: Bool {
-            get { return Settings.boolForKey(.FollowingStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .FollowingStreamSourceOn) }
+            get { return Settings.boolForKey(.followingStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .followingStreamSourceOn) }
         }
 
         /// Indicates if stream's source for NewToday is on.
         static var NewToday: Bool {
-            get { return Settings.boolForKey(.NewTodayStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .NewTodayStreamSourceOn) }
+            get { return Settings.boolForKey(.newTodayStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .newTodayStreamSourceOn) }
         }
 
         /// Indicates if stream's source for PopularToday is on.
         static var PopularToday: Bool {
-            get { return Settings.boolForKey(.PopularTodayStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .PopularTodayStreamSourceOn) }
+            get { return Settings.boolForKey(.popularTodayStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .popularTodayStreamSourceOn) }
         }
 
         /// Indicates if stream's source for Debuts is on.
         static var Debuts: Bool {
-            get { return Settings.boolForKey(.DebutsStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .DebutsStreamSourceOn) }
+            get { return Settings.boolForKey(.debutsStreamSourceOn) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .debutsStreamSourceOn) }
         }
+        
+        /// Indicates which one stream source is selected
+        static var SelectedStreamSource: ShotsSource {
+            get { return Settings.streamForKey(.selectedStreamSource) }
+            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .selectedStreamSource) }
+        }
+        
     }
 
     /// Manages settings related to reminder.
@@ -73,31 +80,31 @@ class Settings {
 
         /// Indicates if "showing author on homescreen" is enabled.
         static var ShowAuthor: Bool {
-            get { return Settings.boolForKey(.ShowAuthorOnHomeScreen) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .ShowAuthorOnHomeScreen) }
+            get { return Settings.boolForKey(.showAuthorOnHomeScreen) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .showAuthorOnHomeScreen) }
         }
         
         /// Indicates if "showing author on homescreen" is enabled.
         static var NightMode: Bool {
-            get { return Settings.boolForKey(.NightMode) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .NightMode) }
+            get { return Settings.boolForKey(.nightMode) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .nightMode) }
         }
         
         /// Indicates if "showing author on homescreen" is enabled.
         static var AutoNightMode: Bool {
-            get { return Settings.boolForKey(.AutoNightMode) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .AutoNightMode) }
+            get { return Settings.boolForKey(.autoNightMode) }
+            set { Settings.setValue(newValue as AnyObject?, forKey: .autoNightMode) }
         }
 
         /// Indicates what color mode is currently set.
         /// - SeeAlso: `ColorMode`
         static var CurrentColorMode: ColorMode {
             get {
-                let savedSetting = Settings.stringForKey(.ColorMode)
+                let savedSetting = Settings.stringForKey(.colorMode)
                 let colorMode = ColorMode(rawValue: savedSetting)
                 return colorMode != nil ? colorMode! : .dayMode
             }
-            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .ColorMode) }
+            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .colorMode) }
         }
     }
 }
@@ -142,6 +149,10 @@ private extension Settings {
         return stringForKey(key.rawValue)
     }
 
+    static func streamForKey(_ key: CustomizationKey) -> ShotsSource {
+        return streamForKey(key.rawValue)
+    }
+    
     static func setValue(_ value: AnyObject?, forKey key: CustomizationKey) {
         Defaults[key.rawValue] = value
     }
@@ -154,6 +165,13 @@ private extension Settings {
 
     static func stringForKey(_ key: String) -> String {
         return Defaults[key].string ?? ""
+    }
+    
+    static func streamForKey(_ key: String) -> ShotsSource {
+        if let streamSourceType = Defaults[key].string {
+            return ShotsSource(rawValue: streamSourceType) ?? .mySet
+        }
+        return .mySet
     }
 }
 

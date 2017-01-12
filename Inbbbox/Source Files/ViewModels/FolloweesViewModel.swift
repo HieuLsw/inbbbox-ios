@@ -20,8 +20,8 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
     fileprivate let shotsProvider = ShotsProvider()
     fileprivate var userMode: UserMode
     fileprivate var followeesDuringDownload = [Followee]()
-    
-    fileprivate let netguruTeam = Team(identifier: "653174", name: "", username: "", avatarURL: nil, createdAt: Date())
+
+    fileprivate let netguruTeam = Team(identifier: "653174", name: "", username: "", avatarURL: nil, createdAt: Date(), followersCount: 0, followingsCount: 0, bio: "", location: "")
 
     var itemsCount: Int {
         return followees.count
@@ -112,7 +112,6 @@ private extension FolloweesViewModel {
         guard let indexForRemove = followeesDuringDownload.index(where: { (f) -> Bool in return f == followee }) else { return }
         followeesDuringDownload.remove(at: indexForRemove)
     }
-
 }
 
 extension FolloweesViewModel {

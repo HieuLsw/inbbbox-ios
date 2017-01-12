@@ -18,8 +18,10 @@ struct FlashMessageTitles {
                                       comment: "Error while removing comment.")
     static let addingCommentFailed = NSLocalizedString("ShotDetailsViewController.AddingCommentError",
                                       comment: "Error while adding comment.")
-    static let downloadingShotsFailed = NSLocalizedString("UIAlertControllerExtension.UnableToDownload",
-                                         comment: "Informing user about problems with downloading items.")
+    static let downloadingShotsFailed = NSLocalizedString("UIAlertControllerExtension.UnableToDownloadShots",
+                                         comment: "Informing user about problems with downloading shots.")
+    static let downloadingTeamsFailed = NSLocalizedString("UIAlertControllerExtension.UnableToDownloadTeams",
+            comment: "Informing user about problems with downloading teams.")
     static let tryAgain = NSLocalizedString("UIAlertControllerExtension.TryAgain",
                                             comment: "Allows user to try again after error occurred.")
 }

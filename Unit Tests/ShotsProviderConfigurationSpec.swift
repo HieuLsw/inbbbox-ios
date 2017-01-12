@@ -50,7 +50,7 @@ class ShotsProviderConfigurationSpec: QuickSpec {
                 }
                 
                 it("shouldn't return disabled source") {
-                    expect(sut.sources).toNot(contain(APIShotsProviderConfiguration.ShotsSource.newToday))
+                    expect(sut.sources).toNot(contain(ShotsSource.newToday))
                 }
             }
         }

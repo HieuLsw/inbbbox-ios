@@ -178,7 +178,10 @@
 "UIAlertControllerExtension.CantSendFeedback" = "A tua conta e-mail não está configurada. Envie uma mensagem para inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownload" = "Descarregar projetos de Dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Descarregar projetos de Dribbble";
+
+/* Informing user about problems with downloading teams. */
+"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -225,6 +228,9 @@
 
 /* Redirect user to Settings app */
 "SettingsViewModel.Settings" = "Configuração";
+
+/* User settings, my set */
+"SettingsViewModel.MySet" = "$My Set";
 
 /********* Acknowledgements button *********/
 "SettingsViewModel.AcknowledgementsButton" = "Os reconhecimentos";
@@ -327,7 +333,7 @@
 "LoginView.Loading" = "INICIANDO...";
 
 /* Describes copyright holder */
-"LoginView.Copyright" = "Conteúdo protegido por direitos autorais (c) 2016 Netguru.co";
+"LoginView.Copyright" = "Conteúdo protegido por direitos autorais (c) 2016 Netguru";
 
 /********* EmptyDataSetLoadingView *********/
 
@@ -341,7 +347,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pt";
-"ShotsOnboardingStateHandler.Skip" = "Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -352,3 +358,11 @@
 "ShotCollectionCell.Bucket" = "Curtido e adicionado ao balde!";
 "ShotCollectionCell.Comment" = "Comentando…";
 "ShotCollectionCell.Follow" = "Está a seguir ao autor!";
+
+/********* ProfileInfoView *********/
+"ProfileInfoView.Followers" = "$Followers";
+"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Following" = "Os autores seguidos";
+
+/********* TeamsCollectionHeaderView *********/
+"TeamsCollectionHeaderView.OnTeams" = "$On Teams";

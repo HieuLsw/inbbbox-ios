@@ -7,7 +7,7 @@ import PromiseKit
 import SwiftyUserDefaults
 import PeekPop
 
-class ShotsCollectionViewController: UICollectionViewController, Vibratable {
+class ShotsCollectionViewController: UICollectionViewController, Vibratable, Support3DTouch {
 
     enum State {
         case onboarding, initialAnimations, normal
@@ -21,7 +21,8 @@ class ShotsCollectionViewController: UICollectionViewController, Vibratable {
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
-    fileprivate var peekPop: PeekPop?
+    internal var peekPop: PeekPop?
+    internal var didCheckedSupport3DForOlderDevices = false
 
     // MARK: Life cycle
 
@@ -66,9 +67,6 @@ extension ShotsCollectionViewController {
         registerToSettingsNotifications()
         setupStreamSourcesAnimators()
         setupSkipButton()
-        
-        peekPop = PeekPop(viewController: self)
-        _ = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
     
     
@@ -82,6 +80,8 @@ extension ShotsCollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
+        
         AnalyticsManager.trackScreen(.shotsView)
 
         if (!didSetupAnimation) {
@@ -254,14 +254,7 @@ fileprivate extension ShotsCollectionViewController {
     }
 
     dynamic func didChangeStreamSourceSettings(_ notification: Notification) {
-        firstly {
-            refreshShotsData()
-        }.then { () -> Void in
-            self.collectionView?.reloadData()
-            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
-        }.catch { error in
-            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
-        }
+        reloadShots()
     }
 
     func refreshShotsData() -> Promise<Void> {
@@ -276,6 +269,17 @@ fileprivate extension ShotsCollectionViewController {
     
     func scrollToShotAtIndex(_ index: Int, animated: Bool = true) {
         collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: animated)
+    }
+    
+    func reloadShots() {
+        firstly {
+            refreshShotsData()
+        }.then { () -> Void in
+            self.collectionView?.reloadData()
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
+        }.catch { error in
+            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+        }
     }
 }
 
@@ -314,7 +318,7 @@ extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
             let indexPath = collectionView?.indexPathsForVisibleItems.first
         else { return nil }
 
-        previewingContext.sourceRect = visibleCell.contentView.bounds
+        previewingContext.sourceRect = visibleCell.frame
 
         return normalStateHandler.getShotDetailsViewController(atIndexPath: indexPath)
     }
@@ -362,7 +366,11 @@ private extension ShotsCollectionViewController {
         if let condition = backgroundAnimator?.areStreamSourcesShown, condition == true {
             hideStreamSources()
         } else {
-            showStreamSources()
+            let streamSourceViewController = StreamSourceViewController(didSelectStream: { [unowned self] in
+                self.reloadShots()
+            })
+            streamSourceViewController.modalPresentationStyle = .overCurrentContext
+            present(streamSourceViewController, animated: true, completion: nil)
         }
     }
 }
