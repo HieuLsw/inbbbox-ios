@@ -325,7 +325,13 @@
 		C61B8B951DDAEAE600D94867 /* AttachmentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61B8B941DDAEAE600D94867 /* AttachmentQuery.swift */; };
 		C61B8B971DDB122C00D94867 /* AttachmentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61B8B961DDB122C00D94867 /* AttachmentCollectionViewCell.swift */; };
 		C66C8BE91DD48A20005D63E6 /* FlashMessageTitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66C8BE81DD48A20005D63E6 /* FlashMessageTitles.swift */; };
+		C66EE3BC1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66EE3BB1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift */; };
+		C66EE3BE1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66EE3BD1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift */; };
+		C66EE3C01E201977005DCF0D /* APIUsersProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66EE3BF1E201977005DCF0D /* APIUsersProviderSpec.swift */; };
+		C66EE3C21E21015D005DCF0D /* ShotsStateHandlersProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66EE3C11E21015D005DCF0D /* ShotsStateHandlersProviderSpec.swift */; };
+		C66EE3C41E2276D6005DCF0D /* ShotsOnboardingStateHandlerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66EE3C31E2276D6005DCF0D /* ShotsOnboardingStateHandlerSpec.swift */; };
 		C6745B7D1DB74371004D3D8E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6745B7C1DB74371004D3D8E /* AlertViewController.swift */; };
+		C67E9CD61E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67E9CD51E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift */; };
 		C6A336791DF749D200357D2A /* SettingsItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A336781DF749D200357D2A /* SettingsItemsProvider.swift */; };
 		C6A3367C1DF74A2E00357D2A /* EstimatedLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */; };
 		C6B095481DF19F88002806A0 /* EstimatedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095471DF19F88002806A0 /* EstimatedLocation.swift */; };
@@ -334,6 +340,7 @@
 		C6B095501DF57EB2002806A0 /* NightModeHoursProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */; };
 		C6B095521DF583FA002806A0 /* EstimatedLocationProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B095511DF583FA002806A0 /* EstimatedLocationProviderMock.swift */; };
 		C6B3E447E8EF8FFA08C91E08 /* ShotDetailsCollectionCollapsableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0001E808B13FB4F9C306EE /* ShotDetailsCollectionCollapsableHeader.swift */; };
+		C6E093AB1E1D6BF800796675 /* LazyImageProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E093AA1E1D6BF800796675 /* LazyImageProviderSpec.swift */; };
 		C6E9D8B11DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */; };
 		C6F148831DBF926E0093FA24 /* EmptyShotsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F148821DBF926E0093FA24 /* EmptyShotsCollectionView.swift */; };
 		C6F148851DC24D850093FA24 /* MainScreenStreamSourcesAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F148841DC24D850093FA24 /* MainScreenStreamSourcesAnimator.swift */; };
@@ -809,7 +816,13 @@
 		C61B8B941DDAEAE600D94867 /* AttachmentQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentQuery.swift; sourceTree = "<group>"; };
 		C61B8B961DDB122C00D94867 /* AttachmentCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewCell.swift; sourceTree = "<group>"; };
 		C66C8BE81DD48A20005D63E6 /* FlashMessageTitles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashMessageTitles.swift; sourceTree = "<group>"; };
+		C66EE3BB1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBucketsRequesterSpec.swift; sourceTree = "<group>"; };
+		C66EE3BD1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBucketsProviderSpec.swift; sourceTree = "<group>"; };
+		C66EE3BF1E201977005DCF0D /* APIUsersProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIUsersProviderSpec.swift; sourceTree = "<group>"; };
+		C66EE3C11E21015D005DCF0D /* ShotsStateHandlersProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotsStateHandlersProviderSpec.swift; sourceTree = "<group>"; };
+		C66EE3C31E2276D6005DCF0D /* ShotsOnboardingStateHandlerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotsOnboardingStateHandlerSpec.swift; sourceTree = "<group>"; };
 		C6745B7C1DB74371004D3D8E /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
+		C67E9CD51E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedProjectsProviderSpec.swift; sourceTree = "<group>"; };
 		C6A336781DF749D200357D2A /* SettingsItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsItemsProvider.swift; sourceTree = "<group>"; };
 		C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocationProvider.swift; sourceTree = "<group>"; };
 		C6A3367B1DF74A2E00357D2A /* NightModeHoursProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHoursProvider.swift; sourceTree = "<group>"; };
@@ -818,6 +831,7 @@
 		C6B0954D1DF1C859002806A0 /* UserLocation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = UserLocation.json; sourceTree = "<group>"; };
 		C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHoursProviderSpec.swift; sourceTree = "<group>"; };
 		C6B095511DF583FA002806A0 /* EstimatedLocationProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstimatedLocationProviderMock.swift; sourceTree = "<group>"; };
+		C6E093AA1E1D6BF800796675 /* LazyImageProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImageProviderSpec.swift; sourceTree = "<group>"; };
 		C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenStreamSourcesAnimatorSpec.swift; sourceTree = "<group>"; };
 		C6F148821DBF926E0093FA24 /* EmptyShotsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyShotsCollectionView.swift; sourceTree = "<group>"; };
 		C6F148841DC24D850093FA24 /* MainScreenStreamSourcesAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenStreamSourcesAnimator.swift; sourceTree = "<group>"; };
@@ -1249,6 +1263,7 @@
 				039F794472634909548F9C0E /* APIShotsProviderSpec.swift */,
 				DDC595BFB6BC4DAC353A01FE /* APIShotsRequesterSpec.swift */,
 				0FFFC0840E460B99F665C2C5 /* APITeamsProviderSpec.swift */,
+				C66EE3BF1E201977005DCF0D /* APIUsersProviderSpec.swift */,
 				1FAE93BCE146DDA9C36F6CF8 /* AsyncWrapperSpec.swift */,
 				4A52A23BA4741CF6B4E3F10A /* AutoScrollableShotsAnimatorSpec.swift */,
 				CD356373304FEE13BADFD74A /* AutoScrollableShotsDataSourceSpec.swift */,
@@ -1262,7 +1277,11 @@
 				48C2356409F6DBA6CCCECB12 /* InitialShotsCollectionViewLayoutSpec.swift */,
 				789EF40106C3C29A91C1C948 /* LikesViewModelSpec.swift */,
 				341E39FEB97D964857A555BB /* LocalNotificationRegistratorSpec.swift */,
+				C6E093AA1E1D6BF800796675 /* LazyImageProviderSpec.swift */,
+				C66EE3BD1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift */,
+				C66EE3BB1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift */,
 				B846DAF934E7B2D65792E07F /* ManagedShotsProviderSpec.swift */,
+				C67E9CD51E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift */,
 				C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */,
 				3F14B4ED91D1574D59453775 /* NSAttributedStringExtensionSpec.swift */,
 				C6B0954F1DF57EB2002806A0 /* NightModeHoursProviderSpec.swift */,
@@ -1286,8 +1305,10 @@
 				117C93561E4C58105633DFDA /* ShotsAnimatorSpec.swift */,
 				B7CCFCBF07387130864BB26C /* ShotsCollectionBackgroundViewSpec.swift */,
 				8E10412C63CC20B8B116A67B /* ShotsCollectionViewFlowLayoutSpec.swift */,
+				C66EE3C31E2276D6005DCF0D /* ShotsOnboardingStateHandlerSpec.swift */,
 				8A1371EA5801DAD8C064104E /* ShotsProviderConfigurationSpec.swift */,
 				B9A2CC766005F6D034EF0E2B /* ShotsProviderSpec.swift */,
+				C66EE3C11E21015D005DCF0D /* ShotsStateHandlersProviderSpec.swift */,
 				685C76AC2DC83917A32C6EA5 /* ShotsStorageSpec.swift */,
 				BB1F917563B6B64378AB26C4 /* TokenStorageSpec.swift */,
 				0B8E247C367E7CD816FFC6E7 /* UserDetailsViewModelSpec.swift */,
@@ -2421,6 +2442,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6E093AB1E1D6BF800796675 /* LazyImageProviderSpec.swift in Sources */,
 				738000923C392AA96CEB1C32 /* APIBucketsProviderSpec.swift in Sources */,
 				5886547BEDFC600E1DDCA93D /* APIBucketsRequesterSpec.swift in Sources */,
 				D99B8E0390DB01E683970725 /* APICommentsProviderSpec.swift in Sources */,
@@ -2440,10 +2462,12 @@
 				65212870D26F15043A7C0943 /* AutoScrollableShotsDataSourceSpec.swift in Sources */,
 				FD69E77A16D095C5C3DCF301 /* BucketCollectionViewCellSpec.swift in Sources */,
 				8E1019DBE20EA2A2DBDB8BEB /* BucketsViewModelSpec.swift in Sources */,
+				C66EE3C01E201977005DCF0D /* APIUsersProviderSpec.swift in Sources */,
 				EAAA12901DC3733D00E8B576 /* ShotDetailsPageViewControllerDataSourceSpec.swift in Sources */,
 				07B6EE5BFE5759158B916EB7 /* DefaultViewControllerPresenterSpec.swift in Sources */,
 				E8CC1B915CB2EB506D738D7B /* FolloweesViewModelSpec.swift in Sources */,
 				8F1ECF32CD4684F25AD631DF /* FormatterSpec.swift in Sources */,
+				C66EE3C41E2276D6005DCF0D /* ShotsOnboardingStateHandlerSpec.swift in Sources */,
 				518B0C8CF332CD63A06BCFF1 /* InitialShotsCollectionViewLayoutSpec.swift in Sources */,
 				C6FDB61ECCFC6DA18056E4C2 /* LikesViewModelSpec.swift in Sources */,
 				91A5F4FAED6556884402B13B /* LocalNotificationRegistratorSpec.swift in Sources */,
@@ -2463,6 +2487,7 @@
 				9EA6F88E747540476AB650BC /* ResponsableSpec.swift in Sources */,
 				EFEB4F05F24BBFC4C907F611 /* SettingsSpec.swift in Sources */,
 				11F4FBF2CC6D9531FE38106E /* SettingsViewModelSpec.swift in Sources */,
+				C67E9CD61E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift in Sources */,
 				DEB8B690F5001B1103B222C6 /* ShotBucketsViewModelSpec.swift in Sources */,
 				4655A59186C10C2A828F9650 /* ShotCollectionViewCellSpec.swift in Sources */,
 				ECFBA598DE6524F332283B52 /* ShotDetailsViewModelSpec.swift in Sources */,
@@ -2506,6 +2531,8 @@
 				8EF4E9F350CC826C4F3BD01B /* ShotsAnimatorDelegateMock.swift in Sources */,
 				657A2D283E1D4CFC561EBADD /* ShotsAnimatorMock.swift in Sources */,
 				C6B095501DF57EB2002806A0 /* NightModeHoursProviderSpec.swift in Sources */,
+				C66EE3C21E21015D005DCF0D /* ShotsStateHandlersProviderSpec.swift in Sources */,
+				C66EE3BC1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift in Sources */,
 				89F6A18D88715072C7BABDE1 /* UserStorageMock.swift in Sources */,
 				4AFD4EB1EB2AC11E12FBF62D /* ViewControllerMock.swift in Sources */,
 				237CCD37767599FA1EA8505A /* ViewControllerPresenterMock.swift in Sources */,
@@ -2530,6 +2557,7 @@
 				18AAA1AE0F5DD724F1E41538 /* UpdateCommentQuerySpec.swift in Sources */,
 				C85BC904F67DB81EEA6B903E /* UserFollowedByMeQuerySpec.swift in Sources */,
 				1B3A3EC0B12E5A4FB544AB8B /* UserQuerySpec.swift in Sources */,
+				C66EE3BE1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift in Sources */,
 				1D8D75D44282A11A261D391B /* SharedQuerySpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
