@@ -46,7 +46,7 @@ final class APIRateLimitKeeper {
     fileprivate(set) var rateLimitPerMinute: UInt?
 
     /// Daily rate limit.
-    /// When user is **not** authenticated, then limit is uknown due to client access token usage.
+    /// When user is **not** authenticated, then limit is unknown due to client access token usage.
     /// Inbbbox will use own client access token which is available globally for other Inbbbox aplications
     /// installed on other devices.
     var rateLimitPerDay: UInt? {
