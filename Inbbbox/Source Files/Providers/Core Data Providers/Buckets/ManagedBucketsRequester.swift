@@ -16,8 +16,8 @@ class ManagedBucketsRequester {
     let managedObjectContext: NSManagedObjectContext
     let managedObjectsProvider: ManagedObjectsProvider
 
-    init() {
-        managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext
+    init(managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext) {
+        self.managedObjectContext = managedObjectContext
         managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: managedObjectContext)
     }
 
