@@ -12,18 +12,18 @@ import Nimble
 
 class ShotsOnboardingStateHandlerSpec: QuickSpec {
 
-   /* override func spec() {
+    override func spec() {
         var sut: ShotsOnboardingStateHandler!
-        var collectionView: ShotsCollectionViewController!
+        var collectionViewController: ShotsCollectionViewController!
         
         beforeEach {
             sut = ShotsOnboardingStateHandler()
-            collectionView = ShotsCollectionViewController(frame: CGRect(x: 0, y: 0, width: 320, height: 568), collectionViewLayout: sut.collectionViewLayout)
+            collectionViewController = ShotsCollectionViewController()
         }
         
         afterEach {
             sut = nil
-            collectionView = nil
+            collectionViewController = nil
         }
         
         describe("when initialized") {
@@ -31,7 +31,7 @@ class ShotsOnboardingStateHandlerSpec: QuickSpec {
             context("should have initial values") {
                 
                 it("number of sections and items should be accurate") {
-                    expect(sut.collectionView(collectionView, numberOfItemsInSection: 0)).to(equal(5))
+                    expect(sut.collectionView(collectionViewController.collectionView!, numberOfItemsInSection: 0)).to(equal(5))
                 }
                 
                 it("onboarding steps have proper actions") {
@@ -49,9 +49,35 @@ class ShotsOnboardingStateHandlerSpec: QuickSpec {
             }
             
             context("cells handling") {
-                //expect(collectionView.indexPathsForVisibleItems).to(haveCount(1))
+                
+                it("swiping cells with proper action should move to next steps") {
+                    let collectionView = collectionViewController.collectionView!
+                    let likeCell = sut.collectionView(collectionView, cellForItemAt: IndexPath(item: 0, section: 0)) as! ShotCollectionViewCell
+                    let bucketCell = sut.collectionView(collectionView, cellForItemAt: IndexPath(item: 1, section: 0)) as! ShotCollectionViewCell
+                    let commentCell = sut.collectionView(collectionView, cellForItemAt: IndexPath(item: 2, section: 0)) as! ShotCollectionViewCell
+                    let followCell = sut.collectionView(collectionView, cellForItemAt: IndexPath(item: 3, section: 0)) as! ShotCollectionViewCell
+
+                    likeCell.swipeCompletion!(.like)
+                    expect(collectionView.contentOffset.y).toEventually(beCloseTo(667))
+                    bucketCell.swipeCompletion!(.bucket)
+                    expect(collectionView.contentOffset.y).toEventually(beCloseTo(1334))
+                    commentCell.swipeCompletion!(.comment)
+                    expect(collectionView.contentOffset.y).toEventually(beCloseTo(2001))
+                    followCell.swipeCompletion!(.follow)
+                    expect(collectionView.contentOffset.y).toEventually(beCloseTo(2668))
+                }
+                
+                it("only proper action should move to next step") {
+                    let collectionView = collectionViewController.collectionView!
+                    let likeCell = sut.collectionView(collectionView, cellForItemAt: IndexPath(item: 0, section: 0)) as! ShotCollectionViewCell
+                    expect(collectionView.contentOffset.y).to(beCloseTo(0))
+                    likeCell.swipeCompletion!(.bucket)
+                    likeCell.swipeCompletion!(.comment)
+                    likeCell.swipeCompletion!(.follow)
+                    expect(collectionView.contentOffset.y).to(beCloseTo(0))
+                }
             }
         }
-    }*/
+    }
 
 }
