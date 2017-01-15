@@ -40,5 +40,4 @@ class ArrayExtensionSpec: QuickSpec {
             }
         }
     }
-
 }

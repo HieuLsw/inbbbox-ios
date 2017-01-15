@@ -53,11 +53,6 @@ class ManagedBucketsProviderSpec: QuickSpec {
                     expect(myBuckets?.count).toEventually(equal(3))
                 }
             }
-            
         }
-
-
     }
 }
-
-

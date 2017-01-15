@@ -135,6 +135,5 @@ class ManagedBucketsRequesterSpec: QuickSpec {
                 }
             }
         }
-        
     }
 }

@@ -53,11 +53,8 @@ class LazyImageProviderSpec: QuickSpec {
                     expect(returnedImages).toEventually(equal(3))
                 }
             }
-            
         }
-        
     }
-
 }
 
 private extension UIImage {
