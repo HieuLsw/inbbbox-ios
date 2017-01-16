@@ -27,9 +27,9 @@ class ShotsStateHandlersProviderSpec: QuickSpec {
         describe("handler for state") {
             context("should return proper handler for state") {
                 it("types of values should be proper") {
-                expect(sut.shotsStateHandlerForState(.initialAnimations) is ShotsInitialAnimationsStateHandler).to(beTruthy())
-                expect(sut.shotsStateHandlerForState(.onboarding) is ShotsOnboardingStateHandler).to(beTruthy())
-                expect(sut.shotsStateHandlerForState(.normal) is ShotsNormalStateHandler).to(beTruthy())
+                    expect(sut.shotsStateHandlerForState(.initialAnimations) is ShotsInitialAnimationsStateHandler).to(beTruthy())
+                    expect(sut.shotsStateHandlerForState(.onboarding) is ShotsOnboardingStateHandler).to(beTruthy())
+                    expect(sut.shotsStateHandlerForState(.normal) is ShotsNormalStateHandler).to(beTruthy())
                 }
                 
             }
