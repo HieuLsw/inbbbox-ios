@@ -102,6 +102,9 @@ workflows:
   prepare_to_run:
     steps:
     - cache-pull: {}
+    - script:
+          inputs:
+            - content: bundle install
     - cocoapods-install:
         inputs:
         - is_update_cocoapods: 'true'
