@@ -21,6 +21,7 @@ class ShotsCollectionViewController: UICollectionViewController, Vibratable, Sup
     var shots = [ShotType]()
     fileprivate var emptyShotsView: UIView?
     fileprivate var didSetupAnimation = false
+    fileprivate var shouldShowShotsSources = false
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
 
@@ -94,6 +95,10 @@ extension ShotsCollectionViewController {
                 self.tabBarController?.present(alertController, animated: true, completion: nil)
             }
         } else {
+            shouldShowShotsSources = true
+        }
+        
+        if (shouldShowShotsSources) {
             AsyncWrapper().main(after: 1) { [unowned self] in
                 self.showStreamSources()
             }
@@ -254,6 +259,7 @@ fileprivate extension ShotsCollectionViewController {
     }
 
     dynamic func didChangeStreamSourceSettings(_ notification: Notification) {
+        shouldShowShotsSources = true
         reloadShots()
     }
 
@@ -353,6 +359,7 @@ private extension ShotsCollectionViewController {
         guard !stateHandler.shouldShowNoShotsView else {
             return
         }
+        shouldShowShotsSources = false
         backgroundAnimator?.startFadeInAnimation()
         AsyncWrapper().main(after: 4) { [unowned self] in
             self.backgroundAnimator?.startFadeOutAnimation()
@@ -369,6 +376,7 @@ private extension ShotsCollectionViewController {
         } else {
             let streamSourceViewController = StreamSourceViewController(didSelectStream: { [unowned self] in
                 self.reloadShots()
+                self.showStreamSources()
             })
             streamSourceViewController.modalPresentationStyle = .overCurrentContext
             present(streamSourceViewController, animated: true, completion: nil)
