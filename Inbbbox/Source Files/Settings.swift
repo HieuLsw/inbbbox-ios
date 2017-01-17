@@ -24,25 +24,37 @@ class Settings {
         /// Indicates if stream's source for Following is on.
         static var Following: Bool {
             get { return Settings.boolForKey(.followingStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .followingStreamSourceOn) }
+            set {
+                Settings.setValue(newValue as AnyObject?, forKey: .followingStreamSourceOn)
+                Settings.StreamSource.SelectedStreamSource = .mySet
+            }
         }
 
         /// Indicates if stream's source for NewToday is on.
         static var NewToday: Bool {
             get { return Settings.boolForKey(.newTodayStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .newTodayStreamSourceOn) }
+            set {
+                Settings.setValue(newValue as AnyObject?, forKey: .newTodayStreamSourceOn)
+                Settings.StreamSource.SelectedStreamSource = .mySet
+            }
         }
 
         /// Indicates if stream's source for PopularToday is on.
         static var PopularToday: Bool {
             get { return Settings.boolForKey(.popularTodayStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .popularTodayStreamSourceOn) }
+            set {
+                Settings.setValue(newValue as AnyObject?, forKey: .popularTodayStreamSourceOn)
+                Settings.StreamSource.SelectedStreamSource = .mySet
+            }
         }
 
         /// Indicates if stream's source for Debuts is on.
         static var Debuts: Bool {
             get { return Settings.boolForKey(.debutsStreamSourceOn) }
-            set { Settings.setValue(newValue as AnyObject?, forKey: .debutsStreamSourceOn) }
+            set {
+                Settings.setValue(newValue as AnyObject?, forKey: .debutsStreamSourceOn)
+                Settings.StreamSource.SelectedStreamSource = .mySet
+            }
         }
         
         /// Indicates which one stream source is selected
