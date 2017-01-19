@@ -181,7 +181,7 @@
 "UIAlertControllerExtension.UnableToDownloadShots" = "Projekt-Downloaden von Dribbble";
 
 /* Informing user about problems with downloading teams. */
-"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
+"UIAlertControllerExtension.UnableToDownloadTeams" = "Teams herunterladen";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -200,7 +200,7 @@
 "SettingsViewModel.CreateAccount" = "Dribbble-Benutzerkonto anlegen";
 
 /* Button text allowing so see his profile. */
-"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
+"SettingsViewModel.ShowMyProfile" = "Mein Profil";
 
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "Debüts";
@@ -242,7 +242,7 @@
 "SettingsViewModel.NightMode" = "Nachtmodus";
 
 /* User Setting, auto night mode */
-"SettingsViewModel.AutoNightMode" = "$Auto Night Mode";
+"SettingsViewModel.AutoNightMode" = "Automatischer Nachtmodus";
 
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
@@ -274,7 +274,7 @@
 "SettingsViewController.Customization" = "Personalisieren";
 
 /* User settings, my set */
-"SettingsViewModel.MySet" = "$My Set";
+"SettingsViewModel.MySet" = "Mein Set";
 
 /********* ShotsCollectionViewController *********/
 
@@ -347,7 +347,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-de";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-de";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-de";
-"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "Diesen Schritt weglassen";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -360,9 +360,9 @@
 "ShotCollectionCell.Follow" = "Dem Autor folgen!";
 
 /********* ProfileInfoView *********/
-"ProfileInfoView.Followers" = "$Followers";
-"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Followers" = "Folger";
+"ProfileInfoView.Shots" = "Schuss";
 "ProfileInfoView.Following" = "Abonnierte Autoren";
 
 /********* TeamsCollectionHeaderView *********/
-"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
+"TeamsCollectionHeaderView.OnTeams" = "Teams";

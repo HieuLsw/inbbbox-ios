@@ -182,7 +182,7 @@
 "UIAlertControllerExtension.UnableToDownloadShots" = "Télécharger des projets de Dribbble";
 
 /* Informing user about problems with downloading teams. */
-"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
+"UIAlertControllerExtension.UnableToDownloadTeams" = "Télécharger des groupes";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -201,7 +201,7 @@
 "SettingsViewModel.CreateAccount" = "Créez votre compte Dribbble";
 
 /* Button text allowing so see his profile. */
-"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
+"SettingsViewModel.ShowMyProfile" = "Mon profile";
 
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "Débuts";
@@ -243,7 +243,7 @@
 "SettingsViewModel.NightMode" = "Mode nuit";
 
 /* User Setting, auto night mode */
-"SettingsViewModel.AutoNightMode" = "$Auto Night Mode";
+"SettingsViewModel.AutoNightMode" = "Mode nuit automatique";
 
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
@@ -258,7 +258,7 @@
 "SettingsViewModel.AllSources" = "Avec les paramètres actuels, vous ne verrez aucune publication. Renseignez au moins une source.";
 
 /* User settings, my set */
-"SettingsViewModel.MySet" = "$My Set";
+"SettingsViewModel.MySet" = "Mon ensemble";
 
 /********* SettingsViewController *********/
 
@@ -348,7 +348,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-fr";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-fr";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-fr";
-"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "Sauter cet étape";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -361,9 +361,9 @@
 "ShotCollectionCell.Follow" = "Tu observes l'auteur!";
 
 /********* ProfileInfoView *********/
-"ProfileInfoView.Followers" = "$Followers";
-"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Followers" = "Observateur";
+"ProfileInfoView.Shots" = "Coup";
 "ProfileInfoView.Following" = "Auteurs observés";
 
 /********* TeamsCollectionHeaderView *********/
-"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
+"TeamsCollectionHeaderView.OnTeams" = "Groupes";
