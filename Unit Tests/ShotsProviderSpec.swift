@@ -53,14 +53,17 @@ class ShotsProviderSpec: QuickSpec {
                     let managedShotsProviderMock = ManagedShotsProviderMock()
                     let managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: inMemoryManagedObjectContext)
                     let managedShot = managedObjectsProvider.managedShot(Shot.fixtureShotWithIdentifier("fixture managed shot identifier"))
-                    managedShotsProviderMock.provideMyLikedShotsStub.on(any(), return: Promise<[ShotType]?> { fulfill, _ in fulfill([managedShot]) })
+                    let likedManagedShot = LikedShot(likeIdentifier: "", createdAt: Date(), shot: managedShot)
+                    managedShotsProviderMock.provideLikedShotsStub.on(any(), return: Promise<[LikedShot]?> { fulfill, _ in fulfill([likedManagedShot]) })
                     sut.managedShotsProvider = managedShotsProviderMock
 
                     firstly {
                         sut.provideMyLikedShots()
                     }.then { shots in
-                        likedShots = shots
-                    }.catch { _ in }
+                        likedShots = shots?.map({ $0.shot })
+                    }.catch { error in
+                        print(error)
+                    }
                 }
 
                 it("should return proper shots") {
@@ -77,10 +80,11 @@ class ShotsProviderSpec: QuickSpec {
                     userStorageClassMock.userIsSignedInStub.on(any(), return: true)
                     sut.userStorageClass = userStorageClassMock
 
-                    let apiShotsProviderMock = APIShotsProviderMock()
+                    let apiShotsProviderMock = APILikedShotsProviderMock()
                     let apiShot = Shot.fixtureShotWithIdentifier("fixture api shot identifier")
-                    apiShotsProviderMock.provideMyLikedShotsStub.on(any(), return: Promise<[ShotType]?> { fulfill, _ in fulfill([apiShot]) })
-                    sut.apiShotsProvider = apiShotsProviderMock
+                    let likedApiShot = LikedShot(likeIdentifier: "", createdAt: Date(), shot: apiShot)
+                    apiShotsProviderMock.provideLikedShotsStub.on(any(), return: Promise<[LikedShot]?> { fulfill, _ in fulfill([likedApiShot]) })
+                    sut.apiLikedShotsProvider = apiShotsProviderMock
                 }
 
                 it("should return proper shots") {
@@ -89,7 +93,7 @@ class ShotsProviderSpec: QuickSpec {
                         firstly {
                             sut.provideMyLikedShots()
                         }.then { shots -> Void in
-                            likedShots = shots
+                            likedShots = shots?.map({ $0.shot })
                             done()
                         }.catch { _ in }
                     }

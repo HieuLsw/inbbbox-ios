@@ -337,15 +337,17 @@ private extension ShotsNormalStateHandler {
 
         return Promise() { fulfill, reject in
             firstly {
-                shotsRequester.likeShot(shot)
-            }.then {
-                self.shotsRequester.fetchShotDetails(shot)
-            }.then { updatedShot -> Void in
-                if let updatedShot = updatedShot as? Shot {
-                    SharedCache.likedShots.append(updatedShot)
-                }
+                shotsRequester.likeshot(shot)
+            }.then { likedShotTuple in
+                return self.shotsRequester.fetchShotDetails(shot).then{ ($0, likedShotTuple) }
+            }.then { (shotDetails, likeDetails) -> Void in
 
-                _ = self.updateShots(with: updatedShot, at: index)
+                if let updatedShot = shotDetails as? Shot {
+                    let likedShot = LikedShot(likeIdentifier: likeDetails.likeIdentifier, createdAt: likeDetails.createdAt, shot: updatedShot)
+
+                    SharedCache.likedShots.add(likedShot)
+                }
+                _ = self.updateShots(with: shotDetails, at: index)
             }.then {
                 self.fetchLikedShots()
             }.then { () -> Void in
@@ -368,7 +370,7 @@ private extension ShotsNormalStateHandler {
                 likesProvider.provideMyLikedShots()
             }.then { shots -> Void in
                 if let shots = shots {
-                    self.likedShots = shots
+                    self.likedShots = shots.map { $0.shot }
                 }
             }.then(execute: fulfill).catch(execute: reject)
         }

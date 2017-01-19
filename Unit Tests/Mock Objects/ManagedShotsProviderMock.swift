@@ -14,8 +14,13 @@ import PromiseKit
 class ManagedShotsProviderMock: ManagedShotsProvider {
 
     let provideMyLikedShotsStub = Stub<Void, Promise<[ShotType]?>>()
+    let provideLikedShotsStub = Stub<Void, Promise<[LikedShot]?>>()
 
     override func provideMyLikedShots() -> Promise<[ShotType]?> {
         return try! provideMyLikedShotsStub.invoke()
+    }
+
+    override func provideManagedLikedShots() -> Promise<[LikedShot]?> {
+        return try! provideLikedShotsStub.invoke()
     }
 }

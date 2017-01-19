@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-struct Shot: ShotType {
+struct Shot: ShotType, Sortable {
     let identifier: String
     let title: String
     let attributedDescription: NSAttributedString?

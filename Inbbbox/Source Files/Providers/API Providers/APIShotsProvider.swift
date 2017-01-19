@@ -16,16 +16,19 @@ class APIShotsProvider: PageableProvider {
     /// Used only when using provideShots() method.
     var configuration = APIShotsProviderConfiguration()
 
+    /// Defines source to provide.
+    enum SourceType {
+        case general, bucket, user, liked
+    }
+
+    /// Currently fetched source.
+    var currentSourceType: SourceType?
+
     fileprivate var likesFetched: UInt = 0
     fileprivate var likesToFetch: UInt = 0
     fileprivate var likes = [ShotType]()
     fileprivate var fetchingLikes = false
     fileprivate var lastPageOfLikesReached = false
-
-    fileprivate var currentSourceType: SourceType?
-    fileprivate enum SourceType {
-        case general, bucket, user, liked
-    }
 
     /**
      Provides shots with current configuration, pagination and page.
@@ -141,6 +144,27 @@ class APIShotsProvider: PageableProvider {
     func previousPage() -> Promise<[ShotType]?> {
         return fetchPage(previousPageFor(Shot.self))
     }
+
+    /**
+     Resets currently used `SourceType`
+
+     - parameter type: `SourceType` to reset
+     */
+    func resetAnUseSourceType(_ type: SourceType) {
+        currentSourceType = type
+        resetPages()
+    }
+
+    /**
+     Sorts given array of T. T have conform to `Sortable` protocol.
+
+     - parameter shots: shots to sort.
+     
+     - returns: sorted shots.
+     */
+    func sort<T: Sortable>(_ shots: [T]?) -> [T]? {
+        return shots?.unique.sorted { $0.createdAt.compare($1.createdAt as Date) == .orderedDescending }
+    }
 }
 
 private extension APIShotsProvider {
@@ -162,11 +186,6 @@ private extension APIShotsProvider {
         }
     }
 
-    func resetAnUseSourceType(_ type: SourceType) {
-        currentSourceType = type
-        resetPages()
-    }
-
     func fetchPage(_ promise: Promise<[Shot]?>) -> Promise<[ShotType]?> {
         return Promise<[ShotType]?> { fulfill, reject in
 
@@ -183,10 +202,7 @@ private extension APIShotsProvider {
     }
 
     func serialize(_ shots: [Shot]?, _ fulfill: @escaping ([ShotType]?) -> Void) {
-        let result = shots?
-            .unique
-            .sorted { $0.createdAt.compare($1.createdAt as Date) == .orderedDescending }
-        fulfill(result.flatMap { $0.map { $0 as ShotType } })
+        fulfill(sort(shots).flatMap { $0.map { $0 as ShotType } })
     }
 
     func prepareForFetchingLikes() -> Promise<Void> {
