@@ -257,7 +257,7 @@
 "SettingsViewModel.AllSources" = "Con la configuración actual no va a ver ningun shot. Asigne al menos una fuente.";
 
 /* User settings, my set */
-"SettingsViewModel.MySet" = "Mi ajuste;
+"SettingsViewModel.MySet" = "Mi ajuste";
 
 /********* SettingsViewController *********/
 
