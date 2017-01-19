@@ -8,6 +8,8 @@
 import Foundation
 import SwiftyJSON
 
+typealias LikedShotTuple = (likeIdentifier: String, createdAt: Date)
+
 struct LikedShot: Sortable {
     let likeIdentifier: String
     let createdAt: Date
