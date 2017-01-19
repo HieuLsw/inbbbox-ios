@@ -34,7 +34,7 @@ final class Cache<T> where T:Hashable, T:Sortable {
     /// Adds contents of array to cache. Replaces duplicates, if any.
     /// - parameter elements: Array to add.
     func add(_ elements: [T]) {
-        elements.forEach { elements.update(with: $0) }
+        elements.forEach { self.elements.update(with: $0) }
     }
 
     /// Returns all elements, sorted by `createdAt`, descending.
