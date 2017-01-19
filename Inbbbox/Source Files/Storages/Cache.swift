@@ -8,47 +8,49 @@
 import Foundation
 
 struct SharedCache {
-    static var likedShots: Cache<Shot> {
+    static var likedShots: Cache<LikedShot> {
         struct Static {
-            static let cache = Cache<Shot>()
+            static let cache = Cache<LikedShot>()
         }
         return Static.cache
     }
 }
 
-final class Cache<T: Equatable> {
+final class Cache<T> where T:Hashable, T:Sortable {
 
-    /// Array containing elements.
-    private(set) var elements = [T]()
+    private var elements2 = Set<T>()
 
-    /// Appends element to cache. Removes duplicate, if any.
+    /// Returns number of items.
+    var count: Int {
+        return elements2.count
+    }
+
+    /// Appends element to cache. Replaces duplicate, if any.
     /// - parameter element: Element to append.
-    func append(_ element: T) {
-        elements.remove(ifContains: element)
-        elements.append(element)
+    func add(_ element: T) {
+        elements2.update(with: element)
     }
 
-    /// Appends contents of array to cache. Removes duplicates, if any.
-    /// - parameter elements: Array to append.
-    func append(contentsOf elements: [T]) {
-        elements.forEach { append($0) }
-    }
-
-    /// Adds contents of array to cache. Removes all elements before adding new ones.
+    /// Adds contents of array to cache. Replaces duplicates, if any.
     /// - parameter elements: Array to add.
     func add(_ elements: [T]) {
-        removeAll()
-        self.elements.append(contentsOf: elements)
+        elements.forEach { elements2.update(with: $0) }
+    }
+
+    /// Returns all elements, sorted by `createdAt`, descending.
+    /// - returns: All elements.
+    func all() -> [T] {
+        return elements2.sorted { $0.createdAt.compare($1.createdAt as Date) == .orderedDescending }
     }
 
     /// Removes single element
     /// - parameter element: Element to remove.
     func remove(_ element: T) {
-        elements = elements.filter { $0 != element }
+        elements2.remove(element)
     }
 
     /// Removes all elements
     func removeAll() {
-        elements.removeAll()
+        elements2.removeAll()
     }
 }

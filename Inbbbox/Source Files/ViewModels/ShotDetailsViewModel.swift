@@ -180,11 +180,11 @@ extension ShotDetailsViewModel: Vibratable {
 
             if let likeDetails = likeDetails {
                 let likedShot = LikedShot(likeIdentifier: likeDetails.likeIdentifier, createdAt: likeDetails.createdAt, shot: shot)
-                shotLiked ? SharedCache.likedShots.append(likedShot) : SharedCache.likedShots.remove(likedShot)
+                shotLiked ? SharedCache.likedShots.add(likedShot) : SharedCache.likedShots.remove(likedShot)
                 return
             }
 
-            let likedShot = SharedCache.likedShots.elements.filter { $0.shot == shot }.first
+            let likedShot = SharedCache.likedShots.all().filter { $0.shot == shot }.first
 
             if let likedShot = likedShot {
                 SharedCache.likedShots.remove(likedShot)

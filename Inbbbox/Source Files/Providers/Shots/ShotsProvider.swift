@@ -29,8 +29,8 @@ class ShotsProvider {
     func provideMyLikedShots() -> Promise<[LikedShot]?> {
         if userStorageClass.isUserSignedIn {
             return Promise<[LikedShot]?> { fulfill, reject in
-                if SharedCache.likedShots.elements.count > 0 {
-                    return fulfill(SharedCache.likedShots.elements)
+                if SharedCache.likedShots.count > 0 {
+                    return fulfill(SharedCache.likedShots.all())
                 }
 
                 firstly {
@@ -87,7 +87,7 @@ class ShotsProvider {
             }.then { shots -> Void in
                 if let providing = self.providing, let shots = shots {
                     switch providing {
-                    case .likedShots: SharedCache.likedShots.append(contentsOf: shots)
+                    case .likedShots: SharedCache.likedShots.add(shots)
                     default: break
                     }
                 }

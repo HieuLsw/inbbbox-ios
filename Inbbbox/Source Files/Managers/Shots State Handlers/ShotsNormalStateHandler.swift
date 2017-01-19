@@ -345,7 +345,7 @@ private extension ShotsNormalStateHandler {
                 if let updatedShot = shotDetails as? Shot {
                     let likedShot = LikedShot(likeIdentifier: likeDetails.likeIdentifier, createdAt: likeDetails.createdAt, shot: updatedShot)
 
-                    SharedCache.likedShots.append(likedShot)
+                    SharedCache.likedShots.add(likedShot)
                 }
                 _ = self.updateShots(with: shotDetails, at: index)
             }.then {
