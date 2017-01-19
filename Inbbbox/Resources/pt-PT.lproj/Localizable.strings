@@ -181,7 +181,7 @@
 "UIAlertControllerExtension.UnableToDownloadShots" = "Descarregar projetos de Dribbble";
 
 /* Informing user about problems with downloading teams. */
-"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
+"UIAlertControllerExtension.UnableToDownloadTeams" = "Equipes de downloads";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -200,7 +200,7 @@
 "SettingsViewModel.CreateAccount" = "Crie uma conta Dribbble";
 
 /* Button text allowing so see his profile. */
-"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
+"SettingsViewModel.ShowMyProfile" = "Ver meu perfil";
 
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "As estreias";
@@ -230,7 +230,7 @@
 "SettingsViewModel.Settings" = "Configuração";
 
 /* User settings, my set */
-"SettingsViewModel.MySet" = "$My Set";
+"SettingsViewModel.MySet" = "Meu conjunto";
 
 /********* Acknowledgements button *********/
 "SettingsViewModel.AcknowledgementsButton" = "Os reconhecimentos";
@@ -245,7 +245,7 @@
 "SettingsViewModel.NightMode" = "Modo noturno";
 
 /* User Setting, auto night mode */
-"SettingsViewModel.AutoNightMode" = "$Auto Night Mode";
+"SettingsViewModel.AutoNightMode" = "Modo noturno automático";
 
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
@@ -347,7 +347,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pt";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pt";
-"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "Pular este passo";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -360,9 +360,9 @@
 "ShotCollectionCell.Follow" = "Está a seguir ao autor!";
 
 /********* ProfileInfoView *********/
-"ProfileInfoView.Followers" = "$Followers";
-"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Followers" = "Seguidores";
+"ProfileInfoView.Shots" = "Imagens";
 "ProfileInfoView.Following" = "Os autores seguidos";
 
 /********* TeamsCollectionHeaderView *********/
-"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
+"TeamsCollectionHeaderView.OnTeams" = "Equipes";
