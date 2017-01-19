@@ -83,6 +83,7 @@
 		306F24A51CBBC6BC00D81B14 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 306F24A31CBBC6BC00D81B14 /* Localizable.stringsdict */; };
 		307C5FA71DAE715E007219F9 /* UpdateableIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307C5FA61DAE715E007219F9 /* UpdateableIndex.swift */; };
 		30872A8C1DD1DAA000330F8F /* URLSessionConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30872A8B1DD1DAA000330F8F /* URLSessionConfigurationExtension.swift */; };
+		3093757D1E30F4F5008D2808 /* APILikedShotsProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3093757C1E30F4F5008D2808 /* APILikedShotsProviderMock.swift */; };
 		309EBC711CAD56860074FB8A /* CrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309EBC701CAD56860074FB8A /* CrashManager.swift */; };
 		30AC7D651E2E16C700C095D0 /* Sortable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AC7D641E2E16C700C095D0 /* Sortable.swift */; };
 		30B04FEE1E30C022001CAC81 /* APILikedShotsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B04FED1E30C022001CAC81 /* APILikedShotsProvider.swift */; };
@@ -535,6 +536,7 @@
 		306F24A41CBBC6BC00D81B14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		307C5FA61DAE715E007219F9 /* UpdateableIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateableIndex.swift; sourceTree = "<group>"; };
 		30872A8B1DD1DAA000330F8F /* URLSessionConfigurationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionConfigurationExtension.swift; sourceTree = "<group>"; };
+		3093757C1E30F4F5008D2808 /* APILikedShotsProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APILikedShotsProviderMock.swift; sourceTree = "<group>"; };
 		309EBC701CAD56860074FB8A /* CrashManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrashManager.swift; sourceTree = "<group>"; };
 		30A01B1E1D33629400BD9860 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		30A01B1F1D3363BC00BD9860 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "pt-PT"; path = "pt-PT.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -1613,6 +1615,7 @@
 				909E3331984E4FD8B5EC79C1 /* APICommentsRequesterMock.swift */,
 				EAA9A75F53B4797803D4FB49 /* APIConnectionsRequesterMock.swift */,
 				F817D454EEF7EB74DFCEB527 /* APIShotsProviderMock.swift */,
+				3093757C1E30F4F5008D2808 /* APILikedShotsProviderMock.swift */,
 				193C1912E937AEE5EB6A97FF /* APIShotsRequesterMock.swift */,
 				522AD551CC8D206C7AD1BBA9 /* AsyncWrapperMock.swift */,
 				4E130E0E8DAA80912A8F8362 /* BucketsProviderMock.swift */,
@@ -2521,6 +2524,7 @@
 				2286B2C834EBDADAF9307955 /* ShotCollectionViewCellDelegateMock.swift in Sources */,
 				8EF4E9F350CC826C4F3BD01B /* ShotsAnimatorDelegateMock.swift in Sources */,
 				657A2D283E1D4CFC561EBADD /* ShotsAnimatorMock.swift in Sources */,
+				3093757D1E30F4F5008D2808 /* APILikedShotsProviderMock.swift in Sources */,
 				C6B095501DF57EB2002806A0 /* NightModeHoursProviderSpec.swift in Sources */,
 				89F6A18D88715072C7BABDE1 /* UserStorageMock.swift in Sources */,
 				4AFD4EB1EB2AC11E12FBF62D /* ViewControllerMock.swift in Sources */,

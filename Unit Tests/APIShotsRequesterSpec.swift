@@ -40,7 +40,9 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.likeShot(Shot.fixtureShot()).then { _ in
+                    firstly { _ -> Promise<Void> in
+                        sut.likeShot(Shot.fixtureShot())
+                    }.then { _ in
                         fail()
                     }.catch { _error in
                         error = _error
@@ -58,7 +60,9 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("should like shot") {
-                    sut.likeShot(Shot.fixtureShot()).then { _ in
+                    firstly { _ -> Promise<Void> in
+                        sut.likeShot(Shot.fixtureShot())
+                    }.then { _ in
                         didInvokePromise = true
                     }.catch { _ in fail() }
                     

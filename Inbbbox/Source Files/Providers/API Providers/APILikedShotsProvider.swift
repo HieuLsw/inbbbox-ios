@@ -8,7 +8,7 @@
 import Foundation
 import PromiseKit
 
-final class APILikedShotsProvider: APIShotsProvider {
+class APILikedShotsProvider: APIShotsProvider {
 
     /**
      Provides liked shots for current user.
