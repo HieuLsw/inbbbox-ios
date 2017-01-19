@@ -29,7 +29,7 @@ extension LikedShot: Mappable {
         }
     }
 
-    fileprivate enum Key: String {
+    enum Key: String {
         case Identifier = "id"
         case Shot = "shot"
         case CreatedAt = "created_at"
