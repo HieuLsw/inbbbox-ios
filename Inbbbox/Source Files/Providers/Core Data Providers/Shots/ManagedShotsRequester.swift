@@ -29,6 +29,16 @@ class ManagedShotsRequester {
         }
     }
 
+    func likeShot(_ shot: ShotType) -> Promise<LikedShotTuple> {
+        return Promise<LikedShotTuple> { fulfill, reject in
+            firstly {
+                likeShot(shot)
+            }.then {
+                fulfill((likeIdentifier: "", createdAt: Date()))
+            }.catch(execute: reject)
+        }
+    }
+
     func unlikeShot(_ shot: ShotType) -> Promise<Void> {
         let managedShot = managedObjectsProvider.managedShot(shot)
         managedShot.liked = false

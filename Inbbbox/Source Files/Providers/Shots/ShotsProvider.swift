@@ -9,6 +9,7 @@ import PromiseKit
 class ShotsProvider {
 
     var apiShotsProvider = APIShotsProvider(page: 1, pagination: 30)
+    var apiLikedShotsProvider = APILikedShotsProvider(page: 1, pagination: 30)
     var managedShotsProvider = ManagedShotsProvider()
     var userStorageClass = UserStorage.self
 
@@ -25,9 +26,9 @@ class ShotsProvider {
         return apiShotsProvider.provideShots()
     }
 
-    func provideMyLikedShots() -> Promise<[ShotType]?> {
+    func provideMyLikedShots() -> Promise<[LikedShot]?> {
         if userStorageClass.isUserSignedIn {
-            return Promise<[ShotType]?> { fulfill, reject in
+            return Promise<[LikedShot]?> { fulfill, reject in
                 if SharedCache.likedShots.elements.count > 0 {
                     return fulfill(SharedCache.likedShots.elements)
                 }
@@ -36,16 +37,17 @@ class ShotsProvider {
                     providing = .likedShots
                     return Promise(value: Void())
                 }.then {
-                    self.apiShotsProvider.provideMyLikedShots()
+                    self.apiLikedShotsProvider.provideLikedShots()
                 }.then { shots -> Void in
                     if let shots = shots {
-                        SharedCache.likedShots.add(shots.flatMap { $0 as? Shot })
+                        SharedCache.likedShots.add(shots)
                     }
                     fulfill(shots)
                 }.catch(execute: reject)
             }
         }
-        return managedShotsProvider.provideMyLikedShots()
+
+        return managedShotsProvider.provideManagedLikedShots()
     }
 
     func provideShotsForUser(_ user: UserType) -> Promise<[ShotType]?> {
@@ -75,13 +77,17 @@ class ShotsProvider {
     }
 
     func nextPage() -> Promise<[ShotType]?> {
-        return Promise<[ShotType]?> { fulfill, reject in
+        return apiShotsProvider.nextPage()
+    }
+
+    func nextPageForLikedShots() -> Promise<[LikedShot]?> {
+        return Promise<[LikedShot]?> { fulfill, reject in
             firstly {
-                apiShotsProvider.nextPage()
+                apiLikedShotsProvider.nextPageForLikes()
             }.then { shots -> Void in
                 if let providing = self.providing, let shots = shots {
                     switch providing {
-                    case .likedShots: SharedCache.likedShots.append(contentsOf: shots.flatMap { $0 as? Shot })
+                    case .likedShots: SharedCache.likedShots.append(contentsOf: shots)
                     default: break
                     }
                 }
