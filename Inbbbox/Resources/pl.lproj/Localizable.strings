@@ -181,7 +181,7 @@
 "UIAlertControllerExtension.UnableToDownloadShots" = "Pobieranie projektów z Dribbble";
 
 /* Informing user about problems with downloading teams. */
-"UIAlertControllerExtension.UnableToDownloadTeams" = "$Downloading teams";
+"UIAlertControllerExtension.UnableToDownloadTeams" = "Pobieranie zespołów";
 
 /********* LocalNotificationRegistrator *********/
 
@@ -200,7 +200,7 @@
 "SettingsViewModel.CreateAccount" = "Załóż konto Dribbble";
 
 /* Button text allowing so see his profile. */
-"SettingsViewModel.ShowMyProfile" = "$Show My Profile";
+"SettingsViewModel.ShowMyProfile" = "Mój profil";
 
 /* User settings, show debuts */
 "SettingsViewModel.Debuts" = "Debiuty";
@@ -236,7 +236,7 @@
 "SettingsViewModel.NightMode" = "Tryb nocny";
 
 /* User Setting, auto night mode */
-"SettingsViewModel.AutoNightMode" = "$Auto Night Mode";
+"SettingsViewModel.AutoNightMode" = "Automatyczny tryb nocny";
 
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
@@ -257,7 +257,7 @@
 "SettingsViewModel.AccessToNotifications" = "Musisz wyrazić zgodę aby uruchomić powiadomienia.";
 
 /* User settings, my set */
-"SettingsViewModel.MySet" = "$My Set";
+"SettingsViewModel.MySet" = "Mój zestaw";
 
 /********* SettingsViewController *********/
 
@@ -347,7 +347,7 @@
 "ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pl";
 "ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pl";
 "ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pl";
-"ShotsOnboardingStateHandler.Skip" = "$Skip this step";
+"ShotsOnboardingStateHandler.Skip" = "Pomiń ten krok";
 
 /********* ShotsCollectionBackgroundView *********/
 
@@ -360,9 +360,9 @@
 "ShotCollectionCell.Follow" = "Obserwujesz autora!";
 
 /********* ProfileInfoView *********/
-"ProfileInfoView.Followers" = "$Followers";
-"ProfileInfoView.Shots" = "$Shots";
+"ProfileInfoView.Followers" = "Obserwujący";
+"ProfileInfoView.Shots" = "Shoty";
 "ProfileInfoView.Following" = "Obserwowani";
 
 /********* TeamsCollectionHeaderView *********/
-"TeamsCollectionHeaderView.OnTeams" = "$On Teams";
+"TeamsCollectionHeaderView.OnTeams" = "Zespoły";
