@@ -14,4 +14,16 @@ extension UIView {
         viewForReturn.backgroundColor = color
         return viewForReturn
     }
+
+    /// Creates a frame with height extended by 4 points.
+    ///
+    /// - parameter frame: The original frame to be extended
+    ///
+    /// - returns: New frame with height 4 points larger
+    static func extendedFrame(forFrame frame: CGRect) -> CGRect {
+        let margin = CGFloat(4)
+        var rect = frame
+        rect.size.height += margin
+        return rect
+    }
 }
