@@ -16,7 +16,7 @@ protocol Support3DTouch: class {
 extension Support3DTouch {
     
     func addSupport3DForOlderDevicesIfNeeded(with delegate: PeekPopPreviewingDelegate, viewController: UIViewController , sourceView view: UIView) {
-        guard viewController.traitCollection.forceTouchCapability == .unknown, !didCheckedSupport3DForOlderDevices  else { return }
+        guard viewController.traitCollection.forceTouchCapability != .available, !didCheckedSupport3DForOlderDevices  else { return }
         addSupport3DForOlderDevices(with: delegate, viewController: viewController, sourceView: view)
         didCheckedSupport3DForOlderDevices = true
     }

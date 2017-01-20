@@ -449,14 +449,17 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        previewingContext.sourceRect = cell.frame
         if let viewModel = viewModel as? UserDetailsViewModel {
             let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
             controller.customizeFor3DTouch(true)
             controller.shotIndex = indexPath.item
-
+            previewingContext.sourceRect = cell.frame
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
+            let previewingContextMargin = CGFloat(4)
+            var rect = cell.frame
+            rect.size.height += previewingContextMargin
+            previewingContext.sourceRect = rect
             return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
