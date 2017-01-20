@@ -68,6 +68,8 @@
 		2F3EF3B7C3E6841B46924AAE /* UserDetailsViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8E247C367E7CD816FFC6E7 /* UserDetailsViewModelSpec.swift */; };
 		300BDCA91CC7B15E002A6A1B /* MFMailComposeViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300BDCA81CC7B15E002A6A1B /* MFMailComposeViewControllerExtension.swift */; };
 		300E4F7C1CC622A200DF9ABE /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300E4F7B1CC622A200DF9ABE /* BouncingView.swift */; };
+		302B6F9E1E32248000CAB63E /* ProfilePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302B6F9D1E32248000CAB63E /* ProfilePageViewController.swift */; };
+		302B6FA01E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302B6F9F1E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift */; };
 		303A578B1D0FE47A00D760A3 /* SafariAuthorizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303A578A1D0FE47A00D760A3 /* SafariAuthorizable.swift */; };
 		304F32521CCE3BDE002EE96B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 304F32541CCE3BDE002EE96B /* InfoPlist.strings */; };
 		30586F351CF5E289003D4B06 /* ShotAuthorCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30586F341CF5E289003D4B06 /* ShotAuthorCompactView.swift */; };
@@ -529,6 +531,8 @@
 		2F59A124425AD6181A4B6CF2 /* UINavigationControllerExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UINavigationControllerExtension.swift; sourceTree = "<group>"; };
 		300BDCA81CC7B15E002A6A1B /* MFMailComposeViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MFMailComposeViewControllerExtension.swift; sourceTree = "<group>"; };
 		300E4F7B1CC622A200DF9ABE /* BouncingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
+		302B6F9D1E32248000CAB63E /* ProfilePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePageViewController.swift; sourceTree = "<group>"; };
+		302B6F9F1E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePageViewControllerDataSource.swift; sourceTree = "<group>"; };
 		303A578A1D0FE47A00D760A3 /* SafariAuthorizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariAuthorizable.swift; sourceTree = "<group>"; };
 		304733CE1D1AA1D800667715 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pl; path = pl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		304F32531CCE3BDE002EE96B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1352,6 +1356,7 @@
 				DBA3546F95B6EF1A72DCC5F0 /* AutoScrollableShotsDataSource.swift */,
 				21121600C2107F43D060763B /* LocalNotificationRegistrator.swift */,
 				17A2D34D47C6D0EE3A55B062 /* ScrollViewAutoScroller.swift */,
+				302B6F9F1E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift */,
 				3A6269AEF2F4AAAB03BCBF8A /* Animators */,
 				F86DC4F1BE7EA7B7F8BE850E /* Authentication */,
 				E3EB164F8DE3F3A6D3BBD4B1 /* Shots State Handlers */,
@@ -1591,6 +1596,7 @@
 				246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */,
 				753FDDBBEFDB2B41C4AE7569 /* ProfileInfoViewController.swift */,
 				D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */,
+				302B6F9D1E32248000CAB63E /* ProfilePageViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2169,6 +2175,7 @@
 				8DAAA291E8C2D16BB9FDDDF6 /* ShotCellCommentActionAnimationDescriptor.swift in Sources */,
 				C9EC918492912E700D81FC7A /* ShotCellLikeActionAnimationDescriptor.swift in Sources */,
 				9F09E224BDADFF7F03E399BB /* InitialShotsCollectionViewLayout.swift in Sources */,
+				302B6FA01E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift in Sources */,
 				59091DBEFF6A647222E040A1 /* OneColumnCollectionViewFlowLayout.swift in Sources */,
 				C6B3E447E8EF8FFA08C91E08 /* ShotDetailsCollectionCollapsableHeader.swift in Sources */,
 				3FE9BE8E685E16EB925FB02F /* ShotsCollectionViewFlowLayout.swift in Sources */,
@@ -2213,6 +2220,7 @@
 				74E256BD1D9E888000AA5941 /* DeviceInfo.swift in Sources */,
 				BE5712591DCA2DEB00358745 /* FlashMessageTypes.swift in Sources */,
 				3C92BB8AB599A001A3815697 /* Formatter.swift in Sources */,
+				302B6F9E1E32248000CAB63E /* ProfilePageViewController.swift in Sources */,
 				342302627F76B9CA7836C927 /* ManagedObjectsProvider.swift in Sources */,
 				7D9A80E3D139236DFE200B24 /* SecretKeysProvider.m in Sources */,
 				594325F453FC541B1BB008C5 /* ShotCellInitialStateAnimationDescriptor.swift in Sources */,
