@@ -69,12 +69,13 @@ class BucketsViewModel: BaseCollectionViewViewModel {
                     IndexPath(row: ($0), section: 0)
                 }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
-                self.downloadShots(buckets)
             }
         }.catch { error in
             self.notifyDelegateAboutFailure(error)
         }
     }
+
+    func downloadItem(at index: Int) { /* empty */ }
 
     func downloadShots(_ buckets: [BucketType]) {
         for bucket in buckets {

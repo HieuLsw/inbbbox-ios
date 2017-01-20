@@ -54,6 +54,7 @@ final class ShotDetailsViewModel {
     fileprivate var userBucketsForShot = [BucketType]()
     fileprivate var isShotLikedByMe: Bool?
     fileprivate var userBucketsForShotCount: Int?
+    fileprivate var likeDetails: LikedShotTuple?
 
     init(shot: ShotType, isLiked: Bool?) {
         self.shot = shot
@@ -161,24 +162,60 @@ extension ShotDetailsViewModel {
         return displayableData
     }
 
+    fileprivate func handle(_ shotLiked: Bool) -> Promise<Bool> {
+        return Promise<Bool> { fulfill, reject in
+            isShotLikedByMe = !shotLiked
+            vibrate(feedbackType: .success)
+            fulfill(!shotLiked)
+        }
+    }
 }
 
 // MARK: Likes handling
 
 extension ShotDetailsViewModel: Vibratable {
 
+    func updateCache(with shot: ShotType) {
+        if let shot = shot as? Shot, let shotLiked = isShotLikedByMe {
+
+            if let likeDetails = likeDetails {
+                let likedShot = LikedShot(likeIdentifier: likeDetails.likeIdentifier, createdAt: likeDetails.createdAt, shot: shot)
+                shotLiked ? SharedCache.likedShots.add(likedShot) : SharedCache.likedShots.remove(likedShot)
+                return
+            }
+
+            let likedShot = SharedCache.likedShots.all().filter { $0.shot == shot }.first
+
+            if let likedShot = likedShot {
+                SharedCache.likedShots.remove(likedShot)
+            }
+        }
+    }
+
     func performLikeOperation() -> Promise<Bool> {
         return Promise<Bool> { fulfill, reject in
 
             if let shotLiked = isShotLikedByMe {
 
-                firstly {
-                    shotLiked ? shotsRequester.unlikeShot(shot) : shotsRequester.likeShot(shot)
-                }.then { _ -> Void in
-                    self.isShotLikedByMe = !shotLiked
-                    self.vibrate(with: .success)
-                    fulfill(!shotLiked)
-                }.catch(execute: reject)
+                if shotLiked {
+                    firstly {
+                        shotsRequester.unlikeShot(shot)
+                    }.then { _ in
+                        self.handle(shotLiked)
+                    }.then { shotLiked -> Void in
+                        fulfill(shotLiked)
+                    }.catch(execute: reject)
+                } else {
+                    firstly {
+                        shotsRequester.likeshot(shot)
+                    }.then { likeDetails in
+                        self.likeDetails = likeDetails
+                    }.then { _ in
+                        self.handle(shotLiked)
+                    }.then { shotLiked -> Void in
+                        fulfill(shotLiked)
+                    }.catch(execute: reject)
+                }
             }
         }
     }

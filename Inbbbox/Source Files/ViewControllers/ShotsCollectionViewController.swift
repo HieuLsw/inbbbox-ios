@@ -239,11 +239,11 @@ fileprivate extension ShotsCollectionViewController {
         if let normalStateHandler = stateHandler as? ShotsNormalStateHandler, let centerButtonTabBarController = tabBarController as? CenterButtonTabBarController {
             normalStateHandler.didLikeShotCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.likes)
-                self.vibrate(with: .success)
+                self.vibrate(feedbackType: .success)
             }
             normalStateHandler.didAddShotToBucketCompletionHandler = {
                 centerButtonTabBarController.animateTabBarItem(.buckets)
-                self.vibrate(with: .success)
+                self.vibrate(feedbackType: .success)
             }
             normalStateHandler.willDismissDetailsCompletionHandler = { [unowned self] index in
                 self.scrollToShotAtIndex(index, animated: false)
@@ -319,10 +319,9 @@ extension ShotsCollectionViewController: PeekPopPreviewingDelegate {
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
-            let collectionView = collectionView,
-            let visibleCell = collectionView.visibleCells.first,
+            let visibleCell = collectionView?.visibleCells.first,
             let normalStateHandler = stateHandler as? ShotsNormalStateHandler,
-            let indexPath = collectionView.indexPathsForVisibleItems.first
+            let indexPath = collectionView?.indexPathsForVisibleItems.first
         else { return nil }
 
         previewingContext.sourceRect = visibleCell.frame

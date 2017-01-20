@@ -30,7 +30,7 @@ class LikesViewModel: SimpleShotsViewModel {
         firstly {
             shotsProvider.provideMyLikedShots()
         }.then { shots -> Void in
-            if let shots = shots, shots != self.shots || shots.count == 0 {
+            if let shots = shots?.map({ $0.shot }), shots != self.shots || shots.count == 0 {
                 self.shots = shots
                 self.delegate?.viewModelDidLoadInitialItems()
             }
@@ -44,9 +44,9 @@ class LikesViewModel: SimpleShotsViewModel {
             return
         }
         firstly {
-            shotsProvider.nextPage()
+            shotsProvider.nextPageForLikedShots()
         }.then { shots -> Void in
-            if let shots = shots, shots.count > 0 {
+            if let shots = shots?.map({ $0.shot }), shots.count > 0 {
                 let indexes = shots.enumerated().map { index, _ in
                     return index + self.shots.count
                 }
@@ -60,7 +60,9 @@ class LikesViewModel: SimpleShotsViewModel {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     func emptyCollectionDescriptionAttributes() -> EmptyCollectionViewDescription {
         let description = EmptyCollectionViewDescription(
             firstLocalizedString: NSLocalizedString("LikesCollectionView.EmptyData.FirstLocalizedString",

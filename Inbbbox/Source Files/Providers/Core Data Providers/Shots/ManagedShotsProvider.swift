@@ -25,6 +25,19 @@ class ManagedShotsProvider {
         }
     }
 
+    func provideManagedLikedShots() -> Promise<[LikedShot]?> {
+        return Promise<[LikedShot]?> { fulfill, reject in
+            firstly {
+                provideMyLikedShots()
+            }.then { managedShots -> Void in
+                if let shots = managedShots{
+                    return fulfill(shots.map { LikedShot(likeIdentifier: $0.identifier, createdAt: Date(), shot: $0) })
+                }
+                fulfill(nil)
+            }.catch(execute: reject)
+        }
+    }
+
     func provideShotsForBucket(_ bucket: BucketType) -> Promise<[ShotType]?> {
 
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedShot.entityName)

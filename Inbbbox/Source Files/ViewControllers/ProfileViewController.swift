@@ -46,6 +46,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch 
     var dismissClosure: (() -> Void)?
 
     var modalTransitionAnimator: ZFModalTransitionAnimator?
+    
+    var userAlreadyFollowed = false
 
     override var containsHeader: Bool {
         return true
@@ -136,14 +138,13 @@ class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch 
         addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
         
         guard viewModel.shouldShowFollowButton else { return }
-
-        firstly {
-            viewModel.isProfileFollowedByMe()
-        }.then { followed in
-            self.header?.userFollowed = followed
-        }.then { _ in
-            self.header?.stopActivityIndicator()
-        }.catch { _ in }
+        
+        guard !userAlreadyFollowed else {
+            userIsAlreadyFollowed()
+            return
+        }
+        
+        checkIfUserIsFollowed()
     }
 }
 
@@ -296,8 +297,16 @@ extension ProfileViewController {
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.itemsCount - 1 {
-            viewModel.downloadItemsForNextPage()
+        
+        switch viewModel {
+        case is UserDetailsViewModel:
+            if indexPath.row == viewModel.itemsCount - 1 {
+                (viewModel as! UserDetailsViewModel).downloadItemsForNextPage()
+            }
+        case is TeamDetailsViewModel:
+            (viewModel as! TeamDetailsViewModel).downloadItem(at: indexPath.row)
+        default:
+            break
         }
     }
 
@@ -387,6 +396,21 @@ private extension ProfileViewController {
         dismissClosure?()
         dismiss(animated: true, completion: nil)
     }
+    
+    func userIsAlreadyFollowed() {
+        header?.userFollowed = userAlreadyFollowed
+        self.header?.stopActivityIndicator()
+    }
+    
+    func checkIfUserIsFollowed() {
+        firstly {
+            viewModel.isProfileFollowedByMe()
+        }.then { followed in
+            self.header?.userFollowed = followed
+        }.then { _ in
+            self.header?.stopActivityIndicator()
+        }.catch { _ in }
+    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
@@ -447,7 +471,7 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             let collectionView = collectionView,
             let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView.cellForItem(at: indexPath)
-        else { return nil }
+            else { return nil }
 
         if let viewModel = viewModel as? UserDetailsViewModel {
             let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))

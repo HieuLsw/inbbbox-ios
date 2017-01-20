@@ -79,7 +79,9 @@ class UserDetailsViewModel: ProfileViewModel, Vibratable {
             self.notifyDelegateAboutFailure(error)
         }
     }
-
+    
+    func downloadItem(at index: Int) { /* empty */ }
+    
     // MARK: Users section
 
     func isProfileFollowedByMe() -> Promise<Bool> {
@@ -101,7 +103,7 @@ class UserDetailsViewModel: ProfileViewModel, Vibratable {
             firstly {
                 connectionsRequester.followUser(user)
             }.then {
-                self.vibrate(with: .success)
+                self.vibrate(feedbackType: .success)
             }.then(execute: fulfill).catch(execute: reject)
         }
     }

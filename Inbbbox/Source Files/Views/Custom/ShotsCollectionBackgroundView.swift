@@ -173,7 +173,7 @@ fileprivate extension ShotsCollectionBackgroundView {
     
     func setupSkipButton() {
         skipButton.setTitle(NSLocalizedString("ShotsOnboardingStateHandler.Skip", comment: "Onboarding user is skipping step"), for: .normal)
-        skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightLight)
+        skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
         skipButton.setTitleColor(UIColor.black, for: .normal)
         skipButton.isHidden = true
         skipButton.alpha = 0

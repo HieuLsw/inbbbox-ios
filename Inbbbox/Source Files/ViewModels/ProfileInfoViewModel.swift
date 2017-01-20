@@ -95,6 +95,8 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
         }
     }
 
+    func downloadItem(at index: Int) { /* empty */ }
+
     func team(forIndex index: Int) -> TeamType {
         return teams[index]
     }

@@ -28,6 +28,40 @@ class APIShotsRequester: Verifiable {
     }
 
     /**
+     Likes given shot. Returns tuple which contains like identifier and like creation date.
+     
+     - Requires: Authenticated user.
+     
+     - seealso: `LikedShot`, `LikedShotTuple`
+
+     - parameter shot: Shot to like.
+     
+     - returns: Promise which resolves to `LikedShotTuple`.
+     */
+    func likeShot(_ shot: ShotType) -> Promise<LikedShotTuple> {
+
+        return Promise<LikedShotTuple> { fulfill, reject in
+            let query = LikeQuery(shot: shot)
+
+            firstly {
+                sendShotQueryForRespone(query)
+            }.then { json -> Void in
+
+                guard let json = json else {
+                    reject(ResponseError.unexpectedResponse)
+                    return
+                }
+
+                let id = json[LikedShot.Key.Identifier.rawValue].stringValue
+                let stringDate = json[LikedShot.Key.CreatedAt.rawValue].stringValue
+                let date = Formatter.Date.Timestamp.date(from: stringDate)!
+
+                fulfill((likeIdentifier: id, createdAt: date))
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
      Unlikes given shot.
 
      - Requires: Authenticated user.

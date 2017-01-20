@@ -130,7 +130,7 @@ private extension ShotDetailsFormatter {
     class func appendTitleAttributedString(_ mutableAttributedString: NSMutableAttributedString, shot: ShotType) {
         let titleAttributedString = NSAttributedString(string: shot.title,
                 attributes: [NSForegroundColorAttributeName: ColorModeProvider.current().shotDetailsHeaderViewTitleLabelTextColor,
-                             NSFontAttributeName: UIFont.systemFont(ofSize: 15, weight: UIFontWeightBold)])
+                             NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15)])
         mutableAttributedString.append(titleAttributedString)
         mutableAttributedString.append(NSAttributedString.newLineAttributedString())
     }

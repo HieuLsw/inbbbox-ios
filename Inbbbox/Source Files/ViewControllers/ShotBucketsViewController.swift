@@ -311,7 +311,7 @@ private extension ShotBucketsViewController {
             viewModel.addShotToBucketAtIndex(index)
         }.then { () -> Void in
             self.willDismissViewControllerClosure?()
-            self.vibrate(with: .success)
+            self.vibrate(feedbackType: .success)
             self.dismiss(animated: true, completion: nil)
         }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.bucketProcessingFailed, canBeDismissedByUser: true)

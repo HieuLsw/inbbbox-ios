@@ -6,8 +6,6 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
-import Foundation
-
 extension Array where Element : Equatable {
 
     /// Returns Array with unique elements.
@@ -29,6 +27,4 @@ extension Array where Element : Equatable {
             remove(at: i)
         }
     }
-    
-    
 }
