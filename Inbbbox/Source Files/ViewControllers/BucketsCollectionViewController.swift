@@ -249,11 +249,8 @@ extension BucketsCollectionViewController : PeekPopPreviewingDelegate {
             let cell = collectionView.cellForItem(at: indexPath)
         else { return nil }
 
-        let previewingContextMargin = CGFloat(4)
-        var rect = cell.frame
-        rect.size.height += previewingContextMargin
-        previewingContext.sourceRect = rect
-        
+        previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
+
         return SimpleShotsCollectionViewController(bucket: viewModel.buckets[indexPath.item])
     }
 

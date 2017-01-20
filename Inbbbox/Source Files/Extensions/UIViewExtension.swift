@@ -14,4 +14,11 @@ extension UIView {
         viewForReturn.backgroundColor = color
         return viewForReturn
     }
+
+    static func extendedFrame(forFrame frame: CGRect) -> CGRect {
+        let margin = CGFloat(4)
+        var rect = frame
+        rect.size.height += margin
+        return rect
+    }
 }

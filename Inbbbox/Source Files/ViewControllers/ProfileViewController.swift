@@ -456,10 +456,7 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             previewingContext.sourceRect = cell.frame
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
-            let previewingContextMargin = CGFloat(4)
-            var rect = cell.frame
-            rect.size.height += previewingContextMargin
-            previewingContext.sourceRect = rect
+            previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
             return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
