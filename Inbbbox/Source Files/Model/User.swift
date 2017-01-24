@@ -19,6 +19,8 @@ final class User: NSObject, UserType {
     let accountType: UserAccountType?
     let followersCount: UInt
     let followingsCount: UInt
+    let projectsCount: UInt
+    let bucketsCount: UInt
     let bio: String
     let location: String
 
@@ -31,6 +33,8 @@ final class User: NSObject, UserType {
         accountType = UserAccountType(rawValue: json[Key.accountType.rawValue].stringValue)
         followersCount = json[Key.followersCount.rawValue].uIntValue
         followingsCount = json[Key.followingsCount.rawValue].uIntValue
+        projectsCount = json[Key.projectsCount.rawValue].uIntValue
+        bucketsCount = json[Key.bucketsCount.rawValue].uIntValue
         bio = json[Key.bio.rawValue].stringValue
         location = json[Key.location.rawValue].stringValue
     }
@@ -49,6 +53,8 @@ final class User: NSObject, UserType {
         }()
         followersCount = aDecoder.decodeObject(forKey: Key.followersCount.rawValue) as? UInt ?? 0
         followingsCount = aDecoder.decodeObject(forKey: Key.followingsCount.rawValue) as? UInt ?? 0
+        projectsCount = aDecoder.decodeObject(forKey: Key.projectsCount.rawValue) as? UInt ?? 0
+        bucketsCount = aDecoder.decodeObject(forKey: Key.bucketsCount.rawValue) as? UInt ?? 0
         bio = aDecoder.decodeObject(forKey: Key.bio.rawValue) as? String ?? ""
         location = aDecoder.decodeObject(forKey: Key.location.rawValue) as? String ?? ""
     }
@@ -62,6 +68,8 @@ final class User: NSObject, UserType {
         aCoder.encode(accountType?.rawValue, forKey: Key.accountType.rawValue)
         aCoder.encode(followersCount, forKey: Key.followersCount.rawValue)
         aCoder.encode(followingsCount, forKey: Key.followingsCount.rawValue)
+        aCoder.encode(projectsCount, forKey: Key.projectsCount.rawValue)
+        aCoder.encode(bucketsCount, forKey: Key.bucketsCount.rawValue)
         aCoder.encode(bio, forKey: Key.bio.rawValue)
         aCoder.encode(location, forKey: Key.location.rawValue)
     }
@@ -78,6 +86,8 @@ private extension User {
         case accountType = "type"
         case followersCount = "followers_count"
         case followingsCount = "followings_count"
+        case projectsCount = "projects_count"
+        case bucketsCount = "buckets_count"
         case bio = "bio"
         case location = "location"
     }

@@ -47,8 +47,8 @@ final class ProfileViewModel: Vibratable {
         case .shots: return Int(user.shotsCount)
         case .team: return 0
         case .info: return 0
-        case .projects: return 0 //user.projectsCount // not fetched yet
-        case .buckets: return 0 //user.projectsCount // not fetched yet
+        case .projects: return Int(user.projectsCount)
+        case .buckets: return Int(user.bucketsCount)
         }
     }
 

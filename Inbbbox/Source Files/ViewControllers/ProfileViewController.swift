@@ -228,7 +228,6 @@ private extension ProfileViewController {
         profileView.childView.addSubview(profilePageViewController.view)
         profilePageViewController.didMove(toParentViewController: self)
         profilePageViewController.view.autoPinEdgesToSuperviewEdges()
-//        profilePageViewController.interactionDelegate = self
     }
 
     dynamic func didTapLeftBarButtonItem() {

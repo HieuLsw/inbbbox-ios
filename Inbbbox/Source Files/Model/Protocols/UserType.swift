@@ -42,6 +42,12 @@ protocol UserType {
     /// Number of users followed by User.
     var followingsCount: UInt { get }
 
+    /// Number of User's projects.
+    var projectsCount: UInt { get }
+
+    /// Number of User's buckets.
+    var bucketsCount: UInt { get }
+
     /// Bio of the User.
     var bio: String { get }
 
