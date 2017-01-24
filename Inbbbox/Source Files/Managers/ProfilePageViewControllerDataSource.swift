@@ -9,16 +9,29 @@ import UIKit
 
 class ProfilePageViewControllerDataSource: NSObject, UIPageViewControllerDataSource {
 
+    let viewControllers: [UIViewController]
+
+    var initialViewController: UIViewController? {
+        return viewControllers.first
+    }
+
+    init(viewControllers: [UIViewController]) {
+        self.viewControllers = viewControllers
+        super.init()
+    }
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .green
-        return vc
+
+        guard let index = viewControllers.index(of: viewController) else { return nil }
+
+        return viewControllers.startIndex == index ? nil : viewControllers[index - 1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .red
-        return vc
+
+        guard let index = viewControllers.index(of: viewController) else { return nil }
+
+        return viewControllers.endIndex - 1 == index ? nil : viewControllers[index + 1]
     }
 
 }

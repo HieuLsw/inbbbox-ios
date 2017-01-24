@@ -248,7 +248,7 @@ private extension ShotBucketsViewController {
 
     func presentProfileViewControllerForUser(_ user: UserType) {
 
-        let profileViewController = ProfileViewController(user: user)
+        let profileViewController = ProfileShotsViewController(user: user)
         let navigationController = UINavigationController(rootViewController: profileViewController)
 
         animateHeader(start: false)

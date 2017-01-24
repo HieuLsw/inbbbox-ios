@@ -1,5 +1,5 @@
 //
-//  ProfileViewModel.swift
+//  ProfileShotsViewModel.swift
 //  Inbbbox
 //
 //  Created by Peter Bruz on 05/05/16.
@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 
-protocol ProfileViewModel: BaseCollectionViewViewModel {
+protocol ProfileShotsViewModel: BaseCollectionViewViewModel {
 
     var title: String { get }
     var avatarURL: URL? { get }

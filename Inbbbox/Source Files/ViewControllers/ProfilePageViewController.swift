@@ -9,9 +9,9 @@ import UIKit
 
 class ProfilePageViewController: UIPageViewController {
 
-    private var internalDataSource: UIPageViewControllerDataSource?
+    fileprivate(set) var internalDataSource: ProfilePageViewControllerDataSource?
 
-    init(_ dataSource: UIPageViewControllerDataSource) {
+    init(_ dataSource: ProfilePageViewControllerDataSource) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         internalDataSource = dataSource
         self.dataSource = internalDataSource
@@ -23,8 +23,12 @@ class ProfilePageViewController: UIPageViewController {
     }
     
     override func viewDidLoad() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .blue
-        setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+        setViewControllers([internalDataSource?.initialViewController ?? UIViewController()], direction: .forward, animated: true, completion: nil)
+    }
+
+    func selectPage(at index: Int, scrollDirection: UIPageViewControllerNavigationDirection) {
+        guard let internalDataSource = internalDataSource else { return }
+        
+        setViewControllers([internalDataSource.viewControllers[index]], direction: scrollDirection, animated: true, completion: nil)
     }
 }

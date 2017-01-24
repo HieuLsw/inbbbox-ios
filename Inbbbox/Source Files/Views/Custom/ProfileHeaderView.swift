@@ -21,6 +21,7 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
     let avatarView = AvatarView(size: avatarSize, bordered: true, borderWidth: 3)
     var shouldShowButton = true
     let button = UIButton.newAutoLayout()
+
     var userFollowed: Bool? {
         didSet {
             let title = userFollowed! ?
@@ -32,6 +33,7 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         }
     }
 
+    fileprivate let backgroundImageView = UIImageView.newAutoLayout()
     fileprivate let activityIndicator = UIActivityIndicatorView.newAutoLayout()
 
     fileprivate var avatarOffset: CGFloat {
@@ -44,6 +46,10 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
 
         clipsToBounds = true
 
+        backgroundImageView.image = UIImage(named: "Profile BG")
+        backgroundImageView.contentMode = .top
+
+        addSubview(backgroundImageView)
         addSubview(avatarView)
 
         if shouldShowButton {
@@ -71,6 +77,8 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
 
         if !didUpdateConstraints {
             didUpdateConstraints = true
+
+            backgroundImageView.autoPinEdgesToSuperviewEdges()
 
             avatarView.autoSetDimensions(to: avatarSize)
             avatarView.autoAlignAxis(toSuperviewAxis: .vertical)

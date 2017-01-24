@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 
-class UserDetailsViewModel: ProfileViewModel, Vibratable {
+class UserDetailsViewModel: ProfileShotsViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 

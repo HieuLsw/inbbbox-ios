@@ -147,15 +147,10 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Sup
 private extension FolloweesCollectionViewController {
     
     func showProfile(for user: UserType) {
-
-        let dataSource = ProfilePageViewControllerDataSource()
-        let vc = ProfilePageViewController(dataSource)
-
-
-//        let profileViewController = ProfileViewController(user: user)
-//        profileViewController.hidesBottomBarWhenPushed = true
-//        profileViewController.userAlreadyFollowed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        let profileViewController = ProfileViewController(user: user)
+        profileViewController.hidesBottomBarWhenPushed = true
+        profileViewController.userAlreadyFollowed = true
+        self.navigationController?.pushViewController(profileViewController, animated: true)
     }
 }
 
@@ -229,7 +224,7 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
         else { return nil }
         
         previewingContext.sourceRect = cell.contentView.bounds
-        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
+        let profileViewController = ProfileShotsViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController
     }
@@ -253,7 +248,7 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
 
         previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
 
-        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
+        let profileViewController = ProfileShotsViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController
     }
