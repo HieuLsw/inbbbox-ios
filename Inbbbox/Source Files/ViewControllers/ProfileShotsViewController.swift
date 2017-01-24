@@ -1,5 +1,5 @@
 //
-//  ProfileViewController.swift
+//  ProfileShotsViewController.swift
 //  Inbbbox
 //
 //  Created by Peter Bruz on 14/03/16.
@@ -32,9 +32,11 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch {
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch {
 
-    fileprivate var viewModel: ProfileViewModel!
+//    var customHeader: ProfileHeaderView?
+
+    fileprivate var viewModel: ProfileShotsViewModel!
 
     fileprivate var header: ProfileHeaderView?
 
@@ -43,6 +45,8 @@ class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch 
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
 
+    var didLoadTeamMembers: ((Int) -> Void)?
+
     var dismissClosure: (() -> Void)?
 
     var modalTransitionAnimator: ZFModalTransitionAnimator?
@@ -50,7 +54,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch 
     var userAlreadyFollowed = false
 
     override var containsHeader: Bool {
-        return true
+        return false// true
     }
 
     func isDisplayingUser(_ user: UserType) -> Bool {
@@ -150,7 +154,7 @@ class ProfileViewController: TwoLayoutsCollectionViewController, Support3DTouch 
 
 // MARK: Buttons' actions
 
-extension ProfileViewController {
+extension ProfileShotsViewController {
 
     func didTapFollowButton(_: UIButton) {
 
@@ -172,7 +176,7 @@ extension ProfileViewController {
 
 // MARK: UICollectionViewDataSource
 
-extension ProfileViewController {
+extension ProfileShotsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
@@ -269,7 +273,7 @@ extension ProfileViewController {
 
 // MARK: UICollectionViewDelegate
 
-extension ProfileViewController {
+extension ProfileShotsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
@@ -289,7 +293,7 @@ extension ProfileViewController {
         }
         if let viewModel = viewModel as? TeamDetailsViewModel {
 
-            let profileViewController = ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+            let profileViewController = ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
             profileViewController.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(profileViewController, animated: true)
         }
@@ -320,9 +324,12 @@ extension ProfileViewController {
 
 // MARK: BaseCollectionViewViewModelDelegate
 
-extension ProfileViewController: BaseCollectionViewViewModelDelegate {
+extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
+        if let viewModel = viewModel as? TeamDetailsViewModel {
+            didLoadTeamMembers?(viewModel.teamMembers.count)
+        }
         collectionView?.reloadData()
     }
 
@@ -349,7 +356,7 @@ extension ProfileViewController: BaseCollectionViewViewModelDelegate {
 
 // MARK: Private extension
 
-private extension ProfileViewController {
+private extension ProfileShotsViewController {
 
     func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
                        atIndexPath indexPath: IndexPath) {
@@ -415,7 +422,7 @@ private extension ProfileViewController {
 
 // MARK: UIViewControllerPreviewingDelegate
 
-extension ProfileViewController: UIViewControllerPreviewingDelegate {
+extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
 
     fileprivate func peekPopPresent(viewController: UIViewController) {
         if let viewModel = viewModel as? UserDetailsViewModel, let detailsViewController = viewController as? ShotDetailsViewController {
@@ -452,7 +459,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
             previewingContext.sourceRect = cell.contentView.bounds
-            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+            return ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
     }
@@ -464,7 +471,7 @@ extension ProfileViewController: UIViewControllerPreviewingDelegate {
 
 // MARK: PeekPopPreviewingDelegate
 
-extension ProfileViewController: PeekPopPreviewingDelegate {
+extension ProfileShotsViewController: PeekPopPreviewingDelegate {
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
@@ -481,7 +488,7 @@ extension ProfileViewController: PeekPopPreviewingDelegate {
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
             previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
-            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
+            return ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
     }

@@ -438,6 +438,8 @@
 		F0EE2870B58F0E2F0AEF5922 /* AvatarSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93BA6AA99E90D52C6A09F6 /* AvatarSettable.swift */; };
 		F0FD0A841CBE496400735933 /* SimpleShotsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FD0A831CBE496400735933 /* SimpleShotsCollectionViewController.swift */; };
 		F0FD0A861CBE56D100735933 /* SimpleShotsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FD0A851CBE56D100735933 /* SimpleShotsViewModel.swift */; };
+		F0FEDACD1E3768C30002181F /* ProfileMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEDACC1E3768C30002181F /* ProfileMenuButton.swift */; };
+		F0FEDACF1E3787050002181F /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEDACE1E3787050002181F /* ProfileViewModel.swift */; };
 		F29FD29A37539BEF427008EB /* APIConnectionsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DA27CAA4EE88511B9E9625 /* APIConnectionsRequester.swift */; };
 		F31EA74E971419AB99BA6E59 /* ShotsInitialAnimationsStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98844EA4215D4DC4A137B213 /* ShotsInitialAnimationsStateHandler.swift */; };
 		F461E56506569C912901945A /* ShotLikedByMeQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDD2F865EC2D0006259889B /* ShotLikedByMeQuerySpec.swift */; };
@@ -940,6 +942,8 @@
 		F0D3D7F11E361738008834E2 /* UnderlineBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlineBarView.swift; sourceTree = "<group>"; };
 		F0FD0A831CBE496400735933 /* SimpleShotsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleShotsCollectionViewController.swift; sourceTree = "<group>"; };
 		F0FD0A851CBE56D100735933 /* SimpleShotsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleShotsViewModel.swift; sourceTree = "<group>"; };
+		F0FEDACC1E3768C30002181F /* ProfileMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMenuButton.swift; sourceTree = "<group>"; };
+		F0FEDACE1E3787050002181F /* ProfileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		F41BD6B6AA49D25024800E9F /* FollowersQuerySpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FollowersQuerySpec.swift; sourceTree = "<group>"; };
 		F5D88A53CE01B833CA03C975 /* ProjectsQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProjectsQuery.swift; sourceTree = "<group>"; };
 		F817D454EEF7EB74DFCEB527 /* APIShotsProviderMock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIShotsProviderMock.swift; sourceTree = "<group>"; };
@@ -1545,6 +1549,7 @@
 				F0BEBDD61CDA24E200AA391C /* TeamDetailsViewModel.swift */,
 				753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */,
 				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
+				F0FEDACE1E3787050002181F /* ProfileViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1787,6 +1792,7 @@
 				D5D168021E13F6D100E91BDA /* SingleStreamView.swift */,
 				F0D3D7EF1E360E7B008834E2 /* ProfileMenuBarView.swift */,
 				F0D3D7F11E361738008834E2 /* UnderlineBarView.swift */,
+				F0FEDACC1E3768C30002181F /* ProfileMenuButton.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -2190,6 +2196,7 @@
 				9F09E224BDADFF7F03E399BB /* InitialShotsCollectionViewLayout.swift in Sources */,
 				302B6FA01E3224BD00CAB63E /* ProfilePageViewControllerDataSource.swift in Sources */,
 				59091DBEFF6A647222E040A1 /* OneColumnCollectionViewFlowLayout.swift in Sources */,
+				F0FEDACF1E3787050002181F /* ProfileViewModel.swift in Sources */,
 				C6B3E447E8EF8FFA08C91E08 /* ShotDetailsCollectionCollapsableHeader.swift in Sources */,
 				3FE9BE8E685E16EB925FB02F /* ShotsCollectionViewFlowLayout.swift in Sources */,
 				A1C55A042B70206CA8D500F2 /* TwoColumnsCollectionViewFlowLayout.swift in Sources */,
@@ -2348,6 +2355,7 @@
 				6323E355E5134FAA6EB23C65 /* APIShotsProvider.swift in Sources */,
 				305A850B1DDAFE7F008EF410 /* DayMode.swift in Sources */,
 				8F8E54067F6F24644AF8B2B3 /* APIShotsProviderConfiguration.swift in Sources */,
+				F0FEDACD1E3768C30002181F /* ProfileMenuButton.swift in Sources */,
 				9FE9B94F4EF53E804FF71D4B /* APIShotsRequester.swift in Sources */,
 				AA3A2942ED29B257AB5C596D /* APITeamsProvider.swift in Sources */,
 				AAE5BCBBAF5336684FE1E3CF /* PageableProvider.swift in Sources */,

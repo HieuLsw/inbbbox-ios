@@ -15,10 +15,11 @@ class ProfileMenuBarView: UIView {
 
     let menuStackView = UIStackView()
 
-    fileprivate let shotsButton = UIButton()
-    fileprivate let infoButton = UIButton()
-    fileprivate let projectsButton = UIButton()
-    fileprivate let bucketsButton = UIButton()
+    fileprivate let shotsButton = ProfileMenuButton()
+    fileprivate let teamButton = ProfileMenuButton()
+    fileprivate let infoButton = ProfileMenuButton()
+    fileprivate let projectsButton = ProfileMenuButton()
+    fileprivate let bucketsButton = ProfileMenuButton()
     fileprivate let underlineBarView = UnderlineBarView()
 
     fileprivate var didSetConstraints = false
@@ -30,20 +31,21 @@ class ProfileMenuBarView: UIView {
 
         deselectAllItems()
 
-        shotsButton.setTitle("Shots", for: .normal)
+        shotsButton.setTitle("Shots", for: .normal) // NGRTodo: Localization
+        teamButton.setTitle("Team", for: .normal)
         infoButton.setTitle("Info", for: .normal)
         projectsButton.setTitle("Projects", for: .normal)
         bucketsButton.setTitle("Buckets", for: .normal)
 
-        [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
+        [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             $0.addTarget(self, action: #selector(didSelect(button:)), for: .touchUpInside)
         }
 
-        menuStackView.addArrangedSubview(shotsButton)
-        menuStackView.addArrangedSubview(infoButton)
-        menuStackView.addArrangedSubview(projectsButton)
-        menuStackView.addArrangedSubview(bucketsButton)
+//        menuStackView.addArrangedSubview(shotsButton)
+//        menuStackView.addArrangedSubview(infoButton)
+//        menuStackView.addArrangedSubview(projectsButton)
+//        menuStackView.addArrangedSubview(bucketsButton)
 
         menuStackView.distribution = .fillEqually
         
@@ -68,51 +70,45 @@ class ProfileMenuBarView: UIView {
 
             underlineBarView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
             underlineBarView.autoSetDimension(.height, toSize: 2)
-
-            //            let commentComposerViewHeight = CGFloat(61)
-            //            keyboardResizableView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
-            //            let constraint = keyboardResizableView.autoPinEdge(toSuperviewEdge: .bottom)
-            //            keyboardResizableView.setReferenceBottomConstraint(constraint)
-            //
-            //            commentComposerView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
-            //            commentComposerView.autoSetDimension(.height, toSize: commentComposerViewHeight)
-            //
-            //            let insets = UIEdgeInsets(top: topLayoutGuideOffset + 10, left: 10, bottom: 0, right: 10)
-            //            let commentComposerInset = shouldShowCommentComposerView ? commentComposerViewHeight : 0
-            //            collectionViewCornerWrapperView.autoPinEdgesToSuperviewEdges(with: insets, excludingEdge: .bottom)
-            //            collectionViewCornerWrapperView.autoPinEdge(toSuperviewEdge: .bottom, withInset: commentComposerInset)
-            //
-            //            collectionView.autoPinEdgesToSuperviewEdges()
         }
         
         super.updateConstraints()
     }
     
     // MARK: public
-    
+
+    func setup(with data: [(item: ProfileMenuItem, badge: Int)]) {
+        let buttonsWithBagdes: [ProfileMenuButton] = data.map { itemWithBadge in
+            let button = menuButton(for: itemWithBadge.item)
+            button.badge = itemWithBadge.badge
+            return button
+        }
+
+        buttonsWithBagdes.forEach {
+            menuStackView.addArrangedSubview($0)
+        }
+    }
+
+    func updateBadge(for item: ProfileMenuItem, with value: Int) {
+        menuButton(for: item).badge = value
+    }
+
     func select(item: ProfileMenuItem) {
-        let button: UIButton = {
-            switch item {
-            case .shots: return shotsButton
-            case .info: return infoButton
-            case .projects: return projectsButton
-            case .buckets: return bucketsButton
-            }
-        }()
         deselectAllItems()
-        select(button: button)
+        select(button: menuButton(for: item))
     }
 }
 
 private extension ProfileMenuBarView {
 
-    dynamic func didSelect(button: UIButton) {
+    dynamic func didSelect(button: ProfileMenuButton) {
         deselectAllItems()
         select(button: button)
 
         let item: ProfileMenuItem? = {
             switch button {
             case shotsButton: return .shots
+            case teamButton: return .team
             case infoButton: return .info
             case projectsButton: return .projects
             case bucketsButton: return .buckets
@@ -125,15 +121,27 @@ private extension ProfileMenuBarView {
         }
     }
 
-    func select(button: UIButton) {
+    func select(button: ProfileMenuButton) {
         button.setTitleColor(.RGBA(26, 26, 26, 1), for: .normal)
+        button.badgeColor = .RGBA(26, 26, 26, 1)
         underlineBarView.underline(frame: button.frame)
     }
 
 
     func deselectAllItems() {
-        [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
+        [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.setTitleColor(.RGBA(148, 147, 153, 1), for: .normal)
+            $0.badgeColor = .RGBA(148, 147, 153, 1)
+        }
+    }
+
+    func menuButton(for item: ProfileMenuItem) -> ProfileMenuButton {
+        switch item {
+        case .shots: return shotsButton
+        case .team: return teamButton
+        case .info: return infoButton
+        case .projects: return projectsButton
+        case .buckets: return bucketsButton
         }
     }
 }

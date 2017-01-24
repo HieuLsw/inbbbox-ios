@@ -12,7 +12,7 @@ import PromiseKit
 import PeekPop
 
 enum ProfileMenuItem: Int {
-    case shots, info, projects, buckets
+    case shots, team, info, projects, buckets
 }
 
 class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouch?
@@ -23,9 +23,7 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
 
     fileprivate var selectedMenuItem: ProfileMenuItem?
 
-    fileprivate var viewModel: ProfileShotsViewModel!
-
-    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
+    fileprivate var viewModel: ProfileViewModel
 
     fileprivate var profilePageViewController: ProfilePageViewController?
 
@@ -38,15 +36,8 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
 
     var userAlreadyFollowed = false
 
-//    override var containsHeader: Bool {
-//        return true
-//    }
-
     func isDisplayingUser(_ user: UserType) -> Bool {
-        if let userDetailsViewModel = viewModel as? UserDetailsViewModel, userDetailsViewModel.user == user {
-            return true
-        }
-        return false
+        return viewModel.user == user
     }
 
     fileprivate var isModal: Bool {
@@ -61,42 +52,49 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
     ///         so if you want to show team's details - pass it as `UserType` with `accountType = .Team`.
     ///
     /// - parameter user: User to initialize view controller with.
-    convenience init(user: UserType) {
-
-        guard let accountType = user.accountType, accountType == .Team else {
-            self.init()
-//            self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
-//                      twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
-            viewModel = UserDetailsViewModel(user: user)
-//            viewModel.delegate = self
-            title = viewModel.title
-            return
-        }
-
-        let team = Team(
-            identifier: user.identifier,
-            name: user.name ?? "",
-            username: user.username,
-            avatarURL: user.avatarURL,
-            createdAt: Date(),
-            followersCount: user.followersCount,
-            followingsCount: user.followingsCount,
-            bio: user.bio,
-            location: user.location
-        )
-        self.init(team: team)
-    }
-
-    fileprivate convenience init(team: TeamType) {
-
-        self.init()
-//        self.init(oneColumnLayoutCellHeightToWidthRatio: LargeUserCollectionViewCell.heightToWidthRatio,
-//                  twoColumnsLayoutCellHeightToWidthRatio: SmallUserCollectionViewCell.heightToWidthRatio)
-
-        viewModel = TeamDetailsViewModel(team: team)
-//        viewModel.delegate = self
+    init(user: UserType) {
+        viewModel = ProfileViewModel(user: user)
+        super.init(nibName: nil, bundle: nil)
         title = viewModel.title
+//        guard let accountType = user.accountType, accountType == .Team else {
+//            self.init()
+////            self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
+////                      twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
+//            viewModel = ProfileViewModel(user: user)//UserDetailsViewModel(user: user)
+////            viewModel.delegate = self
+//            title = viewModel.title
+//            return
+//        }
+//
+//        let team = Team(
+//            identifier: user.identifier,
+//            name: user.name ?? "",
+//            username: user.username,
+//            avatarURL: user.avatarURL,
+//            createdAt: Date(),
+//            followersCount: user.followersCount,
+//            followingsCount: user.followingsCount,
+//            bio: user.bio,
+//            location: user.location
+//        )
+//        self.init(team: team)
     }
+
+    @available(*, unavailable, message: "Use init(user:) instead")
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+//    fileprivate convenience init(team: TeamType) {
+//
+//        self.init()
+////        self.init(oneColumnLayoutCellHeightToWidthRatio: LargeUserCollectionViewCell.heightToWidthRatio,
+////                  twoColumnsLayoutCellHeightToWidthRatio: SmallUserCollectionViewCell.heightToWidthRatio)
+//
+//        viewModel = TeamDetailsViewModel(team: team)
+////        viewModel.delegate = self
+//        title = viewModel.title
+//    }
 
     override func loadView() {
         view = ProfileView(frame: .zero)
@@ -104,15 +102,6 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        guard let collectionView = collectionView else { return }
-//
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
-//        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
-//        collectionView.registerClass(SmallUserCollectionViewCell.self, type: .cell)
-//        collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
-//        collectionView.registerClass(ProfileHeaderView.self, type: .header)
 
         do { // hides bottom border of navigationBar
             let currentColorMode = ColorModeProvider.current()
@@ -125,22 +114,17 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
 
         setupBackButton()
         setupHeaderView()
-
-        profileView.menuBarView.didSelectItem = { [weak self] menuItem in
-            self?.handleMenuItemSelection(menuItem)
-        }
+        setupMenu()
 
         setupProfilePageViewController()
-
-        viewModel.downloadInitialItems()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if selectedMenuItem == nil {
-            selectedMenuItem = .shots
-            profileView.menuBarView.select(item: .shots)
+            selectedMenuItem = viewModel.menu[0]
+            profileView.menuBarView.select(item: viewModel.menu[0])
         }
 
 //        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
@@ -213,20 +197,27 @@ private extension ProfileViewController {
         viewModel.shouldShowFollowButton ? profileView.headerView.startActivityIndicator() : (profileView.headerView.shouldShowButton = false)
     }
 
-    func setupProfilePageViewController() {
-        // NGRTemp:
-        let dataSource: ProfilePageViewControllerDataSource = {
-            if let viewModel = viewModel as? UserDetailsViewModel {
-                return ProfilePageViewControllerDataSource(viewControllers:
-                    [ProfileShotsViewController(user: viewModel.user),
-                     ProfileInfoViewController(user: viewModel.user),
-                     UIViewController(),
-                     UIViewController()]
-                )
-            }
-            return ProfilePageViewControllerDataSource(viewControllers: [])
-        }()
+    func setupMenu() {
+        profileView.menuBarView.setup(with: viewModel.menu.map { ($0, viewModel.badge(forMenuItem: $0)) })
 
+        profileView.menuBarView.didSelectItem = { [weak self] menuItem in
+            self?.handleMenuItemSelection(menuItem)
+        }
+    }
+
+    func setupProfilePageViewController() {
+        let profileShotsViewController = ProfileShotsViewController(user: viewModel.user)
+        profileShotsViewController.didLoadTeamMembers = { [weak self] count in
+            self?.profileView.menuBarView.updateBadge(for: .team, with: count)
+        }
+
+        let dataSource = ProfilePageViewControllerDataSource(viewControllers: [
+                profileShotsViewController,
+                ProfileInfoViewController(user: viewModel.user),
+                UIViewController(),
+                UIViewController()
+            ]
+        )
 
         profilePageViewController = ProfilePageViewController(dataSource)
         profilePageViewController?.delegate = self
@@ -266,7 +257,7 @@ private extension ProfileViewController {
 
         let pageIndex: Int = {
             switch menuItem {
-            case .shots: return 0
+            case .shots, .team: return 0
             case .info: return 1
             case .projects: return 2
             case .buckets: return 3
