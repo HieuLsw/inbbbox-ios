@@ -45,6 +45,10 @@ final class ProfileViewModel: Vibratable {
 
 extension ProfileViewModel {
 
+    /// Returns value that should be shown in menu item's badge.
+    ///
+    /// - Parameter item: Menu item to get badge's value for.
+    /// - Returns: Badge's value.
     func badge(forMenuItem item: ProfileMenuItem) -> Int {
         switch item {
         case .shots: return Int(user.shotsCount)
@@ -55,6 +59,9 @@ extension ProfileViewModel {
         }
     }
 
+    /// Indicates if current profile is followed by logged in user.
+    ///
+    /// - Returns: Promise that resolves positively when profile is followed.
     func isProfileFollowedByMe() -> Promise<Bool> {
 
         return Promise<Bool> { fulfill, reject in
@@ -67,6 +74,9 @@ extension ProfileViewModel {
         }
     }
 
+    /// Requests to follow current profile.
+    ///
+    /// - Returns: Promise that resolves positively when requesting succeds.
     func followProfile() -> Promise<Void> {
 
         return Promise<Void> { fulfill, reject in
@@ -79,6 +89,9 @@ extension ProfileViewModel {
         }
     }
 
+    /// Requests to unfollow current profile.
+    ///
+    /// - Returns: Promise that resolves positively when requesting succeds.
     func unfollowProfile() -> Promise<Void> {
 
         return Promise<Void> { fulfill, reject in
