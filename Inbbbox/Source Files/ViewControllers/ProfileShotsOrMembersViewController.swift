@@ -1,5 +1,5 @@
 //
-//  ProfileShotsViewController.swift
+//  ProfileShotsOrMembersViewController.swift
 //  Inbbbox
 //
 //  Created by Peter Bruz on 14/03/16.
@@ -31,46 +31,27 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
+class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
 
     var shouldHideHeader: (() -> Void)?
     var shouldShowHeader: (() -> Void)?
+    var didLoadTeamMembers: ((Int) -> Void)?
+    var dismissClosure: (() -> Void)?
 
-    fileprivate var viewModel: ProfileShotsViewModel!
-
-    fileprivate var header: ProfileHeaderView?
-
-    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
+    var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
 
-    var didLoadTeamMembers: ((Int) -> Void)?
-
-    var dismissClosure: (() -> Void)?
-
-    var modalTransitionAnimator: ZFModalTransitionAnimator?
-    
-    var userAlreadyFollowed = false
-
     override var containsHeader: Bool {
-        return false// true
-    }
-
-    func isDisplayingUser(_ user: UserType) -> Bool {
-        if let userDetailsViewModel = viewModel as? UserDetailsViewModel, userDetailsViewModel.user == user {
-            return true
-        }
         return false
     }
 
-    fileprivate var isModal: Bool {
-        return self.tabBarController?.presentingViewController is UITabBarController ||
-                self.navigationController?.presentingViewController?.presentedViewController ==
-                self.navigationController && (self.navigationController != nil)
-    }
+    fileprivate var viewModel: ProfileShotsOrMembersViewModel!
 
-    /// Initialize view controller to show user's or team's details.
+    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
+
+    /// Initialize view controller to show user's shots or team's members.
     ///
     /// - Note: According to Dribbble API - Team is a particular case of User,
     ///         so if you want to show team's details - pass it as `UserType` with `accountType = .Team`.
@@ -83,7 +64,6 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
                       twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
             viewModel = UserDetailsViewModel(user: user)
             viewModel.delegate = self
-            title = viewModel.title
             return
         }
 
@@ -108,7 +88,6 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
 
         viewModel = TeamDetailsViewModel(team: team)
         viewModel.delegate = self
-        title = viewModel.title
     }
 
     override func viewDidLoad() {
@@ -132,7 +111,6 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
 			)
         }
 
-        setupBackButton()
         viewModel.downloadInitialItems()
     }
 
@@ -140,44 +118,14 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         super.viewDidAppear(animated)
 
         addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
-        
-        guard viewModel.shouldShowFollowButton else { return }
-        
-        guard !userAlreadyFollowed else {
-            userIsAlreadyFollowed()
-            return
-        }
-        
-        checkIfUserIsFollowed()
     }
 }
 
-// MARK: Buttons' actions
+// MARK: UIScrollViewDelegate
 
-extension ProfileShotsViewController {
-
-    func didTapFollowButton(_: UIButton) {
-
-        if let userFollowed = header?.userFollowed {
-
-            header?.startActivityIndicator()
-            firstly {
-                userFollowed ? viewModel.unfollowProfile() : viewModel.followProfile()
-            }.then {
-                self.header?.userFollowed = !userFollowed
-            }.always {
-                self.header?.stopActivityIndicator()
-            }.catch { error in
-                FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
-            }
-        }
-    }
-}
-
-extension ProfileShotsViewController {
+extension ProfileShotsOrMembersViewController {
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
         if scrollView.contentOffset.y <= 0 {
             shouldShowHeader?()
         }
@@ -185,19 +133,14 @@ extension ProfileShotsViewController {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if decelerate {
-
-            if scrollView.contentOffset.y <= 0 {
-                shouldShowHeader?()
-            } else {
-                shouldHideHeader?()
-            }
+            scrollView.contentOffset.y <= 0 ? shouldShowHeader?() : shouldHideHeader?()
         }
     }
 }
 
 // MARK: UICollectionViewDataSource
 
-extension ProfileShotsViewController {
+extension ProfileShotsOrMembersViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
@@ -276,25 +219,11 @@ extension ProfileShotsViewController {
 
         return UICollectionViewCell()
     }
-
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-
-        if header == nil && kind == UICollectionElementKindSectionHeader {
-            header = collectionView.dequeueReusableClass(ProfileHeaderView.self, forIndexPath: indexPath,
-                    type: .header)
-            header?.avatarView.imageView.loadImageFromURL(viewModel.avatarURL)
-            header?.button.addTarget(self, action: #selector(didTapFollowButton(_:)), for: .touchUpInside)
-            viewModel.shouldShowFollowButton ? header?.startActivityIndicator() : (header?.shouldShowButton = false)
-        }
-
-        return header!
-    }
 }
 
 // MARK: UICollectionViewDelegate
 
-extension ProfileShotsViewController {
+extension ProfileShotsOrMembersViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
@@ -314,7 +243,7 @@ extension ProfileShotsViewController {
         }
         if let viewModel = viewModel as? TeamDetailsViewModel {
 
-            let profileViewController = ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
+            let profileViewController = ProfileViewController(user: viewModel.teamMembers[indexPath.item])
             profileViewController.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(profileViewController, animated: true)
         }
@@ -345,7 +274,7 @@ extension ProfileShotsViewController {
 
 // MARK: BaseCollectionViewViewModelDelegate
 
-extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
+extension ProfileShotsOrMembersViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
         if let viewModel = viewModel as? TeamDetailsViewModel {
@@ -377,7 +306,7 @@ extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
 // MARK: Private extension
 
-private extension ProfileShotsViewController {
+private extension ProfileShotsOrMembersViewController {
 
     func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
                        atIndexPath indexPath: IndexPath) {
@@ -395,55 +324,11 @@ private extension ProfileShotsViewController {
             normalImageCompletion: imageLoadingCompletion
         )
     }
-
-    func setupBackButton() {
-        if isModal {
-            let attributedString = NSMutableAttributedString(
-                string: NSLocalizedString("Profile.BackButton",
-                comment: "Back button, user details"),
-                attributes: [NSForegroundColorAttributeName: UIColor.white])
-            let textAttachment = NSTextAttachment()
-            if let image = UIImage(named: "ic-back") {
-                textAttachment.image = image
-                textAttachment.bounds = CGRect(x: 0, y: -3, width: image.size.width, height: image.size.height)
-            }
-            let attributedStringWithImage = NSAttributedString(attachment: textAttachment)
-            attributedString.replaceCharacters(in: NSRange(location: 0, length: 0),
-                                                      with: attributedStringWithImage)
-
-            let backButton = UIButton()
-            backButton.setAttributedTitle(attributedString, for: .normal)
-            backButton.addTarget(self, action: #selector(didTapLeftBarButtonItem), for: .touchUpInside)
-            backButton.sizeToFit()
-
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        }
-    }
-
-    dynamic func didTapLeftBarButtonItem() {
-        dismissClosure?()
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func userIsAlreadyFollowed() {
-        header?.userFollowed = userAlreadyFollowed
-        self.header?.stopActivityIndicator()
-    }
-    
-    func checkIfUserIsFollowed() {
-        firstly {
-            viewModel.isProfileFollowedByMe()
-        }.then { followed in
-            self.header?.userFollowed = followed
-        }.then { _ in
-            self.header?.stopActivityIndicator()
-        }.catch { _ in }
-    }
 }
 
 // MARK: UIViewControllerPreviewingDelegate
 
-extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
+extension ProfileShotsOrMembersViewController: UIViewControllerPreviewingDelegate {
 
     fileprivate func peekPopPresent(viewController: UIViewController) {
         if let viewModel = viewModel as? UserDetailsViewModel, let detailsViewController = viewController as? ShotDetailsViewController {
@@ -480,7 +365,7 @@ extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
             previewingContext.sourceRect = cell.contentView.bounds
-            return ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
     }
@@ -492,7 +377,7 @@ extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
 
 // MARK: PeekPopPreviewingDelegate
 
-extension ProfileShotsViewController: PeekPopPreviewingDelegate {
+extension ProfileShotsOrMembersViewController: PeekPopPreviewingDelegate {
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
@@ -509,7 +394,7 @@ extension ProfileShotsViewController: PeekPopPreviewingDelegate {
             return controller
         } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
             previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
-            return ProfileShotsViewController(user: viewModel.teamMembers[indexPath.item])
+            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
         }
         return nil
     }

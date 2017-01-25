@@ -9,27 +9,12 @@
 import Foundation
 import PromiseKit
 
-class UserDetailsViewModel: ProfileShotsViewModel, Vibratable {
+class UserDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
-    var title: String {
-        return user.name ?? user.username
-    }
-
-    var avatarURL: URL? {
-        return user.avatarURL as URL?
-    }
-
     var collectionIsEmpty: Bool {
         return userShots.isEmpty
-    }
-
-    var shouldShowFollowButton: Bool {
-        if let currentUser = UserStorage.currentUser, currentUser.identifier != user.identifier {
-            return true
-        }
-        return false
     }
 
     var itemsCount: Int {
@@ -82,42 +67,6 @@ class UserDetailsViewModel: ProfileShotsViewModel, Vibratable {
     
     func downloadItem(at index: Int) { /* empty */ }
     
-    // MARK: Users section
-
-    func isProfileFollowedByMe() -> Promise<Bool> {
-
-        return Promise<Bool> { fulfill, reject in
-
-            firstly {
-                connectionsRequester.isUserFollowedByMe(user)
-            }.then { followed in
-                fulfill(followed)
-            }.catch(execute: reject)
-        }
-    }
-
-    func followProfile() -> Promise<Void> {
-
-        return Promise<Void> { fulfill, reject in
-
-            firstly {
-                connectionsRequester.followUser(user)
-            }.then {
-                self.vibrate(feedbackType: .success)
-            }.then(execute: fulfill).catch(execute: reject)
-        }
-    }
-
-    func unfollowProfile() -> Promise<Void> {
-
-        return Promise<Void> { fulfill, reject in
-
-            firstly {
-                connectionsRequester.unfollowUser(user)
-            }.then(execute: fulfill).catch(execute: reject)
-        }
-    }
-
     // MARK: Cell data section
 
     func shotCollectionViewCellViewData(_ indexPath: IndexPath) -> (shotImage: ShotImageType, animated: Bool) {

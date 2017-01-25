@@ -9,24 +9,12 @@
 import Foundation
 import PromiseKit
 
-class TeamDetailsViewModel: ProfileShotsViewModel, Vibratable {
+class TeamDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
-    var title: String {
-        return team.name
-    }
-
-    var avatarURL: URL? {
-        return team.avatarURL as URL?
-    }
-
     var collectionIsEmpty: Bool {
         return teamMembers.isEmpty
-    }
-
-    var shouldShowFollowButton: Bool {
-        return UserStorage.isUserSignedIn
     }
 
     var itemsCount: Int {
@@ -69,35 +57,6 @@ class TeamDetailsViewModel: ProfileShotsViewModel, Vibratable {
         guard !teamMembersDuringDownload.contains(where: { (m) -> Bool in return m == member }) else { return }
         
         downloadShots(for: member)
-    }
-
-    func isProfileFollowedByMe() -> Promise<Bool> {
-
-        return Promise<Bool> { fulfill, reject in
-            firstly {
-                connectionsRequester.isTeamFollowedByMe(team)
-            }.then(execute: fulfill).catch(execute: reject)
-        }
-    }
-
-    func followProfile() -> Promise<Void> {
-
-        return Promise<Void> { fulfill, reject in
-            firstly {
-                connectionsRequester.followTeam(team)
-            }.then {
-                self.vibrate(feedbackType: .success)
-            }.then(execute: fulfill).catch(execute: reject)
-        }
-    }
-
-    func unfollowProfile() -> Promise<Void> {
-
-        return Promise<Void> { fulfill, reject in
-            firstly {
-                connectionsRequester.unfollowTeam(team)
-            }.then(execute: fulfill).catch(execute: reject)
-        }
     }
 
     func userCollectionViewCellViewData(_ indexPath: IndexPath) -> UserCollectionViewCellViewData {

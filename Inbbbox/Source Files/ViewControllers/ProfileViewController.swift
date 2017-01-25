@@ -2,7 +2,6 @@
 //  ProfileViewController.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 23/01/2017.
 //  Copyright © 2017 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -167,12 +166,12 @@ private extension ProfileViewController {
     }
 
     func setupProfilePageViewController() {
-        let profileShotsViewController = ProfileShotsViewController(user: viewModel.user)
-        profileShotsViewController.didLoadTeamMembers = { [weak self] count in self?.profileView.menuBarView.updateBadge(for: .team, with: count) }
+        let profileShotsOrMembersViewController = ProfileShotsOrMembersViewController(user: viewModel.user)
+        profileShotsOrMembersViewController.didLoadTeamMembers = { [weak self] count in self?.profileView.menuBarView.updateBadge(for: .team, with: count) }
 
         let viewControllers: [UIViewController] = viewModel.menu.map {
             switch $0 {
-            case .shots, .team: return profileShotsViewController
+            case .shots, .team: return profileShotsOrMembersViewController
             case .info: return ProfileInfoViewController(user: viewModel.user)
             case .projects: return UIViewController()
             case .buckets: return UIViewController()
