@@ -27,7 +27,7 @@ class ProfileMenuBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .white
+        backgroundColor = ColorModeProvider.current().menuBackground
 
         deselectAllItems()
 
@@ -128,16 +128,16 @@ private extension ProfileMenuBarView {
     }
 
     func select(button: ProfileMenuButton) {
-        button.setTitleColor(.RGBA(26, 26, 26, 1), for: .normal)
-        button.badgeColor = .RGBA(26, 26, 26, 1)
+        button.setTitleColor(ColorModeProvider.current().activeMenuButtonTitle, for: .normal)
+        button.badgeColor = ColorModeProvider.current().activeMenuButtonBadge
         underlineBarView.underline(frame: button.frame)
     }
 
 
     func deselectAllItems() {
         [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
-            $0.setTitleColor(.RGBA(148, 147, 153, 1), for: .normal)
-            $0.badgeColor = .RGBA(148, 147, 153, 1)
+            $0.setTitleColor(ColorModeProvider.current().inactiveMenuButtonTitle, for: .normal)
+            $0.badgeColor = ColorModeProvider.current().inactiveMenuButtonBadge
         }
     }
 

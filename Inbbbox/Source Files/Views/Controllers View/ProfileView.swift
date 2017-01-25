@@ -56,6 +56,11 @@ class ProfileView: UIView {
         super.updateConstraints()
     }
 
+    // MARK: Public
+
+    /// Toggles header visibility.
+    ///
+    /// - Parameter visible: Desirable state of header.
     func toggleHeader(visible: Bool) {
 
         guard isHeaderVisible != visible else { return }

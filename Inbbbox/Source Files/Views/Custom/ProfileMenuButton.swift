@@ -19,7 +19,7 @@ class ProfileMenuButton: UIButton {
         }
     }
 
-    var badgeColor = UIColor.RGBA(26, 26, 26, 1) {
+    var badgeColor = ColorModeProvider.current().activeMenuButtonBadge {
         didSet {
             badgeLabel.textColor = badgeColor
         }
