@@ -136,76 +136,15 @@ extension ProfileShotsOrMembersViewController {
         return viewModel.itemsCount
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if let viewModel = viewModel as? UserDetailsViewModel {
-            let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self,
-                                                           forIndexPath: indexPath, type: .cell)
-
-            cell.backgroundColor = ColorModeProvider.current().shotViewCellBackground
-            cell.shotImageView.image = nil
-            let cellData = viewModel.shotCollectionViewCellViewData(indexPath)
-
-            indexPathsNeededImageUpdate.append(indexPath)
-            lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
-
-            cell.gifLabel.isHidden = !cellData.animated
-            if !cell.isRegisteredTo3DTouch {
-                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
-            }
+        if let cell = prepareUserCell(at: indexPath, in: collectionView) {
             return cell
+        } else if let cell = prepareTeamCell(at: indexPath, in: collectionView) {
+            return cell
+        } else {
+            return UICollectionViewCell()
         }
-
-        if let viewModel = viewModel as? TeamDetailsViewModel {
-            let cellData = viewModel.userCollectionViewCellViewData(indexPath)
-
-            indexPathsNeededImageUpdate.append(indexPath)
-
-            if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
-                let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
-                                                               forIndexPath: indexPath, type: .cell)
-                cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
-                cell.nameLabel.text = cellData.name
-                cell.numberOfShotsLabel.text = cellData.numberOfShots
-                if cellData.shotsImagesURLs?.count > 0 {
-                    cell.firstShotImageView.loadImageFromURL(cellData.shotsImagesURLs![0])
-                    cell.secondShotImageView.loadImageFromURL(cellData.shotsImagesURLs![1])
-                    cell.thirdShotImageView.loadImageFromURL(cellData.shotsImagesURLs![2])
-                    cell.fourthShotImageView.loadImageFromURL(cellData.shotsImagesURLs![3])
-                }
-                if !cell.isRegisteredTo3DTouch {
-                    cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
-                }
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
-                                                               forIndexPath: indexPath, type: .cell)
-                cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
-                cell.nameLabel.text = cellData.name
-                cell.numberOfShotsLabel.text = cellData.numberOfShots
-                if let shotImage = cellData.firstShotImage {
-
-                    let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
-
-                        guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
-
-                        cell.shotImageView.image = image
-                    }
-                    LazyImageProvider.lazyLoadImageFromURLs(
-                        (shotImage.teaserURL, isCurrentLayoutOneColumn ? shotImage.normalURL : nil, nil),
-                        teaserImageCompletion: imageLoadingCompletion,
-                        normalImageCompletion: imageLoadingCompletion
-                    )
-                }
-                if !cell.isRegisteredTo3DTouch {
-                    cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
-                }
-                return cell
-            }
-        }
-
-        return UICollectionViewCell()
     }
 }
 
@@ -311,6 +250,79 @@ private extension ProfileShotsOrMembersViewController {
             teaserImageCompletion: imageLoadingCompletion,
             normalImageCompletion: imageLoadingCompletion
         )
+    }
+
+    func prepareUserCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell? {
+
+        guard let viewModel = viewModel as? UserDetailsViewModel else { return nil }
+
+        let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self,
+                                                       forIndexPath: indexPath, type: .cell)
+
+        cell.backgroundColor = ColorModeProvider.current().shotViewCellBackground
+        cell.shotImageView.image = nil
+        let cellData = viewModel.shotCollectionViewCellViewData(indexPath)
+
+        indexPathsNeededImageUpdate.append(indexPath)
+        lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
+
+        cell.gifLabel.isHidden = !cellData.animated
+        if !cell.isRegisteredTo3DTouch {
+            cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
+        }
+        return cell
+    }
+
+    func prepareTeamCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell? {
+
+        guard let viewModel = viewModel as? TeamDetailsViewModel else { return nil }
+
+        let cellData = viewModel.userCollectionViewCellViewData(indexPath)
+
+        indexPathsNeededImageUpdate.append(indexPath)
+
+        if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
+            let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
+                                                           forIndexPath: indexPath, type: .cell)
+            cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
+            cell.nameLabel.text = cellData.name
+            cell.numberOfShotsLabel.text = cellData.numberOfShots
+            if cellData.shotsImagesURLs?.count > 0 {
+                cell.firstShotImageView.loadImageFromURL(cellData.shotsImagesURLs![0])
+                cell.secondShotImageView.loadImageFromURL(cellData.shotsImagesURLs![1])
+                cell.thirdShotImageView.loadImageFromURL(cellData.shotsImagesURLs![2])
+                cell.fourthShotImageView.loadImageFromURL(cellData.shotsImagesURLs![3])
+            }
+            if !cell.isRegisteredTo3DTouch {
+                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
+            }
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
+                                                           forIndexPath: indexPath, type: .cell)
+            cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
+            cell.nameLabel.text = cellData.name
+            cell.numberOfShotsLabel.text = cellData.numberOfShots
+            if let shotImage = cellData.firstShotImage {
+
+                let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
+
+                    guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else { return }
+
+                    cell.shotImageView.image = image
+                }
+                LazyImageProvider.lazyLoadImageFromURLs(
+                    (shotImage.teaserURL, isCurrentLayoutOneColumn ? shotImage.normalURL : nil, nil),
+                    teaserImageCompletion: imageLoadingCompletion,
+                    normalImageCompletion: imageLoadingCompletion
+                )
+            }
+            if !cell.isRegisteredTo3DTouch {
+                cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
+            }
+            return cell
+        }
+
     }
 }
 
