@@ -151,15 +151,9 @@ extension ProfileViewController: UIPageViewControllerDelegate {
 
         guard let index = (pageViewController as? ProfilePageViewController)?.internalDataSource?.viewControllers.index(of: viewController) else { return }
 
-        switch index {
-        case 0:
-            profileView.menuBarView.select(item: .shots)
-            selectedMenuItem = .shots
-        case 1:
-            profileView.menuBarView.select(item: .info)
-            selectedMenuItem = .info
-        default: break
-        }
+        let profileMenuItem = viewModel.menu[index]
+        profileView.menuBarView.select(item: profileMenuItem)
+        selectedMenuItem = profileMenuItem
     }
 }
 
@@ -211,13 +205,16 @@ private extension ProfileViewController {
             self?.profileView.menuBarView.updateBadge(for: .team, with: count)
         }
 
-        let dataSource = ProfilePageViewControllerDataSource(viewControllers: [
-                profileShotsViewController,
-                ProfileInfoViewController(user: viewModel.user),
-                UIViewController(),
-                UIViewController()
-            ]
-        )
+        let viewControllers: [UIViewController] = viewModel.menu.map {
+            switch $0 {
+            case .shots, .team: return profileShotsViewController
+            case .info: return ProfileInfoViewController(user: viewModel.user)
+            case .projects: return UIViewController()
+            case .buckets: return UIViewController()
+            }
+        }
+
+        let dataSource = ProfilePageViewControllerDataSource(viewControllers: viewControllers)
 
         profilePageViewController = ProfilePageViewController(dataSource)
         profilePageViewController?.delegate = self

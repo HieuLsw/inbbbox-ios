@@ -224,7 +224,7 @@ extension FolloweesCollectionViewController: UIViewControllerPreviewingDelegate 
         else { return nil }
         
         previewingContext.sourceRect = cell.contentView.bounds
-        let profileViewController = ProfileShotsViewController(user: viewModel.followees[indexPath.item])
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController
     }
@@ -248,7 +248,7 @@ extension FolloweesCollectionViewController: PeekPopPreviewingDelegate {
 
         previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
 
-        let profileViewController = ProfileShotsViewController(user: viewModel.followees[indexPath.item])
+        let profileViewController = ProfileViewController(user: viewModel.followees[indexPath.item])
         profileViewController.hidesBottomBarWhenPushed = true
         return profileViewController
     }

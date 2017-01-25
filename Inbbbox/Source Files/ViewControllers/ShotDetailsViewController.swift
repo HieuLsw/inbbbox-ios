@@ -353,13 +353,13 @@ extension ShotDetailsViewController {
     func presentProfileViewControllerForUser(_ user: UserType) {
 
         if let profileController = (self.presentingViewController as? UINavigationController)?.topViewController
-                    as? ProfileShotsViewController, profileController.isDisplayingUser(user) {
+                    as? ProfileViewController, profileController.isDisplayingUser(user) {
             animateHeader(start: false)
             dismiss(animated: true, completion: nil)
             return
         }
 
-        let profileViewController = ProfileShotsViewController(user: user)
+        let profileViewController = ProfileViewController(user: user)
         let navigationController = UINavigationController(rootViewController: profileViewController)
 
         animateHeader(start: false)

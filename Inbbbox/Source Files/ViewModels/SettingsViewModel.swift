@@ -148,7 +148,7 @@ private extension SettingsViewModel {
         
         allItems.showMyProfileItem.onSelect = { [weak self] in
             if let user = self?.loggedInUser {
-                let viewController = ProfileShotsViewController(user: user)
+                let viewController = ProfileViewController(user: user)
                 self?.settingsViewController?.navigationController?.pushViewController(viewController, animated: true)
             }
         }
