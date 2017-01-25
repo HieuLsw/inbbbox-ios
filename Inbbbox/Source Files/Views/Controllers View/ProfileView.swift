@@ -16,6 +16,9 @@ class ProfileView: UIView {
 
     var childView = UIView()
 
+    fileprivate let headerHeight = CGFloat(150)
+    fileprivate var headerHeightConstraint: NSLayoutConstraint?
+    fileprivate var isHeaderVisible: Bool = true
     fileprivate var didSetConstraints = false
 
     override init(frame: CGRect) {
@@ -39,7 +42,7 @@ class ProfileView: UIView {
             didSetConstraints = true
 
             headerView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
-            headerView.autoSetDimension(.height, toSize: 150)
+            headerHeightConstraint = headerView.autoSetDimension(.height, toSize: headerHeight)
 
             menuBarView.autoPinEdge(toSuperviewEdge: .leading)
             menuBarView.autoPinEdge(toSuperviewEdge: .trailing)
@@ -51,5 +54,16 @@ class ProfileView: UIView {
         }
 
         super.updateConstraints()
+    }
+
+    func toggleHeader(visible: Bool) {
+
+        guard isHeaderVisible != visible else { return }
+
+        UIView.animate(withDuration: 0.4) {
+            self.headerHeightConstraint?.constant = visible ? self.headerHeight : 0
+            self.layoutIfNeeded()
+            self.isHeaderVisible = visible
+        }
     }
 }

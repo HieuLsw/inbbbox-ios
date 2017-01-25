@@ -15,7 +15,12 @@ enum ProfileMenuItem: Int {
     case shots, team, info, projects, buckets
 }
 
-class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouch?
+protocol TriggeringHeaderUpdate: class {
+    var shouldHideHeader: (() -> Void)?  { get set }
+    var shouldShowHeader: (() -> Void)? { get set }
+}
+
+class ProfileViewController: UIViewController {
 
     var profileView: ProfileView! {
         return view as? ProfileView
@@ -26,9 +31,6 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
     fileprivate var viewModel: ProfileViewModel
 
     fileprivate var profilePageViewController: ProfilePageViewController?
-
-    internal var peekPop: PeekPop?
-    internal var didCheckedSupport3DForOlderDevices = false
 
     var dismissClosure: (() -> Void)?
 
@@ -56,45 +58,12 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
         viewModel = ProfileViewModel(user: user)
         super.init(nibName: nil, bundle: nil)
         title = viewModel.title
-//        guard let accountType = user.accountType, accountType == .Team else {
-//            self.init()
-////            self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
-////                      twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
-//            viewModel = ProfileViewModel(user: user)//UserDetailsViewModel(user: user)
-////            viewModel.delegate = self
-//            title = viewModel.title
-//            return
-//        }
-//
-//        let team = Team(
-//            identifier: user.identifier,
-//            name: user.name ?? "",
-//            username: user.username,
-//            avatarURL: user.avatarURL,
-//            createdAt: Date(),
-//            followersCount: user.followersCount,
-//            followingsCount: user.followingsCount,
-//            bio: user.bio,
-//            location: user.location
-//        )
-//        self.init(team: team)
     }
 
     @available(*, unavailable, message: "Use init(user:) instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    fileprivate convenience init(team: TeamType) {
-//
-//        self.init()
-////        self.init(oneColumnLayoutCellHeightToWidthRatio: LargeUserCollectionViewCell.heightToWidthRatio,
-////                  twoColumnsLayoutCellHeightToWidthRatio: SmallUserCollectionViewCell.heightToWidthRatio)
-//
-//        viewModel = TeamDetailsViewModel(team: team)
-////        viewModel.delegate = self
-//        title = viewModel.title
-//    }
 
     override func loadView() {
         view = ProfileView(frame: .zero)
@@ -126,8 +95,6 @@ class ProfileViewController: UIViewController, Support3DTouch { // Support3DTouc
             selectedMenuItem = viewModel.menu[0]
             profileView.menuBarView.select(item: viewModel.menu[0])
         }
-
-//        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
 
         guard viewModel.shouldShowFollowButton else { return }
 
@@ -201,9 +168,7 @@ private extension ProfileViewController {
 
     func setupProfilePageViewController() {
         let profileShotsViewController = ProfileShotsViewController(user: viewModel.user)
-        profileShotsViewController.didLoadTeamMembers = { [weak self] count in
-            self?.profileView.menuBarView.updateBadge(for: .team, with: count)
-        }
+        profileShotsViewController.didLoadTeamMembers = { [weak self] count in self?.profileView.menuBarView.updateBadge(for: .team, with: count) }
 
         let viewControllers: [UIViewController] = viewModel.menu.map {
             switch $0 {
@@ -212,6 +177,11 @@ private extension ProfileViewController {
             case .projects: return UIViewController()
             case .buckets: return UIViewController()
             }
+        }
+
+        viewControllers.flatMap { $0 as? TriggeringHeaderUpdate }.forEach { viewController in
+            viewController.shouldShowHeader = { [weak self] in self?.profileView.toggleHeader(visible: true) }
+            viewController.shouldHideHeader = { [weak self] in self?.profileView.toggleHeader(visible: false) }
         }
 
         let dataSource = ProfilePageViewControllerDataSource(viewControllers: viewControllers)

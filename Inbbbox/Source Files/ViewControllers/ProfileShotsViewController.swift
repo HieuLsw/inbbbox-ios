@@ -31,10 +31,10 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
 
-class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch {
-
-//    var customHeader: ProfileHeaderView?
+    var shouldHideHeader: (() -> Void)?
+    var shouldShowHeader: (() -> Void)?
 
     fileprivate var viewModel: ProfileShotsViewModel!
 
@@ -169,6 +169,27 @@ extension ProfileShotsViewController {
                 self.header?.stopActivityIndicator()
             }.catch { error in
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
+            }
+        }
+    }
+}
+
+extension ProfileShotsViewController {
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        if scrollView.contentOffset.y <= 0 {
+            shouldShowHeader?()
+        }
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if decelerate {
+
+            if scrollView.contentOffset.y <= 0 {
+                shouldShowHeader?()
+            } else {
+                shouldHideHeader?()
             }
         }
     }
