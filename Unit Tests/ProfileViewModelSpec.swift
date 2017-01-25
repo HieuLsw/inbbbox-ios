@@ -2,7 +2,6 @@
 //  ProfileViewModelSpec.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 25/01/2017.
 //  Copyright © 2017 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -18,11 +17,6 @@ class ProfileViewModelSpec: QuickSpec {
     override func spec() {
 
         var sut: ProfileViewModel!
-        let fixtureShotImage: ShotImageType = ShotImage(
-            hidpiURL: URL(string: "https://fixture.domain/fixture.image.hidpi.png"),
-            normalURL: URL(string: "https://fixture.domain/fixture.image.normal.png")!,
-            teaserURL: URL(string: "https://fixture.domain/fixture.image.teaser.png")!
-        )
         var connectionsRequesterMock: APIConnectionsRequesterMock!
 
         beforeEach {
