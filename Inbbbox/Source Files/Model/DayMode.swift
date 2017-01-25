@@ -162,6 +162,27 @@ struct DayMode: ColorModeType {
         return .pinkColor()
     }
 
+    // MARK: Profile Menu Bar
+    var menuBackground: UIColor {
+        return .white
+    }
+
+    var activeMenuButtonTitle: UIColor {
+        return .RGBA(26, 26, 26, 1)
+    }
+
+    var activeMenuButtonBadge: UIColor {
+        return .RGBA(26, 26, 26, 1)
+    }
+
+    var inactiveMenuButtonTitle: UIColor {
+        return .RGBA(148, 147, 153, 1)
+    }
+
+    var inactiveMenuButtonBadge: UIColor {
+        return .RGBA(148, 147, 153, 1)
+    }
+
     // MARK: TwoLayout Collection View Controller
     var twoLayoutsCollectionViewBackground: UIColor {
         return .backgroundGrayColor()

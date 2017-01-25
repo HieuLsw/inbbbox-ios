@@ -29,17 +29,6 @@ class UserDetailsViewModelSpec: QuickSpec {
             sut = UserDetailsViewModelMock(user: User.fixtureUser())
             connectionsRequesterMock = APIConnectionsRequesterMock()
             sut.connectionsRequester = connectionsRequesterMock
-            connectionsRequesterMock.isUserFollowedByMeStub.on(any()) { _ in
-                return Promise<Bool>(value: true)
-            }
-            
-            connectionsRequesterMock.followUserStub.on(any()) { _ in
-                return Promise<Void>(value: Void())
-            }
-            
-            connectionsRequesterMock.unfollowUserStub.on(any()) { _ in
-                return Promise<Void>(value: Void())
-            }
         }
         
         afterEach {
@@ -94,81 +83,6 @@ class UserDetailsViewModelSpec: QuickSpec {
                 expect(cellData.shotImage.teaserURL).to(equal(fixtureShotImage.teaserURL))
                 expect(cellData.shotImage.normalURL).to(equal(fixtureShotImage.normalURL))
                 expect(cellData.shotImage.hidpiURL).to(equal(fixtureShotImage.hidpiURL))
-            }
-        }
-        
-        describe("when checking if logged user follows an user") {
-            
-            var didReceiveResponse: Bool?
-            
-            beforeEach {
-                didReceiveResponse = false
-                
-                waitUntil { done in
-                    sut.isProfileFollowedByMe().then { result -> Void in
-                        didReceiveResponse = true
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-            
-            afterEach {
-                didReceiveResponse = nil
-            }
-            
-            it("should be correctly checked") {
-                expect(didReceiveResponse).to(beTruthy())
-                expect(didReceiveResponse).toNot(beNil())
-            }
-        }
-        
-        describe("when following an user") {
-            
-            var didReceiveResponse: Bool?
-            
-            beforeEach {
-                didReceiveResponse = false
-                
-                waitUntil { done in
-                    sut.followProfile().then { result -> Void in
-                        didReceiveResponse = true
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-            
-            afterEach {
-                didReceiveResponse = nil
-            }
-            
-            it("should be correctly followed") {
-                expect(didReceiveResponse).to(beTruthy())
-                expect(didReceiveResponse).toNot(beNil())
-            }
-        }
-        
-        describe("when unfollowing an user") {
-            
-            var didReceiveResponse: Bool?
-            
-            beforeEach {
-                didReceiveResponse = false
-                
-                waitUntil { done in
-                    sut.unfollowProfile().then { result -> Void in
-                        didReceiveResponse = true
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-            
-            afterEach {
-                didReceiveResponse = nil
-            }
-            
-            it("should be correctly unfollowed") {
-                expect(didReceiveResponse).to(beTruthy())
-                expect(didReceiveResponse).toNot(beNil())
             }
         }
 

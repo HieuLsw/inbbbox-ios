@@ -75,7 +75,6 @@ class BucketsCollectionViewController: UICollectionViewController, Support3DTouc
                     indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableClass(BucketCollectionViewCell.self,
                 forIndexPath: indexPath, type: .cell)
-        cell.clearImages()
         let cellData = viewModel.bucketCollectionViewCellViewData(indexPath)
         cell.nameLabel.text = cellData.name
         cell.numberOfShotsLabel.text = cellData.numberOfShots

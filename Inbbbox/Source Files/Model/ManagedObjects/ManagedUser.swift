@@ -18,6 +18,8 @@ class ManagedUser: NSManagedObject {
     @NSManaged var mngd_accountType: String?
     @NSManaged var mngd_followersCount: UInt
     @NSManaged var mngd_followingsCount: UInt
+    @NSManaged var mngd_projectsCount: UInt
+    @NSManaged var mngd_bucketsCount: UInt
     @NSManaged var mngd_bio: String
     @NSManaged var mngd_location: String
 }
@@ -41,6 +43,8 @@ extension ManagedUser: UserType {
     }
     var followersCount: UInt { return mngd_followersCount }
     var followingsCount: UInt { return mngd_followingsCount }
+    var projectsCount: UInt { return mngd_projectsCount }
+    var bucketsCount: UInt { return mngd_bucketsCount }
     var bio: String { return mngd_bio }
     var location: String { return mngd_location }
 }
