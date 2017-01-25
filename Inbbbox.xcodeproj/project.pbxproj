@@ -424,6 +424,7 @@
 		EE2AACF3017E0000EA7F8164 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEA03D83A79AA83801134F0 /* UserDetailsViewModel.swift */; };
 		EFD89D4338FFEEEE76392087 /* UIViewAnimationsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472FDA9EBA0DF86EFAF923FC /* UIViewAnimationsExtension.swift */; };
 		EFEB4F05F24BBFC4C907F611 /* SettingsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D5F10E1D439D514FDB604 /* SettingsSpec.swift */; };
+		F008DF3B1E38BC0F00B98A39 /* ProfileViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */; };
 		F023FD901CD0D22100CA650D /* APIUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F023FD8F1CD0D22100CA650D /* APIUsersProvider.swift */; };
 		F03764FC1CBB9F81008183F3 /* LazyImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03764FB1CBB9F81008183F3 /* LazyImageProvider.swift */; };
 		F077D0941CD23457008948A9 /* URLDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F077D0931CD23457008948A9 /* URLDetector.swift */; };
@@ -928,6 +929,7 @@
 		ED14B7F90B5F3A56E09857D8 /* ShotsStateHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotsStateHandler.swift; sourceTree = "<group>"; };
 		EF1B71814BD31275DACE75B1 /* RemoveFromBucketQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoveFromBucketQuery.swift; sourceTree = "<group>"; };
 		EFAD56AC35062CE4A617CB43 /* LargeUserCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LargeUserCollectionViewCell.swift; sourceTree = "<group>"; };
+		F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewModelSpec.swift; sourceTree = "<group>"; };
 		F023FD8F1CD0D22100CA650D /* APIUsersProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIUsersProvider.swift; sourceTree = "<group>"; };
 		F03764FB1CBB9F81008183F3 /* LazyImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImageProvider.swift; sourceTree = "<group>"; };
 		F049C867F1FCCDB672E8597F /* CoreDataHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -1355,6 +1357,7 @@
 				C793B4220E7BB68E6C3B711B /* Queries */,
 				475CB1F3D3817C84FF89A59D /* Resources */,
 				0507D0A35CBA257DFCCCB941 /* SharedExamples */,
+				F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */,
 			);
 			path = "Unit Tests";
 			sourceTree = "<group>";
@@ -2530,6 +2533,7 @@
 				518B0C8CF332CD63A06BCFF1 /* InitialShotsCollectionViewLayoutSpec.swift in Sources */,
 				C6FDB61ECCFC6DA18056E4C2 /* LikesViewModelSpec.swift in Sources */,
 				91A5F4FAED6556884402B13B /* LocalNotificationRegistratorSpec.swift in Sources */,
+				F008DF3B1E38BC0F00B98A39 /* ProfileViewModelSpec.swift in Sources */,
 				F674FDFAF55C3D6EDC653140 /* ManagedShotsProviderSpec.swift in Sources */,
 				BE455DB81DF6AC64002D0D29 /* AnimatableShotImageViewSpec.swift in Sources */,
 				E25C737549914F232E8A8D9D /* NSAttributedStringExtensionSpec.swift in Sources */,
