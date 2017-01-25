@@ -30,6 +30,12 @@ class SmallUserCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Wi
         setupShotsView()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        clearImages()
+    }
+
     // MARK: - UIView
 
     override func updateConstraints() {

@@ -74,10 +74,7 @@ class ProfileViewController: UIViewController {
         do { // hides bottom border of navigationBar
             let currentColorMode = ColorModeProvider.current()
             navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
-            navigationController?.navigationBar.setBackgroundImage(
-                UIImage(color: currentColorMode.navigationBarTint),
-                for: .default
-            )
+            navigationController?.navigationBar.setBackgroundImage(UIImage(color: currentColorMode.navigationBarTint), for: .default)
         }
 
         setupBackButton()

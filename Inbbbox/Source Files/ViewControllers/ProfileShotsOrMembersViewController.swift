@@ -101,15 +101,6 @@ class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, S
         collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
         collectionView.registerClass(ProfileHeaderView.self, type: .header)
 
-        do { // hides bottom border of navigationBar
-            let currentColorMode = ColorModeProvider.current()
-            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
-            navigationController?.navigationBar.setBackgroundImage(
-				UIImage(color: currentColorMode.navigationBarTint),
-                for: .default
-			)
-        }
-
         viewModel.downloadInitialItems()
     }
 
@@ -174,7 +165,6 @@ extension ProfileShotsOrMembersViewController {
             if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
                 let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
                                                                forIndexPath: indexPath, type: .cell)
-                cell.clearImages()
                 cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
                 cell.nameLabel.text = cellData.name
                 cell.numberOfShotsLabel.text = cellData.numberOfShots
@@ -191,7 +181,6 @@ extension ProfileShotsOrMembersViewController {
             } else {
                 let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
                                                                forIndexPath: indexPath, type: .cell)
-                cell.clearImages()
                 cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
                 cell.nameLabel.text = cellData.name
                 cell.numberOfShotsLabel.text = cellData.numberOfShots

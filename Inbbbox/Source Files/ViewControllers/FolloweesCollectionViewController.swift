@@ -81,7 +81,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Sup
         if collectionView.collectionViewLayout.isKind(of: TwoColumnsCollectionViewFlowLayout.self) {
             let cell = collectionView.dequeueReusableClass(SmallUserCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
-            cell.clearImages()
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
             cell.numberOfShotsLabel.text = cellData.numberOfShots
@@ -99,7 +98,6 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Sup
         } else {
             let cell = collectionView.dequeueReusableClass(LargeUserCollectionViewCell.self,
                     forIndexPath: indexPath, type: .cell)
-            cell.clearImages()
             cell.avatarView.imageView.loadImageFromURL(cellData.avatarURL)
             cell.nameLabel.text = cellData.name
             cell.numberOfShotsLabel.text = cellData.numberOfShots
