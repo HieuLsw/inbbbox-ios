@@ -31,21 +31,16 @@ class ProfileMenuBarView: UIView {
 
         deselectAllItems()
 
-        shotsButton.setTitle("Shots", for: .normal) // NGRTodo: Localization
-        teamButton.setTitle("Team", for: .normal)
-        infoButton.setTitle("Info", for: .normal)
-        projectsButton.setTitle("Projects", for: .normal)
-        bucketsButton.setTitle("Buckets", for: .normal)
+        shotsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Shots", comment: "Shots card title."), for: .normal)
+        teamButton.setTitle(NSLocalizedString("ProfileMenuBarView.Team", comment: "Team card title."), for: .normal)
+        infoButton.setTitle(NSLocalizedString("ProfileMenuBarView.Info", comment: "Info card title."), for: .normal)
+        projectsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Projects", comment: "Projects card title."), for: .normal)
+        bucketsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Buckets", comment: "Buckets card title."), for: .normal)
 
         [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             $0.addTarget(self, action: #selector(didSelect(button:)), for: .touchUpInside)
         }
-
-//        menuStackView.addArrangedSubview(shotsButton)
-//        menuStackView.addArrangedSubview(infoButton)
-//        menuStackView.addArrangedSubview(projectsButton)
-//        menuStackView.addArrangedSubview(bucketsButton)
 
         menuStackView.distribution = .fillEqually
         
@@ -77,6 +72,9 @@ class ProfileMenuBarView: UIView {
     
     // MARK: public
 
+    /// Sets menu view up with items and related badges values.
+    ///
+    /// - Parameter data: List of tuples containing menu items and badges.
     func setup(with data: [(item: ProfileMenuItem, badge: Int)]) {
         let buttonsWithBagdes: [ProfileMenuButton] = data.map { itemWithBadge in
             let button = menuButton(for: itemWithBadge.item)
@@ -89,10 +87,18 @@ class ProfileMenuBarView: UIView {
         }
     }
 
+    /// Updates item's badge with given value.
+    ///
+    /// - Parameters:
+    ///   - item: Item to update badge for.
+    ///   - value: Value to set in badge.
     func updateBadge(for item: ProfileMenuItem, with value: Int) {
         menuButton(for: item).badge = value
     }
 
+    /// Selects given item.
+    ///
+    /// - Parameter item: Item to select.
     func select(item: ProfileMenuItem) {
         deselectAllItems()
         select(button: menuButton(for: item))
