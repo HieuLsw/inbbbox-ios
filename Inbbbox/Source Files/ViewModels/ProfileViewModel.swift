@@ -41,6 +41,9 @@ final class ProfileViewModel: Vibratable {
     init(user: UserType) {
         self.user = user
     }
+}
+
+extension ProfileViewModel {
 
     func badge(forMenuItem item: ProfileMenuItem) -> Int {
         switch item {
@@ -58,9 +61,9 @@ final class ProfileViewModel: Vibratable {
 
             firstly {
                 connectionsRequester.isUserFollowedByMe(user)
-                }.then { followed in
-                    fulfill(followed)
-                }.catch(execute: reject)
+            }.then { followed in
+                fulfill(followed)
+            }.catch(execute: reject)
         }
     }
 
@@ -70,9 +73,9 @@ final class ProfileViewModel: Vibratable {
 
             firstly {
                 connectionsRequester.followUser(user)
-                }.then {
-                    self.vibrate(feedbackType: .success)
-                }.then(execute: fulfill).catch(execute: reject)
+            }.then {
+                self.vibrate(feedbackType: .success)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 
@@ -82,7 +85,7 @@ final class ProfileViewModel: Vibratable {
 
             firstly {
                 connectionsRequester.unfollowUser(user)
-                }.then(execute: fulfill).catch(execute: reject)
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 }
