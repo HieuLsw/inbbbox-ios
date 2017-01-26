@@ -214,12 +214,14 @@ extension ProfileShotsOrMembersViewController: BaseCollectionViewViewModelDelega
         collectionView?.reloadData()
 
         if viewModel.collectionIsEmpty {
-            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
+            guard let visibleViewController = navigationController?.visibleViewController else { return }
+            FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
     func viewModelDidFailToLoadItems(_ error: Error) {
-        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+        guard let visibleViewController = navigationController?.visibleViewController else { return }
+        FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
     }
 
     func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
