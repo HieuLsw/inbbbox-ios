@@ -231,7 +231,25 @@ struct NightMode: ColorModeType {
     var shotBucketsActionCellBackground: UIColor {
         return .lessDarkGrayNightMode()
     }
-    
+
+    // MARK: Profile Details
+
+    var profileDetailsBackgroundColor: UIColor {
+        return .textDarkGrayColor()
+    }
+
+    var profileDetailsCollectionTitleLabelTextColor: UIColor {
+        return .textGrayColor()
+    }
+
+    var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
+        return .darkGrayNightMode()
+    }
+
+    var profileDetailsCollectionCounterLabelTextColor: UIColor {
+        return .pinkColor()
+    }
+
     // MARK: Settings
     var settingsUsernameTextColor: UIColor {
         return  .whiteNightMode()
