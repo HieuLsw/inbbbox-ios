@@ -367,3 +367,10 @@
 
 /********* TeamsCollectionHeaderView *********/
 "TeamsCollectionHeaderView.OnTeams" = "equipos";
+
+/********* ProfileMenuBarView *********/
+"ProfileMenuBarView.Shots" = "Pantallazo";
+"ProfileMenuBarView.Team" = "$Team";
+"ProfileMenuBarView.Info" = "$Info";
+"ProfileMenuBarView.Projects" = "$Projects";
+"ProfileMenuBarView.Buckets" = "Catálogos";

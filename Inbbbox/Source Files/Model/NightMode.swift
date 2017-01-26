@@ -158,6 +158,27 @@ struct NightMode: ColorModeType {
         return .black
     }
 
+    // MARK: Profile Menu Bar
+    var menuBackground: UIColor {
+        return .RGBA(19, 19, 19, 1)
+    }
+
+    var activeMenuButtonTitle: UIColor {
+        return .white
+    }
+
+    var activeMenuButtonBadge: UIColor {
+        return .pinkColor()
+    }
+
+    var inactiveMenuButtonTitle: UIColor {
+        return .RGBA(148, 147, 153, 1)
+    }
+
+    var inactiveMenuButtonBadge: UIColor {
+        return .RGBA(148, 147, 153, 1)
+    }
+
     // MARK: TwoLayout Collection View Controller
     var twoLayoutsCollectionViewBackground: UIColor {
         return .darkGrayNightMode()

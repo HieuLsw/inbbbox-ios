@@ -99,8 +99,15 @@ protocol ColorModeType {
     var datePickerViewBackgroundColor: UIColor { get }
     var datePickerViewSeparatorColor: UIColor { get }
 
-    /// Profile Header View
+    // MARK: Profile Header View
     var profileHeaderViewBackground: UIColor { get }
+
+    // MARK: Profile Menu Bar
+    var menuBackground: UIColor { get }
+    var activeMenuButtonTitle: UIColor { get }
+    var activeMenuButtonBadge: UIColor { get }
+    var inactiveMenuButtonTitle: UIColor { get }
+    var inactiveMenuButtonBadge: UIColor { get }
 
     // MARK: TwoLayout Collection View Controller
     var twoLayoutsCollectionViewBackground: UIColor { get }
