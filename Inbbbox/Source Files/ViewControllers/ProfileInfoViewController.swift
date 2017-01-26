@@ -116,12 +116,14 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
         profileInfoView.teamsCollectionView.reloadData()
 
         if viewModel.isTeamsEmpty {
-            FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
+            guard let visibleViewController = navigationController?.visibleViewController else { return }
+            FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
         }
     }
 
     func viewModelDidFailToLoadItems(_ error: Error) {
-        FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingTeamsFailed, canBeDismissedByUser: true)
+        guard let visibleViewController = navigationController?.visibleViewController else { return }
+        FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.downloadingTeamsFailed, canBeDismissedByUser: true)
     }
 
     func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
