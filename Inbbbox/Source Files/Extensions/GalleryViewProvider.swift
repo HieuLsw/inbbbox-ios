@@ -19,11 +19,11 @@ class GalleryViewProvider {
     fileprivate let galleryConfiguration: GalleryConfiguration = {
         let closeImage = UIImage(named: "ic-cross-naked") ?? UIImage()
         let closeButton = UIButton(type: .custom)
-        closeButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        closeButton.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
         closeButton.setImage(closeImage, for: .normal)
         closeButton.setImage(closeImage, for: .highlighted)
         return [GalleryConfigurationItem.closeButtonMode(.custom(closeButton)),
-                GalleryConfigurationItem.closeLayout(.pinRight(20, 20)),
+                GalleryConfigurationItem.closeLayout(.pinRight(0, 0)),
                 GalleryConfigurationItem.thumbnailsButtonMode(.none),
                 GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
                 GalleryConfigurationItem.blurDismissDuration(0.1),
