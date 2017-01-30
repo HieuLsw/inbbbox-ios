@@ -13,7 +13,7 @@ import PromiseKit
 class LikesViewModel: SimpleShotsViewModel {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
-    let title = NSLocalizedString("LikesViewModel.Title", comment:"Title of Likes screen")
+    let title = Localized("LikesViewModel.Title", comment:"Title of Likes screen")
     var shots = [ShotType]()
     fileprivate let shotsProvider = ShotsProvider()
     fileprivate var userMode: UserMode
@@ -65,11 +65,11 @@ class LikesViewModel: SimpleShotsViewModel {
     
     func emptyCollectionDescriptionAttributes() -> EmptyCollectionViewDescription {
         let description = EmptyCollectionViewDescription(
-            firstLocalizedString: NSLocalizedString("LikesCollectionView.EmptyData.FirstLocalizedString",
+            firstLocalizedString: Localized("LikesCollectionView.EmptyData.FirstLocalizedString",
                 comment: "LikesCollectionView, empty data set view"),
             attachmentImageName: "ic-like-emptystate",
             imageOffset: CGPoint(x: 0, y: -2),
-            lastLocalizedString: NSLocalizedString("LikesCollectionView.EmptyData.LastLocalizedString",
+            lastLocalizedString: Localized("LikesCollectionView.EmptyData.LastLocalizedString",
                 comment: "LikesCollectionView, empty data set view")
         )
         return description

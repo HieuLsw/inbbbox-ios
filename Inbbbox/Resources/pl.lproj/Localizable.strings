@@ -373,3 +373,12 @@
 "ProfileMenuBarView.Info" = "Info";
 "ProfileMenuBarView.Projects" = "Projekty";
 "ProfileMenuBarView.Buckets" = "Katalogi";
+
+/********* Language *********/
+"Language.Default" = "domyślny";
+"Language.English" = "angielski";
+"Language.Polish" = "polski";
+"Language.German" = "niemiecki";
+"Language.Portugal" = "portugalski";
+"Language.Spanish" = "hiszpański";
+"Language.French" = "francuski";

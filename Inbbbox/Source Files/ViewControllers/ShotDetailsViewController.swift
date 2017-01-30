@@ -513,7 +513,7 @@ private extension ShotDetailsViewController {
         composer.mailComposeDelegate = self
 
         composer.setToRecipients([Dribbble.ReportInappropriateContentEmail])
-        let subject = NSLocalizedString("ShotDetailsViewController.Inappropriate",
+        let subject = Localized("ShotDetailsViewController.Inappropriate",
                                         comment: "Title of email with abusive content.")
         composer.setSubject(subject)
         let body = viewModel.reportBodyForAbusiveComment(indexPath)

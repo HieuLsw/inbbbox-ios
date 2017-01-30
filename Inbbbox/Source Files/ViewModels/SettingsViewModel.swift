@@ -20,7 +20,7 @@ protocol AlertDisplayable: class {
 }
 
 protocol FlashMessageDisplayable: class {
-    func displayFlashMessage(_ model:FlashMessageViewModel)
+    func displayFlashMessage(_ model: FlashMessageViewModel)
 }
 
 enum UserMode {
@@ -29,7 +29,7 @@ enum UserMode {
 
 class SettingsViewModel: GroupedListViewModel {
 
-    let title = NSLocalizedString("SettingsViewModel.Account", comment: "Title for account screen")
+    let title = Localized("SettingsViewModel.Account", comment: "Title for account screen")
 
     weak var settingsViewController: SettingsViewController?
 
@@ -59,7 +59,7 @@ class SettingsViewModel: GroupedListViewModel {
                      [allItems.reminderItem, allItems.reminderDateItem],
                      [allItems.followingStreamSourceItem, allItems.newTodayStreamSourceItem,
                       allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
-                     [allItems.showAuthorItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem],
                      [allItems.sendFeedbackItem],
                      [allItems.acknowledgementItem]]
         } else {
@@ -113,13 +113,13 @@ class SettingsViewModel: GroupedListViewModel {
     }
     
     func titleFor(section: Int) -> String? {
-        let notificationsTitle = NSLocalizedString("SettingsViewController.Notifications",
+        let notificationsTitle = Localized("SettingsViewController.Notifications",
                                                    comment: "Title of group of buttons for notifications settings")
-        let streamSourcesTitle = NSLocalizedString("SettingsViewController.StreamSource",
+        let streamSourcesTitle = Localized("SettingsViewController.StreamSource",
                                                    comment: "Title of group of buttons for stream source settings")
-        let customizationTitle = NSLocalizedString("SettingsViewController.Customization",
+        let customizationTitle = Localized("SettingsViewController.Customization",
                                                    comment: "Title of group of buttons for customization settings")
-        let feedbackTitle = NSLocalizedString("SettingsViewModel.Feedback",
+        let feedbackTitle = Localized("SettingsViewModel.Feedback",
                                               comment: "Title of group of buttons for sending feedback")
         
         switch section {
@@ -242,7 +242,7 @@ private extension SettingsViewModel {
     
     func checkStreamsSource() {
         if Settings.areAllStreamSourcesOff() {
-            let title = NSLocalizedString("SettingsViewModel.AllSources",
+            let title = Localized("SettingsViewModel.AllSources",
                                           comment: "Title of flash message, when user turn off all sources")
             flashMessageDelegate?.displayFlashMessage(FlashMessageViewModel(title: title))
         }
@@ -275,17 +275,17 @@ private extension SettingsViewModel {
     // MARK: Prepare alert
 
     func preparePermissionsAlert() -> AOAlertController {
-        let message = NSLocalizedString("SettingsViewModel.AccessToNotifications",
+        let message = Localized("SettingsViewModel.AccessToNotifications",
                                         comment: "Body of alert, asking user to grant notifications permission.")
         let alert = AOAlertController(title: nil, message: message, style: .alert)
 
-        let settingsActionTitle = NSLocalizedString("SettingsViewModel.Settings",
+        let settingsActionTitle = Localized("SettingsViewModel.Settings",
                                                     comment: "Redirect user to Settings app")
         let settingsAction = AOAlertAction(title: settingsActionTitle, style: .default) { _ in
             UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
         }
 
-        let cancelActionTitle = NSLocalizedString("SettingsViewModel.Dismiss",
+        let cancelActionTitle = Localized("SettingsViewModel.Dismiss",
                                                   comment: "Notifications alert, dismiss button.")
         let cancelAction = AOAlertAction(title: cancelActionTitle, style: .default, handler: nil)
 

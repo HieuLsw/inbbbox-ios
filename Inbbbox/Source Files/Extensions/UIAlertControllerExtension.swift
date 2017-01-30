@@ -30,19 +30,19 @@ extension UIAlertController {
 
     class func provideBucketName(_ createHandler: @escaping (_ bucketName: String) -> Void)
                     -> AlertViewController {
-        let alertTitle = NSLocalizedString("UIAlertControllerExtension.NewBucket",
+        let alertTitle = Localized("UIAlertControllerExtension.NewBucket",
                                   comment: "Allows user to create new bucket.")
-        let alertMessage = NSLocalizedString("UIAlertControllerExtension.ProvideName",
+        let alertMessage = Localized("UIAlertControllerExtension.ProvideName",
                                     comment: "Provide name for new bucket")
         let alert = AlertViewController(title: alertTitle,
                                     message: alertMessage,
                              preferredStyle: .alert)
 
-        let cancelActionTitle = NSLocalizedString("UIAlertControllerExtension.Cancel",
+        let cancelActionTitle = Localized("UIAlertControllerExtension.Cancel",
                                          comment: "Cancel creating new bucket.")
         alert.addAction(UIAlertAction(title: cancelActionTitle, style: .cancel, handler: nil))
 
-        let createActionTitle = NSLocalizedString("UIAlertControllerExtension.Create",
+        let createActionTitle = Localized("UIAlertControllerExtension.Create",
                                          comment: "Create new bucket.")
         alert.addAction(UIAlertAction(title: createActionTitle, style: .default) { _ in
             if let bucketName = alert.textFields?[0].text {
@@ -50,7 +50,7 @@ extension UIAlertController {
             }
         })
         alert.addTextField(configurationHandler: {(textField: UITextField!) in
-            textField.placeholder = NSLocalizedString("UIAlertControllerExtension.BucketName",
+            textField.placeholder = Localized("UIAlertControllerExtension.BucketName",
                                              comment: "Asks user to enter bucket name.")
         })
 
@@ -60,27 +60,27 @@ extension UIAlertController {
     // MARK: Other
 
     class func inappropriateContentReported() -> AOAlertController {
-        let message = NSLocalizedString("UIAlertControllerExtension.InappropriateContentReported", comment: "nil")
+        let message = Localized("UIAlertControllerExtension.InappropriateContentReported", comment: "nil")
 
-        let okActionTitle = NSLocalizedString("UIAlertControllerExtension.OK", comment: "OK")
+        let okActionTitle = Localized("UIAlertControllerExtension.OK", comment: "OK")
         let okAction = AOAlertAction(title: okActionTitle, style: .default, handler: nil)
 
         return UIAlertController.createAlert(message, action: okAction)
     }
 
     class func emailAccountNotFound() -> AOAlertController {
-        let message = NSLocalizedString("UIAlertControllerExtension.EmailError",
+        let message = Localized("UIAlertControllerExtension.EmailError",
                 comment: "Displayed when user device is not capable of/configured to send emails.")
 
         return UIAlertController.createAlert(message)
     }
 
     class func willSignOutUser() -> AOAlertController {
-        let message = NSLocalizedString("ShotsCollectionViewController.SignOut",
+        let message = Localized("ShotsCollectionViewController.SignOut",
                 comment: "Message informing user will be logged out because of an error.")
         let alert = AOAlertController(title: nil, message: message, style: .alert)
 
-        let dismissActionTitle = NSLocalizedString("ShotsCollectionViewController.Dismiss",
+        let dismissActionTitle = Localized("ShotsCollectionViewController.Dismiss",
                 comment: "Dismiss error alert.")
         let dismissAction = AOAlertAction(title: dismissActionTitle, style: .default) { _ in
             Authenticator.logout()
@@ -94,7 +94,7 @@ extension UIAlertController {
     }
     
     class func cantSendFeedback() -> AOAlertController {
-        let message = NSLocalizedString("UIAlertControllerExtension.CantSendFeedback",
+        let message = Localized("UIAlertControllerExtension.CantSendFeedback",
                                         comment: "Displayed when user device is not capable of/configured to send emails, shown when trying to send feedback.")
         
         return UIAlertController.createAlert(message)
@@ -103,7 +103,7 @@ extension UIAlertController {
     // MARK: Private
 
     fileprivate class func defaultDismissAction(_ style: AOAlertActionStyle = .default) -> AOAlertAction {
-        let title = NSLocalizedString("UIAlertControllerExtension.Dismiss", comment: "Dismiss")
+        let title = Localized("UIAlertControllerExtension.Dismiss", comment: "Dismiss")
 
         return AOAlertAction(title: title, style: style, handler: nil)
     }

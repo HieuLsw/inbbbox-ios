@@ -62,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }), selector: #selector(BlockOperation.main), userInfo: nil, repeats: false)
             
         }.catch { _ in }
-        
+
         return shouldPerformAdditionalDelegateHandling
     }
 

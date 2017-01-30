@@ -17,27 +17,27 @@ final class StreamSourceView: UIView {
     }()
     
     private(set) lazy var followingView: SingleStreamView = SingleStreamView(
-        streamName: NSLocalizedString("SettingsViewModel.Following", comment: ""),
+        streamName: Localized("SettingsViewModel.Following", comment: ""),
         streamSource: .following
     )
     
     private(set) lazy var newTodayView = SingleStreamView(
-        streamName: NSLocalizedString("SettingsViewModel.NewToday", comment: ""),
+        streamName: Localized("SettingsViewModel.NewToday", comment: ""),
         streamSource: .newToday
     )
     
     private(set) lazy var popularTodayView = SingleStreamView(
-        streamName: NSLocalizedString("SettingsViewModel.Popular", comment: ""),
+        streamName: Localized("SettingsViewModel.Popular", comment: ""),
         streamSource: .popularToday
     )
     
     private(set) lazy var debutsView = SingleStreamView(
-        streamName: NSLocalizedString("SettingsViewModel.Debuts", comment: ""),
+        streamName: Localized("SettingsViewModel.Debuts", comment: ""),
         streamSource: .debuts
     )
     
     private(set) lazy var mySetView = SingleStreamView(
-        streamName: NSLocalizedString("SettingsViewModel.MySet", comment: ""),
+        streamName: Localized("SettingsViewModel.MySet", comment: ""),
         streamSource: .mySet
     )
     

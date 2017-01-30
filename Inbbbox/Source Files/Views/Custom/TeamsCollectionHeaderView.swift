@@ -15,7 +15,7 @@ final class TeamsCollectionHeaderView: UICollectionReusableView, Reusable {
 
         label.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightBold)
         label.textColor = .textDarkGrayColor()
-        label.text = NSLocalizedString("TeamsCollectionHeaderView.OnTeams", comment: "Teams table's header")
+        label.text = Localized("TeamsCollectionHeaderView.OnTeams", comment: "Teams table's header")
 
         return label
     }()

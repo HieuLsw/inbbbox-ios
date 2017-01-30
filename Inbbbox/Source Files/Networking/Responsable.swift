@@ -70,7 +70,7 @@ extension Responsable {
             } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
                 fulfill((json: nil, header: header))
             } else {
-                let message = NSLocalizedString("Responsable.RetrievingFailed",
+                let message = Localized("Responsable.RetrievingFailed",
                         comment: "Visible when failed to retrieve data.")
                 throw NSError(domain: networkErrorDomain, code: 0, message: message)
             }
@@ -108,10 +108,10 @@ private extension Responsable {
 
         let message: String = {
             if response.statusCode == 401 {
-                return NSLocalizedString("Responsable.AuthorizationExpired",
+                return Localized("Responsable.AuthorizationExpired",
                         comment: "Visible when user authorization expired.")
             }
-            return NSLocalizedString("Responsable.RetrievingFailed", comment: "Visible when failed to retrieve data.")
+            return Localized("Responsable.RetrievingFailed", comment: "Visible when failed to retrieve data.")
         }()
         return NSError(domain: networkErrorDomain, code: response.statusCode, message: message)
     }

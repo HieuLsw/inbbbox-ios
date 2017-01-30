@@ -30,7 +30,7 @@ class SettingsViewController: UITableViewController {
         configureLogoutButton()
 
         tableView.registerClass(SwitchCell.self)
-        tableView.registerClass(DateCell.self)
+        tableView.registerClass(DetailsCell.self)
         tableView.registerClass(LabelCell.self)
 
         tableView?.hideSeparatorForEmptyCells()
@@ -154,6 +154,10 @@ extension SettingsViewController {
         if let labelItem = item as? LabelItem {
             labelItem.onSelect?()
         }
+
+        if let _ = item as? DetailsItem {
+            navigationController?.pushViewController(LanguageViewController(), animated: true)
+        }
         tableView.deselectRowIfSelectedAnimated(true)
     }
     
@@ -169,23 +173,31 @@ private extension SettingsViewController {
     func configureSettingCell(_ cell: UITableViewCell, forItem item: GroupItem) {
         if let item = item as? SwitchItem, let switchCell = cell as? SwitchCell {
             configureSwitchCell(switchCell, forItem: item, withMode: currentColorMode)
-        } else if let item = item as? DateItem, let dateCell = cell as? DateCell {
+        } else if let item = item as? DateItem, let dateCell = cell as? DetailsCell {
             configureDateCell(dateCell, forItem: item, withMode: currentColorMode)
+        } else if let item = item as? DetailsItem, let dateCell = cell as? DetailsCell {
+            configureDetailsCell(dateCell, forItem: item, withMode: currentColorMode)
         } else if let item = item as? LabelItem, let labelCell = cell as? LabelCell {
             configureLabelCell(labelCell, forItem: item, withMode: currentColorMode)
         }
     }
 
-    func configureSwitchCell(_ cell: SwitchCell, forItem item: SwitchItem, withMode mode:ColorModeType) {
+    func configureSwitchCell(_ cell: SwitchCell, forItem item: SwitchItem, withMode mode: ColorModeType) {
         cell.titleLabel.text = item.title
         cell.switchControl.isOn = item.enabled
         cell.selectionStyle = .none
         cell.adaptColorMode(mode)
     }
 
-    func configureDateCell(_ cell: DateCell, forItem item: DateItem, withMode mode:ColorModeType) {
+    func configureDateCell(_ cell: DetailsCell, forItem item: DateItem, withMode mode: ColorModeType) {
         cell.titleLabel.text = item.title
-        cell.setDateText(item.dateString)
+        cell.setDetailText(item.dateString)
+        cell.adaptColorMode(mode)
+    }
+
+    func configureDetailsCell(_ cell: DetailsCell, forItem item: DetailsItem, withMode mode: ColorModeType) {
+        cell.titleLabel.text = item.title
+        cell.setDetailText(item.detailString)
         cell.adaptColorMode(mode)
     }
 
@@ -203,7 +215,7 @@ private extension SettingsViewController {
 
     func configureLogoutButton() {
         navigationItem.rightBarButtonItem = viewModel.loggedInUser != nil ? UIBarButtonItem(
-            title: NSLocalizedString("SettingsViewController.LogOut", comment: "Log out button"),
+            title: Localized("SettingsViewController.LogOut", comment: "Log out button"),
             style: .plain,
             target: self,
             action: #selector(didTapLogOutButton(_:))
@@ -218,7 +230,7 @@ private extension SettingsViewController {
         if let user = viewModel.loggedInUser {
             header.usernameLabel.text = user.name ?? user.username
         } else {
-            header.usernameLabel.text = NSLocalizedString("SettingsViewController.Guest",
+            header.usernameLabel.text = Localized("SettingsViewController.Guest",
                     comment: "Is user a guest without account?")
         }
         var avatarUrl: URL? = nil
@@ -299,7 +311,7 @@ extension SettingsViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true) { [unowned self] in
             if (result == MFMailComposeResult.sent) {
-                let message = FlashMessageViewModel(title: NSLocalizedString("SettingsViewModel.FeedbackSent", comment: "User Settings, feedback sent."))
+                let message = FlashMessageViewModel(title: Localized("SettingsViewModel.FeedbackSent", comment: "User Settings, feedback sent."))
                 self.displayFlashMessage(message)
             }
         }
@@ -311,7 +323,8 @@ private extension UITableView {
     func cellForItemCategory(_ category: GroupItem.Category) -> UITableViewCell {
 
         switch category {
-            case .date: return dequeueReusableCell(DateCell.self)
+            case .details: return dequeueReusableCell(DetailsCell.self)
+            case .date: return dequeueReusableCell(DetailsCell.self)
             case .boolean: return dequeueReusableCell(SwitchCell.self)
             case .string: return dequeueReusableCell(LabelCell.self)
         }
