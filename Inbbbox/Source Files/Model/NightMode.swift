@@ -255,16 +255,12 @@ struct NightMode: ColorModeType {
 
     // MARK: Profile Details
 
-    var profileDetailsBackgroundColor: UIColor {
-        return .textDarkGrayColor()
-    }
-
     var profileDetailsCollectionTitleLabelTextColor: UIColor {
         return .textGrayColor()
     }
 
     var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
-        return .darkGrayNightMode()
+        return .RGBA(62, 74, 76, 1)
     }
 
     var profileDetailsCollectionCounterLabelTextColor: UIColor {
@@ -273,7 +269,7 @@ struct NightMode: ColorModeType {
 
     // MARK: Settings
     var settingsUsernameTextColor: UIColor {
-        return  .whiteNightMode()
+        return .whiteNightMode()
     }
     
     var settingsSelectedCellBackgound: UIColor {

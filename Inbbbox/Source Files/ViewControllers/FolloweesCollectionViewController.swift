@@ -145,9 +145,9 @@ class FolloweesCollectionViewController: TwoLayoutsCollectionViewController, Sup
 private extension FolloweesCollectionViewController {
     
     func showProfile(for user: UserType) {
-        let profileViewController = ProfileBucketsViewController(user: user)//ProfileViewController(user: user)
-        //profileViewController.hidesBottomBarWhenPushed = true
-        //profileViewController.userAlreadyFollowed = true
+        let profileViewController = ProfileViewController(user: user)
+        profileViewController.hidesBottomBarWhenPushed = true
+        profileViewController.userAlreadyFollowed = true
         self.navigationController?.pushViewController(profileViewController, animated: true)
     }
 }

@@ -171,7 +171,7 @@ private extension ProfileViewController {
             case .shots, .team: return profileShotsOrMembersViewController
             case .info: return ProfileInfoViewController(user: viewModel.user)
             case .projects: return UIViewController()
-            case .buckets: return UIViewController()
+            case .buckets: return ProfileBucketsViewController(user: viewModel.user)
             }
         }
 

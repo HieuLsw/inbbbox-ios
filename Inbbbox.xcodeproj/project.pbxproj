@@ -411,6 +411,8 @@
 		EA0CFB1A1D9564D200CFF21A /* CommentLikedQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */; };
 		EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */; };
 		EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */; };
+		EA289B7F1E3F0DDB00D180C2 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B7E1E3F0DDB00D180C2 /* CollectionCell.swift */; };
+		EA289B811E3F437100D180C2 /* ProfileBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B801E3F437100D180C2 /* ProfileBucketsViewModel.swift */; };
 		EA5DC7141E39CE0400BC61E2 /* ProfileBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5DC7131E39CE0400BC61E2 /* ProfileBucketsViewController.swift */; };
 		EA7520441DBF80EF006270EB /* ShotDetailsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */; };
 		EA78076B1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */; };
@@ -917,6 +919,8 @@
 		EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentUnlikeQuery.swift; sourceTree = "<group>"; };
 		EA25956B9FC4631945428870 /* ShotImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotImageView.swift; sourceTree = "<group>"; };
 		EA26B57AF334AAA327E47C15 /* AutoScrollableCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutoScrollableCollectionViewCell.swift; sourceTree = "<group>"; };
+		EA289B7E1E3F0DDB00D180C2 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
+		EA289B801E3F437100D180C2 /* ProfileBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModel.swift; sourceTree = "<group>"; };
 		EA5DC7131E39CE0400BC61E2 /* ProfileBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewController.swift; sourceTree = "<group>"; };
 		EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewController.swift; sourceTree = "<group>"; };
 		EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewControllerDataSource.swift; sourceTree = "<group>"; };
@@ -1555,6 +1559,7 @@
 				753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */,
 				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
 				F0FEDACE1E3787050002181F /* ProfileViewModel.swift */,
+				EA289B801E3F437100D180C2 /* ProfileBucketsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1635,6 +1640,7 @@
 		B26C31AF4A9702DF249E3C56 /* UITableViewCell */ = {
 			isa = PBXGroup;
 			children = (
+				EA289B7E1E3F0DDB00D180C2 /* CollectionCell.swift */,
 				3713135DA7E8E9773CC2969F /* DateCell.swift */,
 				CC3F4F62A88C473C1B22F9F0 /* LabelCell.swift */,
 				6C5A214961E0B433F2ECFB5E /* SwitchCell.swift */,
@@ -2320,6 +2326,7 @@
 				0787622C92DAB405D7465D4B /* BucketQuery.swift in Sources */,
 				87B78617944E25A47160B1FD /* BucketsForShotQuery.swift in Sources */,
 				CC029B8E451F6F43BBF086A9 /* CommentQuery.swift in Sources */,
+				EA289B7F1E3F0DDB00D180C2 /* CollectionCell.swift in Sources */,
 				880DFF4CB7507DAB65CB13F7 /* CreateBucketQuery.swift in Sources */,
 				A3DDB2D1868D1212465AA05F /* CreateCommentQuery.swift in Sources */,
 				B68A12AAB2C53C887C2A3A0C /* DeleteCommentQuery.swift in Sources */,
@@ -2339,6 +2346,7 @@
 				0CD72BFD1AE1C5F446B8CA39 /* UserFollowedByMeQuery.swift in Sources */,
 				305A850E1DDB00FC008EF410 /* UIViewExtension.swift in Sources */,
 				B0FA7ED3857415953587DEA9 /* UserQuery.swift in Sources */,
+				EA289B811E3F437100D180C2 /* ProfileBucketsViewModel.swift in Sources */,
 				B4106314FAE6A26929E31986 /* AutoSizable.swift in Sources */,
 				EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */,
 				F0EE2870B58F0E2F0AEF5922 /* AvatarSettable.swift in Sources */,

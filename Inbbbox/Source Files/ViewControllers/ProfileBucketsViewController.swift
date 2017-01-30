@@ -11,15 +11,17 @@ import UIKit
 class ProfileBucketsViewController: UITableViewController {
 
     fileprivate var currentColorMode = ColorModeProvider.current()
-    fileprivate var viewModel: BucketsViewModel
+    fileprivate var viewModel: ProfileBucketsViewModel!
     
     /// Initialize ProfileBucketsViewController.
     ///
-    /// - parameter viewModel: ProfileInfoViewModel for the presented user
+    /// - parameter user: User to initialize view controller with.
     init(user: UserType) {
-        viewModel = BucketsViewModel()
         super.init(nibName: nil, bundle: nil)
-        //viewModel.delegate = self
+        
+        viewModel = ProfileBucketsViewModel(user: user)
+        viewModel.delegate = self
+        viewModel.downloadInitialItems()
     }
     
     @available(*, unavailable, message: "Use init(user:) instead")
@@ -48,19 +50,66 @@ class ProfileBucketsViewController: UITableViewController {
 extension ProfileBucketsViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8;
+        return viewModel.itemsCount;
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(CollectionCell.self) as CollectionCell
-        
-        cell.adaptColorMode(currentColorMode)
-        cell.selectionStyle = .none
-        cell.titleLabel.text = "Title"
-        cell.backgroundLabel.text = "Title"
-        cell.counterLabel.text = "8"
-        
+        let cell = prepareBucketCell(at: indexPath, in: tableView)
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row == viewModel.itemsCount - 1 {
+            viewModel.downloadItemsForNextPage()
+        }
+    }
+}
+
+// MARK: Private extension
+
+private extension ProfileBucketsViewController {
+    
+    func prepareBucketCell(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(CollectionCell.self)
+        let cellData = viewModel.bucketTableViewCellViewData(indexPath)
+        
+        cell.adaptColorMode(currentColorMode)
+        cell.selectionStyle = .none
+        cell.titleLabel.text = cellData.name
+        cell.backgroundLabel.text = cellData.name
+        cell.counterLabel.text = cellData.numberOfShots
+        if let shots = cellData.shots {
+            cell.shots = shots
+        }
+        
+        return cell
+    }
+}
+
+// MARK: BaseCollectionViewViewModelDelegate
+
+extension ProfileBucketsViewController: BaseCollectionViewViewModelDelegate {
+    
+    func viewModelDidLoadInitialItems() {
+        tableView?.reloadData()
+    }
+    
+    func viewModelDidFailToLoadInitialItems(_ error: Error) {
+        tableView?.reloadData()
+    }
+    
+    func viewModelDidFailToLoadItems(_ error: Error) {
+        guard let visibleViewController = navigationController?.visibleViewController else { return }
+        FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+    }
+    
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadItemsAtIndexPaths indexPaths: [IndexPath]) {
+        tableView?.insertRows(at: indexPaths, with: .automatic)
+    }
+    
+    func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
+        tableView?.reloadRows(at: [indexPath], with: .automatic)
+    }
 }

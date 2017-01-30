@@ -82,7 +82,6 @@ protocol ColorModeType {
     var shotBucketsActionCellBackground: UIColor { get }
 
     // MARK: Profile Details
-    var profileDetailsBackgroundColor: UIColor { get }
     var profileDetailsCollectionTitleLabelTextColor: UIColor { get }
     var profileDetailsCollectionBackgroundLabelTextColor: UIColor { get }
     var profileDetailsCollectionCounterLabelTextColor: UIColor { get }

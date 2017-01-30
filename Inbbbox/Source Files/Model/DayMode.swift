@@ -255,16 +255,12 @@ struct DayMode: ColorModeType {
 
     // MARK: Profile Details
 
-    var profileDetailsBackgroundColor: UIColor {
-        return .white
-    }
-
     var profileDetailsCollectionTitleLabelTextColor: UIColor {
         return .textDarkGrayColor()
     }
 
     var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
-        return .backgroundGrayColor()
+        return .cellBackgroundColor()
     }
 
     var profileDetailsCollectionCounterLabelTextColor: UIColor {

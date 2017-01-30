@@ -11,6 +11,8 @@ import TTTAttributedLabel
 
 class CollectionCell: UITableViewCell, Reusable {
     
+    var shots = [ShotType]()
+    
     let backgroundLabel = UILabel.newAutoLayout()
     let titleLabel = TTTAttributedLabel.newAutoLayout()
     let counterLabel = UILabel.newAutoLayout()
@@ -21,12 +23,10 @@ class CollectionCell: UITableViewCell, Reusable {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .clear
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentView.addSubview(collectionView)
+
+        backgroundColor = .clear
         
         backgroundLabel.font = UIFont.boldSystemFont(ofSize: 54)
         contentView.addSubview(backgroundLabel)
@@ -37,6 +37,12 @@ class CollectionCell: UITableViewCell, Reusable {
         
         counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
         contentView.addSubview(counterLabel)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
+        contentView.addSubview(collectionView)
         
         setNeedsUpdateConstraints()
     }
@@ -70,9 +76,52 @@ class CollectionCell: UITableViewCell, Reusable {
     }
 }
 
+extension CollectionCell: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return shots.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = prepareShotCell(at: indexPath, in: collectionView)
+        return cell
+    }
+}
+
+// MARK: Private extension
+
+private extension CollectionCell {
+
+    func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
+                       atIndexPath indexPath: IndexPath) {
+        let imageLoadingCompletion: (UIImage) -> Void = { image in
+            cell.shotImageView.image = image
+        }
+        LazyImageProvider.lazyLoadImageFromURLs(
+            (shotImage.teaserURL, shotImage.normalURL, nil),
+            teaserImageCompletion: imageLoadingCompletion,
+            normalImageCompletion: imageLoadingCompletion
+        )
+    }
+
+    func prepareShotCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self, forIndexPath: indexPath, type: .cell)
+        
+        cell.shotImageView.image = nil
+
+        let cellData = shots[indexPath.item]
+        
+        lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
+        cell.gifLabel.isHidden = !cellData.animated
+        
+        return cell
+    }
+
+}
+
 extension CollectionCell: ColorModeAdaptable {
     func adaptColorMode(_ mode: ColorModeType) {
-        backgroundColor = mode.profileDetailsBackgroundColor
         backgroundLabel.textColor = mode.profileDetailsCollectionBackgroundLabelTextColor
         titleLabel.textColor = mode.profileDetailsCollectionTitleLabelTextColor
         counterLabel.textColor = mode.profileDetailsCollectionCounterLabelTextColor
