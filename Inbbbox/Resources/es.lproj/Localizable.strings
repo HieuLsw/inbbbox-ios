@@ -238,6 +238,9 @@
 /* User Settings, show author. */
 "SettingsViewModel.DisplayAuthor" = "Mostrar Autor en la pantalla de inicio";
 
+/* User Settings, language. */
+"SettingsViewModel.Language" = "$Language";
+
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Modo nocturno";
 
@@ -383,3 +386,6 @@
 "Language.Portugal" = "$Portugal";
 "Language.Spanish" = "$Spanish";
 "Language.French" = "$French";
+
+/********* LanguageViewController *********/
+"LanguageViewController.Title" = "$Choose language";

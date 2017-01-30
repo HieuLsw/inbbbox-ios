@@ -47,7 +47,7 @@ fileprivate struct Titles {
     }
 
     static var changeLanguageTitle: String {
-        return Localized("Language", comment: "") // NGRTodo: localization
+        return Localized("SettingsViewModel.Language", comment: "User Settings, language.")
     }
 
     static var nightModeTitle: String {

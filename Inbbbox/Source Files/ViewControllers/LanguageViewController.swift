@@ -15,7 +15,7 @@ class LanguageViewController: UITableViewController {
     init(languages: [Language] = Language.allOptions) {
         self.languages = languages
         super.init(style: UITableViewStyle.grouped)
-        title = "Choose language" // NGRTodo: fix this
+        title = Localized("LanguageViewController.Title", comment: "Title for `choose language` screen.")
     }
 
     @available(*, unavailable, message: "Use init(languages:) instead")

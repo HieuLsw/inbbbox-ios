@@ -232,6 +232,9 @@
 /* User Settings, show author. */
 "SettingsViewModel.DisplayAuthor" = "Pokaż autora pod shotem";
 
+/* User Settings, language. */
+"SettingsViewModel.Language" = "Język";
+
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Tryb nocny";
 
@@ -382,3 +385,6 @@
 "Language.Portugal" = "portugalski";
 "Language.Spanish" = "hiszpański";
 "Language.French" = "francuski";
+
+/********* LanguageViewController *********/
+"LanguageViewController.Title" = "Wybierz język";
