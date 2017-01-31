@@ -5,5 +5,11 @@
     "avatar_url" : "fixture.avatar.url",
     "shots_count" : 1,
     "param_to_omit" : "fixture.param",
-    "type" : "User"
+    "type" : "User",
+    "buckets_count" : 1,
+    "followers_count" : 1,
+    "followings_count" : 1,
+    "projects_count" : 1,
+    "bio" : "fixture.bio",
+    "location" : "fixture.location",
 }
