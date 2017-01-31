@@ -16,8 +16,8 @@ import Foundation
 internal func Localized(_ key: String, comment: String) -> String {
 
     guard
-        LanguageManager.shared.current != .deviceDefault,
-        let path = Bundle.main.path(forResource: LanguageManager.shared.current.rawValue, ofType: "lproj"),
+        Settings.Customization.AppLanguage != .deviceDefault,
+        let path = Bundle.main.path(forResource: Settings.Customization.AppLanguage.rawValue, ofType: "lproj"),
         let bundle = Bundle(path: path)
     else {
         return NSLocalizedString(key, comment: comment)

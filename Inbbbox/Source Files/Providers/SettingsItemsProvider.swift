@@ -92,7 +92,7 @@ struct SettingsItemsProvider {
     let showAuthorItem = SwitchItem(title: Titles.shotAuthorTitle,
                                     enabled: Settings.Customization.ShowAuthor)
 
-    let changeLanguageItem = DetailsItem(title: Titles.changeLanguageTitle, detailString: LanguageManager.shared.current.localizedName)
+    let changeLanguageItem = DetailsItem(title: Titles.changeLanguageTitle, detailString: Settings.Customization.AppLanguage.localizedName)
     
     let nightModeItem = SwitchItem(title: Titles.nightModeTitle, enabled: Settings.Customization.NightMode)
     

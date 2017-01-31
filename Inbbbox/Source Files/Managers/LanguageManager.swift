@@ -35,24 +35,24 @@ enum Language: String {
     }
 }
 
-final class LanguageManager {
-
-    static let shared = LanguageManager()
-
-    fileprivate let key = "app-language-key"
-
-    /// Returns current language set in the app.
-    var current: Language {
-        guard let languageString = UserDefaults.standard.string(forKey: key) else { return .deviceDefault }
-
-        return Language(rawValue: languageString) ?? .deviceDefault
-    }
-
-    /// Sets language for the app.
-    ///
-    /// - Parameter language: Language to set.
-    func set(language: Language) {
-        UserDefaults.standard.setValue(language.rawValue, forKey: key)
-        UserDefaults.standard.synchronize()
-    }
-}
+//final class LanguageManager {
+//
+//    static let shared = LanguageManager()
+//
+//    fileprivate let key = "app-language-key"
+//
+//    /// Returns current language set in the app.
+//    var current: Language {
+//        guard let languageString = UserDefaults.standard.string(forKey: key) else { return .deviceDefault }
+//
+//        return Language(rawValue: languageString) ?? .deviceDefault
+//    }
+//
+//    /// Sets language for the app.
+//    ///
+//    /// - Parameter language: Language to set.
+//    func set(language: Language) {
+//        UserDefaults.standard.setValue(language.rawValue, forKey: key)
+//        UserDefaults.standard.synchronize()
+//    }
+//}
