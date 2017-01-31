@@ -18,7 +18,7 @@ enum Language: String {
 
     /// Returns localized name for language.
     var localizedName: String {
-        return Localized("Language.\(self.rawValue)", comment: "Language name.")
+        return Localized("Language.\(rawValue)", comment: "Language name.")
     }
 
     /// Returns all cases of enum.
