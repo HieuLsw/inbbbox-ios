@@ -173,8 +173,8 @@ private extension SettingsViewController {
     func configureSettingCell(_ cell: UITableViewCell, forItem item: GroupItem) {
         if let item = item as? SwitchItem, let switchCell = cell as? SwitchCell {
             configureSwitchCell(switchCell, forItem: item, withMode: currentColorMode)
-        } else if let item = item as? DateItem, let dateCell = cell as? DetailsCell {
-            configureDateCell(dateCell, forItem: item, withMode: currentColorMode)
+        } else if let item = item as? DateItem, let detailsCell = cell as? DetailsCell {
+            configureDateCell(detailsCell, forItem: item, withMode: currentColorMode)
         } else if let item = item as? DetailsItem, let dateCell = cell as? DetailsCell {
             configureDetailsCell(dateCell, forItem: item, withMode: currentColorMode)
         } else if let item = item as? LabelItem, let labelCell = cell as? LabelCell {

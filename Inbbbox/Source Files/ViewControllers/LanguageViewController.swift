@@ -12,6 +12,9 @@ class LanguageViewController: UITableViewController {
     fileprivate let languages: [Language]
     fileprivate let colorModeProvider = ColorModeProvider.current()
 
+    /// Initializes view controller with list of languages.
+    ///
+    /// - Parameter languages: Languages to initialize view controller with.
     init(languages: [Language] = Language.allOptions) {
         self.languages = languages
         super.init(style: UITableViewStyle.grouped)

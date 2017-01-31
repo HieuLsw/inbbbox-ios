@@ -13,9 +13,13 @@ class DetailsItem: GroupItem {
 
     var highlighted = false
 
+    /// Initializes item with title and detailed string.
+    ///
+    /// - Parameters:
+    ///   - title: Title
+    ///   - detailString: Detailed string.
     init(title: String, detailString: String) {
         self.detailString = detailString
-
         super.init(title: title, category: .details)
     }
 }

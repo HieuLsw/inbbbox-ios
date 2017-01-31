@@ -23,5 +23,5 @@ internal func Localized(_ key: String, comment: String) -> String {
         return NSLocalizedString(key, comment: comment)
     }
 
-    return NSLocalizedString(key, tableName: nil, bundle: bundle, value: "", comment: "")
+    return NSLocalizedString(key, tableName: nil, bundle: bundle, value: "", comment: comment)
 }
