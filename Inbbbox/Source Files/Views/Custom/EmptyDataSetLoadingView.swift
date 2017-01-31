@@ -32,7 +32,7 @@ class EmptyDataSetLoadingView: UIView {
 
         addSubview(ballView)
 
-        label.text = NSLocalizedString("EmptyDataSetLoadingView.Loading", comment: "Loading view, when empty data")
+        label.text = Localized("EmptyDataSetLoadingView.Loading", comment: "Loading view, when empty data")
         label.textColor = .cellBackgroundColor()
         label.font = UIFont.systemFont(ofSize: 25, weight: UIFontWeightMedium)
         label.textAlignment = .center

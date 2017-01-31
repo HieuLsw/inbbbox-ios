@@ -113,7 +113,7 @@ class BucketsCollectionViewController: UICollectionViewController, Support3DTouc
 
     func setupBarButtons() {
         navigationItem.rightBarButtonItem =
-                UIBarButtonItem(title: NSLocalizedString("BucketsCollectionView.AddNew",
+                UIBarButtonItem(title: Localized("BucketsCollectionView.AddNew",
                 comment: "Button for adding new bucket"), style: .plain,
                 target: self, action: #selector(didTapAddNewBucketButton(_:)))
     }
@@ -194,11 +194,11 @@ extension BucketsCollectionViewController: DZNEmptyDataSetSource {
             let emptyDataSetView = EmptyDataSetView.newAutoLayout()
             emptyDataSetView.setDescriptionText(
                 firstLocalizedString:
-                NSLocalizedString("BucketsCollectionViewController.EmptyData.FirstLocalizedString",
+                Localized("BucketsCollectionViewController.EmptyData.FirstLocalizedString",
                         comment: "Displayed when empty data in view"),
                 attachmentImage: UIImage(named: currentColorMode.emptyBucketImageName),
                 imageOffset: CGPoint(x: 0, y: -4),
-                lastLocalizedString: NSLocalizedString("BucketsCollectionViewController.EmptyData.LastLocalizedString",
+                lastLocalizedString: Localized("BucketsCollectionViewController.EmptyData.LastLocalizedString",
                     comment: "Displayed when empty data in view")
             )
             return emptyDataSetView

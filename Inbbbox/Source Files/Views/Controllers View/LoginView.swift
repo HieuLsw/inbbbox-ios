@@ -37,7 +37,7 @@ class LoginView: UIView {
         addSubview(orLabel)
         addSubview(dribbbleLogoImageView)
 
-        loginButton.setTitle(NSLocalizedString("LoginView.LoginButtonTitle", comment: "Title of log in button"),
+        loginButton.setTitle(Localized("LoginView.LoginButtonTitle", comment: "Title of log in button"),
                              for: .normal)
         loginButton.backgroundColor = UIColor.white
         loginButton.layer.cornerRadius = cornerRadius
@@ -49,7 +49,7 @@ class LoginView: UIView {
         loginButton.titleEdgeInsets.right = cornerRadius
         insertSubview(loginButton, belowSubview: dribbbleLogoImageView)
 
-        loginAsGuestButton.setTitle(NSLocalizedString("LoginView.GuestButtonTitle", comment: "Title of guest button"),
+        loginAsGuestButton.setTitle(Localized("LoginView.GuestButtonTitle", comment: "Title of guest button"),
                                     for: .normal)
         loginAsGuestButton.backgroundColor = UIColor.clear
         loginAsGuestButton.layer.cornerRadius = cornerRadius
@@ -59,19 +59,19 @@ class LoginView: UIView {
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
         addSubview(loginAsGuestButton)
 
-        sloganLabel.text = NSLocalizedString("LoginView.Slogan", comment: "Slogan")
+        sloganLabel.text = Localized("LoginView.Slogan", comment: "Slogan")
         sloganLabel.textAlignment = .center
         sloganLabel.textColor = defaultWhiteColor
         sloganLabel.font = UIFont.systemFont(ofSize: 25, weight: UIFontWeightLight)
         addSubview(sloganLabel)
 
-        loadingLabel.text = NSLocalizedString("LoginView.Loading", comment: "")
+        loadingLabel.text = Localized("LoginView.Loading", comment: "")
         loadingLabel.textAlignment = .center
         loadingLabel.textColor = defaultWhiteColor
         loadingLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         addSubview(loadingLabel)
 
-        copyrightlabel.text = NSLocalizedString("LoginView.Copyright", comment:"Describes copyright holder")
+        copyrightlabel.text = Localized("LoginView.Copyright", comment:"Describes copyright holder")
         copyrightlabel.textAlignment = .center
         copyrightlabel.textColor = defaultWhiteColor
         copyrightlabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)

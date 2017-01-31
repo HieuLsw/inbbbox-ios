@@ -70,11 +70,11 @@ class BucketContentViewModel: SimpleShotsViewModel {
     
     func emptyCollectionDescriptionAttributes() -> EmptyCollectionViewDescription {
         let description = EmptyCollectionViewDescription(
-            firstLocalizedString: NSLocalizedString("BucketContent.EmptyData.FirstLocalizedString",
+            firstLocalizedString: Localized("BucketContent.EmptyData.FirstLocalizedString",
                 comment: "BucketContentCollectionView, empty data set view"),
             attachmentImageName: ColorModeProvider.current().emptyBucketImageName,
             imageOffset: CGPoint(x: 0, y: -4),
-            lastLocalizedString: NSLocalizedString("BucketContent.EmptyData.LastLocalizedString",
+            lastLocalizedString: Localized("BucketContent.EmptyData.LastLocalizedString",
                 comment: "BucketContentCollectionView, empty data set view")
         )
         return description

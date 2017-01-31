@@ -12,7 +12,7 @@ import PromiseKit
 class FolloweesViewModel: BaseCollectionViewViewModel {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
-    let title = NSLocalizedString("FolloweesViewModel.Title", comment:"Title of Following screen")
+    let title = Localized("FolloweesViewModel.Title", comment:"Title of Following screen")
     var followees = [Followee]()
     var followeesIndexedShots = [Int: [ShotType]]()
     fileprivate let teamsProvider = APITeamsProvider()
@@ -126,7 +126,7 @@ extension FolloweesViewModel {
         init(followee: Followee, shots: [ShotType]?) {
             self.name = followee.name
             self.avatarURL = followee.avatarURL as URL?
-            self.numberOfShots = String.localizedStringWithFormat(NSLocalizedString("%d shots",
+            self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots",
                     comment: "How many shots in collection?"), followee.shotsCount)
             if let shots = shots, shots.count > 0 {
                 let allShotsImagesURLs = shots.map {

@@ -61,11 +61,11 @@ class ShotsOnboardingStateHandler: NSObject, ShotsStateHandler {
     }
 
     override init() {
-        let step1 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step1", comment: "")
-        let step2 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step2", comment: "")
-        let step3 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step3", comment: "")
-        let step4 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step4", comment: "")
-        let step5 = NSLocalizedString("ShotsOnboardingStateHandler.Onboarding-Step5", comment: "")
+        let step1 = Localized("ShotsOnboardingStateHandler.Onboarding-Step1", comment: "")
+        let step2 = Localized("ShotsOnboardingStateHandler.Onboarding-Step2", comment: "")
+        let step3 = Localized("ShotsOnboardingStateHandler.Onboarding-Step3", comment: "")
+        let step4 = Localized("ShotsOnboardingStateHandler.Onboarding-Step4", comment: "")
+        let step5 = Localized("ShotsOnboardingStateHandler.Onboarding-Step5", comment: "")
         onboardingSteps = [
             (image: UIImage(named: step1), action: ShotCollectionViewCell.Action.like),
             (image: UIImage(named: step2), action: ShotCollectionViewCell.Action.bucket),

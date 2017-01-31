@@ -192,11 +192,11 @@ extension FolloweesCollectionViewController: DZNEmptyDataSetSource {
         } else {
             let emptyDataSetView = EmptyDataSetView.newAutoLayout()
             emptyDataSetView.setDescriptionText(
-                firstLocalizedString: NSLocalizedString("FolloweesCollectionView.EmptyData.FirstLocalizedString",
+                firstLocalizedString: Localized("FolloweesCollectionView.EmptyData.FirstLocalizedString",
                         comment: "FolloweesCollectionView, empty data set view"),
                 attachmentImage: UIImage(named: "ic-following-emptystate"),
                 imageOffset: CGPoint(x: 0, y: -3),
-                lastLocalizedString: NSLocalizedString("FolloweesCollectionView.EmptyData.LastLocalizedString",
+                lastLocalizedString: Localized("FolloweesCollectionView.EmptyData.LastLocalizedString",
                         comment: "FolloweesCollectionView, empty data set view")
             )
             return emptyDataSetView

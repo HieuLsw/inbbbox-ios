@@ -34,9 +34,9 @@ class CommentEditView: UIView {
 
     fileprivate var deleteLabelText: String {
         if isEditing {
-            return NSLocalizedString("CommentEditView.Delete", comment: "Editing comment, delete.")
+            return Localized("CommentEditView.Delete", comment: "Editing comment, delete.")
         } else {
-            return NSLocalizedString("CommentEditView.Report", comment: "Editing comment, report content")
+            return Localized("CommentEditView.Report", comment: "Editing comment, report content")
         }
     }
 
@@ -175,7 +175,7 @@ class CommentEditView: UIView {
     fileprivate func setupCancelLabel() {
         cancelLabel.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         cancelLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
-        cancelLabel.text = NSLocalizedString("CommentEditView.Cancel", comment: "Cancel editing comment.")
+        cancelLabel.text = Localized("CommentEditView.Cancel", comment: "Cancel editing comment.")
         contentView.addSubview(cancelLabel)
     }
 
@@ -189,7 +189,7 @@ class CommentEditView: UIView {
     fileprivate func setupLikeLabel() {
         likeLabel.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         likeLabel.textColor = ColorModeProvider.current().shotDetailsCommentEditLabelTextColor
-        likeLabel.text = NSLocalizedString("CommentEditView.Like",
+        likeLabel.text = Localized("CommentEditView.Like",
                                            comment: "Mark selected comment as liked.")
         contentView.addSubview(likeLabel)
     }

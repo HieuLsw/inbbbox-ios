@@ -13,7 +13,7 @@ import PromiseKit
 class BucketsViewModel: BaseCollectionViewViewModel {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
-    let title = NSLocalizedString("CenterButtonTabBar.Buckets", comment:"Main view, bottom bar & view title")
+    let title = Localized("CenterButtonTabBar.Buckets", comment:"Main view, bottom bar & view title")
     var buckets = [BucketType]()
     var bucketsIndexedShots = [Int: [ShotType]]()
     fileprivate let bucketsProvider = BucketsProvider()
@@ -151,7 +151,7 @@ extension BucketsViewModel {
 
         init(bucket: BucketType, shots: [ShotType]?) {
             self.name = bucket.name
-            self.numberOfShots = String.localizedStringWithFormat(NSLocalizedString("%d shots",
+            self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots",
                     comment: "How many shots in collection?"), bucket.shotsCount)
             if let shots = shots, shots.count > 0 {
                 let allShotsImagesURLs = shots.map {

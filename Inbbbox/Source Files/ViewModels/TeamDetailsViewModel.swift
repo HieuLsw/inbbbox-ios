@@ -77,7 +77,7 @@ extension TeamDetailsViewModel {
         init(user: UserType, shots: [ShotType]?) {
             self.name = user.name
             self.avatarURL = user.avatarURL as URL?
-            self.numberOfShots = String.localizedStringWithFormat(NSLocalizedString("%d shots",
+            self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots",
                 comment: "How many shots in collection?"), user.shotsCount)
             if let shots = shots, shots.count > 0 {
 

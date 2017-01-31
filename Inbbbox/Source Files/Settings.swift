@@ -95,6 +95,12 @@ class Settings {
             get { return Settings.boolForKey(.showAuthorOnHomeScreen) }
             set { Settings.setValue(newValue as AnyObject?, forKey: .showAuthorOnHomeScreen) }
         }
+
+        /// Indicates what language is currently set.
+        static var AppLanguage: Language {
+            get { return Language(rawValue: Settings.stringForKey(.language)) ?? .deviceDefault }
+            set { Settings.setValue(newValue.rawValue as AnyObject?, forKey: .language) }
+        }
         
         /// Indicates if "showing author on homescreen" is enabled.
         static var NightMode: Bool {

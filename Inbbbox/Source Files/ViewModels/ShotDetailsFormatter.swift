@@ -137,7 +137,7 @@ private extension ShotDetailsFormatter {
 
     class func appendAuthorAttributedString(_ mutableAttributedString: NSMutableAttributedString,
                                             author: String) -> NSRange {
-        let prefixString = NSLocalizedString("ShotDetailsFormatter.By",
+        let prefixString = Localized("ShotDetailsFormatter.By",
                 comment: "Preposition describing author of shot.")
         let bigFont = UIFont.systemFont(ofSize: ShotDetailsFormatterBigFontSize)
         let smallFont = UIFont.systemFont(ofSize: ShotDetailsFormatterSmallFontSize)
@@ -155,7 +155,7 @@ private extension ShotDetailsFormatter {
     }
 
     class func appendTeamAttributedString(_ mutableAttributedString: NSMutableAttributedString, team: String) -> NSRange {
-        let prefixString = NSLocalizedString("ShotDetailsFormatter.For",
+        let prefixString = Localized("ShotDetailsFormatter.For",
                 comment: "Preposition describing for who shot was made.")
         let font = UIFont.systemFont(ofSize: ShotDetailsFormatterBigFontSize)
         let teamAttributedString = NSMutableAttributedString(
@@ -173,7 +173,7 @@ private extension ShotDetailsFormatter {
     }
 
     class func appendDateAttributedString(_ mutableAttributedString: NSMutableAttributedString, dateSting: String) {
-        let prefixString = NSLocalizedString("ShotDetailsFormatter.On",
+        let prefixString = Localized("ShotDetailsFormatter.On",
                 comment: "Preposition describing when shot was made.")
         let font = UIFont.systemFont(ofSize: ShotDetailsFormatterSmallFontSize)
         let dateAttributedString = NSAttributedString(

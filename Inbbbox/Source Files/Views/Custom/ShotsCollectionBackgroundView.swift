@@ -72,7 +72,7 @@ class ShotsCollectionBackgroundView: UIView {
         setupShowingYouLabel()
         setupSkipButton()
         
-        showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
+        showingYouLabel.text = Localized("BackgroundView.ShowingYou", comment: "Showing You title")
         showingYouLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
         showingYouLabel.alpha = 0
@@ -149,10 +149,10 @@ extension ShotsCollectionBackgroundView {
 fileprivate extension ShotsCollectionBackgroundView {
 
     func setupItems() {
-        followingItem.label.text = NSLocalizedString("SettingsViewModel.Following", comment: "User settings, enable following")
-        newTodayItem.label.text = NSLocalizedString("SettingsViewModel.NewToday", comment: "User settings, enable new today")
-        popularTodayItem.label.text = NSLocalizedString("SettingsViewModel.Popular", comment: "User settings, enable popular")
-        debutsItem.label.text = NSLocalizedString("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
+        followingItem.label.text = Localized("SettingsViewModel.Following", comment: "User settings, enable following")
+        newTodayItem.label.text = Localized("SettingsViewModel.NewToday", comment: "User settings, enable new today")
+        popularTodayItem.label.text = Localized("SettingsViewModel.Popular", comment: "User settings, enable popular")
+        debutsItem.label.text = Localized("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
         for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
             item.label.textAlignment = .center
             item.label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
@@ -164,7 +164,7 @@ fileprivate extension ShotsCollectionBackgroundView {
     }
     
     func setupShowingYouLabel() {
-        showingYouLabel.text = NSLocalizedString("BackgroundView.ShowingYou", comment: "Showing You title")
+        showingYouLabel.text = Localized("BackgroundView.ShowingYou", comment: "Showing You title")
         showingYouLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         showingYouLabel.textColor = UIColor.RGBA(98, 109, 104, 0.9)
         showingYouLabel.alpha = 0
@@ -172,7 +172,7 @@ fileprivate extension ShotsCollectionBackgroundView {
     }
     
     func setupSkipButton() {
-        skipButton.setTitle(NSLocalizedString("ShotsOnboardingStateHandler.Skip", comment: "Onboarding user is skipping step"), for: .normal)
+        skipButton.setTitle(Localized("ShotsOnboardingStateHandler.Skip", comment: "Onboarding user is skipping step"), for: .normal)
         skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightLight)
         skipButton.setTitleColor(UIColor.black, for: .normal)
         skipButton.isHidden = true
