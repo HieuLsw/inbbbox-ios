@@ -36,6 +36,9 @@ extension LanguageViewController {
         let cell = UITableViewCell()
         cell.textLabel?.text = languages[indexPath.row].localizedName
         cell.textLabel?.textColor = colorModeProvider.tableViewCellTextColor
+        if languages[indexPath.row] == LanguageManager.shared.current {
+            cell.textLabel?.font = .boldSystemFont(ofSize: 17)
+        }
         return cell
     }
 }
@@ -45,6 +48,11 @@ extension LanguageViewController {
 extension LanguageViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        guard languages[indexPath.row] != LanguageManager.shared.current else {
+            _ = navigationController?.popViewController(animated: true)
+            return
+        }
 
         LanguageManager.shared.set(language: languages[indexPath.row])
         UIApplication.shared.keyWindow?.rootViewController = CenterButtonTabBarController()
