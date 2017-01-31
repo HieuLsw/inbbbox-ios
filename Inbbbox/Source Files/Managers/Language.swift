@@ -12,7 +12,7 @@ enum Language: String {
     case english = "en"
     case polish = "pl"
     case german = "de"
-    case portugal = "pt-PT"
+    case portuguese = "pt-PT"
     case spanish = "es"
     case french = "fr"
 
@@ -23,6 +23,6 @@ enum Language: String {
 
     /// Returns all cases of enum.
     static var allOptions: [Language] {
-        return [.deviceDefault, .english, .polish, .german, .portugal, .spanish, .french]
+        return [.deviceDefault, .english, .polish, .german, .portuguese, .spanish, .french]
     }
 }
