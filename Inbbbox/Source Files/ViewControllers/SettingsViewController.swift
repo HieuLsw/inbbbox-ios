@@ -155,7 +155,7 @@ extension SettingsViewController {
             labelItem.onSelect?()
         }
 
-        if let _ = item as? DetailsItem {
+        if item is DetailsItem {
             navigationController?.pushViewController(LanguageViewController(), animated: true)
         }
         tableView.deselectRowIfSelectedAnimated(true)
