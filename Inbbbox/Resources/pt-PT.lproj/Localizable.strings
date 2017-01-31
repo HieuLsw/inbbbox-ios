@@ -378,13 +378,13 @@
 "ProfileMenuBarView.Buckets" = "Os catálogos";
 
 /********* Language *********/
-"Language.Default" = "$Default";
-"Language.English" = "$English";
-"Language.Polish" = "$Polish";
-"Language.German" = "$German";
-"Language.Portugal" = "$Portugal";
-"Language.Spanish" = "$Spanish";
-"Language.French" = "$French";
+"Language.default" = "$Default";
+"Language.en" = "$English";
+"Language.pl" = "$Polish";
+"Language.de" = "$German";
+"Language.pt-PT" = "$Portugal";
+"Language.es" = "$Spanish";
+"Language.fr" = "$French";
 
 /********* LanguageViewController *********/
 "LanguageViewController.Title" = "$Choose language";

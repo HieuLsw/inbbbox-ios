@@ -378,13 +378,13 @@
 "ProfileMenuBarView.Buckets" = "Katalogi";
 
 /********* Language *********/
-"Language.Default" = "domyślny";
-"Language.English" = "angielski";
-"Language.Polish" = "polski";
-"Language.German" = "niemiecki";
-"Language.Portugal" = "portugalski";
-"Language.Spanish" = "hiszpański";
-"Language.French" = "francuski";
+"Language.default" = "domyślny";
+"Language.en" = "angielski";
+"Language.pl" = "polski";
+"Language.de" = "niemiecki";
+"Language.pt-PT" = "portugalski";
+"Language.es" = "hiszpański";
+"Language.fr" = "francuski";
 
 /********* LanguageViewController *********/
 "LanguageViewController.Title" = "Wybierz język";
