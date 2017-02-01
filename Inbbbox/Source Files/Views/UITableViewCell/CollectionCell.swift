@@ -21,7 +21,9 @@ class CollectionCell: UITableViewCell, Reusable {
     let backgroundLabel = UILabel.newAutoLayout()
     let titleLabel = TTTAttributedLabel.newAutoLayout()
     let counterLabel = UILabel.newAutoLayout()
-    fileprivate var collectionView: UICollectionView
+    var collectionView: UICollectionView
+    
+    var isRegisteredTo3DTouch = false
     
     fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
     fileprivate var didSetConstraints = false
