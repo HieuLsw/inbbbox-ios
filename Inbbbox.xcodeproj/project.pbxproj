@@ -949,6 +949,7 @@
 		F035ECF01E3F685B003A8348 /* LanguageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		F03764FB1CBB9F81008183F3 /* LazyImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImageProvider.swift; sourceTree = "<group>"; };
 		F049C867F1FCCDB672E8597F /* CoreDataHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		F066714B1E40C22D00088503 /* StoreData 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "StoreData 4.xcdatamodel"; sourceTree = "<group>"; };
 		F077D0931CD23457008948A9 /* URLDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLDetector.swift; sourceTree = "<group>"; };
 		F0B898D61CC0F189004A807C /* GalleryViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewProvider.swift; sourceTree = "<group>"; };
 		F0BEBDD41CD789C400AA391C /* ShotDetailsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -3190,11 +3191,12 @@
 		19A3E5B1B1A9AD6E5FBE2E43 /* StoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F066714B1E40C22D00088503 /* StoreData 4.xcdatamodel */,
 				C69FEDFB1E2C2D5F004846E7 /* StoreData 3.xcdatamodel */,
 				C61B8B8F1DD9EA2700D94867 /* StoreData 2.xcdatamodel */,
 				6BF2D11C762B7A43AD0B9880 /* StoreData.xcdatamodel */,
 			);
-			currentVersion = C69FEDFB1E2C2D5F004846E7 /* StoreData 3.xcdatamodel */;
+			currentVersion = F066714B1E40C22D00088503 /* StoreData 4.xcdatamodel */;
 			path = StoreData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
