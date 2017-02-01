@@ -1,17 +1,16 @@
 //
-//  DateCell.swift
+//  DetailsCell.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 18/12/15.
 //  Copyright © 2015 Netguru Sp. z o.o. All rights reserved.
 //
 
 import UIKit
 import PureLayout
 
-class DateCell: UITableViewCell, Reusable {
+class DetailsCell: UITableViewCell, Reusable {
 
-    let dateLabel = UILabel.newAutoLayout()
+    let detailLabel = UILabel.newAutoLayout()
     let titleLabel = UILabel.newAutoLayout()
 
     fileprivate var didSetConstraints = false
@@ -25,9 +24,9 @@ class DateCell: UITableViewCell, Reusable {
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 
-        dateLabel.textColor = UIColor.followeeTextGrayColor()
-        dateLabel.textAlignment = .right
-        contentView.addSubview(dateLabel)
+        detailLabel.textColor = UIColor.followeeTextGrayColor()
+        detailLabel.textAlignment = .right
+        contentView.addSubview(detailLabel)
 
         setNeedsUpdateConstraints()
     }
@@ -44,20 +43,20 @@ class DateCell: UITableViewCell, Reusable {
             titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
             titleLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
 
-            dateLabel.autoPinEdge(.leading, to: .trailing, of: titleLabel, withOffset: 5)
-            dateLabel.autoPinEdge(toSuperviewEdge: .trailing)
-            dateLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 12)
+            detailLabel.autoPinEdge(.leading, to: .trailing, of: titleLabel, withOffset: 5)
+            detailLabel.autoPinEdge(toSuperviewEdge: .trailing)
+            detailLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 12)
         }
 
         super.updateConstraints()
     }
 
-    func setDateText(_ text: String) {
-        dateLabel.text = text
+    func setDetailText(_ text: String) {
+        detailLabel.text = text
     }
 }
 
-extension DateCell: ColorModeAdaptable {
+extension DetailsCell: ColorModeAdaptable {
     func adaptColorMode(_ mode: ColorModeType) {
         titleLabel.textColor = mode.tableViewCellTextColor
         selectedBackgroundView = UIView.withColor(mode.settingsSelectedCellBackgound)

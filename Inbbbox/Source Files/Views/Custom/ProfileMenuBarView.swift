@@ -31,11 +31,11 @@ class ProfileMenuBarView: UIView {
 
         deselectAllItems()
 
-        shotsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Shots", comment: "Shots card title."), for: .normal)
-        teamButton.setTitle(NSLocalizedString("ProfileMenuBarView.Team", comment: "Team card title."), for: .normal)
-        infoButton.setTitle(NSLocalizedString("ProfileMenuBarView.Info", comment: "Info card title."), for: .normal)
-        projectsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Projects", comment: "Projects card title."), for: .normal)
-        bucketsButton.setTitle(NSLocalizedString("ProfileMenuBarView.Buckets", comment: "Buckets card title."), for: .normal)
+        shotsButton.setTitle(Localized("ProfileMenuBarView.Shots", comment: "Shots card title."), for: .normal)
+        teamButton.setTitle(Localized("ProfileMenuBarView.Team", comment: "Team card title."), for: .normal)
+        infoButton.setTitle(Localized("ProfileMenuBarView.Info", comment: "Info card title."), for: .normal)
+        projectsButton.setTitle(Localized("ProfileMenuBarView.Projects", comment: "Projects card title."), for: .normal)
+        bucketsButton.setTitle(Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title."), for: .normal)
 
         [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)

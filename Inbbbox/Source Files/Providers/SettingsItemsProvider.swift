@@ -9,30 +9,62 @@
 import Foundation
 
 fileprivate struct Titles {
-    
-    static let createAccountTitle = NSLocalizedString("SettingsViewModel.CreateAccount",
-                                                           comment: "Button text allowing user to create new account.")
-    static let showMyProfileTitle = NSLocalizedString("SettingsViewModel.ShowMyProfile",
-                                                           comment: "Button text allowing user to see his profile.")
-    static let reminderTitle = NSLocalizedString("SettingsViewModel.EnableDailyReminders",
-                                                      comment: "User settings, enable daily reminders")
-    static let reminderDateTitle = NSLocalizedString("SettingsViewModel.SendDailyReminders",
-                                                          comment: "User settings, send daily reminders")
-    static let followingStreamSourceTitle = NSLocalizedString("SettingsViewModel.Following",
-                                                                   comment: "User settings, enable following")
-    static let newTodayStreamSourceTitle = NSLocalizedString("SettingsViewModel.NewToday",
-                                                                  comment: "User settings, enable new today.")
-    static let popularTodayStreamSourceTitle = NSLocalizedString("SettingsViewModel.Popular",
-                                                                      comment: "User settings, enable popular today.")
-    static let debutsStreamSourceTitle = NSLocalizedString("SettingsViewModel.Debuts",
-                                                                comment: "User settings, show debuts.")
-    static let shotAuthorTitle = NSLocalizedString("SettingsViewModel.DisplayAuthor",
-                                                        comment: "User Settings, show author.")
-    static let nightModeTitle = NSLocalizedString("SettingsViewModel.NightMode", comment: "User Settings, night mode.")
-    static let autoNightModeTitle = NSLocalizedString("SettingsViewModel.AutoNightMode", comment: "User Settings, auto night mode.")
-    static let sendFeedbackTitle = NSLocalizedString("SettingsViewModel.SendFeedback",
-                                                          comment: "User Settings, send settings.")
-    static let acknowledgementsTitle = NSLocalizedString("SettingsViewModel.AcknowledgementsButton", comment: "Acknowledgements button")
+
+    static var createAccountTitle: String {
+        return Localized("SettingsViewModel.CreateAccount", comment: "Button text allowing user to create new account.")
+    }
+
+    static var showMyProfileTitle: String {
+        return Localized("SettingsViewModel.ShowMyProfile", comment: "Button text allowing user to see his profile.")
+    }
+
+    static var reminderTitle: String {
+        return Localized("SettingsViewModel.EnableDailyReminders", comment: "User settings, enable daily reminders")
+    }
+
+    static var reminderDateTitle: String {
+        return Localized("SettingsViewModel.SendDailyReminders", comment: "User settings, send daily reminders")
+    }
+
+    static var followingStreamSourceTitle: String {
+        return Localized("SettingsViewModel.Following", comment: "User settings, enable following")
+    }
+
+    static var newTodayStreamSourceTitle: String {
+        return Localized("SettingsViewModel.NewToday", comment: "User settings, enable new today.")
+    }
+
+    static var popularTodayStreamSourceTitle: String {
+        return Localized("SettingsViewModel.Popular", comment: "User settings, enable popular today.")
+    }
+
+    static var debutsStreamSourceTitle: String {
+        return Localized("SettingsViewModel.Debuts", comment: "User settings, show debuts.")
+    }
+
+    static var shotAuthorTitle: String {
+        return Localized("SettingsViewModel.DisplayAuthor", comment: "User Settings, show author.")
+    }
+
+    static var changeLanguageTitle: String {
+        return Localized("SettingsViewModel.Language", comment: "User Settings, language.")
+    }
+
+    static var nightModeTitle: String {
+        return Localized("SettingsViewModel.NightMode", comment: "User Settings, night mode.")
+    }
+
+    static var autoNightModeTitle: String {
+        return Localized("SettingsViewModel.AutoNightMode", comment: "User Settings, auto night mode.")
+    }
+
+    static var sendFeedbackTitle: String {
+        return Localized("SettingsViewModel.SendFeedback", comment: "User Settings, send settings.")
+    }
+
+    static var acknowledgementsTitle: String {
+        return Localized("SettingsViewModel.AcknowledgementsButton", comment: "Acknowledgements button")
+    }
 }
 
 struct SettingsItemsProvider {
@@ -59,6 +91,8 @@ struct SettingsItemsProvider {
     
     let showAuthorItem = SwitchItem(title: Titles.shotAuthorTitle,
                                     enabled: Settings.Customization.ShowAuthor)
+
+    let changeLanguageItem = DetailsItem(title: Titles.changeLanguageTitle, detailString: Settings.Customization.AppLanguage.localizedName)
     
     let nightModeItem = SwitchItem(title: Titles.nightModeTitle, enabled: Settings.Customization.NightMode)
     

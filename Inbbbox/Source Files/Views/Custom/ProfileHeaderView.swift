@@ -25,9 +25,9 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
     var userFollowed: Bool? {
         didSet {
             let title = userFollowed! ?
-                    NSLocalizedString("ProfileHeaderView.Unfollow",
+                    Localized("ProfileHeaderView.Unfollow",
                             comment: "Allows user to unfollow another user.") :
-                    NSLocalizedString("ProfileHeaderView.Follow",
+                    Localized("ProfileHeaderView.Follow",
                             comment: "Allows user to follow another user.")
             button.setTitle(title, for: UIControlState())
         }

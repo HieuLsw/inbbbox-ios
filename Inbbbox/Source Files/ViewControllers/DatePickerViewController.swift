@@ -39,7 +39,7 @@ class DatePickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = NSLocalizedString("DatePickerViewController.SetReminder",
+        title = Localized("DatePickerViewController.SetReminder",
                 comment: "Button title when users accepts selected date for reminder.")
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,

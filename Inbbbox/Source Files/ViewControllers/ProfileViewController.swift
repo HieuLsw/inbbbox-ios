@@ -127,7 +127,7 @@ private extension ProfileViewController {
     func setupBackButton() {
         if isModal {
             let attributedString = NSMutableAttributedString(
-                string: NSLocalizedString("Profile.BackButton",
+                string: Localized("Profile.BackButton",
                                           comment: "Back button, user details"),
                 attributes: [NSForegroundColorAttributeName: UIColor.white])
             let textAttachment = NSTextAttachment()

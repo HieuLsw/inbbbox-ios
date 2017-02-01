@@ -40,10 +40,10 @@ class ShotBucketsViewModel {
     var titleForHeader: String {
         switch shotBucketsViewControllerMode {
         case .addToBucket:
-            return NSLocalizedString("ShotBucketsViewModel.AddToBucket",
+            return Localized("ShotBucketsViewModel.AddToBucket",
                     comment: "Allows user to add shot to bucket")
         case .removeFromBucket:
-            return NSLocalizedString("ShotBucketsViewModel.RemoveFromBucket",
+            return Localized("ShotBucketsViewModel.RemoveFromBucket",
                     comment: "Allows user to remove shot from bucket")
         }
     }
@@ -51,10 +51,10 @@ class ShotBucketsViewModel {
     var titleForActionItem: String {
         switch shotBucketsViewControllerMode {
         case .addToBucket:
-            return NSLocalizedString("ShotBucketsViewModel.NewBucket",
+            return Localized("ShotBucketsViewModel.NewBucket",
                     comment: "Allows user to create new bucket")
         case .removeFromBucket:
-            return NSLocalizedString("ShotBucketsViewModel.RemoveFromSelectedBuckets",
+            return Localized("ShotBucketsViewModel.RemoveFromSelectedBuckets",
                     comment: "Allows user to remove from multiple backets")
         }
     }
@@ -168,7 +168,7 @@ class ShotBucketsViewModel {
 
     func displayableDataForBucketAtIndex(_ index: Int) -> (bucketName: String, shotsCountText: String) {
         let bucket = buckets[index]
-        let localizedString = NSLocalizedString("%d shots", comment: "How many shots in collection?")
+        let localizedString = Localized("%d shots", comment: "How many shots in collection?")
         let shotsCountText = String.localizedStringWithFormat(localizedString, bucket.shotsCount)
 
         return (bucketName: bucket.name, shotsCountText: shotsCountText)

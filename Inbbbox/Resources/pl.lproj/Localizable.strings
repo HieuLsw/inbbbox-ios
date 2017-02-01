@@ -232,6 +232,9 @@
 /* User Settings, show author. */
 "SettingsViewModel.DisplayAuthor" = "Pokaż autora pod shotem";
 
+/* User Settings, language. */
+"SettingsViewModel.Language" = "Język";
+
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Tryb nocny";
 
@@ -373,3 +376,15 @@
 "ProfileMenuBarView.Info" = "Info";
 "ProfileMenuBarView.Projects" = "Projekty";
 "ProfileMenuBarView.Buckets" = "Katalogi";
+
+/********* Language *********/
+"Language.default" = "domyślny";
+"Language.en" = "angielski";
+"Language.pl" = "polski";
+"Language.de" = "niemiecki";
+"Language.pt-PT" = "portugalski";
+"Language.es" = "hiszpański";
+"Language.fr" = "francuski";
+
+/********* LanguageViewController *********/
+"LanguageViewController.Title" = "Wybierz język";

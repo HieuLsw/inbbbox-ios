@@ -238,6 +238,9 @@
 /* User Settings, show author. */
 "SettingsViewModel.DisplayAuthor" = "Zeige den Autoren auf dem Hauptbildschirm an";
 
+/* User Settings, language. */
+"SettingsViewModel.Language" = "$Language";
+
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Nachtmodus";
 
@@ -373,3 +376,15 @@
 "ProfileMenuBarView.Info" = "$Info";
 "ProfileMenuBarView.Projects" = "$Projects";
 "ProfileMenuBarView.Buckets" = "Album";
+
+/********* Language *********/
+"Language.default" = "$Default";
+"Language.en" = "$English";
+"Language.pl" = "$Polish";
+"Language.de" = "$German";
+"Language.pt-PT" = "$Portugal";
+"Language.es" = "$Spanish";
+"Language.fr" = "$French";
+
+/********* LanguageViewController *********/
+"LanguageViewController.Title" = "$Choose language";

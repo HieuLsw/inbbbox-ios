@@ -395,13 +395,13 @@ class ShotCollectionViewCell: UICollectionViewCell, Reusable {
     fileprivate func displayMessageBasedOnAction(_ action: Action) {
         switch action {
         case .like:
-            messageLabel.text = NSLocalizedString("ShotCollectionCell.Like", comment: "Shown when user perform like action")
+            messageLabel.text = Localized("ShotCollectionCell.Like", comment: "Shown when user perform like action")
         case .bucket:
-            messageLabel.text = NSLocalizedString("ShotCollectionCell.Bucket", comment: "Shown when user perform add to bucket action")
+            messageLabel.text = Localized("ShotCollectionCell.Bucket", comment: "Shown when user perform add to bucket action")
         case .comment:
-            messageLabel.text = NSLocalizedString("ShotCollectionCell.Comment", comment: "Shown when user perform comment action")
+            messageLabel.text = Localized("ShotCollectionCell.Comment", comment: "Shown when user perform comment action")
         case .follow:
-            messageLabel.text = NSLocalizedString("ShotCollectionCell.Follow", comment: "Shown when user perform follow action")
+            messageLabel.text = Localized("ShotCollectionCell.Follow", comment: "Shown when user perform follow action")
         case .doNothing:
             messageLabel.text = ""
         }
