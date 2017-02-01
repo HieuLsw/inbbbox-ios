@@ -311,6 +311,8 @@ class ShotCollectionViewCell: UICollectionViewCell, Reusable {
                 self.likeImageView.displayFirstImageView()
             })
         case bucketActionRange.min ..< CGFloat.greatestFiniteMagnitude where bucketImageView.isFirstImageVisible:
+            commentImageView.isHidden = true
+            followImageView.isHidden = true
             UIView.animate(animations: {
                 self.bucketImageView.displaySecondImageView()
             })
@@ -329,6 +331,8 @@ class ShotCollectionViewCell: UICollectionViewCell, Reusable {
                 self.commentImageView.displaySecondImageView()
             })
         case followActionRange.mid ... followActionRange.max where followImageView.isSelfOrSecondImageVisible:
+            bucketImageView.isHidden = true
+            plusImageView.isHidden = true
             UIView.animate(animations: {
                 self.displayFollow()
                 self.followImageView.displayFirstImageView()
