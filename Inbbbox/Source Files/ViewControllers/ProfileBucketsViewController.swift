@@ -21,7 +21,6 @@ class ProfileBucketsViewController: UITableViewController {
         
         viewModel = ProfileBucketsViewModel(user: user)
         viewModel.delegate = self
-        viewModel.downloadInitialItems()
     }
     
     @available(*, unavailable, message: "Use init(user:) instead")
@@ -40,8 +39,9 @@ class ProfileBucketsViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 140
         tableView.separatorStyle = .none
-        
         tableView.registerClass(CollectionCell.self)
+        
+        viewModel.downloadInitialItems()
     }
 }
 
@@ -50,7 +50,7 @@ class ProfileBucketsViewController: UITableViewController {
 extension ProfileBucketsViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.itemsCount;
+        return viewModel.itemsCount
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,9 +80,7 @@ private extension ProfileBucketsViewController {
         cell.titleLabel.text = cellData.name
         cell.backgroundLabel.text = cellData.name
         cell.counterLabel.text = cellData.numberOfShots
-        if let shots = cellData.shots {
-            cell.shots = shots
-        }
+        cell.shots = cellData.shots
         
         return cell
     }

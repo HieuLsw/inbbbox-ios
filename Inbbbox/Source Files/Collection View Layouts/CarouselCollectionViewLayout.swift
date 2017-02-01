@@ -30,7 +30,7 @@ final class CarouselCollectionViewLayout: UICollectionViewLayout {
         super.prepare()
         
         let collectionViewSize = collectionView!.bounds.size
-        leftRightMargin = (collectionViewSize.width - itemSize.width) / 2
+        leftRightMargin = CGFloat(28)
         topBottomMargin = (collectionViewSize.height - itemSize.height) / 2
     }
     

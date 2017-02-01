@@ -11,18 +11,24 @@ import TTTAttributedLabel
 
 class CollectionCell: UITableViewCell, Reusable {
     
-    var shots = [ShotType]()
+    var shots: [ShotType]? {
+        didSet {
+            collectionView.reloadData()
+            collectionView.scrollRectToVisible(CGRect.zero, animated: false)
+        }
+    }
     
     let backgroundLabel = UILabel.newAutoLayout()
     let titleLabel = TTTAttributedLabel.newAutoLayout()
     let counterLabel = UILabel.newAutoLayout()
     fileprivate var collectionView: UICollectionView
     
+    fileprivate var indexPathsNeededImageUpdate = [IndexPath]()
     fileprivate var didSetConstraints = false
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
-        collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: CarouselCollectionViewLayout())
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -68,18 +74,28 @@ class CollectionCell: UITableViewCell, Reusable {
             collectionView.autoPinEdge(toSuperviewEdge: .leading)
             collectionView.autoPinEdge(toSuperviewEdge: .trailing)
             collectionView.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 2)
-            collectionView.autoPinEdge(toSuperviewEdge: .bottom)
+            collectionView.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
             collectionView.autoSetDimension(.height, toSize: 113)
         }
         
         super.updateConstraints()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        shots = nil
+        indexPathsNeededImageUpdate = [IndexPath]()
     }
 }
 
 extension CollectionCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return shots.count
+        if let shots = shots {
+            return shots.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -94,7 +110,12 @@ private extension CollectionCell {
 
     func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
                        atIndexPath indexPath: IndexPath) {
-        let imageLoadingCompletion: (UIImage) -> Void = { image in
+        let imageLoadingCompletion: (UIImage) -> Void = { [weak self] image in
+            
+            guard let certainSelf = self, certainSelf.indexPathsNeededImageUpdate.contains(indexPath) else {
+                return
+            }
+            
             cell.shotImageView.image = image
         }
         LazyImageProvider.lazyLoadImageFromURLs(
@@ -103,15 +124,18 @@ private extension CollectionCell {
             normalImageCompletion: imageLoadingCompletion
         )
     }
-
+    
     func prepareShotCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self, forIndexPath: indexPath, type: .cell)
         
-        cell.shotImageView.image = nil
-
+        guard let shots = shots else {
+            cell.gifLabel.isHidden = true
+            return cell
+        }
         let cellData = shots[indexPath.item]
         
+        indexPathsNeededImageUpdate.append(indexPath)
         lazyLoadImage(cellData.shotImage, forCell: cell, atIndexPath: indexPath)
         cell.gifLabel.isHidden = !cellData.animated
         
