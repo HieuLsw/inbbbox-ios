@@ -41,6 +41,7 @@ struct ManagedObjectsProvider {
         managedShot.mngd_viewsCount = shot.viewsCount
         managedShot.mngd_commentsCount = shot.commentsCount
         managedShot.mngd_bucketsCount = shot.bucketsCount
+        managedShot.mngd_htmlUrl = shot.htmlUrl
         if let team = shot.team {
             managedShot.mngd_team = managedTeam(team)
         }
@@ -66,6 +67,12 @@ struct ManagedObjectsProvider {
         managedUser.mngd_avatarURL = user.avatarURL?.absoluteString
         managedUser.mngd_shotsCount = user.shotsCount
         managedUser.mngd_accountType = user.accountType?.rawValue
+        managedUser.mngd_followersCount = user.followersCount
+        managedUser.mngd_followingsCount = user.followingsCount
+        managedUser.mngd_projectsCount = user.projectsCount
+        managedUser.mngd_bucketsCount = user.bucketsCount
+        managedUser.mngd_bio = user.bio
+        managedUser.mngd_location = user.location
         return managedUser
     }
 

@@ -54,6 +54,30 @@ class UserSpec: QuickSpec {
             it("user's shots count should be properly mapped") {
                 expect(sut.shotsCount).to(equal(1))
             }
+
+            it("user's buckets count should be properly mapped") {
+                expect(sut.bucketsCount).to(equal(1))
+            }
+
+            it("user's followers count should be properly mapped") {
+                expect(sut.followersCount).to(equal(1))
+            }
+
+            it("user's followings count should be properly mapped") {
+                expect(sut.followingsCount).to(equal(1))
+            }
+
+            it("user's projects count should be properly mapped") {
+                expect(sut.projectsCount).to(equal(1))
+            }
+
+            it("user's bio should be properly mapped") {
+                expect(sut.bio).to(equal("fixture.bio"))
+            }
+
+            it("user's location should be properly mapped") {
+                expect(sut.location).to(equal("fixture.location"))
+            }
         }
         
         describe("when encoding user") {
@@ -98,7 +122,31 @@ class UserSpec: QuickSpec {
                 }
                 
                 it("user's shots count should be properly mapped") {
-                    expect(sut.shotsCount).to(equal(1))
+                    expect(sut.shotsCount).to(equal(decodedUser!.shotsCount))
+                }
+
+                it("user's buckets count should be properly mapped") {
+                    expect(sut.bucketsCount).to(equal(decodedUser!.bucketsCount))
+                }
+
+                it("user's followers count should be properly mapped") {
+                    expect(sut.followersCount).to(equal(decodedUser!.followersCount))
+                }
+
+                it("user's followings count should be properly mapped") {
+                    expect(sut.followingsCount).to(equal(decodedUser!.followingsCount))
+                }
+
+                it("user's projects count should be properly mapped") {
+                    expect(sut.projectsCount).to(equal(decodedUser!.projectsCount))
+                }
+
+                it("user's bio should be properly mapped") {
+                    expect(sut.bio).to(equal(decodedUser!.bio))
+                }
+
+                it("user's location should be properly mapped") {
+                    expect(sut.location).to(equal(decodedUser!.location))
                 }
             }
         }
