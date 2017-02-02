@@ -57,7 +57,7 @@ final class User: NSObject, UserType {
         followingsCount = aDecoder.decodeObject(forKey: Key.followingsCount.rawValue) as? UInt ?? 0
         projectsCount = aDecoder.decodeObject(forKey: Key.projectsCount.rawValue) as? UInt ?? 0
         bucketsCount = aDecoder.decodeObject(forKey: Key.bucketsCount.rawValue) as? UInt ?? 0
-        isPro =  aDecoder.decodeObject(forKey: Key.pro.rawValue) as? Bool ?? false
+        isPro =  aDecoder.decodeBool(forKey: Key.pro.rawValue)
         bio = aDecoder.decodeObject(forKey: Key.bio.rawValue) as? String ?? ""
         location = aDecoder.decodeObject(forKey: Key.location.rawValue) as? String ?? ""
     }
