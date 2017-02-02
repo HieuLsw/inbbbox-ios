@@ -21,6 +21,7 @@ final class User: NSObject, UserType {
     let followingsCount: UInt
     let projectsCount: UInt
     let bucketsCount: UInt
+    let isPro: Bool
     let bio: String
     let location: String
 
@@ -35,6 +36,7 @@ final class User: NSObject, UserType {
         followingsCount = json[Key.followingsCount.rawValue].uIntValue
         projectsCount = json[Key.projectsCount.rawValue].uIntValue
         bucketsCount = json[Key.bucketsCount.rawValue].uIntValue
+        isPro = json[Key.pro.rawValue].boolValue
         bio = json[Key.bio.rawValue].stringValue
         location = json[Key.location.rawValue].stringValue
     }
@@ -55,6 +57,7 @@ final class User: NSObject, UserType {
         followingsCount = aDecoder.decodeObject(forKey: Key.followingsCount.rawValue) as? UInt ?? 0
         projectsCount = aDecoder.decodeObject(forKey: Key.projectsCount.rawValue) as? UInt ?? 0
         bucketsCount = aDecoder.decodeObject(forKey: Key.bucketsCount.rawValue) as? UInt ?? 0
+        isPro =  aDecoder.decodeObject(forKey: Key.pro.rawValue) as? Bool ?? false
         bio = aDecoder.decodeObject(forKey: Key.bio.rawValue) as? String ?? ""
         location = aDecoder.decodeObject(forKey: Key.location.rawValue) as? String ?? ""
     }
@@ -70,6 +73,7 @@ final class User: NSObject, UserType {
         aCoder.encode(followingsCount, forKey: Key.followingsCount.rawValue)
         aCoder.encode(projectsCount, forKey: Key.projectsCount.rawValue)
         aCoder.encode(bucketsCount, forKey: Key.bucketsCount.rawValue)
+        aCoder.encode(isPro, forKey: Key.pro.rawValue)
         aCoder.encode(bio, forKey: Key.bio.rawValue)
         aCoder.encode(location, forKey: Key.location.rawValue)
     }
@@ -88,6 +92,7 @@ private extension User {
         case followingsCount = "followings_count"
         case projectsCount = "projects_count"
         case bucketsCount = "buckets_count"
+        case pro = "pro"
         case bio = "bio"
         case location = "location"
     }

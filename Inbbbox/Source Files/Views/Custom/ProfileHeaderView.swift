@@ -18,6 +18,12 @@ private var margin: CGFloat {
 
 class ProfileHeaderView: UICollectionReusableView, Reusable {
 
+    enum BagdeType: String {
+        case pro = "PRO"
+        case team = "Team"
+    }
+
+    let contentView = UIView.newAutoLayout()
     let avatarView = AvatarView(size: avatarSize, bordered: true, borderWidth: 3)
     var shouldShowButton = true
     let button = UIButton.newAutoLayout()
@@ -33,8 +39,18 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         }
     }
 
+    var badge: BagdeType? {
+        didSet {
+            badgeLabel.text = badge?.rawValue
+            badgeView.isHidden = badge == nil
+        }
+    }
+
     fileprivate let backgroundImageView = UIImageView.newAutoLayout()
     fileprivate let activityIndicator = UIActivityIndicatorView.newAutoLayout()
+    fileprivate let badgeView = UIView.newAutoLayout()
+    fileprivate let vibrancyView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    fileprivate let badgeLabel = UILabel.newAutoLayout()
 
     fileprivate var avatarOffset: CGFloat {
         return shouldShowButton ? -20 : 0
@@ -50,7 +66,21 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         backgroundImageView.contentMode = .top
 
         addSubview(backgroundImageView)
-        addSubview(avatarView)
+        addSubview(contentView)
+
+        contentView.backgroundColor = .clear
+        contentView.addSubview(avatarView)
+
+
+        badgeView.backgroundColor = .RGBA(246, 248, 248, 0.63)
+        badgeView.layer.cornerRadius = 4
+        badgeView.clipsToBounds = true
+        badgeView.addSubview(vibrancyView)
+        contentView.addSubview(badgeView)
+
+        badgeLabel.font = .systemFont(ofSize: 11, weight: UIFontWeightMedium)
+        badgeLabel.textColor = .RGBA(51, 51, 51, 1)
+        vibrancyView.addSubview(badgeLabel)
 
         if shouldShowButton {
             button.setTitleColor(.white, for: UIControlState())
@@ -60,10 +90,10 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 13, bottom: 5, right: 13)
             button.layer.borderWidth = 1
             button.layer.cornerRadius = 13
-            addSubview(button)
+            contentView.addSubview(button)
             button.isHidden = true
 
-            addSubview(activityIndicator)
+            contentView.addSubview(activityIndicator)
         }
         setNeedsUpdateConstraints()
     }
@@ -78,11 +108,20 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
+            contentView.autoPinEdgesToSuperviewEdges()
+
             backgroundImageView.autoPinEdgesToSuperviewEdges()
 
             avatarView.autoSetDimensions(to: avatarSize)
             avatarView.autoAlignAxis(toSuperviewAxis: .vertical)
             avatarView.autoAlignAxis(.horizontal, toSameAxisOf: avatarView.superview!, withOffset: avatarOffset)
+
+            badgeView.autoPinEdge(.left, to: .left, of: avatarView, withOffset: avatarSize.width / 2 + 12)
+            badgeView.autoPinEdge(.top, to: .top, of: avatarView, withOffset: 4)
+
+            vibrancyView.autoPinEdgesToSuperviewEdges()
+
+            badgeLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 3, left: 4, bottom: 3, right: 4))
 
             if shouldShowButton {
                 button.autoPinEdge(.top, to: .bottom, of: avatarView, withOffset: 10)
