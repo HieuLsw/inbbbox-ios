@@ -71,6 +71,10 @@ class UserSpec: QuickSpec {
                 expect(sut.projectsCount).to(equal(1))
             }
 
+            it("user's pro indicator should be properly mapped") {
+                expect(sut.isPro).to(beTruthy())
+            }
+
             it("user's bio should be properly mapped") {
                 expect(sut.bio).to(equal("fixture.bio"))
             }
@@ -139,6 +143,10 @@ class UserSpec: QuickSpec {
 
                 it("user's projects count should be properly mapped") {
                     expect(sut.projectsCount).to(equal(decodedUser!.projectsCount))
+                }
+
+                it("user's pro indicator should be properly mapped") {
+                    expect(sut.isPro).to(equal(decodedUser!.isPro))
                 }
 
                 it("user's bio should be properly mapped") {
