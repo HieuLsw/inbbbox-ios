@@ -260,7 +260,7 @@ struct NightMode: ColorModeType {
     }
 
     var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
-        return .RGBA(62, 74, 76, 1)
+        return .RGBA(62, 74, 76, 0.5)
     }
 
     var profileDetailsCollectionCounterLabelTextColor: UIColor {

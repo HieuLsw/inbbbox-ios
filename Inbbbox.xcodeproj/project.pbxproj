@@ -408,11 +408,13 @@
 		E8B8CB77BA6DC8C4E4B30540 /* AsyncWrapperSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAE93BCE146DDA9C36F6CF8 /* AsyncWrapperSpec.swift */; };
 		E8CC1B915CB2EB506D738D7B /* FolloweesViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34DC2963BC538E758A8E55F /* FolloweesViewModelSpec.swift */; };
 		E8DB92DF347FE584F62C4E27 /* UIWindowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC5F88643B64405114F960D /* UIWindowExtension.swift */; };
+		EA00D61C1E43613D00A23212 /* ProfileProjectsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */; };
+		EA00D61E1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */; };
 		EA0CFB1A1D9564D200CFF21A /* CommentLikedQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */; };
 		EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */; };
 		EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */; };
 		EA289B851E41C64300D180C2 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B841E41C64300D180C2 /* CollectionCell.swift */; };
-		EA289B871E41C65600D180C2 /* ProfileBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B861E41C65600D180C2 /* ProfileBucketsViewController.swift */; };
+		EA289B871E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */; };
 		EA289B891E41C6E100D180C2 /* CarouselCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */; };
 		EA289B8B1E41C6F000D180C2 /* ProfileBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */; };
 		EA7520441DBF80EF006270EB /* ShotDetailsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */; };
@@ -919,13 +921,15 @@
 		E83498FB5F5E1018FEAF1195 /* CommentType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CommentType.swift; sourceTree = "<group>"; };
 		E94D3749A8FF27FAC072922D /* Responsable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Responsable.swift; sourceTree = "<group>"; };
 		E98D5AF44581A8526F3CEF06 /* SecretKeysProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SecretKeysProvider.h; sourceTree = "<group>"; };
+		EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsViewModel.swift; sourceTree = "<group>"; };
+		EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewModel.swift; sourceTree = "<group>"; };
 		EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikedQuery.swift; sourceTree = "<group>"; };
 		EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikeQuery.swift; sourceTree = "<group>"; };
 		EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentUnlikeQuery.swift; sourceTree = "<group>"; };
 		EA25956B9FC4631945428870 /* ShotImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotImageView.swift; sourceTree = "<group>"; };
 		EA26B57AF334AAA327E47C15 /* AutoScrollableCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutoScrollableCollectionViewCell.swift; sourceTree = "<group>"; };
 		EA289B841E41C64300D180C2 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
-		EA289B861E41C65600D180C2 /* ProfileBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewController.swift; sourceTree = "<group>"; };
+		EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewController.swift; sourceTree = "<group>"; };
 		EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionViewLayout.swift; sourceTree = "<group>"; };
 		EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModel.swift; sourceTree = "<group>"; };
 		EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewController.swift; sourceTree = "<group>"; };
@@ -1459,6 +1463,7 @@
 				F0BEBDD81CDB3E9800AA391C /* ProfileShotsOrMembersViewModel.swift */,
 				753FDB69B47193BA76493CC9 /* Vibratable.swift */,
 				BEDB0ACB1E02E24A001510C7 /* Support3DTouch.swift */,
+				EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1574,6 +1579,7 @@
 				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
 				F0FEDACE1E3787050002181F /* ProfileViewModel.swift */,
 				F035ECEE1E3F6153003A8348 /* DetailsItem.swift */,
+				EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1616,7 +1622,7 @@
 		9A9500D7011CE6AAB185DB95 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				EA289B861E41C65600D180C2 /* ProfileBucketsViewController.swift */,
+				EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */,
 				06995610DDA33B7FE12B42B6 /* AcknowledgementsViewController.swift */,
 				C6745B7C1DB74371004D3D8E /* AlertViewController.swift */,
 				998EDE49EC23AB5DE545D476 /* BucketsCollectionViewController.swift */,
@@ -2214,7 +2220,7 @@
 				C6A3367C1DF74A2E00357D2A /* EstimatedLocationProvider.swift in Sources */,
 				91CC54F94EE1DE79024A4940 /* Constants.swift in Sources */,
 				30872A8C1DD1DAA000330F8F /* URLSessionConfigurationExtension.swift in Sources */,
-				EA289B871E41C65600D180C2 /* ProfileBucketsViewController.swift in Sources */,
+				EA289B871E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift in Sources */,
 				55B0D2257EC4ABFCA118F483 /* Defines.swift in Sources */,
 				07BB4BCA0300D81D1F853945 /* Settings.swift in Sources */,
 				F0D3D7EE1E3600C7008834E2 /* ProfileView.swift in Sources */,
@@ -2242,6 +2248,7 @@
 				DB2360C6CCA9ABC62653E7DC /* StringExtension.swift in Sources */,
 				C61B8B951DDAEAE600D94867 /* AttachmentQuery.swift in Sources */,
 				9C8C715087F97CAF1CA2399D /* UIAlertControllerExtension.swift in Sources */,
+				EA00D61C1E43613D00A23212 /* ProfileProjectsViewModel.swift in Sources */,
 				D5D168031E13F6D100E91BDA /* SingleStreamView.swift in Sources */,
 				B26A0E2EAE6E3A4CB7916482 /* UICollectionViewExtension.swift in Sources */,
 				EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */,
@@ -2315,6 +2322,7 @@
 				5D46BF9F1F5F465B898755A1 /* CommentType.swift in Sources */,
 				13BC711D904BC2B16544E3F9 /* ProjectType.swift in Sources */,
 				A0F859EA9D0643D714130BDA /* ShotImageType.swift in Sources */,
+				EA00D61E1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift in Sources */,
 				DC000A3051A5020B037354D0 /* ShotType.swift in Sources */,
 				5529816C41FD206531921633 /* TeamType.swift in Sources */,
 				4D3B0164C1EB4C796ED48741 /* UserType.swift in Sources */,

@@ -2,7 +2,6 @@
 //  APIProjectsProvider.swift
 //  Inbbbox
 //
-//  Created by Patryk Kaczmarek on 15/02/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -29,6 +28,44 @@ class APIProjectsProvider: PageableProvider {
             firstly {
                 firstPageForQueries([query], withSerializationKey: nil)
             }.then { (projects: [Project]?) -> Void in
+                fulfill(projects.flatMap { $0.map { $0 as ProjectType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
+     Provides projects for given user.
+
+     - parameter user: User whos projects should be provided.
+
+     - returns: Promise which resolves with projects or nil.
+     */
+    func provideProjectsForUser(_ user: UserType) -> Promise<[ProjectType]?> {
+
+        let query = ProjectsQuery(user: user)
+
+        return Promise<[ProjectType]?> { fulfill, reject in
+            firstly {
+                firstPageForQueries([query], withSerializationKey: nil)
+            }.then { (projects: [Project]?) -> Void in
+                fulfill(projects.flatMap { $0.map { $0 as ProjectType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
+     Provides next page of projects.
+
+     - Warning: You have to use any of provide... method first to be able to use this method.
+     Otherwise an exception will appear.
+
+     - returns: Promise which resolves with projects or nil.
+     */
+    func nextPage() -> Promise<[ProjectType]?> {
+        return Promise <[ProjectType]?> { fulfill, reject in
+            firstly {
+                nextPageFor(Project.self)
+            }.then { projects -> Void in
                 fulfill(projects.flatMap { $0.map { $0 as ProjectType } })
             }.catch(execute: reject)
         }

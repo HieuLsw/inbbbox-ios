@@ -260,7 +260,7 @@ struct DayMode: ColorModeType {
     }
 
     var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
-        return .cellBackgroundColor()
+        return .RGBA(223, 224, 226, 0.5)
     }
 
     var profileDetailsCollectionCounterLabelTextColor: UIColor {
