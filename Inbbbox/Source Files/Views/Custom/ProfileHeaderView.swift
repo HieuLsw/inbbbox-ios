@@ -71,7 +71,6 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         contentView.backgroundColor = .clear
         contentView.addSubview(avatarView)
 
-
         badgeView.backgroundColor = .RGBA(246, 248, 248, 0.63)
         badgeView.layer.cornerRadius = 4
         badgeView.clipsToBounds = true
