@@ -416,7 +416,7 @@
 		EA0CFB1A1D9564D200CFF21A /* CommentLikedQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */; };
 		EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */; };
 		EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */; };
-		EA289B851E41C64300D180C2 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B841E41C64300D180C2 /* CollectionCell.swift */; };
+		EA289B851E41C64300D180C2 /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B841E41C64300D180C2 /* CarouselCell.swift */; };
 		EA289B871E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */; };
 		EA289B891E41C6E100D180C2 /* CarouselCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */; };
 		EA289B8B1E41C6F000D180C2 /* ProfileBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */; };
@@ -934,7 +934,7 @@
 		EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentUnlikeQuery.swift; sourceTree = "<group>"; };
 		EA25956B9FC4631945428870 /* ShotImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotImageView.swift; sourceTree = "<group>"; };
 		EA26B57AF334AAA327E47C15 /* AutoScrollableCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AutoScrollableCollectionViewCell.swift; sourceTree = "<group>"; };
-		EA289B841E41C64300D180C2 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
+		EA289B841E41C64300D180C2 /* CarouselCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 		EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewController.swift; sourceTree = "<group>"; };
 		EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionViewLayout.swift; sourceTree = "<group>"; };
 		EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModel.swift; sourceTree = "<group>"; };
@@ -1669,7 +1669,7 @@
 		B26C31AF4A9702DF249E3C56 /* UITableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				EA289B841E41C64300D180C2 /* CollectionCell.swift */,
+				EA289B841E41C64300D180C2 /* CarouselCell.swift */,
 				3713135DA7E8E9773CC2969F /* DetailsCell.swift */,
 				CC3F4F62A88C473C1B22F9F0 /* LabelCell.swift */,
 				6C5A214961E0B433F2ECFB5E /* SwitchCell.swift */,
@@ -2249,7 +2249,7 @@
 				F0BEBDD91CDB3E9800AA391C /* ProfileShotsOrMembersViewModel.swift in Sources */,
 				5E180521365BBA2A8F361704 /* CollectionExtension.swift in Sources */,
 				1392330240EA8E15D6F5D874 /* NSAttributedStringExtension.swift in Sources */,
-				EA289B851E41C64300D180C2 /* CollectionCell.swift in Sources */,
+				EA289B851E41C64300D180C2 /* CarouselCell.swift in Sources */,
 				7E62178B6801E760CC0E6593 /* NSErrorExtensions.swift in Sources */,
 				CFF1C31F325FA63607E36263 /* NSManagedObjectExtension.swift in Sources */,
 				801A11B5141E2B6F9FDFB2DF /* NSMutableAttributedStringExtension.swift in Sources */,

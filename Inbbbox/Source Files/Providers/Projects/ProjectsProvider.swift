@@ -20,7 +20,7 @@ class ProjectsProvider {
         return managedProjectsProvider.provideProjectsForShot(shot)
     }
 
-    func provideProjectsForUser(_ user: UserType) -> Promise<[ProjectType]?> {
+    func provideProjects(forUser user: UserType) -> Promise<[ProjectType]?> {
         return apiProjectsProvider.provideProjectsForUser(user)
     }
 

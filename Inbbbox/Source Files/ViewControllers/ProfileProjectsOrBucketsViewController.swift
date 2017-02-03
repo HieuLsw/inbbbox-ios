@@ -21,7 +21,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
 
     fileprivate var currentColorMode = ColorModeProvider.current()
     fileprivate var viewModel: ProfileProjectsOrBucketsViewModel!
-    fileprivate var rowsOffset = [Int:CGFloat]()
+    fileprivate var rowsOffset = [Int: CGFloat]()
     fileprivate var currentContainer = [ShotType]()
 
     fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
@@ -55,7 +55,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 140
         tableView.separatorStyle = .none
-        tableView.registerClass(CollectionCell.self)
+        tableView.registerClass(CarouselCell.self)
 
         viewModel.downloadInitialItems()
     }
@@ -87,8 +87,8 @@ extension ProfileProjectsOrBucketsViewController {
     }
 
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let collectionCell = cell as? CollectionCell else { return }
-        rowsOffset[indexPath.row] = collectionCell.collectionView.contentOffset.x
+        guard let carouselCell = cell as? CarouselCell else { return }
+        rowsOffset[indexPath.row] = carouselCell.collectionView.contentOffset.x
     }
 }
 
@@ -115,7 +115,7 @@ private extension ProfileProjectsOrBucketsViewController {
 
     func prepareCell(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCell(CollectionCell.self)
+        let cell = tableView.dequeueReusableCell(CarouselCell.self)
         cell.adaptColorMode(currentColorMode)
         cell.selectionStyle = .none
         if let offset = rowsOffset[indexPath.row] {
@@ -197,9 +197,9 @@ extension ProfileProjectsOrBucketsViewController: UIViewControllerPreviewingDele
 
         guard
             let tableIndexPath = tableView.indexPathForRow(at: previewingContext.sourceView.convert(location, to: tableView)),
-            let collectionCell = tableView.cellForRow(at: tableIndexPath) as? CollectionCell,
-            let collectionIndexPath = collectionCell.collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionCell.collectionView)),
-            let cell = collectionCell.collectionView.cellForItem(at: collectionIndexPath)
+            let carouselCell = tableView.cellForRow(at: tableIndexPath) as? CarouselCell,
+            let collectionIndexPath = carouselCell.collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: carouselCell.collectionView)),
+            let cell = carouselCell.collectionView.cellForItem(at: collectionIndexPath)
         else {
             return nil
         }
@@ -223,7 +223,7 @@ extension ProfileProjectsOrBucketsViewController: UIViewControllerPreviewingDele
         }
 
         let shot = currentContainer[collectionIndexPath.item]
-        let viewPoint = collectionCell.convert(cell.frame.origin, from: collectionCell.collectionView)
+        let viewPoint = carouselCell.convert(cell.frame.origin, from: carouselCell.collectionView)
         previewingContext.sourceRect = CGRect(origin: viewPoint, size: cell.frame.size)
 
         let controller = ShotDetailsViewController(shot: shot)
@@ -245,9 +245,9 @@ extension ProfileProjectsOrBucketsViewController: PeekPopPreviewingDelegate {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
             let tableIndexPath = tableView.indexPathForRow(at: previewingContext.sourceView.convert(location, to: tableView)),
-            let collectionCell = tableView.cellForRow(at: tableIndexPath) as? CollectionCell,
-            let collectionIndexPath = collectionCell.collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionCell.collectionView)),
-            let cell = collectionCell.collectionView.cellForItem(at: collectionIndexPath)
+            let carouselCell = tableView.cellForRow(at: tableIndexPath) as? CarouselCell,
+            let collectionIndexPath = carouselCell.collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: carouselCell.collectionView)),
+            let cell = carouselCell.collectionView.cellForItem(at: collectionIndexPath)
         else {
             return nil
         }
@@ -271,7 +271,7 @@ extension ProfileProjectsOrBucketsViewController: PeekPopPreviewingDelegate {
         }
 
         let shot = currentContainer[collectionIndexPath.item]
-        let sourceCellOrigin = collectionCell.collectionView.convert(cell.frame.origin, to: tableView)
+        let sourceCellOrigin = carouselCell.collectionView.convert(cell.frame.origin, to: tableView)
         let sourceFrame = CGRect(origin: sourceCellOrigin, size: cell.frame.size)
         previewingContext.sourceRect = sourceFrame
 

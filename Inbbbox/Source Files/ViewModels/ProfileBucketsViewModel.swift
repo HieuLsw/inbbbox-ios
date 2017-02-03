@@ -29,22 +29,20 @@ class ProfileBucketsViewModel: ProfileProjectsOrBucketsViewModel {
 
     func downloadInitialItems() {
         firstly {
-            bucketsProvider.provideBucketsForUser(user)
-        }.then {
-            buckets -> Void in
+            bucketsProvider.provideBuckets(forUser: user)
+        }.then { buckets -> Void in
             var bucketsShouldBeReloaded = true
             if let buckets = buckets {
                 if buckets == self.buckets && buckets.count != 0 {
                     bucketsShouldBeReloaded = false
                 }
                 self.buckets = buckets
-                self.downloadShots(buckets)
+                self.downloadShots(forBuckets: buckets)
             }
             if bucketsShouldBeReloaded {
                 self.delegate?.viewModelDidLoadInitialItems()
             }
-        }.catch {
-            error in
+        }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
@@ -55,17 +53,13 @@ class ProfileBucketsViewModel: ProfileProjectsOrBucketsViewModel {
         }
         firstly {
             bucketsProvider.nextPage()
-        }.then {
-            buckets -> Void in
+        }.then { buckets -> Void in
             if let buckets = buckets, buckets.count > 0 {
-                let indexes = buckets.enumerated().map {
-                    index, _ in
+                let indexes = buckets.enumerated().map { index, _ in
                     return index + self.buckets.count
                 }
                 self.buckets.append(contentsOf: buckets)
-                let indexPaths = indexes.map {
-                    IndexPath(row: ($0), section: 0)
-                }
+                let indexPaths = indexes.map { IndexPath(row: ($0), section: 0) }
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
             }
         }.catch { error in
@@ -75,44 +69,29 @@ class ProfileBucketsViewModel: ProfileProjectsOrBucketsViewModel {
 
     func downloadItem(at index: Int) { /* empty */ }
 
-    func downloadShots(_ buckets: [BucketType]) {
+    func downloadShots(forBuckets buckets: [BucketType]) {
         for bucket in buckets {
             firstly {
                 shotsProvider.provideShotsForBucket(bucket)
-            }.then {
-                shots -> Void in
+            }.then { shots -> Void in
                 var bucketShotsShouldBeReloaded = true
-                var indexOfBucket: Int?
-                for (index, item) in self.buckets.enumerated() {
-                    if item.identifier == bucket.identifier {
-                        indexOfBucket = index
-                        break
-                    }
-                }
-                guard let index = indexOfBucket else {
-                    return
-                }
+                guard let index = self.buckets.index(where: { $0.identifier == bucket.identifier }) else { return }
                 if let oldShots = self.bucketsIndexedShots[index], let newShots = shots {
                     bucketShotsShouldBeReloaded = oldShots != newShots
                 }
-                if let shots = shots {
-                    self.bucketsIndexedShots[index] = shots
-                } else {
-                    self.bucketsIndexedShots[index] = [ShotType]()
-                }
+                self.bucketsIndexedShots[index] = shots ?? [ShotType]()
                 if bucketShotsShouldBeReloaded {
                     let indexPath = IndexPath(row: index, section: 0)
                     self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
                 }
             }.catch { error in
-                    self.notifyDelegateAboutFailure(error)
+                self.notifyDelegateAboutFailure(error)
             }
         }
     }
 
     func bucketTableViewCellViewData(_ indexPath: IndexPath) -> ProfileBucketTableViewCellViewData {
-        return ProfileBucketTableViewCellViewData(bucket: buckets[indexPath.row],
-                                                shots: bucketsIndexedShots[indexPath.row])
+        return ProfileBucketTableViewCellViewData(bucket: buckets[indexPath.row], shots: bucketsIndexedShots[indexPath.row])
     }
 
     func clearViewModelIfNeeded() {

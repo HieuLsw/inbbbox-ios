@@ -1,5 +1,5 @@
 //
-//  CollectionCell.swift
+//  CarouselCell.swift
 //  Inbbbox
 //
 //  Copyright © 2017 Netguru Sp. z o.o. All rights reserved.
@@ -9,7 +9,7 @@ import UIKit
 import PureLayout
 import TTTAttributedLabel
 
-class CollectionCell: UITableViewCell, Reusable {
+class CarouselCell: UITableViewCell, Reusable {
     
     var shots: [ShotType]? {
         didSet {
@@ -36,14 +36,14 @@ class CollectionCell: UITableViewCell, Reusable {
 
         backgroundColor = .clear
         
-        backgroundLabel.font = UIFont.boldSystemFont(ofSize: 54)
+        backgroundLabel.font = .boldSystemFont(ofSize: 54)
         contentView.addSubview(backgroundLabel)
         
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.kern = 0.8
         contentView.addSubview(titleLabel)
         
-        counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
+        counterLabel.font = .boldSystemFont(ofSize: 10)
         contentView.addSubview(counterLabel)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ class CollectionCell: UITableViewCell, Reusable {
     }
 }
 
-extension CollectionCell: UICollectionViewDataSource {
+extension CarouselCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let shots = shots {
@@ -108,7 +108,7 @@ extension CollectionCell: UICollectionViewDataSource {
 
 // MARK: Private extension
 
-private extension CollectionCell {
+private extension CarouselCell {
 
     func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
                        atIndexPath indexPath: IndexPath) {
@@ -146,7 +146,7 @@ private extension CollectionCell {
 
 }
 
-extension CollectionCell: ColorModeAdaptable {
+extension CarouselCell: ColorModeAdaptable {
     func adaptColorMode(_ mode: ColorModeType) {
         backgroundLabel.textColor = mode.profileDetailsCollectionBackgroundLabelTextColor
         titleLabel.textColor = mode.profileDetailsCollectionTitleLabelTextColor

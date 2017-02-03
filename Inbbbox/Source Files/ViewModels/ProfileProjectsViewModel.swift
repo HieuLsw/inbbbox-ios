@@ -28,22 +28,20 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
 
     func downloadInitialItems() {
         firstly {
-            projectsProvider.provideProjectsForUser(user)
-        }.then {
-            projects -> Void in
+            projectsProvider.provideProjects(forUser: user)
+        }.then { projects -> Void in
             var projectsShouldBeReloaded = true
             if let projects = projects {
                 if projects == self.projects && projects.count != 0 {
                     projectsShouldBeReloaded = false
                 }
                 self.projects = projects
-                self.downloadShots(projects)
+                self.downloadShots(forProjects: projects)
             }
             if projectsShouldBeReloaded {
                 self.delegate?.viewModelDidLoadInitialItems()
             }
-        }.catch {
-            error in
+        }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
     }
@@ -54,8 +52,7 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
         }
         firstly {
             projectsProvider.nextPage()
-        }.then {
-            projects -> Void in
+        }.then { projects -> Void in
             if let projects = projects, projects.count > 0 {
                 let indexes = projects.enumerated().map {
                     index, _ in
@@ -74,31 +71,17 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
     
     func downloadItem(at index: Int) { /* empty */ }
     
-    func downloadShots(_ projects: [ProjectType]) {
+    func downloadShots(forProjects projects: [ProjectType]) {
         for project in projects {
             firstly {
                 shotsProvider.provideShotsForProject(project)
-            }.then {
-                shots -> Void in
+            }.then { shots -> Void in
                 var projectsShotsShouldBeReloaded = true
-                var indexOfProjects: Int?
-                for (index, item) in self.projects.enumerated() {
-                    if item.identifier == project.identifier {
-                        indexOfProjects = index
-                        break
-                    }
-                }
-                guard let index = indexOfProjects else {
-                    return
-                }
+                guard let index = self.projects.index(where: { $0.identifier == project.identifier }) else { return }
                 if let oldShots = self.projectsIndexedShots[index], let newShots = shots {
                     projectsShotsShouldBeReloaded = oldShots != newShots
                 }
-                if let shots = shots {
-                    self.projectsIndexedShots[index] = shots
-                } else {
-                    self.projectsIndexedShots[index] = [ShotType]()
-                }
+                self.projectsIndexedShots[index] = shots ?? [ShotType]()
                 if projectsShotsShouldBeReloaded {
                     let indexPath = IndexPath(row: index, section: 0)
                     self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
@@ -110,8 +93,7 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
     }
 
     func projectTableViewCellViewData(_ indexPath: IndexPath) -> ProfileProjectTableViewCellViewData {
-        return ProfileProjectTableViewCellViewData(project: projects[indexPath.row],
-                                                  shots: projectsIndexedShots[indexPath.row])
+        return ProfileProjectTableViewCellViewData(project: projects[indexPath.row], shots: projectsIndexedShots[indexPath.row])
     }
 
     func clearViewModelIfNeeded() {
@@ -128,11 +110,7 @@ extension ProfileProjectsViewModel {
         let shots: [ShotType]?
 
         init(project: ProjectType, shots: [ShotType]?) {
-            if let name = project.name {
-                self.name = name
-            } else {
-                self.name = ""
-            }
+            self.name = project.name ?? ""
             self.numberOfShots = String(format: "%d", project.shotsCount)
             if let shots = shots, shots.count > 0 {
                 self.shots = shots
