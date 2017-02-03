@@ -44,6 +44,6 @@ func == (lhs: LikedShot, rhs: LikedShot) -> Bool {
 
 extension LikedShot: Hashable {
     var hashValue: Int {
-        return likeIdentifier.hashValue// + createdAt.hashValue
+        return likeIdentifier.hashValue ^ createdAt.hashValue
     }
 }
