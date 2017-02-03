@@ -410,6 +410,9 @@
 		E8DB92DF347FE584F62C4E27 /* UIWindowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC5F88643B64405114F960D /* UIWindowExtension.swift */; };
 		EA00D61C1E43613D00A23212 /* ProfileProjectsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */; };
 		EA00D61E1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */; };
+		EA00D6201E4496A800A23212 /* ProjectSpecExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D61F1E4496A800A23212 /* ProjectSpecExtension.swift */; };
+		EA00D6241E44996300A23212 /* ProfileBucketsViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D6231E44996300A23212 /* ProfileBucketsViewModelSpec.swift */; };
+		EA00D6261E44A0D600A23212 /* ProfileProjectsViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA00D6251E44A0D600A23212 /* ProfileProjectsViewModelSpec.swift */; };
 		EA0CFB1A1D9564D200CFF21A /* CommentLikedQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */; };
 		EA0CFB1C1D95652200CFF21A /* CommentLikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */; };
 		EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */; };
@@ -923,6 +926,9 @@
 		E98D5AF44581A8526F3CEF06 /* SecretKeysProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SecretKeysProvider.h; sourceTree = "<group>"; };
 		EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsViewModel.swift; sourceTree = "<group>"; };
 		EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewModel.swift; sourceTree = "<group>"; };
+		EA00D61F1E4496A800A23212 /* ProjectSpecExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSpecExtension.swift; sourceTree = "<group>"; };
+		EA00D6231E44996300A23212 /* ProfileBucketsViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModelSpec.swift; sourceTree = "<group>"; };
+		EA00D6251E44A0D600A23212 /* ProfileProjectsViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsViewModelSpec.swift; sourceTree = "<group>"; };
 		EA0CFB191D9564D200CFF21A /* CommentLikedQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikedQuery.swift; sourceTree = "<group>"; };
 		EA0CFB1B1D95652200CFF21A /* CommentLikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikeQuery.swift; sourceTree = "<group>"; };
 		EA0CFB1D1D95654700CFF21A /* CommentUnlikeQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentUnlikeQuery.swift; sourceTree = "<group>"; };
@@ -1380,6 +1386,8 @@
 				475CB1F3D3817C84FF89A59D /* Resources */,
 				0507D0A35CBA257DFCCCB941 /* SharedExamples */,
 				F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */,
+				EA00D6231E44996300A23212 /* ProfileBucketsViewModelSpec.swift */,
+				EA00D6251E44A0D600A23212 /* ProfileProjectsViewModelSpec.swift */,
 			);
 			path = "Unit Tests";
 			sourceTree = "<group>";
@@ -1845,6 +1853,7 @@
 				B92F17DEC65C2797425F2AC6 /* UIGestureRecognizer+Specs.m */,
 				7BCC4CA1C2C895D8060128D7 /* UIImageSpecExtension.swift */,
 				373B43F4E99619491E96CE5F /* UserSpecExtension.swift */,
+				EA00D61F1E4496A800A23212 /* ProjectSpecExtension.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -2582,6 +2591,7 @@
 				5E6CC9E29CAB4EAE571D8E70 /* PageableComponentSerializerSpec.swift in Sources */,
 				7E4C2EA011391887E1F660E0 /* PageableComponentSpec.swift in Sources */,
 				D6C37F599AB84610C10FCD8B /* PageableProviderSpec.swift in Sources */,
+				EA00D6241E44996300A23212 /* ProfileBucketsViewModelSpec.swift in Sources */,
 				DBE24991D644239A591CEC2E /* PageRequestSpec.swift in Sources */,
 				EA9373A31DA4EC7800BB3DB5 /* CommentLikedQuerySpec.swift in Sources */,
 				D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */,
@@ -2604,6 +2614,7 @@
 				B9CCCEDFFDAC5BAC390ECAB8 /* ShotsStorageSpec.swift in Sources */,
 				48029B89CECCA2D1617F9E51 /* TokenStorageSpec.swift in Sources */,
 				2F3EF3B7C3E6841B46924AAE /* UserDetailsViewModelSpec.swift in Sources */,
+				EA00D6201E4496A800A23212 /* ProjectSpecExtension.swift in Sources */,
 				DE124DCF12C68CABC8E1494B /* UserSpec.swift in Sources */,
 				358755A297EF18918247D240 /* UserStorageSpec.swift in Sources */,
 				183A91CFB82F0A0DEDE50E88 /* VerifiableSpec.swift in Sources */,
@@ -2653,6 +2664,7 @@
 				A0F11D2DC59AC9DB7D8EEEC3 /* FollowersQuerySpec.swift in Sources */,
 				70A9390D8C1FC18E771C9A21 /* FollowUserQuerySpec.swift in Sources */,
 				1CCE5077716497F1282211B9 /* LikeQuerySpec.swift in Sources */,
+				EA00D6261E44A0D600A23212 /* ProfileProjectsViewModelSpec.swift in Sources */,
 				17925BE6EFC35B201C608D83 /* ProjectsQuerySpec.swift in Sources */,
 				66A962383AA7CA12F05FDB74 /* RemoveFromBucketQuerySpec.swift in Sources */,
 				F461E56506569C912901945A /* ShotLikedByMeQuerySpec.swift in Sources */,

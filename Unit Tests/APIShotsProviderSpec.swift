@@ -121,6 +121,18 @@ class APIShotsProviderSpec: QuickSpec {
             }
         }
         
+        describe("when providing shots for project") {
+
+            it("shots should be properly returned") {
+                sut.provideShotsForProject(Project.fixtureProject()).then { _shots -> Void in
+                    shots = _shots
+                }.catch { _ in fail() }
+
+                expect(shots).toNotEventually(beNil())
+                expect(shots).toEventually(haveCount(3))
+            }
+        }
+
         describe("when providing shots from next/previous page") {
             
             var error: Error!
