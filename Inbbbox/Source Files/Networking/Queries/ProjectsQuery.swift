@@ -20,4 +20,11 @@ struct ProjectsQuery: Query {
     init(shot: ShotType) {
         path = "/shots/" + shot.identifier + "/projects"
     }
+
+    /// Initialize query for list of user's projects.
+    ///
+    /// - parameter user: User to list projects for.
+    init(user: UserType) {
+        path = "/users/" + user.username + "/projects"
+    }
 }

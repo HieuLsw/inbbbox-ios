@@ -26,3 +26,26 @@ protocol ProjectType {
     /// Number of shots associated to this Project.
     var shotsCount: UInt { get }
 }
+
+func == (lhs: ProjectType, rhs: ProjectType) -> Bool {
+    return lhs.identifier == rhs.identifier
+}
+
+func == (lhs: [ProjectType], rhs: [ProjectType]) -> Bool {
+
+    guard lhs.count == rhs.count else { return false }
+
+    var indexingGenerators = (left: lhs.makeIterator(), right: rhs.makeIterator())
+
+    var isEqual = true
+    while let leftElement = indexingGenerators.left.next(),
+        let rightElement = indexingGenerators.right.next(), isEqual {
+            isEqual = leftElement == rightElement
+    }
+
+    return isEqual
+}
+
+func != (lhs: [ProjectType], rhs: [ProjectType]) -> Bool {
+    return !(lhs == rhs)
+}

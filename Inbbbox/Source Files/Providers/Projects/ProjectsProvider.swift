@@ -2,7 +2,6 @@
 //  ProjectsProvider.swift
 //  Inbbbox
 //
-//  Created by Lukasz Wolanczyk on 2/22/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -19,5 +18,13 @@ class ProjectsProvider {
             return apiProjectsProvider.provideProjectsForShot(shot)
         }
         return managedProjectsProvider.provideProjectsForShot(shot)
+    }
+
+    func provideProjects(forUser user: UserType) -> Promise<[ProjectType]?> {
+        return apiProjectsProvider.provideProjectsForUser(user)
+    }
+
+    func nextPage() -> Promise<[ProjectType]?> {
+        return apiProjectsProvider.nextPage()
     }
 }
