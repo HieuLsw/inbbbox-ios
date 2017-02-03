@@ -68,7 +68,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     func downloadInitialItems() {
         firstly {
-            teamsProvider.provideMyTeams()
+            teamsProvider.provideTeamFor(user: user)
         }.then { teams -> Void in
             if let teams = teams {
                 self.teams = teams

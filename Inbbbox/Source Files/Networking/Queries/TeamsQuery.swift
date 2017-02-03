@@ -16,4 +16,10 @@ struct TeamsQuery: Query {
         path = "/user/teams"
     }
 
+    /// Initialize query for list a given user’s teams.
+    ///
+    /// - parameter temasOfUser: User that is followed by listed users.
+    init(temasOfUser user: UserType) {
+        path = "/users/\(user.username)/teams"
+    }
 }
