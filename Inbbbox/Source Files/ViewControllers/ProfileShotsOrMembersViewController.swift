@@ -59,7 +59,7 @@ class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, S
 
         self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
                   twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
-        viewModel = UserDetailsViewModel(user: user)
+        viewModel = ProfileShotsViewModel(user: user)
         viewModel.delegate = self
     }
 
