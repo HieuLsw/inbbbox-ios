@@ -16,7 +16,6 @@ class ProfileMenuBarView: UIView {
     let menuStackView = UIStackView()
 
     fileprivate let shotsButton = ProfileMenuButton()
-    fileprivate let teamButton = ProfileMenuButton()
     fileprivate let infoButton = ProfileMenuButton()
     fileprivate let projectsButton = ProfileMenuButton()
     fileprivate let bucketsButton = ProfileMenuButton()
@@ -32,12 +31,11 @@ class ProfileMenuBarView: UIView {
         deselectAllItems()
 
         shotsButton.setTitle(Localized("ProfileMenuBarView.Shots", comment: "Shots card title."), for: .normal)
-        teamButton.setTitle(Localized("ProfileMenuBarView.Team", comment: "Team card title."), for: .normal)
         infoButton.setTitle(Localized("ProfileMenuBarView.Info", comment: "Info card title."), for: .normal)
         projectsButton.setTitle(Localized("ProfileMenuBarView.Projects", comment: "Projects card title."), for: .normal)
         bucketsButton.setTitle(Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title."), for: .normal)
 
-        [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
+        [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             $0.addTarget(self, action: #selector(didSelect(button:)), for: .touchUpInside)
         }
@@ -114,7 +112,6 @@ private extension ProfileMenuBarView {
         let item: ProfileMenuItem? = {
             switch button {
             case shotsButton: return .shots
-            case teamButton: return .team
             case infoButton: return .info
             case projectsButton: return .projects
             case bucketsButton: return .buckets
@@ -135,7 +132,7 @@ private extension ProfileMenuBarView {
 
 
     func deselectAllItems() {
-        [shotsButton, teamButton, infoButton, projectsButton, bucketsButton].forEach {
+        [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.setTitleColor(ColorModeProvider.current().inactiveMenuButtonTitle, for: .normal)
             $0.badgeColor = ColorModeProvider.current().inactiveMenuButtonBadge
         }
@@ -144,7 +141,6 @@ private extension ProfileMenuBarView {
     func menuButton(for item: ProfileMenuItem) -> ProfileMenuButton {
         switch item {
         case .shots: return shotsButton
-        case .team: return teamButton
         case .info: return infoButton
         case .projects: return projectsButton
         case .buckets: return bucketsButton

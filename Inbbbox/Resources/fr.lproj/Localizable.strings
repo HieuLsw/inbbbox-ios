@@ -373,7 +373,6 @@
 
 /********* ProfileMenuBarView *********/
 "ProfileMenuBarView.Shots" = "Coup";
-"ProfileMenuBarView.Team" = "$Team";
 "ProfileMenuBarView.Info" = "$Info";
 "ProfileMenuBarView.Projects" = "$Projects";
 "ProfileMenuBarView.Buckets" = "Catalogues";

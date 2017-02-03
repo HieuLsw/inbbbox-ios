@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 
-class UserDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
+class ProfileShotsViewModel: BaseCollectionViewViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
@@ -78,7 +78,7 @@ class UserDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
 
 // MARK: Helpers
 
-extension UserDetailsViewModel {
+extension ProfileShotsViewModel {
 
     func shotWithSwappedUser(_ shot: ShotType) -> ShotType {
         return Shot(

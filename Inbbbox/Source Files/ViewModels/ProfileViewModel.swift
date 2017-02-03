@@ -27,7 +27,7 @@ final class ProfileViewModel: Vibratable {
 
     var menu: [ProfileMenuItem] {
         return [
-            user.accountType == .Team ? .team : .shots,
+            .shots,
             .info,
             .projects,
             .buckets
@@ -51,7 +51,6 @@ extension ProfileViewModel {
     func badge(forMenuItem item: ProfileMenuItem) -> Int {
         switch item {
         case .shots: return Int(user.shotsCount)
-        case .team: return 0
         case .info: return 0
         case .projects: return Int(user.projectsCount)
         case .buckets: return Int(user.bucketsCount)
