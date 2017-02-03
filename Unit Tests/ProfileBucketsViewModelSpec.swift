@@ -100,20 +100,20 @@ private class ProfileBucketsViewModelMock: ProfileBucketsViewModel {
     override func downloadInitialItems() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket]
-        downloadShots(buckets)
+        downloadShots(forBuckets: buckets)
     }
 
     override func downloadItemsForNextPage() {
         let bucket = Bucket.fixtureBucket()
         buckets = [bucket, bucket, bucket]
-        downloadShots(buckets)
+        downloadShots(forBuckets: buckets)
 
         if shouldCallNextPageDownloadSuper {
             super.downloadItemsForNextPage()
         }
     }
 
-    override func downloadShots(_ buckets: [BucketType]) {
+    override func downloadShots(forBuckets buckets: [BucketType]) {
         for index in 0...buckets.count - 1 {
             bucketsIndexedShots[index] = [Shot.fixtureShot()]
         }

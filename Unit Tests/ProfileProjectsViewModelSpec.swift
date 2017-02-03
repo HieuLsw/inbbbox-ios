@@ -100,20 +100,20 @@ private class ProfileProjectsViewModelMock: ProfileProjectsViewModel {
     override func downloadInitialItems() {
         let project = Project.fixtureProject()
         projects = [project, project]
-        downloadShots(projects)
+        downloadShots(forProjects: projects)
     }
 
     override func downloadItemsForNextPage() {
         let project = Project.fixtureProject()
         projects = [project, project, project]
-        downloadShots(projects)
+        downloadShots(forProjects: projects)
 
         if shouldCallNextPageDownloadSuper {
             super.downloadItemsForNextPage()
         }
     }
 
-    override func downloadShots(_ projects: [ProjectType]) {
+    override func downloadShots(forProjects projects: [ProjectType]) {
         for index in 0...projects.count - 1 {
             projectsIndexedShots[index] = [Shot.fixtureShot()]
         }
