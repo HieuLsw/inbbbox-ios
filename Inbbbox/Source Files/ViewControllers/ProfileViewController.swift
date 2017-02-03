@@ -150,6 +150,8 @@ private extension ProfileViewController {
 
     func setupHeaderView() {
         profileView.headerView.avatarView.imageView.loadImageFromURL(viewModel.avatarURL)
+        profileView.headerView.badge = viewModel.user.isPro ? .pro : nil
+        profileView.headerView.badge = viewModel.user.accountType == .Team ? .team : profileView.headerView.badge
         profileView.headerView.button.addTarget(self, action: #selector(didTapFollowButton(_:)), for: .touchUpInside)
         viewModel.shouldShowFollowButton ? profileView.headerView.startActivityIndicator() : (profileView.headerView.shouldShowButton = false)
     }

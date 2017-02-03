@@ -65,6 +65,7 @@ class ProfileView: UIView {
         guard isHeaderVisible != visible else { return }
 
         UIView.animate(withDuration: 0.4) {
+            self.headerView.contentView.alpha = visible ? 1 : 0
             self.headerHeightConstraint?.constant = visible ? self.headerHeight : 0
             self.layoutIfNeeded()
             self.isHeaderVisible = visible

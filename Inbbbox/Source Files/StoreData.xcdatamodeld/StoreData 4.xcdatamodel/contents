@@ -58,6 +58,7 @@
         <attribute name="mngd_followersCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mngd_followingsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mngd_identifier" attributeType="String" elementID="Identifier" syncable="YES"/>
+        <attribute name="mngd_isPro" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mngd_location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mngd_name" optional="YES" attributeType="String" elementID="Name" syncable="YES"/>
         <attribute name="mngd_projectsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -72,6 +73,6 @@
         <element name="ManagedShot" positionX="0" positionY="0" width="128" height="300"/>
         <element name="ManagedShotImage" positionX="0" positionY="0" width="128" height="105"/>
         <element name="ManagedTeam" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="ManagedUser" positionX="0" positionY="0" width="128" height="255"/>
+        <element name="ManagedUser" positionX="0" positionY="0" width="128" height="270"/>
     </elements>
 </model>

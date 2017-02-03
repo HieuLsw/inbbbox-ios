@@ -48,6 +48,9 @@ protocol UserType {
     /// Number of User's buckets.
     var bucketsCount: UInt { get }
 
+    /// Indicates if user is a PRO user.
+    var isPro: Bool { get }
+
     /// Bio of the User.
     var bio: String { get }
 
