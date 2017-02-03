@@ -11,7 +11,7 @@ import SwiftyJSON
 @testable import Inbbbox
 
 extension Project {
-    
+
     static func fixtureProject() -> Project {
         let json = JSONSpecLoader.sharedInstance.jsonWithResourceName("Project")
         return Project.map(json)

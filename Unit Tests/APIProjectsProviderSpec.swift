@@ -2,7 +2,6 @@
 //  APIProjectsProviderSpec.swift
 //  Inbbbox
 //
-//  Created by Patryk Kaczmarek on 15/02/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -39,40 +38,39 @@ class APIProjectsProviderSpec: QuickSpec {
                 expect(projects).toEventually(haveCount(3))
             }
         }
-        
+
         describe("when providing projects for user") {
-            
-            
+
             var projects: [ProjectType]?
-            
+
             beforeEach {
                 TokenStorage.storeToken("fixture.token")
             }
-            
+
             afterEach {
                 projects = nil
             }
-            
+
             context("for user") {
-                
+
                 it("projects should be properly returned") {
                     sut.provideProjectsForUser(User.fixtureUser()).then { _projects -> Void in
                         projects = _projects
-                        }.catch { _ in fail() }
-                    
+                    }.catch { _ in fail() }
+
                     expect(projects).toNotEventually(beNil())
                     expect(projects).toEventually(haveCount(3))
                     expect(projects?.first?.identifier).toEventually(equal("1"))
                 }
             }
-            
+
             context("for the next page") {
-                
+
                 it("projects should be properly returned") {
                     sut.nextPage().then { _projects -> Void in
                         projects = _projects
-                        }.catch { _ in fail() }
-                    
+                    }.catch { _ in fail() }
+
                     expect(projects).toNotEventually(beNil())
                     expect(projects).toEventually(haveCount(3))
                     expect(projects?.first?.identifier).toEventually(equal("1"))
