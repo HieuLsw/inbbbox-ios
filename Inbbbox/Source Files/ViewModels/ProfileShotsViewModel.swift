@@ -1,15 +1,14 @@
 //
-//  UserDetailsViewModel.swift
+//  ProfileShotsViewModel.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 14/03/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
 import Foundation
 import PromiseKit
 
-class UserDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
+class ProfileShotsViewModel: BaseCollectionViewViewModel, Vibratable {
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
@@ -78,7 +77,7 @@ class UserDetailsViewModel: ProfileShotsOrMembersViewModel, Vibratable {
 
 // MARK: Helpers
 
-extension UserDetailsViewModel {
+extension ProfileShotsViewModel {
 
     func shotWithSwappedUser(_ shot: ShotType) -> ShotType {
         return Shot(

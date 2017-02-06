@@ -1,8 +1,7 @@
 //
-//  UserDetailsViewModelSpec.swift
+//  ProfileShotsViewModelSpec.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 15/03/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -13,11 +12,11 @@ import Dobby
 
 @testable import Inbbbox
 
-class UserDetailsViewModelSpec: QuickSpec {
+class ProfileShotsViewModelSpec: QuickSpec {
     
     override func spec() {
         
-        var sut: UserDetailsViewModelMock!
+        var sut: ProfileShotsViewModelMock!
         let fixtureShotImage: ShotImageType = ShotImage(
             hidpiURL: URL(string: "https://fixture.domain/fixture.image.hidpi.png"),
             normalURL: URL(string: "https://fixture.domain/fixture.image.normal.png")!,
@@ -26,7 +25,7 @@ class UserDetailsViewModelSpec: QuickSpec {
         var connectionsRequesterMock: APIConnectionsRequesterMock!
         
         beforeEach {
-            sut = UserDetailsViewModelMock(user: User.fixtureUser())
+            sut = ProfileShotsViewModelMock(user: User.fixtureUser())
             connectionsRequesterMock = APIConnectionsRequesterMock()
             sut.connectionsRequester = connectionsRequesterMock
         }
@@ -106,7 +105,7 @@ class UserDetailsViewModelSpec: QuickSpec {
 
 //Explanation: Create UserDetailsViewModelMock to override methods from BaseCollectionViewViewModel.
 
-private class UserDetailsViewModelMock: UserDetailsViewModel {
+private class ProfileShotsViewModelMock: ProfileShotsViewModel {
 
     var shouldCallNextPageDownloadSuper = false
 

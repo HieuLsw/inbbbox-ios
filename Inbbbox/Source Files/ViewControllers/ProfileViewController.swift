@@ -11,7 +11,7 @@ import PromiseKit
 import PeekPop
 
 enum ProfileMenuItem: Int {
-    case shots, team, info, projects, buckets
+    case shots, info, projects, buckets
 }
 
 protocol TriggeringHeaderUpdate: class {
@@ -165,12 +165,10 @@ private extension ProfileViewController {
     }
 
     func setupProfilePageViewController() {
-        let profileShotsOrMembersViewController = ProfileShotsOrMembersViewController(user: viewModel.user)
-        profileShotsOrMembersViewController.didLoadTeamMembers = { [weak self] count in self?.profileView.menuBarView.updateBadge(for: .team, with: count) }
-
+        
         let viewControllers: [UIViewController] = viewModel.menu.map {
             switch $0 {
-            case .shots, .team: return profileShotsOrMembersViewController
+            case .shots: return ProfileShotsViewController(user: viewModel.user)
             case .info: return ProfileInfoViewController(user: viewModel.user)
             case .projects: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .projects)
             case .buckets: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .buckets)
@@ -221,7 +219,7 @@ private extension ProfileViewController {
 
         let pageIndex: Int = {
             switch menuItem {
-            case .shots, .team: return 0
+            case .shots: return 0
             case .info: return 1
             case .projects: return 2
             case .buckets: return 3
