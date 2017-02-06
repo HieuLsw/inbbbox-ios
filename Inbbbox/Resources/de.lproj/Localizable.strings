@@ -1,7 +1,7 @@
 /********* ProfileViewController *********/
 
 /* Back button, user details */
-"Profile.BackButton" = "Zurück";
+"Profile.BackButton" = " Zurück";
 
 /********* BucketContentCollectionViewController *********/
 
@@ -19,7 +19,7 @@
 /* LikesCollectionView, empty data set view */
 "LikesCollectionView.EmptyData.LastLocalizedString" = " Shots liken!";
 
-/********* LikesCollectionViewController *********/
+/********* FolloweesCollectionViewController *********/
 
 /* FolloweesCollectionView, empty data set view */
 "FolloweesCollectionView.EmptyData.FirstLocalizedString" = " Zuerst ";
@@ -32,7 +32,7 @@
 /* Title of Following screen */
 "FolloweesViewModel.Title" = "Abonnierte Autoren";
 
-//******** LikesViewModel ********
+/********* LikesViewModel *********/
 
 /* Title of Likes screen */
 "LikesViewModel.Title" = "Likes";

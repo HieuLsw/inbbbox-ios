@@ -19,7 +19,7 @@
 /* LikesCollectionView, empty data set view */
 "LikesCollectionView.EmptyData.LastLocalizedString" = " polub jakieś shoty!";
 
-/********* LikesCollectionViewController *********/
+/********* FolloweesCollectionViewController *********/
 
 /* FolloweesCollectionView, empty data set view */
 "FolloweesCollectionView.EmptyData.FirstLocalizedString" = " Najpierw ";
@@ -32,7 +32,7 @@
 /* Title of Following screen */
 "FolloweesViewModel.Title" = "Obserwowani";
 
-//******** LikesViewModel ********
+/********* LikesViewModel *********/
 
 /* Title of Likes screen */
 "LikesViewModel.Title" = "Polubienia";
