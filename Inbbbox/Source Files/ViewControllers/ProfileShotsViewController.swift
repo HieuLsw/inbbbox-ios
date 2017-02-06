@@ -1,5 +1,5 @@
 //
-//  ProfileShotsOrMembersViewController.swift
+//  ProfileShotsViewController.swift
 //  Inbbbox
 //
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
@@ -30,7 +30,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
 
     var shouldHideHeader: (() -> Void)?
     var shouldShowHeader: (() -> Void)?
@@ -63,15 +63,6 @@ class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, S
         viewModel.delegate = self
     }
 
-//    fileprivate convenience init(team: TeamType) {
-//
-//        self.init(oneColumnLayoutCellHeightToWidthRatio: LargeUserCollectionViewCell.heightToWidthRatio,
-//                  twoColumnsLayoutCellHeightToWidthRatio: SmallUserCollectionViewCell.heightToWidthRatio)
-//
-//        viewModel = TeamDetailsViewModel(team: team)
-//        viewModel.delegate = self
-//    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -96,7 +87,7 @@ class ProfileShotsOrMembersViewController: TwoLayoutsCollectionViewController, S
 
 // MARK: UIScrollViewDelegate
 
-extension ProfileShotsOrMembersViewController {
+extension ProfileShotsViewController {
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= 0 {
@@ -113,7 +104,7 @@ extension ProfileShotsOrMembersViewController {
 
 // MARK: UICollectionViewDataSource
 
-extension ProfileShotsOrMembersViewController {
+extension ProfileShotsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.itemsCount
@@ -121,57 +112,35 @@ extension ProfileShotsOrMembersViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if let cell = prepareUserCell(at: indexPath, in: collectionView) {
-            return cell
-//        } else if let cell = prepareTeamCell(at: indexPath, in: collectionView) {
-//            return cell
-        } else {
-            return UICollectionViewCell()
-        }
+        return prepareUserCell(at: indexPath, in: collectionView)
     }
 }
 
 // MARK: UICollectionViewDelegate
 
-extension ProfileShotsOrMembersViewController {
+extension ProfileShotsViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-//        if let viewModel = viewModel as? UserDetailsViewModel {
+        let detailsViewController = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+        detailsViewController.shotIndex = indexPath.item
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
-            let detailsViewController = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
-            detailsViewController.shotIndex = indexPath.item
-            let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
-            let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-            
-            modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-            
-            pageViewController.transitioningDelegate = modalTransitionAnimator
-            pageViewController.modalPresentationStyle = .custom
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
 
-            present(pageViewController, animated: true, completion: nil)
-//        }
-//        if let viewModel = viewModel as? TeamDetailsViewModel {
-//
-//            let profileViewController = ProfileViewController(user: viewModel.teamMembers[indexPath.item])
-//            profileViewController.hidesBottomBarWhenPushed = true
-//            self.navigationController?.pushViewController(profileViewController, animated: true)
-//        }
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .custom
+
+        present(pageViewController, animated: true, completion: nil)
     }
 
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        
-//        switch viewModel {
-//        case is UserDetailsViewModel:
-            if indexPath.row == viewModel.itemsCount - 1 {
-                viewModel.downloadItemsForNextPage()
-            }
-//        case is TeamDetailsViewModel:
-//            (viewModel as! TeamDetailsViewModel).downloadItem(at: indexPath.row)
-//        default:
-//            break
-//        }
+                                 forItemAt indexPath: IndexPath) {
+
+        if indexPath.row == viewModel.itemsCount - 1 {
+            viewModel.downloadItemsForNextPage()
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
@@ -184,7 +153,7 @@ extension ProfileShotsOrMembersViewController {
 
 // MARK: BaseCollectionViewViewModelDelegate
 
-extension ProfileShotsOrMembersViewController: BaseCollectionViewViewModelDelegate {
+extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
         collectionView?.reloadData()
@@ -215,7 +184,7 @@ extension ProfileShotsOrMembersViewController: BaseCollectionViewViewModelDelega
 
 // MARK: Private extension
 
-private extension ProfileShotsOrMembersViewController {
+private extension ProfileShotsViewController {
 
     func lazyLoadImage(_ shotImage: ShotImageType, forCell cell: SimpleShotCollectionViewCell,
                        atIndexPath indexPath: IndexPath) {
@@ -234,7 +203,7 @@ private extension ProfileShotsOrMembersViewController {
         )
     }
 
-    func prepareUserCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell? {
+    func prepareUserCell(at indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self, forIndexPath: indexPath, type: .cell)
 
@@ -255,7 +224,7 @@ private extension ProfileShotsOrMembersViewController {
 
 // MARK: UIViewControllerPreviewingDelegate
 
-extension ProfileShotsOrMembersViewController: UIViewControllerPreviewingDelegate {
+extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
 
     fileprivate func peekPopPresent(viewController: UIViewController) {
         if let detailsViewController = viewController as? ShotDetailsViewController {
@@ -270,10 +239,6 @@ extension ProfileShotsOrMembersViewController: UIViewControllerPreviewingDelegat
 
             present(pageViewController, animated: true, completion: nil)
         }
-//        } else if (viewModel is TeamDetailsViewModel) {
-//            navigationController?.pushViewController(viewController, animated: true)
-//        }
-
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
@@ -282,20 +247,14 @@ extension ProfileShotsOrMembersViewController: UIViewControllerPreviewingDelegat
             let collectionView = collectionView,
             let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView.cellForItem(at: indexPath)
-            else { return nil }
+        else { return nil }
 
-//        if let viewModel = viewModel as? UserDetailsViewModel {
-            previewingContext.sourceRect = cell.contentView.bounds
-            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
-            controller.customizeFor3DTouch(true)
-            controller.shotIndex = indexPath.item
+        previewingContext.sourceRect = cell.contentView.bounds
+        let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+        controller.customizeFor3DTouch(true)
+        controller.shotIndex = indexPath.item
 
-            return controller
-//        } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
-//            previewingContext.sourceRect = cell.contentView.bounds
-//            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
-//        }
-//        return nil
+        return controller
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
@@ -305,26 +264,20 @@ extension ProfileShotsOrMembersViewController: UIViewControllerPreviewingDelegat
 
 // MARK: PeekPopPreviewingDelegate
 
-extension ProfileShotsOrMembersViewController: PeekPopPreviewingDelegate {
+extension ProfileShotsViewController: PeekPopPreviewingDelegate {
 
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard
             let collectionView = collectionView,
             let indexPath = collectionView.indexPathForItem(at: previewingContext.sourceView.convert(location, to: collectionView)),
             let cell = collectionView.cellForItem(at: indexPath)
-            else { return nil }
+        else { return nil }
 
-//        if let viewModel = viewModel as? UserDetailsViewModel {
-            let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
-            controller.customizeFor3DTouch(true)
-            controller.shotIndex = indexPath.item
-            previewingContext.sourceRect = cell.frame
-            return controller
-//        } else if let viewModel = viewModel as? TeamDetailsViewModel, collectionView.collectionViewLayout is TwoColumnsCollectionViewFlowLayout {
-//            previewingContext.sourceRect = UIView.extendedFrame(forFrame: cell.frame)
-//            return ProfileViewController(user: viewModel.teamMembers[indexPath.item])
-//        }
-//        return nil
+        let controller = ShotDetailsViewController(shot: viewModel.shotWithSwappedUser(viewModel.userShots[indexPath.item]))
+        controller.customizeFor3DTouch(true)
+        controller.shotIndex = indexPath.item
+        previewingContext.sourceRect = cell.frame
+        return controller
     }
 
     func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
