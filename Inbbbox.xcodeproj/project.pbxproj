@@ -1455,7 +1455,6 @@
 				65BA2813D25CE6EA657CBA73 /* Numeric.swift */,
 				BE71499B1DE85DCD007442CF /* OnboardingSkipButtonHandlerDelegate.swift */,
 				EA00D61D1E43689600A23212 /* ProfileProjectsOrBucketsViewModel.swift */,
-				F0BEBDD81CDB3E9800AA391C /* ProfileShotsOrMembersViewModel.swift */,
 				0FE6DAF0C4E21417E84D4B6F /* Reusable.swift */,
 				303A578A1D0FE47A00D760A3 /* SafariAuthorizable.swift */,
 				ED14B7F90B5F3A56E09857D8 /* ShotsStateHandler.swift */,
@@ -1575,6 +1574,7 @@
 				EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */,
 				753FDC5472DAE17BC1EC24CF /* ProfileInfoViewModel.swift */,
 				EA00D61B1E43613D00A23212 /* ProfileProjectsViewModel.swift */,
+				3BEA03D83A79AA83801134F0 /* ProfileShotsViewModel.swift */,
 				F0FEDACE1E3787050002181F /* ProfileViewModel.swift */,
 				B06CB7E060D9820A38D8C666 /* SettingsViewModel.swift */,
 				30ED40221B9A46F946A93D9F /* ShotBucketsViewModel.swift */,
@@ -1582,7 +1582,6 @@
 				48B614937BCA0F196E31253A /* ShotDetailsViewModel.swift */,
 				D5B91B511E142060005628F6 /* StreamSourceViewModel.swift */,
 				7CA78ED3E8C74C6041B3C6B7 /* SwitchItem.swift */,
-				3BEA03D83A79AA83801134F0 /* ProfileShotsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
