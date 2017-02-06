@@ -81,7 +81,9 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
+        if let collectionView = collectionView {
+            addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView)
+        }
     }
 }
 
