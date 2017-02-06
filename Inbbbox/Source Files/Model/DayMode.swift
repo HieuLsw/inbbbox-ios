@@ -252,7 +252,21 @@ struct DayMode: ColorModeType {
     var shotBucketsActionCellBackground: UIColor {
         return .white
     }
-    
+
+    // MARK: Profile Details
+
+    var profileDetailsCollectionTitleLabelTextColor: UIColor {
+        return .textDarkGrayColor()
+    }
+
+    var profileDetailsCollectionBackgroundLabelTextColor: UIColor {
+        return .RGBA(223, 224, 226, 0.5)
+    }
+
+    var profileDetailsCollectionCounterLabelTextColor: UIColor {
+        return .pinkColor()
+    }
+
     // MARK: Settings
     var settingsUsernameTextColor: UIColor {
         return .textDarkColor()

@@ -66,7 +66,6 @@ class ShotsProvider {
                 fulfill(shotsSorted)
             }.catch(execute: reject)
         }
-
     }
 
     func provideShotsForBucket(_ bucket: BucketType) -> Promise<[ShotType]?> {
@@ -74,6 +73,10 @@ class ShotsProvider {
             return apiShotsProvider.provideShotsForBucket(bucket)
         }
         return managedShotsProvider.provideShotsForBucket(bucket)
+    }
+
+    func provideShotsForProject(_ project: ProjectType) -> Promise<[ShotType]?> {
+        return apiShotsProvider.provideShotsForProject(project)
     }
 
     func nextPage() -> Promise<[ShotType]?> {

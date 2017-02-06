@@ -2,7 +2,6 @@
 //  APIShotsProvider.swift
 //  Inbbbox
 //
-//  Created by Patryk Kaczmarek on 22/01/16.
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -18,7 +17,7 @@ class APIShotsProvider: PageableProvider {
 
     /// Defines source to provide.
     enum SourceType {
-        case general, bucket, user, liked
+        case general, bucket, user, liked, project
     }
 
     /// Currently fetched source.
@@ -118,6 +117,20 @@ class APIShotsProvider: PageableProvider {
         resetAnUseSourceType(.bucket)
 
         let query = ShotsQuery(type: .bucketShots(bucket))
+        return provideShotsWithQueries([query])
+    }
+
+    /**
+     Provides shots for given project.
+
+     - parameter project: Project which shots should be provided.
+
+     - returns: Promise which resolves with shots or nil.
+     */
+    func provideShotsForProject(_ project: ProjectType) -> Promise<[ShotType]?> {
+        resetAnUseSourceType(.project)
+
+        let query = ShotsQuery(type: .projectShots(project))
         return provideShotsWithQueries([query])
     }
 

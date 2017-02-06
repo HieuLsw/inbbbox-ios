@@ -168,10 +168,10 @@ private extension ProfileViewController {
         
         let viewControllers: [UIViewController] = viewModel.menu.map {
             switch $0 {
-            case .shots: return ProfileShotsOrMembersViewController(user: viewModel.user)
+            case .shots: return ProfileShotsViewController(user: viewModel.user)
             case .info: return ProfileInfoViewController(user: viewModel.user)
-            case .projects: return UIViewController()
-            case .buckets: return UIViewController()
+            case .projects: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .projects)
+            case .buckets: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .buckets)
             }
         }
 

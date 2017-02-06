@@ -47,7 +47,7 @@ protocol ColorModeType {
     var tableViewCellBackground: UIColor { get }
     var tableViewCellTextColor: UIColor { get }
     
-    // MARK: Swich Cell
+    // MARK: Switch Cell
     var switchCellTintColor: UIColor { get }
 
     // MARK: Shot Buckets
@@ -80,7 +80,12 @@ protocol ColorModeType {
     var shotDetailsSeparatorColor: UIColor { get }
     var shotDetailsEditViewBackground: UIColor { get }
     var shotBucketsActionCellBackground: UIColor { get }
-    
+
+    // MARK: Profile Details
+    var profileDetailsCollectionTitleLabelTextColor: UIColor { get }
+    var profileDetailsCollectionBackgroundLabelTextColor: UIColor { get }
+    var profileDetailsCollectionCounterLabelTextColor: UIColor { get }
+
     // MARK: Settings
     var settingsUsernameTextColor: UIColor { get }
     var settingsSelectedCellBackgound: UIColor { get }
