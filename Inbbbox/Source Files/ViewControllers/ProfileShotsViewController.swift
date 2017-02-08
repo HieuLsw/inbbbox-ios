@@ -79,7 +79,7 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         collectionView.registerClass(SmallUserCollectionViewCell.self, type: .cell)
         collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
         collectionView.registerClass(ProfileHeaderView.self, type: .header)
-        updateInsets(top: ProfileView.headerInitialHeight, in: collectionView)
+        collectionView.updateInsets(top: ProfileView.headerInitialHeight)
 
         viewModel.downloadInitialItems()
     }
@@ -90,7 +90,7 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         guard let collectionView = collectionView else { return }
 
         if viewModel.itemsCount == 0 {
-            updateInsets(bottom: collectionView.frame.height, in: collectionView)
+            collectionView.updateInsets(bottom: collectionView.frame.height)
         }
         guard let offset = scrollContentOffset?() else { return }
         collectionView.contentOffset = offset
@@ -233,25 +233,16 @@ private extension ProfileShotsViewController {
     func adjustCollectionView() {
         guard let collectionView = collectionView else { return }
         if viewModel.itemsCount == 0 {
-            updateInsets(bottom: collectionView.frame.height, in: collectionView)
+            collectionView.updateInsets(bottom: collectionView.frame.height)
         } else {
             if collectionView.contentSize.height < collectionView.frame.height {
-                updateInsets(bottom: collectionView.frame.height - collectionView.contentSize.height, in: collectionView)
+                collectionView.updateInsets(bottom: collectionView.frame.height - collectionView.contentSize.height)
             } else {
-                updateInsets(bottom: 0, in: collectionView)
+                collectionView.updateInsets(bottom: 0)
             }
         }
         guard let offset = self.scrollContentOffset?() else { return }
         collectionView.contentOffset = offset
-    }
-
-    func updateInsets(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil, in scrollView: UIScrollView) {
-        scrollView.contentInset = UIEdgeInsets(
-            top: top ?? scrollView.contentInset.top,
-            left: left ?? scrollView.contentInset.left,
-            bottom: bottom ?? scrollView.contentInset.bottom,
-            right: right ?? scrollView.contentInset.right
-        )
     }
 }
 

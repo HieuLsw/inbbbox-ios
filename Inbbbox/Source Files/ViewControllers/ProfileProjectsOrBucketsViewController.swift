@@ -60,7 +60,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
         tableView.estimatedRowHeight = 140
         tableView.separatorStyle = .none
         tableView.registerClass(CarouselCell.self)
-        updateInsets(top: ProfileView.headerInitialHeight, in: tableView)
+        tableView.updateInsets(top: ProfileView.headerInitialHeight)
 
         viewModel.downloadInitialItems()
     }
@@ -69,7 +69,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
         super.viewWillAppear(animated)
 
         if viewModel.itemsCount == 0 {
-            updateInsets(bottom: tableView.frame.height, in: tableView)
+            tableView.updateInsets(bottom: tableView.frame.height)
         }
 
         guard let offset = scrollContentOffset?() else { return }
@@ -148,25 +148,16 @@ private extension ProfileProjectsOrBucketsViewController {
 
     func adjustTableView() {
         if viewModel.itemsCount == 0 {
-            updateInsets(bottom: tableView.frame.height, in: tableView)
+            tableView.updateInsets(bottom: tableView.frame.height)
         } else {
             if tableView.contentSize.height < tableView.frame.height {
-                updateInsets(bottom: tableView.frame.height - tableView.contentSize.height, in: tableView)
+                tableView.updateInsets(bottom: tableView.frame.height - tableView.contentSize.height)
             } else {
-                updateInsets(bottom: 0, in: tableView)
+                tableView.updateInsets(bottom: 0)
             }
         }
         guard let offset = self.scrollContentOffset?() else { return }
         tableView.contentOffset = offset
-    }
-
-    func updateInsets(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil, in scrollView: UIScrollView) {
-        scrollView.contentInset = UIEdgeInsets(
-            top: top ?? scrollView.contentInset.top,
-            left: left ?? scrollView.contentInset.left,
-            bottom: bottom ?? scrollView.contentInset.bottom,
-            right: right ?? scrollView.contentInset.right
-        )
     }
 }
 

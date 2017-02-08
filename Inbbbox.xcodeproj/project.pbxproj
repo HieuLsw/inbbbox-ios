@@ -441,6 +441,7 @@
 		F035ECF11E3F685B003A8348 /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F035ECF01E3F685B003A8348 /* LanguageViewController.swift */; };
 		F03764FC1CBB9F81008183F3 /* LazyImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03764FB1CBB9F81008183F3 /* LazyImageProvider.swift */; };
 		F077D0941CD23457008948A9 /* URLDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F077D0931CD23457008948A9 /* URLDetector.swift */; };
+		F094D0391E4AFC8F00C76150 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F094D0381E4AFC8F00C76150 /* UIScrollViewExtension.swift */; };
 		F0B898D71CC0F189004A807C /* GalleryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B898D61CC0F189004A807C /* GalleryViewProvider.swift */; };
 		F0BEBDD51CD789C400AA391C /* ShotDetailsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BEBDD41CD789C400AA391C /* ShotDetailsViewControllerExtension.swift */; };
 		F0D3D7EC1E35F968008834E2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3D7EB1E35F968008834E2 /* ProfileViewController.swift */; };
@@ -959,6 +960,7 @@
 		F049C867F1FCCDB672E8597F /* CoreDataHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		F066714B1E40C22D00088503 /* StoreData 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "StoreData 4.xcdatamodel"; sourceTree = "<group>"; };
 		F077D0931CD23457008948A9 /* URLDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLDetector.swift; sourceTree = "<group>"; };
+		F094D0381E4AFC8F00C76150 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
 		F0B898D61CC0F189004A807C /* GalleryViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewProvider.swift; sourceTree = "<group>"; };
 		F0BEBDD41CD789C400AA391C /* ShotDetailsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsViewControllerExtension.swift; sourceTree = "<group>"; };
 		F0D3D7EB1E35F968008834E2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -1104,6 +1106,7 @@
 				BBC5F88643B64405114F960D /* UIWindowExtension.swift */,
 				30872A8B1DD1DAA000330F8F /* URLSessionConfigurationExtension.swift */,
 				30CE68931DD21C5200FF2BAA /* URLSessionExtension.swift */,
+				F094D0381E4AFC8F00C76150 /* UIScrollViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2374,6 +2377,7 @@
 				305A850E1DDB00FC008EF410 /* UIViewExtension.swift in Sources */,
 				B0FA7ED3857415953587DEA9 /* UserQuery.swift in Sources */,
 				B4106314FAE6A26929E31986 /* AutoSizable.swift in Sources */,
+				F094D0391E4AFC8F00C76150 /* UIScrollViewExtension.swift in Sources */,
 				EA0CFB1E1D95654700CFF21A /* CommentUnlikeQuery.swift in Sources */,
 				F0EE2870B58F0E2F0AEF5922 /* AvatarSettable.swift in Sources */,
 				7375CF971DFABFC400E9A299 /* NightModeHoursProvider.swift in Sources */,
