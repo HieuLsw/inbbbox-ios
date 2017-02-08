@@ -131,6 +131,14 @@ protocol ColorModeType {
     var visualEffectBlurType: UIBlurEffectStyle { get }
     var collectionViewBackgroundColor: UIColor { get }
     
+    // MARK: Separator
+    var separatorColor: UIColor { get }
+    
+    // MARK: Profile info tab
+    var statisticNameTextColor: UIColor { get }
+    var statisticValueTextColor: UIColor { get }
+    var smallTextColor: UIColor { get }
+    
     func isEqualTo(_ other: ColorModeType) -> Bool
 }
 

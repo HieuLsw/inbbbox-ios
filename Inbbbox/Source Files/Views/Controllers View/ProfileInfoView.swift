@@ -14,13 +14,14 @@ final class ProfileInfoView: UIView {
     let shotsAmountView = UserStatisticView(title: Localized("ProfileInfoView.Shots", comment: "Shots"))
     let followingAmountView = UserStatisticView(title: Localized("ProfileInfoView.Following", comment: "Following"))
     let locationView = LocationView()
+    let scrollView = UIScrollView(frame: .zero)
 
     private(set) lazy var bioLabel: UILabel = { [unowned self] in
         let label = UILabel()
 
         label.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         label.numberOfLines = 0
-        label.textColor = .textMediumGrayColor()
+        label.textColor = ColorModeProvider.current().smallTextColor
         label.textAlignment = .center
 
         return label
@@ -30,9 +31,9 @@ final class ProfileInfoView: UIView {
         let stackView = UIStackView(
             arrangedSubviews: [
                 self.followersAmountView,
-                SeparatorView(axis: .horizontal, thickness: 0.5, color: .separatorGrayColor()),
+                SeparatorView(axis: .horizontal, thickness: 0.5, color: ColorModeProvider.current().separatorColor),
                 self.shotsAmountView,
-                SeparatorView(axis: .horizontal, thickness: 0.5, color: .separatorGrayColor()),
+                SeparatorView(axis: .horizontal, thickness: 0.5, color: ColorModeProvider.current().separatorColor),
                 self.followingAmountView
             ]
         )
@@ -47,9 +48,9 @@ final class ProfileInfoView: UIView {
     private lazy var headerStackView: UIStackView = { [unowned self] in
         let stackView = UIStackView(
             arrangedSubviews: [
-                SeparatorView(axis: .vertical, thickness: 0.5, color: .separatorGrayColor()),
+                SeparatorView(axis: .vertical, thickness: 0.5, color: ColorModeProvider.current().separatorColor),
                 self.statisticsStackView,
-                SeparatorView(axis: .vertical, thickness: 0.5, color: .separatorGrayColor())
+                SeparatorView(axis: .vertical, thickness: 0.5, color: ColorModeProvider.current().separatorColor)
             ]
         )
         stackView.axis = .vertical
@@ -64,7 +65,7 @@ final class ProfileInfoView: UIView {
                 self.bioLabel,
             ]
         )
-        stackView.layoutMargins = UIEdgeInsetsMake(16, 0, 12, 0)
+        stackView.layoutMargins = UIEdgeInsetsMake(16, 16, 12, 16)
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -75,10 +76,12 @@ final class ProfileInfoView: UIView {
 
     private(set) var teamsCollectionView: UICollectionView
     private(set) var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout
+    private(set) var teamMembersTableView: UITableView
 
     override init(frame: CGRect) {
         teamsCollectionViewFlowLayout = UICollectionViewFlowLayout()
         teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
+        teamMembersTableView = UITableView(frame: .zero, style: .plain)
         super.init(frame: frame)
         setupCollectionView()
         setupLayout()
@@ -92,21 +95,29 @@ final class ProfileInfoView: UIView {
     private func setupLayout() {
         backgroundColor = .white
 
-        addSubview(headerStackView)
+        addSubview(scrollView)
+        scrollView.autoPinEdgesToSuperviewEdges()
+        
+        scrollView.addSubview(headerStackView)
         headerStackView.autoPinEdge(toSuperviewEdge: .top)
         headerStackView.autoPinEdge(toSuperviewEdge: .left)
         headerStackView.autoPinEdge(toSuperviewEdge: .right)
-
-        addSubview(informationsStackView)
+        headerStackView.autoMatch(.width, to: .width, of: self)
+        
+        scrollView.addSubview(informationsStackView)
         informationsStackView.autoPinEdge(.top, to: .bottom, of: headerStackView)
         informationsStackView.autoPinEdge(toSuperviewEdge: .left)
         informationsStackView.autoPinEdge(toSuperviewEdge: .right)
 
-        addSubview(teamsCollectionView)
+        scrollView.addSubview(teamsCollectionView)
         teamsCollectionView.autoPinEdge(.top, to: .bottom, of: informationsStackView)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .left)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .right)
-        teamsCollectionView.autoPinEdge(toSuperviewEdge: .bottom)
+
+        scrollView.addSubview(teamMembersTableView)
+        teamMembersTableView.autoPinEdge(.top, to: .bottom, of: informationsStackView)
+        teamMembersTableView.autoPinEdge(toSuperviewEdge: .left)
+        teamMembersTableView.autoPinEdge(toSuperviewEdge: .right)
     }
 
     private func setupCollectionView() {
@@ -115,6 +126,21 @@ final class ProfileInfoView: UIView {
         teamsCollectionViewFlowLayout.minimumLineSpacing = 0
 
         teamsCollectionView.backgroundColor = .white
+    }
+
+    func updateLayout() {
+        teamsCollectionView.autoSetDimension(.height, toSize: teamsCollectionView.contentSize.height + 60)
+        teamMembersTableView.autoSetDimension(.height, toSize: teamMembersTableView.contentSize.height)
+        var scrollViewContentSize = headerStackView.frame.size.height + informationsStackView.frame.size.height
+        
+        if !teamsCollectionView.isHidden {
+            scrollViewContentSize += teamsCollectionView.contentSize.height + 60
+        }
+        
+        if !teamMembersTableView.isHidden {
+            scrollViewContentSize += teamMembersTableView.contentSize.height
+        }
+        scrollView.contentSize.height = scrollViewContentSize
     }
 
 }

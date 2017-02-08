@@ -334,6 +334,24 @@ struct DayMode: ColorModeType {
         return .backgroundGrayColor()
     }
     
+    // MARK: Separator
+    var separatorColor: UIColor {
+        return .separatorGrayColor()
+    }
+    
+    // MARK: Profile info tab
+    var statisticNameTextColor: UIColor {
+        return .textLightGrayColor()
+    }
+    
+    var statisticValueTextColor: UIColor {
+        return .textDarkColor()
+    }
+    
+    var smallTextColor: UIColor {
+        return .textMediumGrayColor()
+    }
+    
     func isEqualTo(_ other: ColorModeType) -> Bool {
         return other is DayMode
     }

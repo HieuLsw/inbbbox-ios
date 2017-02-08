@@ -10,8 +10,10 @@ import PromiseKit
 import UIKit
 
 final class ProfileInfoViewController: UIViewController {
-
+    
     fileprivate let viewModel: ProfileInfoViewModel
+
+    fileprivate var currentColorMode = ColorModeProvider.current()
 
     fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
@@ -37,7 +39,7 @@ final class ProfileInfoViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupTeamsCollectionView()
-        viewModel.refreshUserData()
+        setupTeamMembersTableView()
     }
 
     override func viewDidLayoutSubviews() {
@@ -62,6 +64,16 @@ final class ProfileInfoViewController: UIViewController {
         profileInfoView.teamsCollectionView.register(TeamsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier)
     }
 
+    private func setupTeamMembersTableView() {
+        profileInfoView.teamMembersTableView.delegate = self
+        profileInfoView.teamMembersTableView.dataSource = self
+        profileInfoView.teamMembersTableView.register(CarouselCell.self, forCellReuseIdentifier: CarouselCell.identifier)
+        profileInfoView.teamMembersTableView.rowHeight = UITableViewAutomaticDimension
+        profileInfoView.teamMembersTableView.estimatedRowHeight = 140
+        profileInfoView.teamMembersTableView.separatorStyle = .none
+        profileInfoView.teamMembersTableView.isScrollEnabled = false
+    }
+
     fileprivate func setupUI() {
         profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
         profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
@@ -70,6 +82,7 @@ final class ProfileInfoViewController: UIViewController {
         profileInfoView.bioLabel.text = viewModel.bio
         profileInfoView.locationView.isHidden = viewModel.shouldHideLocation
         profileInfoView.teamsCollectionView.isHidden = viewModel.shouldHideTeams
+        profileInfoView.teamMembersTableView.isHidden = viewModel.shouldHideTeamMembers
     }
 
 }
@@ -105,10 +118,45 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
 
 }
 
+extension ProfileInfoViewController: UITableViewDelegate {
+
+}
+
+extension ProfileInfoViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.teamMembersCount
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = prepareCell(at: indexPath, in: tableView)
+        return cell
+    }
+
+}
+
+extension ProfileInfoViewController {
+
+    func prepareCell(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(CarouselCell.self)
+        cell.adaptColorMode(currentColorMode)
+        cell.selectionStyle = .none
+
+        let teamMember = viewModel.member(forIndex: indexPath.row)
+        cell.titleLabel.text = teamMember.name
+        cell.backgroundLabel.text = teamMember.name
+        cell.shots = viewModel.shots(forIndex: indexPath.row)
+
+        return cell
+    }
+}
+
 extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
         profileInfoView.teamsCollectionView.reloadData()
+        profileInfoView.teamMembersTableView.reloadData()
+        profileInfoView.updateLayout()
         setupUI()
     }
 
@@ -131,7 +179,7 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
     }
 
     func viewModel(_ viewModel: BaseCollectionViewViewModel, didLoadShotsForItemAtIndexPath indexPath: IndexPath) {
-        profileInfoView.teamsCollectionView.reloadItems(at: [indexPath])
+        profileInfoView.teamMembersTableView.reloadRows(at: [indexPath], with: .none)
     }
 
 }
