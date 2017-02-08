@@ -19,7 +19,7 @@
 /* LikesCollectionView, empty data set view */
 "LikesCollectionView.EmptyData.LastLocalizedString" = " dê gosto a algumas fotos!";
 
-/********* LikesCollectionViewController *********/
+/********* FolloweesCollectionViewController *********/
 
 /* FolloweesCollectionView, empty data set view */
 "FolloweesCollectionView.EmptyData.FirstLocalizedString" = " Primeiro";
@@ -32,7 +32,7 @@
 /* Title of Following screen */
 "FolloweesViewModel.Title" = "Os autores seguidos";
 
-//******** LikesViewModel ********
+/********* LikesViewModel *********/
 
 /* Title of Likes screen */
 "LikesViewModel.Title" = "Os gostos";
@@ -372,7 +372,6 @@
 
 /********* ProfileMenuBarView *********/
 "ProfileMenuBarView.Shots" = "Imagens";
-"ProfileMenuBarView.Team" = "$Team";
 "ProfileMenuBarView.Info" = "$Info";
 "ProfileMenuBarView.Projects" = "$Projects";
 "ProfileMenuBarView.Buckets" = "Os catálogos";

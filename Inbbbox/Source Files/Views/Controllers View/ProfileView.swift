@@ -10,6 +10,8 @@ import PureLayout
 
 class ProfileView: UIView {
 
+    static let headerInitialHeight = CGFloat(150)
+
     let headerView = ProfileHeaderView()
     let menuBarView = ProfileMenuBarView()
 
@@ -23,11 +25,11 @@ class ProfileView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .white
+        backgroundColor = ColorModeProvider.current().tableViewBackground
 
+        addSubview(childView)
         addSubview(headerView)
         addSubview(menuBarView)
-        addSubview(childView)
     }
 
     @available(*, unavailable, message: "Use init(frame:) instead")
@@ -49,7 +51,7 @@ class ProfileView: UIView {
             menuBarView.autoSetDimension(.height, toSize: 48)
 
             childView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-            childView.autoPinEdge(.top, to: .bottom, of: menuBarView)
+            childView.autoPinEdge(toSuperviewEdge: .top, withInset: 48)
         }
 
         super.updateConstraints()
@@ -57,18 +59,18 @@ class ProfileView: UIView {
 
     // MARK: Public
 
-    /// Toggles header visibility.
+    /// Sets header's height. Note: you can pass negative values, they will be properly mapped/ignored.
     ///
-    /// - Parameter visible: Desirable state of header.
-    func toggleHeader(visible: Bool) {
+    /// - Parameter value: Value of header's height
+    func setHeaderHeight(value: CGFloat) {
+        headerHeightConstraint?.constant = value > 0 ? value : 0
 
-        guard isHeaderVisible != visible else { return }
-
-        UIView.animate(withDuration: 0.4) {
-            self.headerView.contentView.alpha = visible ? 1 : 0
-            self.headerHeightConstraint?.constant = visible ? self.headerHeight : 0
-            self.layoutIfNeeded()
-            self.isHeaderVisible = visible
+        if value > headerHeight {
+            headerView.contentView.alpha = 1
+        } else if value < 0 {
+            headerView.contentView.alpha = 0
+        } else {
+            headerView.contentView.alpha = value / headerHeight
         }
     }
 }

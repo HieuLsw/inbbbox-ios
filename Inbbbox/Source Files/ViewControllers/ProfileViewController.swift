@@ -11,25 +11,43 @@ import PromiseKit
 import PeekPop
 
 enum ProfileMenuItem: Int {
-    case shots, team, info, projects, buckets
+    case shots, info, projects, buckets
 }
 
-protocol TriggeringHeaderUpdate: class {
-    var shouldHideHeader: (() -> Void)?  { get set }
-    var shouldShowHeader: (() -> Void)? { get set }
+protocol ContainingScrollableView: class {
+    var scrollContentOffset: (() -> CGPoint)? { get set }
+    var scrollableView: UIScrollView { get }
 }
+
+fileprivate var shotsContext = 0
+fileprivate var infoContext = 1
+fileprivate var projectsContext = 2
+fileprivate var bucketsContext = 3
 
 class ProfileViewController: UIViewController {
+
+    fileprivate enum KeyPath: String {
+        case contentOffset
+    }
 
     var profileView: ProfileView! {
         return view as? ProfileView
     }
 
-    fileprivate var selectedMenuItem: ProfileMenuItem?
+    var headerHeight = ProfileView.headerInitialHeight
+
+    fileprivate var selectedMenuItem: ProfileMenuItem? = nil {
+        didSet {
+            guard let item = selectedMenuItem else { return }
+            observeContentOffsetForViewController(withPageIndex: item.rawValue)
+        }
+    }
 
     fileprivate var viewModel: ProfileViewModel
 
     fileprivate var profilePageViewController: ProfilePageViewController?
+
+    fileprivate var indexesForRegisteredObservers: [Int] = []
 
     var dismissClosure: (() -> Void)?
 
@@ -101,6 +119,32 @@ class ProfileViewController: UIViewController {
         
         checkIfUserIsFollowed()
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        removeAllContentOffsetObservers()
+        super.viewWillDisappear(animated)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+
+        guard keyPath == KeyPath.contentOffset.rawValue else { return }
+
+        guard
+            (context == &shotsContext && selectedMenuItem == .shots) ||
+            (context == &infoContext && selectedMenuItem == .info) ||
+            (context == &projectsContext && selectedMenuItem == .projects) ||
+            (context == &bucketsContext && selectedMenuItem == .buckets)
+        else { return }
+
+        guard
+            let newOffset = change?[.newKey] as? CGPoint,
+            let oldoffset = change?[.oldKey] as? CGPoint,
+            newOffset.y != oldoffset.y
+        else { return }
+
+        profileView.setHeaderHeight(value: -newOffset.y)
+        headerHeight = -newOffset.y
+    }
 }
 
 
@@ -127,8 +171,7 @@ private extension ProfileViewController {
     func setupBackButton() {
         if isModal {
             let attributedString = NSMutableAttributedString(
-                string: Localized("Profile.BackButton",
-                                          comment: "Back button, user details"),
+                string: Localized("Profile.BackButton", comment: "Back button, user details"),
                 attributes: [NSForegroundColorAttributeName: UIColor.white])
             let textAttachment = NSTextAttachment()
             if let image = UIImage(named: "ic-back") {
@@ -136,8 +179,7 @@ private extension ProfileViewController {
                 textAttachment.bounds = CGRect(x: 0, y: -3, width: image.size.width, height: image.size.height)
             }
             let attributedStringWithImage = NSAttributedString(attachment: textAttachment)
-            attributedString.replaceCharacters(in: NSRange(location: 0, length: 0),
-                                               with: attributedStringWithImage)
+            attributedString.replaceCharacters(in: NSRange(location: 0, length: 0), with: attributedStringWithImage)
 
             let backButton = UIButton()
             backButton.setAttributedTitle(attributedString, for: .normal)
@@ -165,21 +207,14 @@ private extension ProfileViewController {
     }
 
     func setupProfilePageViewController() {
-        let profileShotsOrMembersViewController = ProfileShotsOrMembersViewController(user: viewModel.user)
-        profileShotsOrMembersViewController.didLoadTeamMembers = { [weak self] count in self?.profileView.menuBarView.updateBadge(for: .team, with: count) }
-
+        
         let viewControllers: [UIViewController] = viewModel.menu.map {
             switch $0 {
-            case .shots, .team: return profileShotsOrMembersViewController
+            case .shots: return ProfileShotsViewController(user: viewModel.user)
             case .info: return ProfileInfoViewController(user: viewModel.user)
             case .projects: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .projects)
             case .buckets: return ProfileProjectsOrBucketsViewController(user: viewModel.user, type: .buckets)
             }
-        }
-
-        viewControllers.flatMap { $0 as? TriggeringHeaderUpdate }.forEach { viewController in
-            viewController.shouldShowHeader = { [weak self] in self?.profileView.toggleHeader(visible: true) }
-            viewController.shouldHideHeader = { [weak self] in self?.profileView.toggleHeader(visible: false) }
         }
 
         let dataSource = ProfilePageViewControllerDataSource(viewControllers: viewControllers)
@@ -193,6 +228,38 @@ private extension ProfileViewController {
         profileView.childView.addSubview(profilePageViewController.view)
         profilePageViewController.didMove(toParentViewController: self)
         profilePageViewController.view.autoPinEdgesToSuperviewEdges()
+    }
+
+    func observeContentOffsetForViewController(withPageIndex index: Int) {
+        removeAllContentOffsetObservers()
+
+        guard
+            let viewControllers = (profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers,
+            let scrollableView = (viewControllers[index] as? ContainingScrollableView)?.scrollableView
+        else { return }
+
+        let keyPath = KeyPath.contentOffset.rawValue
+        let options: NSKeyValueObservingOptions = [.old, .new]
+        switch index {
+        case ProfileMenuItem.shots.rawValue: scrollableView.addObserver(self, forKeyPath: keyPath, options: options, context: &shotsContext)
+        case ProfileMenuItem.info.rawValue: scrollableView.addObserver(self, forKeyPath: keyPath, options: options, context: &infoContext)
+        case ProfileMenuItem.projects.rawValue: scrollableView.addObserver(self, forKeyPath: keyPath, options: options, context: &projectsContext)
+        case ProfileMenuItem.buckets.rawValue: scrollableView.addObserver(self, forKeyPath: keyPath, options: options, context: &bucketsContext)
+        default: break
+        }
+
+        indexesForRegisteredObservers.append(index)
+        (viewControllers[index] as? ContainingScrollableView)?.scrollContentOffset = { CGPoint(x: 0, y: -self.headerHeight) }
+    }
+
+    func removeAllContentOffsetObservers() {
+        guard let viewControllers = (profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers else { return }
+
+        indexesForRegisteredObservers.forEach { index in
+            (viewControllers[index] as? ContainingScrollableView)?.scrollableView.removeObserver(self, forKeyPath: KeyPath.contentOffset.rawValue)
+        }
+
+        indexesForRegisteredObservers.removeAll()
     }
 
     dynamic func didTapLeftBarButtonItem() {
@@ -221,7 +288,7 @@ private extension ProfileViewController {
 
         let pageIndex: Int = {
             switch menuItem {
-            case .shots, .team: return 0
+            case .shots: return 0
             case .info: return 1
             case .projects: return 2
             case .buckets: return 3

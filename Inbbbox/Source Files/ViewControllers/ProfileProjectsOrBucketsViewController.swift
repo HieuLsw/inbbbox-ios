@@ -8,16 +8,20 @@
 import UIKit
 import ZFDragableModalTransition
 import PeekPop
+import Async
 
-class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTouch, TriggeringHeaderUpdate {
+class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTouch, ContainingScrollableView {
 
     /// Defines which view model should be loaded
     enum ProfileProjectsOrBucketsType: String {
         case projects, buckets
     }
 
-    var shouldHideHeader: (() -> Void)?
-    var shouldShowHeader: (() -> Void)?
+    var scrollableView: UIScrollView {
+        return tableView
+    }
+
+    var scrollContentOffset: (() -> CGPoint)?
 
     fileprivate var currentColorMode = ColorModeProvider.current()
     fileprivate var viewModel: ProfileProjectsOrBucketsViewModel!
@@ -56,8 +60,21 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
         tableView.estimatedRowHeight = 140
         tableView.separatorStyle = .none
         tableView.registerClass(CarouselCell.self)
+        tableView.updateInsets(top: ProfileView.headerInitialHeight)
 
         viewModel.downloadInitialItems()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if viewModel.itemsCount == 0 {
+            tableView.updateInsets(bottom: tableView.frame.height)
+        }
+
+        if let offset = scrollContentOffset?() {
+            tableView.contentOffset = offset
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -89,23 +106,6 @@ extension ProfileProjectsOrBucketsViewController {
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let carouselCell = cell as? CarouselCell else { return }
         rowsOffset[indexPath.row] = carouselCell.collectionView.contentOffset.x
-    }
-}
-
-// MARK: UIScrollViewDelegate
-
-extension ProfileProjectsOrBucketsViewController {
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
-            shouldShowHeader?()
-        }
-    }
-
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if decelerate {
-            scrollView.contentOffset.y <= 0 ? shouldShowHeader?() : shouldHideHeader?()
-        }
     }
 }
 
@@ -146,6 +146,21 @@ private extension ProfileProjectsOrBucketsViewController {
 
         return cell
     }
+
+    func adjustTableView() {
+        if viewModel.itemsCount == 0 {
+            tableView.updateInsets(bottom: tableView.frame.height)
+        } else {
+            if tableView.contentSize.height < tableView.frame.height {
+                tableView.updateInsets(bottom: tableView.frame.height - tableView.contentSize.height)
+            } else {
+                tableView.updateInsets(bottom: 0)
+            }
+        }
+        if let offset = scrollContentOffset?() {
+            tableView.contentOffset = offset
+        }
+    }
 }
 
 // MARK: BaseCollectionViewViewModelDelegate
@@ -154,10 +169,20 @@ extension ProfileProjectsOrBucketsViewController: BaseCollectionViewViewModelDel
 
     func viewModelDidLoadInitialItems() {
         tableView?.reloadData()
+
+        Async.main(after: 0.01) {
+            self.adjustTableView()
+        }
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         tableView?.reloadData()
+
+        Async.main(after: 0.01) {
+            if let offset = self.scrollContentOffset?() {
+                self.tableView?.contentOffset = offset
+            }
+        }
     }
 
     func viewModelDidFailToLoadItems(_ error: Error) {
