@@ -9,6 +9,7 @@ import UIKit
 import ZFDragableModalTransition
 import PromiseKit
 import PeekPop
+import Async
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -30,13 +31,17 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, TriggeringHeaderUpdate {
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, ContainingScrollableView {
 
-    var shouldHideHeader: (() -> Void)?
-    var shouldShowHeader: (() -> Void)?
     var dismissClosure: (() -> Void)?
 
     var modalTransitionAnimator: ZFModalTransitionAnimator?
+
+    var scrollableView: UIScrollView {
+        return collectionView! as UIScrollView
+    }
+
+    var scrollContentOffset: (() -> CGPoint)?
 
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
@@ -74,8 +79,21 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         collectionView.registerClass(SmallUserCollectionViewCell.self, type: .cell)
         collectionView.registerClass(LargeUserCollectionViewCell.self, type: .cell)
         collectionView.registerClass(ProfileHeaderView.self, type: .header)
+        updateInsets(top: ProfileView.headerInitialHeight, in: collectionView)
 
         viewModel.downloadInitialItems()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard let collectionView = collectionView else { return }
+
+        if viewModel.itemsCount == 0 {
+            updateInsets(bottom: collectionView.frame.height, in: collectionView)
+        }
+        guard let offset = scrollContentOffset?() else { return }
+        collectionView.contentOffset = offset
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -83,23 +101,6 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
 
         if let collectionView = collectionView {
             addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView)
-        }
-    }
-}
-
-// MARK: UIScrollViewDelegate
-
-extension ProfileShotsViewController {
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
-            shouldShowHeader?()
-        }
-    }
-
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if decelerate {
-            scrollView.contentOffset.y <= 0 ? shouldShowHeader?() : shouldHideHeader?()
         }
     }
 }
@@ -159,10 +160,16 @@ extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
         collectionView?.reloadData()
+
+        Async.main(after: 0.01) {
+            self.adjustCollectionView()
+        }
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         collectionView?.reloadData()
+        guard let offset = self.scrollContentOffset?() else { return }
+        collectionView?.contentOffset = offset
 
         if viewModel.collectionIsEmpty {
             guard let visibleViewController = navigationController?.visibleViewController else { return }
@@ -221,6 +228,30 @@ private extension ProfileShotsViewController {
             cell.isRegisteredTo3DTouch = registerTo3DTouch(cell.contentView)
         }
         return cell
+    }
+
+    func adjustCollectionView() {
+        guard let collectionView = collectionView else { return }
+        if viewModel.itemsCount == 0 {
+            updateInsets(bottom: collectionView.frame.height, in: collectionView)
+        } else {
+            if collectionView.contentSize.height < collectionView.frame.height {
+                updateInsets(bottom: collectionView.frame.height - collectionView.contentSize.height, in: collectionView)
+            } else {
+                updateInsets(bottom: 0, in: collectionView)
+            }
+        }
+        guard let offset = self.scrollContentOffset?() else { return }
+        collectionView.contentOffset = offset
+    }
+
+    func updateInsets(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil, in scrollView: UIScrollView) {
+        scrollView.contentInset = UIEdgeInsets(
+            top: top ?? scrollView.contentInset.top,
+            left: left ?? scrollView.contentInset.left,
+            bottom: bottom ?? scrollView.contentInset.bottom,
+            right: right ?? scrollView.contentInset.right
+        )
     }
 }
 

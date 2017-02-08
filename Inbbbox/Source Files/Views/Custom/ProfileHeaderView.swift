@@ -107,7 +107,16 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         if !didUpdateConstraints {
             didUpdateConstraints = true
 
-            contentView.autoPinEdgesToSuperviewEdges()
+            NSLayoutConstraint.autoSetPriority(1000) {
+                contentView.autoPinEdge(toSuperviewEdge: .leading)
+                contentView.autoPinEdge(toSuperviewEdge: .trailing)
+                contentView.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
+                contentView.autoSetDimension(.height, toSize: 150)
+            }
+
+            NSLayoutConstraint.autoSetPriority(999) {
+                contentView.autoCenterInSuperview()
+            }
 
             backgroundImageView.autoPinEdgesToSuperviewEdges()
 
