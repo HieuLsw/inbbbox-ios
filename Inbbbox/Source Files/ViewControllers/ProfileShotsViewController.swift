@@ -38,7 +38,7 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     var scrollableView: UIScrollView {
-        return collectionView! as UIScrollView
+        return collectionView!
     }
 
     var scrollContentOffset: (() -> CGPoint)?
@@ -92,8 +92,10 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         if viewModel.itemsCount == 0 {
             collectionView.updateInsets(bottom: collectionView.frame.height)
         }
-        guard let offset = scrollContentOffset?() else { return }
-        collectionView.contentOffset = offset
+
+        if let offset = scrollContentOffset?() {
+            collectionView.contentOffset = offset
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -168,8 +170,11 @@ extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         collectionView?.reloadData()
-        guard let offset = self.scrollContentOffset?() else { return }
-        collectionView?.contentOffset = offset
+        Async.main(after: 0.01) {
+            if let offset = self.scrollContentOffset?() {
+                self.collectionView?.contentOffset = offset
+            }
+        }
 
         if viewModel.collectionIsEmpty {
             guard let visibleViewController = navigationController?.visibleViewController else { return }

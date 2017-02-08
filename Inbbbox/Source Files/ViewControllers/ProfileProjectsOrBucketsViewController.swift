@@ -72,8 +72,9 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
             tableView.updateInsets(bottom: tableView.frame.height)
         }
 
-        guard let offset = scrollContentOffset?() else { return }
-        tableView.contentOffset = offset
+        if let offset = scrollContentOffset?() {
+            tableView.contentOffset = offset
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -156,8 +157,9 @@ private extension ProfileProjectsOrBucketsViewController {
                 tableView.updateInsets(bottom: 0)
             }
         }
-        guard let offset = self.scrollContentOffset?() else { return }
-        tableView.contentOffset = offset
+        if let offset = scrollContentOffset?() {
+            tableView.contentOffset = offset
+        }
     }
 }
 
@@ -175,8 +177,12 @@ extension ProfileProjectsOrBucketsViewController: BaseCollectionViewViewModelDel
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         tableView?.reloadData()
-        guard let offset = scrollContentOffset?() else { return }
-        tableView?.contentOffset = offset
+
+        Async.main(after: 0.01) {
+            if let offset = self.scrollContentOffset?() {
+                self.tableView?.contentOffset = offset
+            }
+        }
     }
 
     func viewModelDidFailToLoadItems(_ error: Error) {
