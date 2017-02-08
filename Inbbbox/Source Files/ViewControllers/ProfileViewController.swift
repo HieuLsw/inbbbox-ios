@@ -164,22 +164,6 @@ extension ProfileViewController: UIPageViewControllerDelegate {
     }
 }
 
-extension ProfileViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-        guard
-            let selectedMenuItem = selectedMenuItem,
-            let viewController = ((profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers[selectedMenuItem.rawValue] as? ContainingScrollableView),
-            viewController.scrollableView == scrollView
-        else {
-            return
-        }
-
-        profileView.setHeaderHeight(value: -scrollView.contentOffset.y)
-        headerHeight = -scrollView.contentOffset.y
-    }
-}
-
 // MARK: Private extension
 
 private extension ProfileViewController {
