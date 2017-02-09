@@ -45,7 +45,7 @@ class ShotsInitialAnimationsStateHandler: NSObject, ShotsStateHandler {
     }
     
     var shouldShowNoShotsView: Bool {
-        return shotsCollectionViewController?.shots.count == 0 && Settings.areAllStreamSourcesOff()
+        return Settings.areAllStreamSourcesOff()
     }
 
     fileprivate let emptyDataSetLoadingView = EmptyDataSetLoadingView.newAutoLayout()

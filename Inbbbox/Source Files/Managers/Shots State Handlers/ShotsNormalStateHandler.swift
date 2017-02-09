@@ -43,7 +43,7 @@ class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
     }
     
     var shouldShowNoShotsView: Bool {
-        return shotsCollectionViewController?.shots.count == 0 && Settings.areAllStreamSourcesOff()
+        return Settings.areAllStreamSourcesOff()
     }
 
     var didLikeShotCompletionHandler: (() -> Void)?
@@ -79,7 +79,7 @@ class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
 extension ShotsNormalStateHandler {
     func collectionView(_ collectionView: UICollectionView,
             numberOfItemsInSection section: Int) -> Int {
-        guard let shotsCollectionViewController = shotsCollectionViewController else {
+        guard let shotsCollectionViewController = shotsCollectionViewController, !shouldShowNoShotsView else {
             return 0
         }
         return shotsCollectionViewController.shots.count
