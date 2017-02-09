@@ -124,8 +124,6 @@ final class ProfileInfoView: UIView {
         teamsCollectionViewFlowLayout.headerReferenceSize = CGSize(width: frame.size.width, height: 60)
         teamsCollectionViewFlowLayout.minimumInteritemSpacing = 0
         teamsCollectionViewFlowLayout.minimumLineSpacing = 0
-
-        teamsCollectionView.backgroundColor = .white
     }
 
     func updateLayout() {

@@ -9,7 +9,7 @@ import Haneke
 import PromiseKit
 import UIKit
 
-final class ProfileInfoViewController: UIViewController {
+final class ProfileInfoViewController: UIViewController, ContainingScrollableView {
     
     fileprivate let viewModel: ProfileInfoViewModel
 
@@ -18,6 +18,12 @@ final class ProfileInfoViewController: UIViewController {
     fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
     }
+    
+    var scrollableView: UIScrollView {
+        return profileInfoView.scrollView
+    }
+    
+    var scrollContentOffset: (() -> CGPoint)?
 
     init(user: UserType) {
         viewModel = ProfileInfoViewModel(user: user)
@@ -37,6 +43,7 @@ final class ProfileInfoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        profileInfoView.scrollView.updateInsets(top: ProfileView.headerInitialHeight)
         setupUI()
         setupTeamsCollectionView()
         setupTeamMembersTableView()
