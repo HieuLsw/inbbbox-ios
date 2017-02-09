@@ -11,7 +11,6 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     private let userProvider = APIUsersProvider()
     private let teamsProvider = TeamsProvider()
-    private let apiTeamsProvider = APITeamsProvider()
     private let shotsProvider = ShotsProvider()
     
     private var user: UserType
@@ -142,7 +141,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     private func downloadMembersOfTeam() {
         guard let team = team else { return }
         firstly {
-            apiTeamsProvider.provideMembersForTeam(team)
+            teamsProvider.provideMembersForTeam(team)
         }.then { teamMembers -> Void in
             if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers
@@ -159,8 +158,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
             firstly {
                 shotsProvider.provideShotsForUser(member)
             }.then { shots -> Void in
-                guard let shots = shots else { return }
-                guard let index = self.teamMembers.index(where: { $0.identifier == member.identifier }) else { return }
+                guard let shots = shots, let index = self.teamMembers.index(where: { $0.identifier == member.identifier }) else { return }
                 self.teamMemberShots[index] = shots
                 let indexPath = IndexPath(row: index, section: 0)
                 self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)

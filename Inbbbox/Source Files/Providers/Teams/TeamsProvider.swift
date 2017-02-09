@@ -22,4 +22,8 @@ class TeamsProvider {
     func provideTeamFor(user: UserType) -> Promise<[TeamType]?> {
         return apiTeamsProvider.provideTeamsFor(user: user)
     }
+    
+    func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
+        return apiTeamsProvider.provideMembersForTeam(team)
+    }
 }
