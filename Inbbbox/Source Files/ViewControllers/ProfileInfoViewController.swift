@@ -11,7 +11,7 @@ import PromiseKit
 import UIKit
 
 final class ProfileInfoViewController: UIViewController, ContainingScrollableView {
-    
+
     fileprivate let viewModel: ProfileInfoViewModel
 
     fileprivate var currentColorMode = ColorModeProvider.current()
@@ -85,7 +85,6 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     }
 
     private func setupTeamMembersTableView() {
-        profileInfoView.teamMembersTableView.delegate = self
         profileInfoView.teamMembersTableView.dataSource = self
         profileInfoView.teamMembersTableView.register(CarouselCell.self, forCellReuseIdentifier: CarouselCell.identifier)
         profileInfoView.teamMembersTableView.rowHeight = UITableViewAutomaticDimension
@@ -138,10 +137,6 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
 
 }
 
-extension ProfileInfoViewController: UITableViewDelegate {
-
-}
-
 extension ProfileInfoViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -173,12 +168,10 @@ extension ProfileInfoViewController {
     func adjustScrollView() {
         if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
+        } else if profileInfoView.scrollView.contentSize.height < profileInfoView.scrollView.frame.height {
+            profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height - profileInfoView.scrollView.contentSize.height)
         } else {
-            if profileInfoView.scrollView.contentSize.height < profileInfoView.scrollView.frame.height {
-                profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height - profileInfoView.scrollView.contentSize.height)
-            } else {
-                profileInfoView.scrollView.updateInsets(bottom: 0)
-            }
+            profileInfoView.scrollView.updateInsets(bottom: 0)
         }
         guard let offset = self.scrollContentOffset?() else { return }
         profileInfoView.scrollView.contentOffset = offset
@@ -192,19 +185,16 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
         profileInfoView.teamMembersTableView.reloadData()
         setupUI()
         profileInfoView.updateLayout()
-        
-        Async.main(after: 0.01) {
-            self.adjustScrollView()
-        }
+        profileInfoView.teamsCollectionView.layoutIfNeeded()
+        profileInfoView.teamMembersTableView.layoutIfNeeded()
+        adjustScrollView()
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         profileInfoView.teamsCollectionView.reloadData()
-
-        Async.main(after: 0.01) {
-            if let offset = self.scrollContentOffset?() {
-                self.profileInfoView.scrollView.contentOffset = offset
-            }
+        profileInfoView.teamsCollectionView.layoutIfNeeded()
+        if let offset = self.scrollContentOffset?() {
+            self.profileInfoView.scrollView.contentOffset = offset
         }
         
         if viewModel.isTeamsEmpty {
