@@ -26,6 +26,10 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     var itemsCount: Int {
         return userTeams.count
     }
+    
+    var teamsCount: Int {
+        return userTeams.count
+    }
 
     var teamMembersCount: Int {
         return teamMembers.count

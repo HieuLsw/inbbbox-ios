@@ -5,6 +5,7 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
+import Async
 import Haneke
 import PromiseKit
 import UIKit
@@ -52,6 +53,18 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+            profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
+        }
+        
+        if let offset = scrollContentOffset?() {
+            profileInfoView.scrollView.contentOffset = offset
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -156,6 +169,20 @@ extension ProfileInfoViewController {
 
         return cell
     }
+    
+    func adjustScrollView() {
+        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+            profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
+        } else {
+            if profileInfoView.scrollView.contentSize.height < profileInfoView.scrollView.frame.height {
+                profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height - profileInfoView.scrollView.contentSize.height)
+            } else {
+                profileInfoView.scrollView.updateInsets(bottom: 0)
+            }
+        }
+        guard let offset = self.scrollContentOffset?() else { return }
+        profileInfoView.scrollView.contentOffset = offset
+    }
 }
 
 extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
@@ -165,11 +192,21 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
         profileInfoView.teamMembersTableView.reloadData()
         setupUI()
         profileInfoView.updateLayout()
+        
+        Async.main(after: 0.01) {
+            self.adjustScrollView()
+        }
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         profileInfoView.teamsCollectionView.reloadData()
 
+        Async.main(after: 0.01) {
+            if let offset = self.scrollContentOffset?() {
+                self.profileInfoView.scrollView.contentOffset = offset
+            }
+        }
+        
         if viewModel.isTeamsEmpty {
             guard let visibleViewController = navigationController?.visibleViewController else { return }
             FlashMessage.sharedInstance.showNotification(inViewController: visibleViewController, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
