@@ -7,6 +7,7 @@
 
 import UIKit
 import PureLayout
+import TTTAttributedLabel
 
 final class ProfileInfoView: UIView {
 
@@ -16,12 +17,12 @@ final class ProfileInfoView: UIView {
     let locationView = LocationView()
     let scrollView = UIScrollView(frame: .zero)
 
-    private(set) lazy var bioLabel: UILabel = { [unowned self] in
-        let label = UILabel()
+    private(set) lazy var bioLabel: TTTAttributedLabel = { [unowned self] in
+        let label = TTTAttributedLabel.newAutoLayout()
 
-        label.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         label.numberOfLines = 0
-        label.textColor = ColorModeProvider.current().smallTextColor
+        label.isUserInteractionEnabled = true
+        label.linkAttributes = [NSForegroundColorAttributeName : UIColor.pinkColor()]
         label.textAlignment = .center
 
         return label
@@ -97,7 +98,7 @@ final class ProfileInfoView: UIView {
 
         addSubview(scrollView)
         scrollView.autoPinEdgesToSuperviewEdges()
-        
+
         scrollView.addSubview(headerStackView)
         headerStackView.autoPinEdge(toSuperviewEdge: .top)
         headerStackView.autoPinEdge(toSuperviewEdge: .left)
@@ -132,7 +133,7 @@ final class ProfileInfoView: UIView {
         var scrollViewContentSize = headerStackView.frame.size.height + informationsStackView.frame.size.height
         
         if !teamsCollectionView.isHidden {
-            scrollViewContentSize += teamsCollectionView.contentSize.height + 60
+            scrollViewContentSize += teamsCollectionView.contentSize.height + 60 + 16
         }
         
         if !teamMembersTableView.isHidden {

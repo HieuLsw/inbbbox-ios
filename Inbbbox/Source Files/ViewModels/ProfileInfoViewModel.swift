@@ -13,16 +13,18 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     private let teamsProvider = TeamsProvider()
     private let apiTeamsProvider = APITeamsProvider()
     private let shotsProvider = ShotsProvider()
+    
     private var user: UserType
+    private var userTeams = [TeamType]()
+    
     private var team: TeamType?
-    private var teams = [TeamType]()
     private var teamMembers = [UserType]()
     private var teamMemberShots = [Int: [ShotType]]()
 
     weak var delegate: BaseCollectionViewViewModelDelegate?
 
     var itemsCount: Int {
-        return teams.count
+        return userTeams.count
     }
 
     var teamMembersCount: Int {
@@ -45,8 +47,25 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
         return user.location
     }
 
-    var bio: String {
-        return user.bio
+    var bio: NSAttributedString? {
+        guard let body = NSAttributedString(htmlString: user.bio)?.attributedStringByTrimingTrailingNewLine() else {
+            return nil
+        }
+        
+        let mutableBody = NSMutableAttributedString(attributedString: body)
+        
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 0
+        style.maximumLineHeight = 20
+        style.minimumLineHeight = 20
+        
+        mutableBody.addAttributes([
+            NSForegroundColorAttributeName: ColorModeProvider.current().smallTextColor,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
+            NSParagraphStyleAttributeName: style
+        ], range: NSRange(location: 0, length: mutableBody.length))
+        
+        return mutableBody.copy() as? NSAttributedString
     }
 
     var shouldHideLocation: Bool {
@@ -63,7 +82,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     var isTeamsEmpty: Bool {
-        return teams.isEmpty
+        return userTeams.isEmpty
     }
 
     init(user: UserType) {
@@ -93,9 +112,9 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
         }.then { teams -> Void in
             if let teams = teams, teams.count > 0 {
                 let indexPaths = teams.enumerated().map { index, _ in
-                    return IndexPath(row: (index + self.teams.count), section: 0)
+                    return IndexPath(row: (index + self.userTeams.count), section: 0)
                 }
-                self.teams.append(contentsOf: teams)
+                self.userTeams.append(contentsOf: teams)
                 self.delegate?.viewModel(self, didLoadItemsAtIndexPaths: indexPaths)
             }
         }.catch { error in
@@ -108,7 +127,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
             teamsProvider.provideTeamFor(user: user)
         }.then { teams -> Void in
             if let teams = teams {
-                self.teams = teams
+                self.userTeams = teams
             }
             self.delegate?.viewModelDidLoadInitialItems()
         }.catch { error in
@@ -148,7 +167,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     func team(forIndex index: Int) -> TeamType {
-        return teams[index]
+        return userTeams[index]
     }
 
     func member(forIndex index: Int) -> UserType {

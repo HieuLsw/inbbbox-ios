@@ -76,7 +76,7 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
         profileInfoView.teamMembersTableView.dataSource = self
         profileInfoView.teamMembersTableView.register(CarouselCell.self, forCellReuseIdentifier: CarouselCell.identifier)
         profileInfoView.teamMembersTableView.rowHeight = UITableViewAutomaticDimension
-        profileInfoView.teamMembersTableView.estimatedRowHeight = 140
+        profileInfoView.teamMembersTableView.estimatedRowHeight = 165
         profileInfoView.teamMembersTableView.separatorStyle = .none
         profileInfoView.teamMembersTableView.isScrollEnabled = false
     }
@@ -86,7 +86,7 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
         profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
         profileInfoView.followingAmountView.valueLabel.text = viewModel.followingsCount
         profileInfoView.locationView.locationLabel.text = viewModel.location
-        profileInfoView.bioLabel.text = viewModel.bio
+        profileInfoView.bioLabel.setText(viewModel.bio)
         profileInfoView.locationView.isHidden = viewModel.shouldHideLocation
         profileInfoView.teamsCollectionView.isHidden = viewModel.shouldHideTeams
         profileInfoView.teamMembersTableView.isHidden = viewModel.shouldHideTeamMembers
@@ -163,8 +163,8 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
     func viewModelDidLoadInitialItems() {
         profileInfoView.teamsCollectionView.reloadData()
         profileInfoView.teamMembersTableView.reloadData()
-        profileInfoView.updateLayout()
         setupUI()
+        profileInfoView.updateLayout()
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
