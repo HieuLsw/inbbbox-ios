@@ -91,8 +91,10 @@ extension ShotsCollectionViewController {
             }.then {
                 self.stateHandler.presentData()
             }.catch { error in
-                let alertController = UIAlertController.willSignOutUser()
-                self.tabBarController?.present(alertController, animated: true, completion: nil)
+                if self.stateHandler.state != .normal {
+                    let alertController = UIAlertController.willSignOutUser()
+                    self.tabBarController?.present(alertController, animated: true, completion: nil)
+                }
             }
         } else {
             shouldShowStreamSources = true
