@@ -8,7 +8,6 @@
 import UIKit
 import ZFDragableModalTransition
 import PeekPop
-import Async
 
 class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTouch, ContainingScrollableView {
 
@@ -169,19 +168,15 @@ extension ProfileProjectsOrBucketsViewController: BaseCollectionViewViewModelDel
 
     func viewModelDidLoadInitialItems() {
         tableView?.reloadData()
-
-        Async.main(after: 0.01) {
-            self.adjustTableView()
-        }
+        tableView?.layoutIfNeeded()
+        self.adjustTableView()
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         tableView?.reloadData()
-
-        Async.main(after: 0.01) {
-            if let offset = self.scrollContentOffset?() {
-                self.tableView?.contentOffset = offset
-            }
+        tableView?.layoutIfNeeded()
+        if let offset = self.scrollContentOffset?() {
+            self.tableView?.contentOffset = offset
         }
     }
 
