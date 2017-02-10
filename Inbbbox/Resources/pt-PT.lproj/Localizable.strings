@@ -276,6 +276,9 @@
 /* Log out button */
 "SettingsViewController.LogOut" = "Feche a sessão";
 
+/* Back button */
+"SettingsViewController.Back" = "Retorne";
+
 /* Title of group of buttons for notifications settings */
 "SettingsViewController.Notifications" = "LEMBRETES";
 
