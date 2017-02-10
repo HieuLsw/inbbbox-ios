@@ -43,7 +43,8 @@ class GalleryViewProvider {
             return [GalleryItem.custom(fetchImageBlock: { _ in },
                     itemViewControllerBlock: { ( index , count , imageCompletion, configuration , isInitial ) -> UIViewController in
                         
-                        let controller = ItemBaseController<AnimatableShotImageView>(index: index, itemCount: count, fetchImageBlock:{ _ in }, configuration: configuration, isInitialController: isInitial)
+                        let controller = ItemBaseController<AnimatableShotImageView>(index: index, itemCount: count, fetchImageBlock:{ completion in completion(UIImage()) }, configuration: configuration, isInitialController: isInitial)
+                        controller.itemView.hiddenProgressView = true
                         controller.itemView.loadAnimatableShotFromUrl(animated)
                         return controller
                     })]

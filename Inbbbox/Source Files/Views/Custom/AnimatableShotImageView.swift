@@ -93,9 +93,13 @@ class AnimatableShotImageView: FLAnimatedImageView {
 
     fileprivate func setImageWithData(_ data: Data) {
         Async.main {
-            self.progressAnimator.updateProgress(progress: 1.0) { [weak self] in
-                self?.progressAnimator.progressImageView.isHidden = true
-                self?.animatedImage = FLAnimatedImage(animatedGIFData: data)
+            if !self.hiddenProgressView {
+                self.progressAnimator.updateProgress(progress: 1.0) { [weak self] in
+                    self?.progressAnimator.progressImageView.isHidden = true
+                    self?.animatedImage = FLAnimatedImage(animatedGIFData: data)
+                }
+            } else {
+                self.animatedImage = FLAnimatedImage(animatedGIFData: data)
             }
         }
     }
