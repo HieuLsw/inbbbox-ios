@@ -31,6 +31,25 @@ class APITeamsProvider: PageableProvider {
     }
 
     /**
+     Provides logged user's teams.
+
+     - parameter user: User to get teams for.
+     
+     - returns: Promise which resolves with teams or nil.
+    */
+    func provideTeamsFor(user: UserType) -> Promise<[TeamType]?> {
+
+        let query = TeamsQuery(teamsOfUser: user)
+        return Promise<[TeamType]?> { fulfill, reject in
+            firstly {
+                firstPageForQueries([query], withSerializationKey: nil)
+            }.then { (teams: [Team]?) -> Void in
+                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.catch(execute: reject)
+        }
+    }
+
+    /**
      Provides next page of teams.
 
      - Warning: You have to use any of provide... method first to be able to use this method.

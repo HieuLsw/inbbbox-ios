@@ -11,11 +11,11 @@ import PureLayout
 final class UserStatisticView: UIView {
 
     private(set) lazy var valueLabel: UILabel = { [unowned self] in
-        self.label(fontSize: 24, textColor: .textDarkColor())
+        self.label(fontSize: 24, textColor: ColorModeProvider.current().statisticValueTextColor)
     }()
 
     private lazy var titleLabel: UILabel = { [unowned self] in
-        self.label(fontSize: 12, textColor: .textLightGrayColor())
+        self.label(fontSize: 12, textColor: ColorModeProvider.current().statisticNameTextColor)
     }()
 
     private lazy var stackView: UIStackView = { [unowned self] in

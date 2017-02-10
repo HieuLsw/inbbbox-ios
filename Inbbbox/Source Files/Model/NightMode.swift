@@ -334,6 +334,24 @@ struct NightMode: ColorModeType {
         return .darkGrayNightMode()
     }
     
+    // MARK: Separator
+    var separatorColor: UIColor {
+        return .black
+    }
+    
+    // MARK: Profile info tab
+    var statisticNameTextColor: UIColor {
+        return .bigTextNightModeGrayColor()
+    }
+    
+    var statisticValueTextColor: UIColor {
+        return .textLightGrayColor()
+    }
+    
+    var smallTextColor: UIColor {
+        return .textNightModeGrayColor()
+    }
+    
     func isEqualTo(_ other: ColorModeType) -> Bool {
         return other is NightMode
     }
