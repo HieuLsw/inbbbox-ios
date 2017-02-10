@@ -114,10 +114,11 @@ final class ColorModeProvider {
     fileprivate class func findCenterButtonTabControllerInWindows() -> CenterButtonTabBarController? {
         let windows = UIApplication.shared.windows as [UIWindow]
         for window in windows {
-            guard let centerButtonTabBarController = window.rootViewController as? CenterButtonTabBarController  else {
-                continue
+            if let centerButtonTabBarController = window.rootViewController as? CenterButtonTabBarController {
+                return centerButtonTabBarController
+            } else if let loginViewController = window.rootViewController as? LoginViewController {
+                return loginViewController.centerButtonTabBarController
             }
-            return centerButtonTabBarController
         }
         return nil
     }
