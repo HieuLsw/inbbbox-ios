@@ -9,7 +9,6 @@ import UIKit
 import ZFDragableModalTransition
 import PromiseKit
 import PeekPop
-import Async
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -162,18 +161,15 @@ extension ProfileShotsViewController: BaseCollectionViewViewModelDelegate {
 
     func viewModelDidLoadInitialItems() {
         collectionView?.reloadData()
-
-        Async.main(after: 0.01) {
-            self.adjustCollectionView()
-        }
+        collectionView?.layoutIfNeeded()
+        self.adjustCollectionView()
     }
 
     func viewModelDidFailToLoadInitialItems(_ error: Error) {
         collectionView?.reloadData()
-        Async.main(after: 0.01) {
-            if let offset = self.scrollContentOffset?() {
-                self.collectionView?.contentOffset = offset
-            }
+        collectionView?.layoutIfNeeded()
+        if let offset = self.scrollContentOffset?() {
+            self.collectionView?.contentOffset = offset
         }
 
         if viewModel.collectionIsEmpty {

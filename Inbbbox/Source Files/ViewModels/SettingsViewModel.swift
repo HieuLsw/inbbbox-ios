@@ -66,7 +66,7 @@ class SettingsViewModel: GroupedListViewModel {
             items = [[allItems.createAccountItem],
                      [allItems.reminderItem, allItems.reminderDateItem],
                      [allItems.newTodayStreamSourceItem, allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
-                     [allItems.showAuthorItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem],
                      [allItems.sendFeedbackItem],
                      [allItems.acknowledgementItem]]
         }
