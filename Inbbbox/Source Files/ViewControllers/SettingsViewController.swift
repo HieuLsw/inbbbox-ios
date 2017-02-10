@@ -28,6 +28,7 @@ class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureLogoutButton()
+        configureBackButton()
 
         tableView.registerClass(SwitchCell.self)
         tableView.registerClass(DetailsCell.self)
@@ -220,6 +221,12 @@ private extension SettingsViewController {
             target: self,
             action: #selector(didTapLogOutButton(_:))
         ) : nil
+    }
+
+    func configureBackButton() {
+        let backItem = UIBarButtonItem()
+        backItem.title = Localized("SettingsViewController.Back", comment: "Back button")
+        navigationItem.backBarButtonItem = backItem
     }
 
     func provideDataForHeader() {

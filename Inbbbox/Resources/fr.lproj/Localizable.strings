@@ -274,6 +274,9 @@
 /* Log out button */
 "SettingsViewController.LogOut" = "Déconnecter";
 
+/* Back button */
+"SettingsViewController.Back" = "Retour";
+
 /* Title of group of buttons for notifications settings */
 "SettingsViewController.Notifications" = "NOTIFICATIONS";
 
