@@ -89,12 +89,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        do { // hides bottom border of navigationBar
-            let currentColorMode = ColorModeProvider.current()
-            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
-            navigationController?.navigationBar.setBackgroundImage(UIImage(color: currentColorMode.navigationBarTint), for: .default)
-        }
-
         setupBackButton()
         setupHeaderView()
         setupMenu()
@@ -120,8 +114,22 @@ class ProfileViewController: UIViewController {
         checkIfUserIsFollowed()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        do { // hides bottom border of navigationBar
+            let currentColorMode = ColorModeProvider.current()
+            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
+            navigationController?.navigationBar.setBackgroundImage(UIImage(color: currentColorMode.navigationBarTint), for: .default)
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         removeAllContentOffsetObservers()
+        do { // reverts bottom border of navigationBar
+            navigationController?.navigationBar.shadowImage = nil
+            navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        }
         super.viewWillDisappear(animated)
     }
 
