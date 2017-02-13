@@ -28,8 +28,8 @@ class ShotDetailsFooterView: UICollectionReusableView, Reusable {
     fileprivate let cornerWrapperView = UIView.newAutoLayout()
 
     override init(frame: CGRect) {
-        let height = Int(cornerRadius)
-        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height - 15, jumpDuration: TimeInterval(1))
+        let height = Int(cornerRadius) - 15
+        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height, jumpDuration: TimeInterval(1))
         super.init(frame: frame)
 
         backgroundColor = .clear
