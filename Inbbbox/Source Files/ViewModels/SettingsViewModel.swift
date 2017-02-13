@@ -38,7 +38,7 @@ class SettingsViewModel: GroupedListViewModel {
     fileprivate weak var alertDelegate: AlertDisplayable?
     fileprivate weak var flashMessageDelegate: FlashMessageDisplayable?
     
-    fileprivate let allItems = SettingsItemsProvider()
+    fileprivate(set) var allItems = SettingsItemsProvider()
     
     var loggedInUser: User? {
         return UserStorage.currentUser

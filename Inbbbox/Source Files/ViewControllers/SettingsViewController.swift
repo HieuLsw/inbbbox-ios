@@ -100,7 +100,7 @@ extension SettingsViewController {
 
         let cell = tableView.cellForItemCategory(item.category)
 
-        if item is DateItem {
+        if item == viewModel.allItems.reminderDateItem {
             cell.isHidden = !Settings.Reminder.Enabled
         }
 
@@ -113,7 +113,7 @@ extension SettingsViewController {
 
         let item = viewModel[indexPath.section][indexPath.row]
 
-        if item is DateItem {
+        if item == viewModel.allItems.reminderDateItem {
             return Settings.Reminder.Enabled ? UITableViewAutomaticDimension : 0
         }
 
