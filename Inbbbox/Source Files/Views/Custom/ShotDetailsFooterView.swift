@@ -29,7 +29,7 @@ class ShotDetailsFooterView: UICollectionReusableView, Reusable {
 
     override init(frame: CGRect) {
         let height = Int(cornerRadius)
-        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height, jumpDuration: TimeInterval(1))
+        activityIndicatorView = BouncingView(frame: frame, jumpHeight: height - 15, jumpDuration: TimeInterval(1))
         super.init(frame: frame)
 
         backgroundColor = .clear
@@ -64,7 +64,7 @@ class ShotDetailsFooterView: UICollectionReusableView, Reusable {
             didUpdateConstraints = true
 
             cornerWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
-            cornerWrapperView.autoSetDimension(.height, toSize: cornerRadius)
+            cornerWrapperView.autoSetDimension(.height, toSize: cornerRadius + 5)
 
             activityIndicatorView.autoPinEdgesToSuperviewEdges()
         }
