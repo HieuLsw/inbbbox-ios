@@ -35,12 +35,12 @@
 /********* LikesViewModel *********/
 
 /* Title of Likes screen */
-"LikesViewModel.Title" = "Os gostos";
+"LikesViewModel.Title" = "Favoritos";
 
 /********* CenterButtonTabBarController *********/
 
 /* Main view, bottom bar */
-"CenterButtonTabBar.Likes" = "Os gostos";
+"CenterButtonTabBar.Likes" = "Favoritos";
 
 /* Main view, bottom bar */
 "CenterButtonTabBar.Buckets" = "Os catálogos";
@@ -242,7 +242,7 @@
 "SettingsViewModel.DisplayAuthor" = "Mostrar Autor na tela de inicio";
 
 /* User Settings, language. */
-"SettingsViewModel.Language" = "$Language";
+"SettingsViewModel.Language" = "Lengua";
 
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Modo noturno";
@@ -375,18 +375,18 @@
 
 /********* ProfileMenuBarView *********/
 "ProfileMenuBarView.Shots" = "Imagens";
-"ProfileMenuBarView.Info" = "$Info";
-"ProfileMenuBarView.Projects" = "$Projects";
+"ProfileMenuBarView.Info" = "Informação";
+"ProfileMenuBarView.Projects" = "Projetos";
 "ProfileMenuBarView.Buckets" = "Os catálogos";
 
 /********* Language *********/
-"Language.default" = "$Default";
-"Language.en" = "$English";
-"Language.pl" = "$Polish";
-"Language.de" = "$German";
-"Language.pt-PT" = "$Portugal";
-"Language.es" = "$Spanish";
-"Language.fr" = "$French";
+"Language.default" = "predefinido";
+"Language.en" = "inglês";
+"Language.pl" = "polaco";
+"Language.de" = "alemão";
+"Language.pt-PT" = "português";
+"Language.es" = "espanhol";
+"Language.fr" = "francês";
 
 /********* LanguageViewController *********/
-"LanguageViewController.Title" = "$Choose language";
+"LanguageViewController.Title" = "Escolher a lengua";

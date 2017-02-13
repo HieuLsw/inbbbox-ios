@@ -240,7 +240,7 @@
 "SettingsViewModel.DisplayAuthor" = "Montrer Auteur à la page d'accueil";
 
 /* User Settings, language. */
-"SettingsViewModel.Language" = "$Language";
+"SettingsViewModel.Language" = "Langues";
 
 /* User Setting, night mode */
 "SettingsViewModel.NightMode" = "Mode nuit";
@@ -376,18 +376,18 @@
 
 /********* ProfileMenuBarView *********/
 "ProfileMenuBarView.Shots" = "Coup";
-"ProfileMenuBarView.Info" = "$Info";
-"ProfileMenuBarView.Projects" = "$Projects";
+"ProfileMenuBarView.Info" = "Infos";
+"ProfileMenuBarView.Projects" = "Projets";
 "ProfileMenuBarView.Buckets" = "Catalogues";
 
 /********* Language *********/
-"Language.default" = "$Default";
-"Language.en" = "$English";
-"Language.pl" = "$Polish";
-"Language.de" = "$German";
-"Language.pt-PT" = "$Portugal";
-"Language.es" = "$Spanish";
-"Language.fr" = "$French";
+"Language.default" = "Défault";
+"Language.en" = "anglais";
+"Language.pl" = "polonais";
+"Language.de" = "allemand";
+"Language.pt-PT" = "portugais";
+"Language.es" = "espagnol";
+"Language.fr" = "français";
 
 /********* LanguageViewController *********/
-"LanguageViewController.Title" = "$Choose language";
+"LanguageViewController.Title" = "Séléctionnez svp la langue";
