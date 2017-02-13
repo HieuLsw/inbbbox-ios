@@ -182,14 +182,12 @@ private extension SettingsViewModel {
             Settings.Reminder.Enabled = newValue
             if newValue == true {
                 self.registerUserNotificationSettings()
-
                 if Settings.Reminder.LocalNotificationSettingsProvided == true {
                     self.registerLocalNotification()
                 }
             } else {
                 self.unregisterLocalNotification()
             }
-
             self.settingsViewController?.updateDateToggleStatus()
             AnalyticsManager.trackSettingChanged(.dailyRemainderEnabled, state: newValue)
         }
