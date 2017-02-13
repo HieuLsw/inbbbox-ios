@@ -336,7 +336,7 @@
 "LoginView.Slogan" = "Każdy shot wymiata";
 
 /**/
-"LoginView.Loading" = "ŁADUJE...";
+"LoginView.Loading" = "ŁADUJĘ...";
 
 /* Describes copyright holder */
 "LoginView.Copyright" = "Wszelkie prawa zastrzeżone (c) 2016 Netguru";
@@ -344,7 +344,7 @@
 /********* EmptyDataSetLoadingView *********/
 
 /* Loading view, when empty data */
-"EmptyDataSetLoadingView.Loading" = "Ładuje...";
+"EmptyDataSetLoadingView.Loading" = "Ładuję...";
 
 /********* ShotsOnboardingStateHandler *********/
 /* Below (steps 1 - 3) is localization of Onboarding images contained in Images.xcassets*/
