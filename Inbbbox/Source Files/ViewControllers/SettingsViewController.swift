@@ -17,7 +17,6 @@ class SettingsViewController: UITableViewController {
     fileprivate var viewModel: SettingsViewModel!
     fileprivate var authenticator: Authenticator?
     fileprivate var currentColorMode =  ColorModeProvider.current()
-    fileprivate let indexPathForDateSwitch = IndexPath(row: 1, section: 1)
 
     convenience init() {
         self.init(style: UITableViewStyle.grouped)
@@ -112,7 +111,9 @@ extension SettingsViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
-        if indexPath == indexPathForDateSwitch {
+        let item = viewModel[indexPath.section][indexPath.row]
+
+        if item is DateItem {
             return Settings.Reminder.Enabled ? UITableViewAutomaticDimension : 0
         }
 
