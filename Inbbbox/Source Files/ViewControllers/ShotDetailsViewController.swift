@@ -329,7 +329,7 @@ extension ShotDetailsViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        let height: CGFloat = viewModel.isFetchingComments ? 64 : ShotDetailsFooterView.minimumRequiredHeight
+        let height: CGFloat = viewModel.isFetchingComments ? 69 : ShotDetailsFooterView.minimumRequiredHeight
         return CGSize(width: collectionView.frame.width, height: height)
     }
 }

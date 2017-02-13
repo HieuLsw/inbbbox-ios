@@ -28,7 +28,7 @@ class ShotDetailsFooterView: UICollectionReusableView, Reusable {
     fileprivate let cornerWrapperView = UIView.newAutoLayout()
 
     override init(frame: CGRect) {
-        let height = Int(cornerRadius)
+        let height = Int(cornerRadius) - 15
         activityIndicatorView = BouncingView(frame: frame, jumpHeight: height, jumpDuration: TimeInterval(1))
         super.init(frame: frame)
 
@@ -64,7 +64,7 @@ class ShotDetailsFooterView: UICollectionReusableView, Reusable {
             didUpdateConstraints = true
 
             cornerWrapperView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .bottom)
-            cornerWrapperView.autoSetDimension(.height, toSize: cornerRadius)
+            cornerWrapperView.autoSetDimension(.height, toSize: cornerRadius + 5)
 
             activityIndicatorView.autoPinEdgesToSuperviewEdges()
         }
