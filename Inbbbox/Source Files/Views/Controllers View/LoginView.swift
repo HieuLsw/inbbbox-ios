@@ -75,6 +75,7 @@ class LoginView: UIView {
         copyrightlabel.textAlignment = .center
         copyrightlabel.textColor = defaultWhiteColor
         copyrightlabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+        copyrightlabel.adjustsFontSizeToFitWidth = true
         addSubview(copyrightlabel)
     }
 
@@ -137,6 +138,7 @@ class LoginView: UIView {
             let standardSpacing: CGFloat = 20
             copyrightlabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: standardSpacing)
             copyrightlabel.autoPinEdge(toSuperviewEdge: .leading, withInset: standardSpacing)
+            copyrightlabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: standardSpacing)
             copyrightlabel.autoSetDimension(.height, toSize: 14.5)
             copyrightlabel.autoAlignAxis(toSuperviewAxis: .vertical)
         }
