@@ -102,9 +102,11 @@ class SettingsViewModel: GroupedListViewModel {
 
     func updateStatus() {
         allItems.reminderItem.enabled = Settings.Reminder.Enabled
+
         if let date = Settings.Reminder.Date {
             allItems.reminderDateItem.date = date
         }
+
         allItems.followingStreamSourceItem.enabled = Settings.StreamSource.Following
         allItems.newTodayStreamSourceItem.enabled = Settings.StreamSource.NewToday
         allItems.popularTodayStreamSourceItem.enabled = Settings.StreamSource.PopularToday
@@ -187,6 +189,8 @@ private extension SettingsViewModel {
             } else {
                 self.unregisterLocalNotification()
             }
+
+            self.settingsViewController?.updateDateToggleStatus()
             AnalyticsManager.trackSettingChanged(.dailyRemainderEnabled, state: newValue)
         }
 
