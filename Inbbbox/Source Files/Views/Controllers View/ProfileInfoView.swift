@@ -78,11 +78,13 @@ final class ProfileInfoView: UIView {
     private(set) var teamsCollectionView: UICollectionView
     private(set) var teamsCollectionViewFlowLayout: UICollectionViewFlowLayout
     private(set) var teamMembersTableView: UITableView
+    private(set) var likedShotsTableView: UITableView
 
     override init(frame: CGRect) {
         teamsCollectionViewFlowLayout = UICollectionViewFlowLayout()
         teamsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: teamsCollectionViewFlowLayout)
-        teamMembersTableView = UITableView(frame: .zero, style: .plain)
+        teamMembersTableView = UITableView(frame: .zero)
+        likedShotsTableView = UITableView(frame: .zero)
         super.init(frame: frame)
         setupCollectionView()
         setupLayout()
@@ -110,8 +112,13 @@ final class ProfileInfoView: UIView {
         informationsStackView.autoPinEdge(toSuperviewEdge: .left)
         informationsStackView.autoPinEdge(toSuperviewEdge: .right)
 
+        scrollView.addSubview(likedShotsTableView)
+        likedShotsTableView.autoPinEdge(.top, to: .bottom, of: informationsStackView)
+        likedShotsTableView.autoPinEdge(toSuperviewEdge: .left)
+        likedShotsTableView.autoPinEdge(toSuperviewEdge: .right)
+        
         scrollView.addSubview(teamsCollectionView)
-        teamsCollectionView.autoPinEdge(.top, to: .bottom, of: informationsStackView)
+        teamsCollectionView.autoPinEdge(.top, to: .bottom, of: likedShotsTableView)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .left)
         teamsCollectionView.autoPinEdge(toSuperviewEdge: .right)
 
@@ -130,6 +137,8 @@ final class ProfileInfoView: UIView {
     func updateLayout() {
         teamsCollectionView.autoSetDimension(.height, toSize: teamsCollectionView.contentSize.height + 60)
         teamMembersTableView.autoSetDimension(.height, toSize: teamMembersTableView.contentSize.height)
+        likedShotsTableView.autoSetDimension(.height, toSize: likedShotsTableView.contentSize.height)
+        
         var scrollViewContentSize = headerStackView.frame.size.height + informationsStackView.frame.size.height
         
         if !teamsCollectionView.isHidden {
@@ -137,7 +146,7 @@ final class ProfileInfoView: UIView {
         }
         
         if !teamMembersTableView.isHidden {
-            scrollViewContentSize += teamMembersTableView.contentSize.height
+            scrollViewContentSize += teamMembersTableView.contentSize.height + likedShotsTableView.contentSize.height
         }
         scrollView.contentSize.height = scrollViewContentSize
     }

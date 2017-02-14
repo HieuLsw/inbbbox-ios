@@ -370,6 +370,7 @@
 "ProfileInfoView.Followers" = "Observateur";
 "ProfileInfoView.Shots" = "Coup";
 "ProfileInfoView.Following" = "Auteurs observés";
+"ProfileInfoView.RecentLikes" = "$Recent Likes";
 
 /********* TeamsCollectionHeaderView *********/
 "TeamsCollectionHeaderView.OnTeams" = "Groupes";
