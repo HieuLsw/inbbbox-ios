@@ -47,6 +47,7 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
         setupUI()
         setupTeamsCollectionView()
         setupTeamMembersTableView()
+        setupLikedShotsTableView()
     }
 
     override func viewDidLayoutSubviews() {
@@ -83,15 +84,23 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
         profileInfoView.teamsCollectionView.register(TeamsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TeamsCollectionHeaderView.identifier)
     }
 
-    private func setupTeamMembersTableView() {
-        profileInfoView.teamMembersTableView.dataSource = self
-        profileInfoView.teamMembersTableView.register(CarouselCell.self, forCellReuseIdentifier: CarouselCell.identifier)
-        profileInfoView.teamMembersTableView.rowHeight = UITableViewAutomaticDimension
-        profileInfoView.teamMembersTableView.estimatedRowHeight = 165
-        profileInfoView.teamMembersTableView.separatorStyle = .none
-        profileInfoView.teamMembersTableView.isScrollEnabled = false
+    private func setupLikedShotsTableView() {
+        setupTableView(profileInfoView.likedShotsTableView)
     }
 
+    private func setupTeamMembersTableView() {
+        setupTableView(profileInfoView.teamMembersTableView)
+    }
+    
+    private func setupTableView(_ tableView: UITableView) {
+        tableView.dataSource = self
+        tableView.register(CarouselCell.self, forCellReuseIdentifier: CarouselCell.identifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 165
+        tableView.separatorStyle = .none
+        tableView.isScrollEnabled = false
+    }
+    
     fileprivate func setupUI() {
         profileInfoView.shotsAmountView.valueLabel.text = viewModel.shotsCount
         profileInfoView.followersAmountView.valueLabel.text = viewModel.followersCount
@@ -139,7 +148,7 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
 extension ProfileInfoViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.teamMembersCount
+        return tableView == profileInfoView.teamMembersTableView ? viewModel.teamMembersCount : viewModel.likedShotsCount
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -156,10 +165,16 @@ extension ProfileInfoViewController {
         cell.adaptColorMode(currentColorMode)
         cell.selectionStyle = .none
 
-        let teamMember = viewModel.member(forIndex: indexPath.row)
-        cell.titleLabel.text = teamMember.name
-        cell.backgroundLabel.text = teamMember.name
-        cell.shots = viewModel.shots(forIndex: indexPath.row)
+        if tableView == profileInfoView.teamMembersTableView {
+            let teamMember = viewModel.member(forIndex: indexPath.row)
+            cell.titleLabel.text = teamMember.name
+            cell.backgroundLabel.text = teamMember.name
+            cell.shots = viewModel.shots(forIndex: indexPath.row)
+        } else if tableView == profileInfoView.likedShotsTableView {
+            cell.titleLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
+            cell.backgroundLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
+            cell.shots = viewModel.userLikedShots
+        }
 
         return cell
     }
@@ -182,10 +197,12 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
     func viewModelDidLoadInitialItems() {
         profileInfoView.teamsCollectionView.reloadData()
         profileInfoView.teamMembersTableView.reloadData()
+        profileInfoView.likedShotsTableView.reloadData()
         setupUI()
         profileInfoView.updateLayout()
         profileInfoView.teamsCollectionView.layoutIfNeeded()
         profileInfoView.teamMembersTableView.layoutIfNeeded()
+        profileInfoView.likedShotsTableView.layoutIfNeeded()
         adjustScrollView()
     }
 

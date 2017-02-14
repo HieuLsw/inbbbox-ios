@@ -15,6 +15,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     
     private var user: UserType
     private var userTeams = [TeamType]()
+    private(set) var userLikedShots = [ShotType]()
     
     private var team: TeamType?
     private var teamMembers = [UserType]()
@@ -32,6 +33,10 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     var teamMembersCount: Int {
         return teamMembers.count
+    }
+    
+    var likedShotsCount: Int {
+        return userLikedShots.count > 0 ? 1 : 0
     }
 
     var shotsCount: String {
@@ -106,7 +111,12 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     func downloadInitialItems() {
-        user.accountType == .Team ? downloadMembersOfTeam() : downloadTeams()
+        if user.accountType == .Team {
+            downloadMembersOfTeam()
+        } else {
+            downloadTeams()
+            downloadLikedShots()
+        }
     }
 
     func downloadItemsForNextPage() {
@@ -132,7 +142,6 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
             if let teams = teams {
                 self.userTeams = teams
             }
-            self.delegate?.viewModelDidLoadInitialItems()
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
@@ -165,6 +174,18 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
             }.catch { error in
                 self.notifyDelegateAboutFailure(error)
             }
+        }
+    }
+    
+    private func downloadLikedShots() {
+        firstly {
+            shotsProvider.provideLikedShotsForUser(user)
+        }.then { shots -> Void in
+            guard let shots = shots else { return }
+            self.userLikedShots = shots
+            self.delegate?.viewModelDidLoadInitialItems()
+        }.catch { error in
+            self.notifyDelegateAboutFailure(error)
         }
     }
 
