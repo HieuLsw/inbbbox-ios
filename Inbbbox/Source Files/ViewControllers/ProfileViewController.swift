@@ -89,12 +89,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        do { // hides bottom border of navigationBar
-            let currentColorMode = ColorModeProvider.current()
-            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
-            navigationController?.navigationBar.setBackgroundImage(UIImage(color: currentColorMode.navigationBarTint), for: .default)
-        }
-
         setupBackButton()
         setupHeaderView()
         setupMenu()
@@ -120,8 +114,15 @@ class ProfileViewController: UIViewController {
         checkIfUserIsFollowed()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        hideBottomBorderOfNavigationBar(true)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         removeAllContentOffsetObservers()
+        hideBottomBorderOfNavigationBar(false)
         super.viewWillDisappear(animated)
     }
 
@@ -313,5 +314,11 @@ private extension ProfileViewController {
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
+    }
+
+    func hideBottomBorderOfNavigationBar(_ value: Bool) {
+        let image = value ? UIImage(color: ColorModeProvider.current().navigationBarTint) : nil
+        navigationController?.navigationBar.shadowImage = image
+        navigationController?.navigationBar.setBackgroundImage(image, for: .default)
     }
 }
