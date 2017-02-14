@@ -8,7 +8,7 @@ import UIKit
 struct ShotsCollectionBackgroundViewSpacing {
     
     static let logoDefaultVerticalInset = CGFloat(60)
-    static let logoAnimationVerticalInset = CGFloat(160)
+    static let logoAnimationVerticalInset = CGFloat(200)
     static let logoHeight = CGFloat(30)
     
     static let labelDefaultHeight = CGFloat(21)
