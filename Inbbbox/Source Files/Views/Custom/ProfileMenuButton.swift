@@ -32,8 +32,9 @@ class ProfileMenuButton: UIButton {
         super.init(frame: frame)
 
         badgeLabel.font = UIFont.systemFont(ofSize: 10)
-
-        titleLabel?.addSubview(badgeLabel)
+        
+        addSubview(badgeLabel)
+        titleLabel?.textAlignment = .center
     }
 
     @available(*, unavailable, message: "Use init(frame:) instead")
@@ -50,6 +51,12 @@ class ProfileMenuButton: UIButton {
 
             badgeLabel.autoPinEdge(.leading, to: .trailing, of: titleLabel)
             badgeLabel.autoPinEdge(.bottom, to: .top, of: titleLabel, withOffset: 7)
+            
+            if (titleLabel.intrinsicContentSize.width >= intrinsicContentSize.width) {
+                titleLabel.adjustsFontSizeToFitWidth = true
+                badgeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8)
+                titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 8)
+            }
         }
 
         super.updateConstraints()
