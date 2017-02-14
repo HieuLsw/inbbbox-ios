@@ -117,19 +117,12 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        do { // hides bottom border of navigationBar
-            let currentColorMode = ColorModeProvider.current()
-            navigationController?.navigationBar.shadowImage = UIImage(color: currentColorMode.navigationBarTint)
-            navigationController?.navigationBar.setBackgroundImage(UIImage(color: currentColorMode.navigationBarTint), for: .default)
-        }
+        hideBottomBorderOfNavigationBar(true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         removeAllContentOffsetObservers()
-        do { // reverts bottom border of navigationBar
-            navigationController?.navigationBar.shadowImage = nil
-            navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        }
+        hideBottomBorderOfNavigationBar(false)
         super.viewWillDisappear(animated)
     }
 
@@ -321,5 +314,11 @@ private extension ProfileViewController {
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
+    }
+
+    func hideBottomBorderOfNavigationBar(_ value: Bool) {
+        let image = value ? UIImage(color: ColorModeProvider.current().navigationBarTint) : nil
+        navigationController?.navigationBar.shadowImage = image
+        navigationController?.navigationBar.setBackgroundImage(image, for: .default)
     }
 }
