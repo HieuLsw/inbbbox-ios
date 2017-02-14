@@ -38,7 +38,7 @@ class SettingsViewModel: GroupedListViewModel {
     fileprivate weak var alertDelegate: AlertDisplayable?
     fileprivate weak var flashMessageDelegate: FlashMessageDisplayable?
     
-    fileprivate let allItems = SettingsItemsProvider()
+    fileprivate(set) var allItems = SettingsItemsProvider()
     
     var loggedInUser: User? {
         return UserStorage.currentUser
@@ -102,9 +102,11 @@ class SettingsViewModel: GroupedListViewModel {
 
     func updateStatus() {
         allItems.reminderItem.enabled = Settings.Reminder.Enabled
+
         if let date = Settings.Reminder.Date {
             allItems.reminderDateItem.date = date
         }
+
         allItems.followingStreamSourceItem.enabled = Settings.StreamSource.Following
         allItems.newTodayStreamSourceItem.enabled = Settings.StreamSource.NewToday
         allItems.popularTodayStreamSourceItem.enabled = Settings.StreamSource.PopularToday
@@ -180,13 +182,13 @@ private extension SettingsViewModel {
             Settings.Reminder.Enabled = newValue
             if newValue == true {
                 self.registerUserNotificationSettings()
-
                 if Settings.Reminder.LocalNotificationSettingsProvided == true {
                     self.registerLocalNotification()
                 }
             } else {
                 self.unregisterLocalNotification()
             }
+            self.settingsViewController?.updateDateToggleStatus()
             AnalyticsManager.trackSettingChanged(.dailyRemainderEnabled, state: newValue)
         }
 

@@ -17,7 +17,7 @@ class SettingsViewController: UITableViewController {
     fileprivate var viewModel: SettingsViewModel!
     fileprivate var authenticator: Authenticator?
     fileprivate var currentColorMode =  ColorModeProvider.current()
-    
+
     convenience init() {
         self.init(style: UITableViewStyle.grouped)
         viewModel = SettingsViewModel(delegate: self)
@@ -97,11 +97,27 @@ extension SettingsViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel[indexPath.section][indexPath.row]
+
         let cell = tableView.cellForItemCategory(item.category)
+
+        if item == viewModel.allItems.reminderDateItem {
+            cell.isHidden = !Settings.Reminder.Enabled
+        }
 
         configureSettingCell(cell, forItem: item)
 
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        let item = viewModel[indexPath.section][indexPath.row]
+
+        if item == viewModel.allItems.reminderDateItem {
+            return Settings.Reminder.Enabled ? UITableViewAutomaticDimension : 0
+        }
+
+        return UITableViewAutomaticDimension
     }
 }
 
@@ -308,6 +324,10 @@ extension SettingsViewController {
         let acknowledgementsNavigationController =
         UINavigationController(rootViewController: AcknowledgementsViewController())
         present(acknowledgementsNavigationController, animated: true, completion: nil)
+    }
+
+    func updateDateToggleStatus() {
+        tableView.reloadData()
     }
 }
 
