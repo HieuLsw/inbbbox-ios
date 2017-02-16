@@ -2,7 +2,6 @@
 //  SwitchCell.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 18/12/15.
 //  Copyright © 2015 Netguru Sp. z o.o. All rights reserved.
 //
 
@@ -23,7 +22,7 @@ class SwitchCell: UITableViewCell, Reusable {
         titleLabel.adjustsFontSizeToFitWidth = true
         contentView.addSubview(titleLabel)
 
-        switchControl.layer.cornerRadius = 18.0
+        switchControl.layer.cornerRadius = 16
         switchControl.thumbTintColor = UIColor.white
         switchControl.onTintColor = UIColor.pinkColor()
         contentView.addSubview(switchControl)
@@ -42,8 +41,9 @@ class SwitchCell: UITableViewCell, Reusable {
 
             titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: edgesInset)
             titleLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
+            titleLabel.autoPinEdge(.trailing, to: .leading, of: switchControl, withOffset: -5)
 
-            switchControl.autoPinEdge(.leading, to: .trailing, of: titleLabel, withOffset: 5)
+            switchControl.autoSetDimensions(to: CGSize(width: 49, height: 31))
             switchControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: edgesInset)
             switchControl.autoAlignAxis(toSuperviewAxis: .horizontal)
         }
