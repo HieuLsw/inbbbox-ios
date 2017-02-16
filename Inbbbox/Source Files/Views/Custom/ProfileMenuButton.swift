@@ -52,7 +52,7 @@ class ProfileMenuButton: UIButton {
             badgeLabel.autoPinEdge(.leading, to: .trailing, of: titleLabel)
             badgeLabel.autoPinEdge(.bottom, to: .top, of: titleLabel, withOffset: 7)
             
-            if (titleLabel.intrinsicContentSize.width >= intrinsicContentSize.width) {
+            if (titleLabel.intrinsicContentSize.width + badgeLabel.intrinsicContentSize.width >= intrinsicContentSize.width) {
                 titleLabel.adjustsFontSizeToFitWidth = true
                 badgeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8)
                 titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 8)
