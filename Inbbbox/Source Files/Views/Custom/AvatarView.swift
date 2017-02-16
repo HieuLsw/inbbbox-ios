@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol AvatarViewDelegate: class {
+    func avatarView(_ avatarView: AvatarView, didTapButton avatarButton: UIButton)
+}
+
 class AvatarView: UIView {
 
     let imageView = UIImageView()
@@ -56,8 +60,4 @@ class AvatarView: UIView {
         maskLayer.path = ovalPath.cgPath
         return maskLayer
     }
-}
-
-protocol AvatarViewDelegate: class {
-    func avatarView(_ avatarView: AvatarView, didTapButton avatarButton: UIButton)
 }

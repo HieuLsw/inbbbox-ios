@@ -9,6 +9,10 @@ import UIKit
 import PureLayout
 import TTTAttributedLabel
 
+protocol CarouselCellDelegate: class {
+    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType)
+}
+
 class CarouselCell: UITableViewCell, Reusable {
 
     weak var delegate: CarouselCellDelegate?
@@ -167,8 +171,4 @@ extension CarouselCell: ColorModeAdaptable {
         titleLabel.textColor = mode.profileDetailsCollectionTitleLabelTextColor
         counterLabel.textColor = mode.profileDetailsCollectionCounterLabelTextColor
     }
-}
-
-protocol CarouselCellDelegate: class {
-    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType)
 }
