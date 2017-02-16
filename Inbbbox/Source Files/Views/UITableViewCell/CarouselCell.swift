@@ -9,8 +9,14 @@ import UIKit
 import PureLayout
 import TTTAttributedLabel
 
+protocol CarouselCellDelegate: class {
+    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType)
+}
+
 class CarouselCell: UITableViewCell, Reusable {
-    
+
+    weak var delegate: CarouselCellDelegate?
+
     var shots: [ShotType]? {
         didSet {
             collectionView.reloadData()
@@ -49,6 +55,7 @@ class CarouselCell: UITableViewCell, Reusable {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
         contentView.addSubview(collectionView)
         
@@ -91,6 +98,8 @@ class CarouselCell: UITableViewCell, Reusable {
     }
 }
 
+// MARK: UICollectionViewDataSource
+
 extension CarouselCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -103,6 +112,16 @@ extension CarouselCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = prepareShotCell(at: indexPath, in: collectionView)
         return cell
+    }
+}
+
+// MARK: UICollectionViewDelegate
+
+extension CarouselCell: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let shots = shots else { return }
+        delegate?.carouselCell(self, didTap: indexPath.item, for: shots[indexPath.item])
     }
 }
 

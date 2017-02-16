@@ -108,6 +108,34 @@ extension ProfileProjectsOrBucketsViewController {
     }
 }
 
+// MARK: CarouselCellDelegate
+
+extension ProfileProjectsOrBucketsViewController: CarouselCellDelegate {
+
+    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType) {
+
+        let controller = ShotDetailsViewController(shot: shot)
+        controller.shotIndex = item
+        guard let carouselCellIndex = tableView.indexPath(for: carouselCell) else { return }
+
+        if let viewModel = viewModel as? ProfileBucketsViewModel {
+            guard
+                let bucket = viewModel.bucketsIndexedShots[carouselCellIndex.row],
+                bucket.count > item
+            else { return }
+            currentContainer = bucket
+        } else if let viewModel = viewModel as? ProfileProjectsViewModel {
+            guard
+                let project = viewModel.projectsIndexedShots[carouselCellIndex.row],
+                project.count > item
+            else { return }
+            currentContainer = project
+        } else { return }
+
+        presentShotDetails(with: controller)
+    }
+}
+
 // MARK: Private extension
 
 private extension ProfileProjectsOrBucketsViewController {
@@ -115,6 +143,7 @@ private extension ProfileProjectsOrBucketsViewController {
     func prepareCell(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(CarouselCell.self)
+        cell.delegate = self
         cell.adaptColorMode(currentColorMode)
         cell.selectionStyle = .none
         if let offset = rowsOffset[indexPath.row] {
@@ -160,6 +189,22 @@ private extension ProfileProjectsOrBucketsViewController {
             tableView.contentOffset = offset
         }
     }
+
+    func presentShotDetails(with controller: ShotDetailsViewController) {
+
+        controller.customizeFor3DTouch(false)
+
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: controller)
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        modalTransitionAnimator?.behindViewScale = 1
+
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .custom
+
+        present(pageViewController, animated: true, completion: nil)
+    }
 }
 
 // MARK: BaseCollectionViewViewModelDelegate
@@ -201,16 +246,7 @@ extension ProfileProjectsOrBucketsViewController: UIViewControllerPreviewingDele
     fileprivate func peekPopPresent(viewController: UIViewController) {
         guard let detailsViewController = viewController as? ShotDetailsViewController else { return }
 
-        detailsViewController.customizeFor3DTouch(false)
-        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: detailsViewController)
-        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
-        modalTransitionAnimator?.behindViewScale = 1
-
-        pageViewController.transitioningDelegate = modalTransitionAnimator
-        pageViewController.modalPresentationStyle = .custom
-
-        present(pageViewController, animated: true, completion: nil)
+        presentShotDetails(with: detailsViewController)
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {

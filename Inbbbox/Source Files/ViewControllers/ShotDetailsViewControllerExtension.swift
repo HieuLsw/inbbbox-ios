@@ -12,6 +12,13 @@ import MessageUI
 import TTTAttributedLabel
 import PromiseKit
 
+// MARK: Protocols
+
+protocol UICollectionViewCellWithLabelContainingClickableLinksDelegate: class {
+    func labelContainingClickableLinksDidTap(_ gestureRecognizer: UITapGestureRecognizer, textContainer: NSTextContainer, layoutManager: NSLayoutManager)
+    func urlInLabelTapped(_ url: URL)
+}
+
 // MARK: KeyboardResizableViewDelegate
 
 extension ShotDetailsViewController: KeyboardResizableViewDelegate {
@@ -198,13 +205,4 @@ extension ShotDetailsViewController: UICollectionViewCellWithLabelContainingClic
             UIApplication.shared.openURL(url)
         }
     }
-}
-
-// MARK: Protocols
-
-protocol UICollectionViewCellWithLabelContainingClickableLinksDelegate: class {
-
-    func labelContainingClickableLinksDidTap(_ gestureRecognizer: UITapGestureRecognizer,
-                                             textContainer: NSTextContainer, layoutManager: NSLayoutManager)
-    func urlInLabelTapped(_ url: URL)
 }

@@ -6,6 +6,10 @@
 //  Copyright © 2016 Netguru Sp. z o.o. All rights reserved.
 //
 
+protocol ShotDetailsPageDelegate: class {
+    func shotDetailsDismissed(atIndex index: Int)
+}
+
 class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDataSource {
     
     // MARK: Properties
@@ -70,9 +74,4 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         }
         return nil
     }
-}
-
-protocol ShotDetailsPageDelegate: class {
-    
-    func shotDetailsDismissed(atIndex index: Int)
 }
