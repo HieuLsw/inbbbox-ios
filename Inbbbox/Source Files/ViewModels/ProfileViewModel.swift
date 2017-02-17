@@ -25,6 +25,10 @@ final class ProfileViewModel: Vibratable {
         return false
     }
 
+    var backgroundImage: UIImage? {
+        return UIImage(named:ColorModeProvider.current().profileHeaderViewBackgroundImageName)
+    }
+
     var menu: [ProfileMenuItem] {
         return [
             .shots,

@@ -162,6 +162,10 @@ struct DayMode: ColorModeType {
         return .pinkColor()
     }
 
+    var profileHeaderViewBackgroundImageName: String {
+        return "Profile BG"
+    }
+
     // MARK: Profile Menu Bar
     var menuBackground: UIColor {
         return .white

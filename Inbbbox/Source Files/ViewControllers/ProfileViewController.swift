@@ -196,6 +196,7 @@ private extension ProfileViewController {
         profileView.headerView.badge = viewModel.user.isPro ? .pro : nil
         profileView.headerView.badge = viewModel.user.accountType == .Team ? .team : profileView.headerView.badge
         profileView.headerView.button.addTarget(self, action: #selector(didTapFollowButton(_:)), for: .touchUpInside)
+        profileView.headerView.backgroundImageView.image = viewModel.backgroundImage
         viewModel.shouldShowFollowButton ? profileView.headerView.startActivityIndicator() : (profileView.headerView.shouldShowButton = false)
     }
 

@@ -158,6 +158,10 @@ struct NightMode: ColorModeType {
         return .black
     }
 
+    var profileHeaderViewBackgroundImageName: String {
+        return "Profile BG-night"
+    }
+
     // MARK: Profile Menu Bar
     var menuBackground: UIColor {
         return .RGBA(19, 19, 19, 1)
