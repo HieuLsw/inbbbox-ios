@@ -30,10 +30,10 @@ class ProfileMenuBarView: UIView {
 
         deselectAllItems()
 
-        shotsButton.setTitle(Localized("ProfileMenuBarView.Shots", comment: "Shots card title."), for: .normal)
-        infoButton.setTitle(Localized("ProfileMenuBarView.Info", comment: "Info card title."), for: .normal)
-        projectsButton.setTitle(Localized("ProfileMenuBarView.Projects", comment: "Projects card title."), for: .normal)
-        bucketsButton.setTitle(Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title."), for: .normal)
+        shotsButton.title = Localized("ProfileMenuBarView.Shots", comment: "Shots card title.")
+        infoButton.title = Localized("ProfileMenuBarView.Info", comment: "Info card title.")
+        projectsButton.title = Localized("ProfileMenuBarView.Projects", comment: "Projects card title.")
+        bucketsButton.title = Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title.")
 
         [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
             $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
