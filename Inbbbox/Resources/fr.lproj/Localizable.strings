@@ -364,7 +364,7 @@
 "ShotCollectionCell.Like" = "Ajouté aux favoris!";
 "ShotCollectionCell.Bucket" = "Ajouter aux favoris & aux albums!";
 "ShotCollectionCell.Comment" = "Commenter…";
-"ShotCollectionCell.Follow" = "Auteur suivi!;
+"ShotCollectionCell.Follow" = "Auteur suivi!";
 
 /********* ProfileInfoView *********/
 "ProfileInfoView.Followers" = "Observateur";
