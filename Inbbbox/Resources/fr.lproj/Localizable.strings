@@ -43,7 +43,7 @@
 "CenterButtonTabBar.Likes" = "Favoris";
 
 /* Main view, bottom bar */
-"CenterButtonTabBar.Buckets" = "Catalogues";
+"CenterButtonTabBar.Buckets" = "Albums";
 
 /* Main view, bottom bar */
 "CenterButtonTabBar.Following" = "Auteurs observés";
@@ -54,7 +54,7 @@
 /********* AcknowledgementsViewController *********/
 
 /* Acknowledgements view title*/
-"AcknowledgementsView.Title" = "Consignes";
+"AcknowledgementsView.Title" = "Clauses de confidentialité";
 
 /* Back button */
 "AcknowledgementsView.Back" = "Retour";
@@ -62,7 +62,7 @@
 /********* BucketsCollectionViewController *********/
 
 /* Button for adding new bucket */
-"BucketsCollectionView.AddNew" = "Ajouter un nouveau";
+"BucketsCollectionView.AddNew" = "Nouvel album";
 
 /* Displayed when empty data in view */
 "BucketsCollectionViewController.EmptyData.FirstLocalizedString" = "D’abord ";
@@ -124,7 +124,7 @@
 /********* CommentEditView *********/
 
 /* Mark selected comment as liked. */
-"CommentEditView.Like" = "Aimes";
+"CommentEditView.Like" = "Favoris";
 
 /* Cancel editing comment. */
 "CommentEditView.Cancel" = "Annuler";
@@ -179,7 +179,7 @@
 "UIAlertControllerExtension.CantSendFeedback" = "Vous n'avez pas de client de messagerie ? pas de soucis utilisez cette adresse pour nous envoyer des commentaires : inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
-"UIAlertControllerExtension.UnableToDownloadShots" = "Télécharger des projets de Dribbble";
+"UIAlertControllerExtension.UnableToDownloadShots" = "Télécharger des nouveaux projets Dribbble";
 
 /* Informing user about problems with downloading teams. */
 "UIAlertControllerExtension.UnableToDownloadTeams" = "Télécharger des groupes";
@@ -216,7 +216,7 @@
 "SettingsViewModel.Popular" = "Tendances du jour";
 
 /* User settings, send daily reminders */
-"SettingsViewModel.SendDailyReminders" = "Envoyer des rappels sur";
+"SettingsViewModel.SendDailyReminders" = "Envoyer un rappel à";
 
 /* User settings, enable following */
 "SettingsViewModel.Following" = "Observés";
@@ -231,13 +231,13 @@
 "SettingsViewModel.Settings" = "Paramètres";
 
 /********* Acknowledgements button *********/
-"SettingsViewModel.AcknowledgementsButton" = "Mentions sur la politique de confidentialité";
+"SettingsViewModel.AcknowledgementsButton" = "Politique de confidentialité";
 
 /* Body of alert, asking user to grant notifications permission. */
 "SettingsViewModel.AccessToNotifications" = "Vous devez donner votre accord pour activer\nles notifications.";
 
 /* User Settings, show author. */
-"SettingsViewModel.DisplayAuthor" = "Montrer Auteur à la page d'accueil";
+"SettingsViewModel.DisplayAuthor" = "Afficher le nom de l'auteur (sur la page d'accueil)";
 
 /* User Settings, language. */
 "SettingsViewModel.Language" = "Langues";
@@ -249,10 +249,10 @@
 "SettingsViewModel.AutoNightMode" = "Mode nuit automatique";
 
 /* User Settings, feedback section title. */
-"SettingsViewModel.Feedback" = "FEEDBACK";
+"SettingsViewModel.Feedback" = "SUGGESTIONS";
 
 /* User Settings, send your feedback button. */
-"SettingsViewModel.SendFeedback" = "Envoyez-nous vos suggestions";
+"SettingsViewModel.SendFeedback" = "Envoie-nous tes suggestions";
 
 /* User Settings, feedback sent. */
 "SettingsViewModel.FeedbackSent" = "Merci! Votre commentaire a été envoyé!";
@@ -272,7 +272,7 @@
 "SettingsViewController.Guest" = "Visiteur?";
 
 /* Log out button */
-"SettingsViewController.LogOut" = "Déconnecter";
+"SettingsViewController.LogOut" = "Déconnexion";
 
 /* Back button */
 "SettingsViewController.Back" = "Retour";
@@ -295,7 +295,7 @@
 "ShotsCollectionViewController.Dismiss" = "Fermer";
 
 /* Error shown when no stream sources were selected. */
-"ShotsCollectionViewController.NoShotsErrorLabel" = "Choisissez au moins\nune source dans\nles paramètres";
+"ShotsCollectionViewController.NoShotsErrorLabel" = "Choisis au moins\nune source dans\nles paramètres";
 
 /********** ProfileHeaderView *********/
 
@@ -358,13 +358,13 @@
 
 /********* ShotsCollectionBackgroundView *********/
 
-"BackgroundView.ShowingYou" = "Il est montré:";
+"BackgroundView.ShowingYou" = "Actif:";
 
 /********* ShotCollectionCell *********/
 "ShotCollectionCell.Like" = "Ajouté aux favoris!";
-"ShotCollectionCell.Bucket" = "Aimer et ajouter à la liste des souhaits!";
+"ShotCollectionCell.Bucket" = "Ajouter aux favoris & aux albums!";
 "ShotCollectionCell.Comment" = "Commenter…";
-"ShotCollectionCell.Follow" = "Tu observes l'auteur!";
+"ShotCollectionCell.Follow" = "Auteur suivi!;
 
 /********* ProfileInfoView *********/
 "ProfileInfoView.Followers" = "Observateur";
