@@ -42,7 +42,6 @@ class ProfileMenuButton: UIButton {
     fileprivate let badgeLabel = UILabel()
     fileprivate let nameLabel = UILabel()
     fileprivate var didSetConstraints = false
-    fileprivate var nameTrailingConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,14 +64,15 @@ class ProfileMenuButton: UIButton {
         if !didSetConstraints {
             didSetConstraints = true
 
+            let offset = CGFloat(4.0)
             badgeLabel.autoPinEdge(.leading, to: .trailing, of: nameLabel)
             badgeLabel.autoPinEdge(.bottom, to: .top, of: nameLabel, withOffset: 7)
-            badgeLabel.autoPinEdge(toSuperviewEdge: .trailing)
+            badgeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: offset)
             
             nameLabel.adjustsFontSizeToFitWidth = true
-            nameLabel.autoPinEdge(toSuperviewEdge: .leading)
+            nameLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: offset)
             nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: self)
-            nameLabel.autoMatch(.width, to: .width, of: self, withOffset: -badgeLabel.intrinsicContentSize.width)
+            nameLabel.autoMatch(.width, to: .width, of: self, withOffset: -(badgeLabel.intrinsicContentSize.width + (offset * 2)) )
         }
 
         super.updateConstraints()
