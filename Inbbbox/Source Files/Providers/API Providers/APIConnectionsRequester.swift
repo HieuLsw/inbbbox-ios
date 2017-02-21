@@ -24,6 +24,7 @@ class APIConnectionsRequester: Verifiable {
     ///
     /// - returns: Promise which resolves with void.
     func followUser(_ user: UserType) -> Promise<Void> {
+        AnalyticsManager.trackUserActionEvent(.follow)
 
         let query = FollowUserQuery(user: user)
         return sendConnectionQuery(query)

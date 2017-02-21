@@ -21,7 +21,7 @@ enum AnalyticsLoginEvent: String {
 
 /// Defines which user actions can be tracked.
 enum AnalyticsUserActionEvent: String {
-    case like, addToBucket, comment, swipeDown
+    case like, addToBucket, comment, swipeDown, follow
 }
 
 /// Defines which settings change can be tracked.
