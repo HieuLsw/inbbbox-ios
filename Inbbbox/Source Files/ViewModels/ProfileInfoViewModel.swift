@@ -56,7 +56,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     var bio: NSAttributedString? {
-        guard let body = NSAttributedString(htmlString: user.bio)?.attributedStringByTrimingTrailingNewLine() else {
+        guard user.bio.characters.count > 0, let body = NSAttributedString(htmlString: user.bio)?.attributedStringByTrimingTrailingNewLine() else {
             return nil
         }
         
