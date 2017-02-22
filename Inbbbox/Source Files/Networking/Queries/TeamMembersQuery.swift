@@ -20,4 +20,11 @@ struct TeamMembersQuery: Query {
     init(team: TeamType) {
         path = "/teams/" + team.identifier + "/members"
     }
+    
+    /// Initialize query for list of given team's members.
+    ///
+    /// - parameter team: Team to list members for.
+    init(team: UserType) {
+        path = "/teams/" + team.identifier + "/members"
+    }
 }

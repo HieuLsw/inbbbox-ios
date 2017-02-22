@@ -15,15 +15,19 @@ class TeamsProvider {
         return apiTeamsProvider.provideTeamsOfCurrentUser()
     }
 
-    func nextPage() -> Promise<[TeamType]?> {
+    func nextPage() -> Promise<[UserType]?> {
         return apiTeamsProvider.teamsNextPage()
     }
 
-    func provideTeamFor(user: UserType) -> Promise<[TeamType]?> {
+    func provideTeamFor(user: UserType) -> Promise<[UserType]?> {
         return apiTeamsProvider.provideTeamsFor(user: user)
     }
     
     func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
+        return apiTeamsProvider.provideMembersForTeam(team)
+    }
+    
+    func provideMembersForTeam(_ team: UserType) -> Promise<[UserType]?> {
         return apiTeamsProvider.provideMembersForTeam(team)
     }
 }

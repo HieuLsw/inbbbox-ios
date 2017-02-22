@@ -14,10 +14,9 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     private let shotsProvider = ShotsProvider()
     
     private(set) var user: UserType
-    private var userTeams = [TeamType]()
+    private var userTeams = [UserType]()
     private(set) var userLikedShots = [ShotType]()
     
-    private var team: TeamType?
     private var teamMembers = [UserType]()
     private var teamMemberShots = [Int: [ShotType]]()
 
@@ -95,19 +94,6 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     init(user: UserType) {
         self.user = user
-        if let accountType = user.accountType, accountType == .Team {
-            team = Team(
-                identifier: user.identifier,
-                name: user.name ?? "",
-                username: user.username,
-                avatarURL: user.avatarURL,
-                createdAt: Date(),
-                followersCount: user.followersCount,
-                followingsCount: user.followingsCount,
-                bio: user.bio,
-                location: user.location
-            )
-        }
     }
 
     func downloadInitialItems() {
@@ -148,9 +134,8 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
     
     private func downloadMembersOfTeam() {
-        guard let team = team else { return }
         firstly {
-            teamsProvider.provideMembersForTeam(team)
+            teamsProvider.provideMembersForTeam(user)
         }.then { teamMembers -> Void in
             if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers
@@ -189,7 +174,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
         }
     }
 
-    func team(forIndex index: Int) -> TeamType {
+    func team(forIndex index: Int) -> UserType {
         return userTeams[index]
     }
 

@@ -148,6 +148,14 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
             viewModel.downloadItemsForNextPage()
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let team = viewModel.team(forIndex: indexPath.item)
+        let profileViewController = ProfileViewController(user: team)
+        profileViewController.hidesBottomBarWhenPushed = true
+        profileViewController.userAlreadyFollowed = true
+        self.navigationController?.pushViewController(profileViewController, animated: true)
+    }
 
 }
 
