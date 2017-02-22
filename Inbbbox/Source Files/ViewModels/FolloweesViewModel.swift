@@ -35,7 +35,7 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
 
         firstly {
             UserStorage.isUserSignedIn ?
-                    connectionsProvider.provideMyFollowees() : teamsProvider.provideMembersForTeam(netguruTeam)
+                    connectionsProvider.provideMyFollowees() : teamsProvider.provideMembers(forTeam: netguruTeam)
         }.then { followees -> Void in
             if let followees = followees, followees != self.followees || followees.count == 0 {
                 self.followees = followees

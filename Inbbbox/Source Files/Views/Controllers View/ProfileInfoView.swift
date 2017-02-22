@@ -96,7 +96,7 @@ final class ProfileInfoView: UIView {
     }
 
     private func setupLayout() {
-        backgroundColor = .white
+        backgroundColor = ColorModeProvider.current().collectionViewBackgroundColor
 
         addSubview(scrollView)
         scrollView.autoPinEdgesToSuperviewEdges()
