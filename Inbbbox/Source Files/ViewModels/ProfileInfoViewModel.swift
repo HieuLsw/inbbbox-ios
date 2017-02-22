@@ -123,7 +123,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     private func downloadTeams() {
         firstly {
-            teamsProvider.provideTeamFor(user: user)
+            teamsProvider.provideTeams(forUser: user)
         }.then { teams -> Void in
             if let teams = teams {
                 self.userTeams = teams
@@ -135,7 +135,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     
     private func downloadMembersOfTeam() {
         firstly {
-            teamsProvider.provideMembersForTeam(user)
+            teamsProvider.provideMembers(forTeam: user)
         }.then { teamMembers -> Void in
             if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers

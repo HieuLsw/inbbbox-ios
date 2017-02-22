@@ -178,18 +178,17 @@ extension ProfileInfoViewController {
         let cell = tableView.dequeueReusableCell(CarouselCell.self)
         cell.adaptColorMode(currentColorMode)
         cell.selectionStyle = .none
-
+        cell.delegate = self
+        
         if tableView == profileInfoView.teamMembersTableView {
             let teamMember = viewModel.member(forIndex: indexPath.row)
             cell.titleLabel.text = teamMember.name
             cell.backgroundLabel.text = teamMember.name
             cell.shots = viewModel.shots(forIndex: indexPath.row)
-            cell.delegate = self
         } else if tableView == profileInfoView.likedShotsTableView {
             cell.titleLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
             cell.backgroundLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
             cell.shots = viewModel.userLikedShots
-            cell.delegate = self
         }
 
         return cell
