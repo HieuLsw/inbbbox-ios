@@ -24,6 +24,7 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     }
     
     var scrollContentOffset: (() -> CGPoint)?
+    var didLayoutSubviews = false
 
     init(user: UserType) {
         viewModel = ProfileInfoViewModel(user: user)
@@ -44,6 +45,9 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         profileInfoView.scrollView.updateInsets(top: ProfileView.headerInitialHeight)
+
+        viewModel.downloadInitialItems()
+
         setupUI()
         setupTeamsCollectionView()
         setupTeamMembersTableView()
@@ -53,23 +57,21 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
+
+        didLayoutSubviews = true
+        adjustScrollView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+        if viewModel.likedShotsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
         }
         
         if let offset = scrollContentOffset?() {
             profileInfoView.scrollView.contentOffset = offset
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.downloadInitialItems()
     }
 
     override func loadView() {
@@ -180,7 +182,9 @@ extension ProfileInfoViewController {
     }
     
     func adjustScrollView() {
-        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+        guard profileInfoView.frame.height > 0 else { return }
+
+        if viewModel.likedShotsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
         } else if profileInfoView.scrollView.contentSize.height < profileInfoView.scrollView.frame.height {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height - profileInfoView.scrollView.contentSize.height)
