@@ -67,6 +67,7 @@ class ProfileView: UIView {
 
         if value > headerHeight {
             headerView.contentView.alpha = 1
+            headerView.setBackgroundImageOffset(value: value / headerHeight)
         } else if value < 0 {
             headerView.contentView.alpha = 0
         } else {

@@ -51,6 +51,8 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
     fileprivate let badgeView = UIView.newAutoLayout()
     fileprivate let vibrancyView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     fileprivate let badgeLabel = UILabel.newAutoLayout()
+    fileprivate var backgroundImageTopConstraint: NSLayoutConstraint?
+
 
     fileprivate var avatarOffset: CGFloat {
         return shouldShowButton ? -20 : 0
@@ -118,7 +120,8 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
                 contentView.autoCenterInSuperview()
             }
 
-            backgroundImageView.autoPinEdgesToSuperviewEdges()
+            backgroundImageView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+            backgroundImageTopConstraint = backgroundImageView.autoPinEdge(.top, to: .top, of: contentView)
 
             avatarView.autoSetDimensions(to: avatarSize)
             avatarView.autoAlignAxis(toSuperviewAxis: .vertical)
@@ -150,5 +153,9 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
         button.isHidden = false
+    }
+
+    func setBackgroundImageOffset(value: CGFloat) {
+        backgroundImageTopConstraint?.constant = value
     }
 }
