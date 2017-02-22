@@ -30,12 +30,18 @@ class ProfileMenuButton: UIButton {
         }
     }
     
-    var title: String? {
+    var name: String? {
         get {
             return nameLabel.text
         }
         set {
             nameLabel.text = newValue
+        }
+    }
+    
+    var nameColor = ColorModeProvider.current().activeMenuButtonTitle {
+        didSet {
+            nameLabel.textColor = nameColor
         }
     }
 
