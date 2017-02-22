@@ -13,7 +13,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     private let teamsProvider = TeamsProvider()
     private let shotsProvider = ShotsProvider()
     
-    private var user: UserType
+    private(set) var user: UserType
     private var userTeams = [TeamType]()
     private(set) var userLikedShots = [ShotType]()
     

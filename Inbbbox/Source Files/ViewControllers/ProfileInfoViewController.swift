@@ -8,6 +8,7 @@
 import Haneke
 import PromiseKit
 import UIKit
+import ZFDragableModalTransition
 
 final class ProfileInfoViewController: UIViewController, ContainingScrollableView {
 
@@ -15,6 +16,9 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
 
     fileprivate var currentColorMode = ColorModeProvider.current()
 
+    fileprivate var currentContainer = [ShotType]()
+    fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
+    
     fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
     }
@@ -172,10 +176,12 @@ extension ProfileInfoViewController {
             cell.titleLabel.text = teamMember.name
             cell.backgroundLabel.text = teamMember.name
             cell.shots = viewModel.shots(forIndex: indexPath.row)
+            cell.delegate = self
         } else if tableView == profileInfoView.likedShotsTableView {
             cell.titleLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
             cell.backgroundLabel.text = Localized("ProfileInfoView.RecentLikes", comment: "")
             cell.shots = viewModel.userLikedShots
+            cell.delegate = self
         }
 
         return cell
@@ -236,4 +242,42 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
         profileInfoView.teamMembersTableView.reloadRows(at: [indexPath], with: .none)
     }
 
+}
+
+// MARK: CarouselCellDelegate
+
+extension ProfileInfoViewController: CarouselCellDelegate {
+    
+    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType) {
+        
+        let controller = ShotDetailsViewController(shot: shot)
+        controller.shotIndex = item
+        
+        if viewModel.user.accountType == .Team {
+            guard let carouselCellIndex = profileInfoView.teamMembersTableView.indexPath(for: carouselCell), let shots = viewModel.shots(forIndex: carouselCellIndex.row) else { return }
+            currentContainer = shots
+        } else {
+            currentContainer = viewModel.userLikedShots
+        }
+        
+        presentShotDetails(with: controller)
+    }
+}
+
+extension ProfileInfoViewController {
+    func presentShotDetails(with controller: ShotDetailsViewController) {
+        
+        controller.customizeFor3DTouch(false)
+        
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: controller)
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+        
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        modalTransitionAnimator?.behindViewScale = 1
+        
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .custom
+        
+        present(pageViewController, animated: true, completion: nil)
+    }
 }
