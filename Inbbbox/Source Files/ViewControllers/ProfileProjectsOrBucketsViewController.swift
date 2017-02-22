@@ -21,6 +21,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
     }
 
     var scrollContentOffset: (() -> CGPoint)?
+    var didLayoutSubviews = false
 
     fileprivate var currentColorMode = ColorModeProvider.current()
     fileprivate var viewModel: ProfileProjectsOrBucketsViewModel!
@@ -62,6 +63,11 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
         tableView.updateInsets(top: ProfileView.headerInitialHeight)
 
         viewModel.downloadInitialItems()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        didLayoutSubviews = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
