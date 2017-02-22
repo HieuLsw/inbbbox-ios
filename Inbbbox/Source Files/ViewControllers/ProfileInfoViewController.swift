@@ -54,11 +54,6 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
         setupLikedShotsTableView()
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        print(profileInfoView.scrollView.frame.height)
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
