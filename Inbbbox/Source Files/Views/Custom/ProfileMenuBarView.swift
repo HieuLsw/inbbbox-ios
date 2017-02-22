@@ -133,7 +133,7 @@ private extension ProfileMenuBarView {
 
     func deselectAllItems() {
         [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
-            $0.nameColor = ColorModeProvider.current().activeMenuButtonTitle
+            $0.nameColor = ColorModeProvider.current().inactiveMenuButtonTitle
             $0.badgeColor = ColorModeProvider.current().inactiveMenuButtonBadge
         }
     }
