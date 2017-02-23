@@ -31,7 +31,7 @@ class APITeamsProviderSpec: QuickSpec {
         describe("when providing members for team") {
             
             it("members should be properly returned") {
-                sut.provideMembersForTeam(Team.fixtureTeam()).then { _users -> Void in
+                sut.provideMembers(forTeam: Team.fixtureTeam()).then { _users -> Void in
                     users = _users
                 }.catch { _ in fail("This should not be invoked") }
                 

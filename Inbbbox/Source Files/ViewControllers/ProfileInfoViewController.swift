@@ -8,6 +8,7 @@
 import Haneke
 import PromiseKit
 import UIKit
+import ZFDragableModalTransition
 
 final class ProfileInfoViewController: UIViewController, ContainingScrollableView {
 
@@ -15,6 +16,9 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
 
     fileprivate var currentColorMode = ColorModeProvider.current()
 
+    fileprivate var currentContainer = [ShotType]()
+    fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
+    
     fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
     }
@@ -24,6 +28,7 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     }
     
     var scrollContentOffset: (() -> CGPoint)?
+    var didLayoutSubviews = false
 
     init(user: UserType) {
         viewModel = ProfileInfoViewModel(user: user)
@@ -44,6 +49,9 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         profileInfoView.scrollView.updateInsets(top: ProfileView.headerInitialHeight)
+
+        viewModel.downloadInitialItems()
+
         setupUI()
         setupTeamsCollectionView()
         setupTeamMembersTableView()
@@ -53,23 +61,21 @@ final class ProfileInfoViewController: UIViewController, ContainingScrollableVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileInfoView.teamsCollectionViewFlowLayout.itemSize = CGSize(width: profileInfoView.frame.size.width / 2, height: 65)
+
+        didLayoutSubviews = true
+        adjustScrollView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+        if viewModel.likedShotsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
         }
         
         if let offset = scrollContentOffset?() {
             profileInfoView.scrollView.contentOffset = offset
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.downloadInitialItems()
     }
 
     override func loadView() {
@@ -142,6 +148,14 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
             viewModel.downloadItemsForNextPage()
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let team = viewModel.team(forIndex: indexPath.item)
+        let profileViewController = ProfileViewController(user: team)
+        profileViewController.hidesBottomBarWhenPushed = true
+        profileViewController.userAlreadyFollowed = true
+        self.navigationController?.pushViewController(profileViewController, animated: true)
+    }
 
 }
 
@@ -164,7 +178,8 @@ extension ProfileInfoViewController {
         let cell = tableView.dequeueReusableCell(CarouselCell.self)
         cell.adaptColorMode(currentColorMode)
         cell.selectionStyle = .none
-
+        cell.delegate = self
+        
         if tableView == profileInfoView.teamMembersTableView {
             let teamMember = viewModel.member(forIndex: indexPath.row)
             cell.titleLabel.text = teamMember.name
@@ -180,7 +195,9 @@ extension ProfileInfoViewController {
     }
     
     func adjustScrollView() {
-        if viewModel.itemsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
+        guard profileInfoView.frame.height > 0 else { return }
+
+        if viewModel.likedShotsCount == 0 && viewModel.teamsCount == 0 && viewModel.teamMembersCount == 0 {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height)
         } else if profileInfoView.scrollView.contentSize.height < profileInfoView.scrollView.frame.height {
             profileInfoView.scrollView.updateInsets(bottom: profileInfoView.scrollView.frame.height - profileInfoView.scrollView.contentSize.height)
@@ -232,4 +249,42 @@ extension ProfileInfoViewController: BaseCollectionViewViewModelDelegate {
         profileInfoView.teamMembersTableView.reloadRows(at: [indexPath], with: .none)
     }
 
+}
+
+// MARK: CarouselCellDelegate
+
+extension ProfileInfoViewController: CarouselCellDelegate {
+    
+    func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType) {
+        
+        let controller = ShotDetailsViewController(shot: shot)
+        controller.shotIndex = item
+        
+        if viewModel.user.accountType == .Team {
+            guard let carouselCellIndex = profileInfoView.teamMembersTableView.indexPath(for: carouselCell), let shots = viewModel.shots(forIndex: carouselCellIndex.row) else { return }
+            currentContainer = shots
+        } else {
+            currentContainer = viewModel.userLikedShots
+        }
+        
+        presentShotDetails(with: controller)
+    }
+}
+
+extension ProfileInfoViewController {
+    func presentShotDetails(with controller: ShotDetailsViewController) {
+        
+        controller.customizeFor3DTouch(false)
+        
+        let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: controller)
+        let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+        
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+        modalTransitionAnimator?.behindViewScale = 1
+        
+        pageViewController.transitioningDelegate = modalTransitionAnimator
+        pageViewController.modalPresentationStyle = .custom
+        
+        present(pageViewController, animated: true, completion: nil)
+    }
 }

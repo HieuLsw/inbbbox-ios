@@ -74,7 +74,6 @@ final class ColorModeProvider {
         ProfileHeaderView.appearance().backgroundColor = mode.profileHeaderViewBackground
 
         UICollectionView.appearance().backgroundColor = mode.collectionViewBackgroundColor
-        UIScrollView.appearance().backgroundColor = mode.collectionViewBackgroundColor
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().barStyle = .black
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]

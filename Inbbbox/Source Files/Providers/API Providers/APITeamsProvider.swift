@@ -37,14 +37,14 @@ class APITeamsProvider: PageableProvider {
      
      - returns: Promise which resolves with teams or nil.
     */
-    func provideTeamsFor(user: UserType) -> Promise<[TeamType]?> {
+    func provideTeams(forUser user: UserType) -> Promise<[UserType]?> {
 
         let query = TeamsQuery(teamsOfUser: user)
-        return Promise<[TeamType]?> { fulfill, reject in
+        return Promise<[UserType]?> { fulfill, reject in
             firstly {
                 firstPageForQueries([query], withSerializationKey: nil)
-            }.then { (teams: [Team]?) -> Void in
-                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+            }.then { (teams: [User]?) -> Void in
+                fulfill(teams.flatMap { $0.map { $0 as UserType } })
             }.catch(execute: reject)
         }
     }
@@ -57,12 +57,12 @@ class APITeamsProvider: PageableProvider {
 
      - returns: Promise which resolves with users or nil.
      */
-    func teamsNextPage() -> Promise<[TeamType]?> {
-        return Promise <[TeamType]?> { fulfill, reject in
+    func teamsNextPage() -> Promise<[UserType]?> {
+        return Promise <[UserType]?> { fulfill, reject in
             firstly {
-                nextPageFor(Team.self)
+                nextPageFor(User.self)
             }.then { teams -> Void in
-                fulfill(teams.flatMap { $0.map { $0 as TeamType } })
+                fulfill(teams.flatMap { $0.map { $0 as UserType } })
             }.catch(execute: reject)
         }
     }
@@ -74,9 +74,24 @@ class APITeamsProvider: PageableProvider {
 
     - returns: Promise which resolves with users or nil.
     */
-    func provideMembersForTeam(_ team: TeamType) -> Promise<[UserType]?> {
-
+    func provideMembers(forTeam team: TeamType) -> Promise<[UserType]?> {
         let query = TeamMembersQuery(team: team)
+        return provideMembersForQuery(query)
+    }
+    
+    /**
+     Provides team's members.
+     
+     - parameter team: Team to get members for.
+     
+     - returns: Promise which resolves with users or nil.
+     */
+    func provideMembers(forTeam team: UserType) -> Promise<[UserType]?> {
+        let query = TeamMembersQuery(team: team)
+        return provideMembersForQuery(query)
+    }
+
+    private func provideMembersForQuery(_ query: TeamMembersQuery) -> Promise<[UserType]?> {
         return Promise<[UserType]?> { fulfill, reject in
             firstly {
                 firstPageForQueries([query], withSerializationKey: nil)
@@ -85,7 +100,7 @@ class APITeamsProvider: PageableProvider {
             }.catch(execute: reject)
         }
     }
-
+    
     /**
      Provides next page of team's members.
 

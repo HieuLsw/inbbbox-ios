@@ -41,6 +41,7 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
     }
 
     var scrollContentOffset: (() -> CGPoint)?
+    var didLayoutSubviews = false
 
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
@@ -81,6 +82,11 @@ class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DT
         collectionView.updateInsets(top: ProfileView.headerInitialHeight)
 
         viewModel.downloadInitialItems()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        didLayoutSubviews = true
     }
 
     override func viewWillAppear(_ animated: Bool) {

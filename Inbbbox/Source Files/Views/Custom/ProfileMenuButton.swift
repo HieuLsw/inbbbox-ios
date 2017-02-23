@@ -15,7 +15,12 @@ class ProfileMenuButton: UIButton {
         didSet {
             badgeLabel.text = "\(badge)"
             badgeLabel.isHidden = badge == 0
-            titleEdgeInsets = UIEdgeInsets(top: 0, left: badge == 0 ? 0 : -3, bottom: 0, right: badge == 0 ? 0 : 3)
+            
+            if badge == 0 {
+                nameLabel.textAlignment = .center
+            } else {
+                nameLabel.textAlignment = .right
+            }
         }
     }
 
@@ -24,17 +29,44 @@ class ProfileMenuButton: UIButton {
             badgeLabel.textColor = badgeColor
         }
     }
+    
+    var name: String? {
+        get {
+            return nameLabel.text
+        }
+        set {
+            nameLabel.text = newValue
+        }
+    }
+    
+    var nameColor = ColorModeProvider.current().activeMenuButtonTitle {
+        didSet {
+            nameLabel.textColor = nameColor
+        }
+    }
+    
+    var nameFont: UIFont {
+        get {
+            return nameLabel.font
+        }
+        set {
+            nameLabel.font = newValue
+        }
+    }
 
     fileprivate let badgeLabel = UILabel()
+    fileprivate let nameLabel = UILabel()
     fileprivate var didSetConstraints = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         badgeLabel.font = UIFont.systemFont(ofSize: 10)
+        nameLabel.font = titleLabel?.font
+        nameLabel.textAlignment = .center
         
         addSubview(badgeLabel)
-        titleLabel?.textAlignment = .center
+        addSubview(nameLabel)
     }
 
     @available(*, unavailable, message: "Use init(frame:) instead")
@@ -47,16 +79,15 @@ class ProfileMenuButton: UIButton {
         if !didSetConstraints {
             didSetConstraints = true
 
-            guard let titleLabel = titleLabel else { return }
-
-            badgeLabel.autoPinEdge(.leading, to: .trailing, of: titleLabel)
-            badgeLabel.autoPinEdge(.bottom, to: .top, of: titleLabel, withOffset: 7)
+            let offset = CGFloat(4.0)
+            badgeLabel.autoPinEdge(.leading, to: .trailing, of: nameLabel)
+            badgeLabel.autoPinEdge(.bottom, to: .top, of: nameLabel, withOffset: 7)
+            badgeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: offset)
             
-            if (titleLabel.intrinsicContentSize.width + badgeLabel.intrinsicContentSize.width >= intrinsicContentSize.width) {
-                titleLabel.adjustsFontSizeToFitWidth = true
-                badgeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8)
-                titleLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 8)
-            }
+            nameLabel.adjustsFontSizeToFitWidth = true
+            nameLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: offset)
+            nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: self)
+            nameLabel.autoMatch(.width, to: .width, of: self, withOffset: -(badgeLabel.intrinsicContentSize.width + (offset * 2)) )
         }
 
         super.updateConstraints()

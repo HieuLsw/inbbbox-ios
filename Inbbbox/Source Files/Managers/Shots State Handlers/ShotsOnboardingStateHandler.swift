@@ -103,20 +103,14 @@ extension ShotsOnboardingStateHandler {
 
 // MARK: UICollectionViewDelegate
 extension ShotsOnboardingStateHandler {
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        if indexPath.row == onboardingSteps.count {
-            scrollViewAnimationsCompletion = {
-                Defaults[.onboardingPassed] = true
-                self.enablePrefetching()
-                self.delegate?.shotsStateHandlerDidInvalidate(self)
-            }
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row == onboardingSteps.count - 1 else {
             return
+        }
+        scrollViewAnimationsCompletion = {
+            Defaults[.onboardingPassed] = true
+            self.enablePrefetching()
+            self.delegate?.shotsStateHandlerDidInvalidate(self)
         }
         skipOnboardingStep()
     }

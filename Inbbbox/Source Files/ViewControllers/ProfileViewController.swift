@@ -17,6 +17,7 @@ enum ProfileMenuItem: Int {
 protocol ContainingScrollableView: class {
     var scrollContentOffset: (() -> CGPoint)? { get set }
     var scrollableView: UIScrollView { get }
+    var didLayoutSubviews: Bool { get set }
 }
 
 fileprivate var shotsContext = 0
@@ -118,6 +119,10 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
 
         hideBottomBorderOfNavigationBar(true)
+
+        if let menuItem = selectedMenuItem {
+            observeContentOffsetForViewController(withPageIndex: menuItem.rawValue)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +140,12 @@ class ProfileViewController: UIViewController {
             (context == &infoContext && selectedMenuItem == .info) ||
             (context == &projectsContext && selectedMenuItem == .projects) ||
             (context == &bucketsContext && selectedMenuItem == .buckets)
+        else { return }
+
+        guard
+            let menuItem = selectedMenuItem,
+            let viewController = viewControllerContainingScrollableView(atPageWithIndex: menuItem.rawValue),
+            viewController.didLayoutSubviews
         else { return }
 
         guard
@@ -235,10 +246,7 @@ private extension ProfileViewController {
     func observeContentOffsetForViewController(withPageIndex index: Int) {
         removeAllContentOffsetObservers()
 
-        guard
-            let viewControllers = (profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers,
-            let scrollableView = (viewControllers[index] as? ContainingScrollableView)?.scrollableView
-        else { return }
+        guard let scrollableView = viewControllerContainingScrollableView(atPageWithIndex: index)?.scrollableView else { return }
 
         let keyPath = KeyPath.contentOffset.rawValue
         let options: NSKeyValueObservingOptions = [.old, .new]
@@ -251,14 +259,12 @@ private extension ProfileViewController {
         }
 
         indexesForRegisteredObservers.append(index)
-        (viewControllers[index] as? ContainingScrollableView)?.scrollContentOffset = { CGPoint(x: 0, y: -self.headerHeight) }
+        viewControllerContainingScrollableView(atPageWithIndex: index)?.scrollContentOffset = { CGPoint(x: 0, y: -self.headerHeight) }
     }
 
     func removeAllContentOffsetObservers() {
-        guard let viewControllers = (profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers else { return }
-
         indexesForRegisteredObservers.forEach { index in
-            (viewControllers[index] as? ContainingScrollableView)?.scrollableView.removeObserver(self, forKeyPath: KeyPath.contentOffset.rawValue)
+            viewControllerContainingScrollableView(atPageWithIndex: index)?.scrollableView.removeObserver(self, forKeyPath: KeyPath.contentOffset.rawValue)
         }
 
         indexesForRegisteredObservers.removeAll()
@@ -321,5 +327,10 @@ private extension ProfileViewController {
         let image = value ? UIImage(color: ColorModeProvider.current().navigationBarTint) : nil
         navigationController?.navigationBar.shadowImage = image
         navigationController?.navigationBar.setBackgroundImage(image, for: .default)
+    }
+
+    func viewControllerContainingScrollableView(atPageWithIndex index: Int) -> ContainingScrollableView? {
+        let viewControllers = (profilePageViewController?.dataSource as? ProfilePageViewControllerDataSource)?.viewControllers
+        return viewControllers?[index] as? ContainingScrollableView
     }
 }

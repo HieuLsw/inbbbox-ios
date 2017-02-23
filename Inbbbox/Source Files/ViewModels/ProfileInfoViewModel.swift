@@ -13,11 +13,10 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     private let teamsProvider = TeamsProvider()
     private let shotsProvider = ShotsProvider()
     
-    private var user: UserType
-    private var userTeams = [TeamType]()
+    private(set) var user: UserType
+    private var userTeams = [UserType]()
     private(set) var userLikedShots = [ShotType]()
     
-    private var team: TeamType?
     private var teamMembers = [UserType]()
     private var teamMemberShots = [Int: [ShotType]]()
 
@@ -56,7 +55,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
 
     var bio: NSAttributedString? {
-        guard let body = NSAttributedString(htmlString: user.bio)?.attributedStringByTrimingTrailingNewLine() else {
+        guard user.bio.characters.count > 0, let body = NSAttributedString(htmlString: user.bio)?.attributedStringByTrimingTrailingNewLine() else {
             return nil
         }
         
@@ -95,19 +94,6 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     init(user: UserType) {
         self.user = user
-        if let accountType = user.accountType, accountType == .Team {
-            team = Team(
-                identifier: user.identifier,
-                name: user.name ?? "",
-                username: user.username,
-                avatarURL: user.avatarURL,
-                createdAt: Date(),
-                followersCount: user.followersCount,
-                followingsCount: user.followingsCount,
-                bio: user.bio,
-                location: user.location
-            )
-        }
     }
 
     func downloadInitialItems() {
@@ -137,7 +123,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
 
     private func downloadTeams() {
         firstly {
-            teamsProvider.provideTeamFor(user: user)
+            teamsProvider.provideTeams(forUser: user)
         }.then { teams -> Void in
             if let teams = teams {
                 self.userTeams = teams
@@ -148,9 +134,8 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
     }
     
     private func downloadMembersOfTeam() {
-        guard let team = team else { return }
         firstly {
-            teamsProvider.provideMembersForTeam(team)
+            teamsProvider.provideMembers(forTeam: user)
         }.then { teamMembers -> Void in
             if let teamMembers = teamMembers, teamMembers != self.teamMembers || teamMembers.count == 0 {
                 self.teamMembers = teamMembers
@@ -189,7 +174,7 @@ final class ProfileInfoViewModel: BaseCollectionViewViewModel {
         }
     }
 
-    func team(forIndex index: Int) -> TeamType {
+    func team(forIndex index: Int) -> UserType {
         return userTeams[index]
     }
 

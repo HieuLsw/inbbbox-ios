@@ -25,7 +25,8 @@ struct ShotsQuery: Query {
             case .list:
                 return "/shots"
             case .userShots(let user):
-                return "/users/\(user.username)/shots"
+                let path = user.accountType == .Team ? "teams" : "users"
+                return "/\(path)/\(user.username)/shots"
             case .bucketShots(let bucket):
                 return "/buckets/\(bucket.identifier)/shots"
             case .userLikedShots(let user):
