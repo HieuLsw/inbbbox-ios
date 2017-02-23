@@ -369,7 +369,7 @@
 "ProfileInfoView.Followers" = "Seguidores";
 "ProfileInfoView.Shots" = "Imagens";
 "ProfileInfoView.Following" = "Os autores seguidos";
-"ProfileInfoView.RecentLikes" = "Recente favoritos";
+"ProfileInfoView.RecentLikes" = "Curtidas recentes";
 
 /********* TeamsCollectionHeaderView *********/
 "TeamsCollectionHeaderView.OnTeams" = "Equipes";
