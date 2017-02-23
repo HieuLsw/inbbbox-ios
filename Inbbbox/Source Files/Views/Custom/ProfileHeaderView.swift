@@ -25,6 +25,7 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
 
     let contentView = UIView.newAutoLayout()
     let avatarView = AvatarView(size: avatarSize, bordered: true, borderWidth: 3)
+    let backgroundImageView = UIImageView.newAutoLayout()
     var shouldShowButton = true
     let button = UIButton.newAutoLayout()
 
@@ -46,7 +47,6 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         }
     }
 
-    fileprivate let backgroundImageView = UIImageView.newAutoLayout()
     fileprivate let activityIndicator = UIActivityIndicatorView.newAutoLayout()
     fileprivate let badgeView = UIView.newAutoLayout()
     fileprivate let vibrancyView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
@@ -63,8 +63,6 @@ class ProfileHeaderView: UICollectionReusableView, Reusable {
         super.init(frame: frame)
 
         clipsToBounds = true
-
-        backgroundImageView.image = UIImage(named: "Profile BG")
         backgroundImageView.contentMode = .top
 
         addSubview(backgroundImageView)

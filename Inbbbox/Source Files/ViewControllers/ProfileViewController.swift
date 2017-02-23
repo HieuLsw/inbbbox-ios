@@ -207,6 +207,7 @@ private extension ProfileViewController {
         profileView.headerView.badge = viewModel.user.isPro ? .pro : nil
         profileView.headerView.badge = viewModel.user.accountType == .Team ? .team : profileView.headerView.badge
         profileView.headerView.button.addTarget(self, action: #selector(didTapFollowButton(_:)), for: .touchUpInside)
+        profileView.headerView.backgroundImageView.image = viewModel.backgroundImage
         viewModel.shouldShowFollowButton ? profileView.headerView.startActivityIndicator() : (profileView.headerView.shouldShowButton = false)
     }
 
@@ -327,7 +328,7 @@ private extension ProfileViewController {
     }
 
     func hideBottomBorderOfNavigationBar(_ value: Bool) {
-        let image = value ? UIImage(color: ColorModeProvider.current().navigationBarTint) : nil
+        let image = value ? UIImage(color: ColorModeProvider.current().profileNavigationBarTint) : nil
         navigationController?.navigationBar.shadowImage = image
         navigationController?.navigationBar.setBackgroundImage(image, for: .default)
     }

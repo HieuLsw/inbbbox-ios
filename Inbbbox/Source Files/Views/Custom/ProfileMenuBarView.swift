@@ -30,13 +30,13 @@ class ProfileMenuBarView: UIView {
 
         deselectAllItems()
 
-        shotsButton.title = Localized("ProfileMenuBarView.Shots", comment: "Shots card title.")
-        infoButton.title = Localized("ProfileMenuBarView.Info", comment: "Info card title.")
-        projectsButton.title = Localized("ProfileMenuBarView.Projects", comment: "Projects card title.")
-        bucketsButton.title = Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title.")
+        shotsButton.name = Localized("ProfileMenuBarView.Shots", comment: "Shots card title.")
+        infoButton.name = Localized("ProfileMenuBarView.Info", comment: "Info card title.")
+        projectsButton.name = Localized("ProfileMenuBarView.Projects", comment: "Projects card title.")
+        bucketsButton.name = Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title.")
 
         [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
-            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            $0.nameFont = UIFont.boldSystemFont(ofSize: 14)
             $0.addTarget(self, action: #selector(didSelect(button:)), for: .touchUpInside)
         }
 
@@ -125,7 +125,7 @@ private extension ProfileMenuBarView {
     }
 
     func select(button: ProfileMenuButton) {
-        button.setTitleColor(ColorModeProvider.current().activeMenuButtonTitle, for: .normal)
+        button.nameColor = ColorModeProvider.current().activeMenuButtonTitle
         button.badgeColor = ColorModeProvider.current().activeMenuButtonBadge
         underlineBarView.underline(frame: button.frame)
     }
@@ -133,7 +133,7 @@ private extension ProfileMenuBarView {
 
     func deselectAllItems() {
         [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
-            $0.setTitleColor(ColorModeProvider.current().inactiveMenuButtonTitle, for: .normal)
+            $0.nameColor = ColorModeProvider.current().inactiveMenuButtonTitle
             $0.badgeColor = ColorModeProvider.current().inactiveMenuButtonBadge
         }
     }

@@ -100,6 +100,8 @@ protocol ColorModeType {
 
     // MARK: Profile Header View
     var profileHeaderViewBackground: UIColor { get }
+    var profileHeaderViewBackgroundImageName: String { get }
+    var profileNavigationBarTint: UIColor { get }
 
     // MARK: Profile Menu Bar
     var menuBackground: UIColor { get }

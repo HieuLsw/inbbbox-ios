@@ -223,7 +223,7 @@ private extension ProfileShotsViewController {
 
         let cell = collectionView.dequeueReusableClass(SimpleShotCollectionViewCell.self, forIndexPath: indexPath, type: .cell)
 
-        cell.backgroundColor = ColorModeProvider.current().shotViewCellBackground
+        cell.contentView.backgroundColor = ColorModeProvider.current().shotViewCellBackground
         cell.shotImageView.image = nil
         let cellData = viewModel.shotCollectionViewCellViewData(indexPath)
 
