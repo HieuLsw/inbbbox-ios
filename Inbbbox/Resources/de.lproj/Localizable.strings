@@ -369,7 +369,7 @@
 "ProfileInfoView.Followers" = "Folger";
 "ProfileInfoView.Shots" = "Schuss";
 "ProfileInfoView.Following" = "Abonnierte Autoren";
-"ProfileInfoView.RecentLikes" = "$Recent Likes";
+"ProfileInfoView.RecentLikes" = "Neuste Favoriten";
 
 /********* TeamsCollectionHeaderView *********/
 "TeamsCollectionHeaderView.OnTeams" = "Teams";

@@ -176,7 +176,7 @@
 "UIAlertControllerExtension.EmailError" = "Nous ne pouvons pas envoyer un e-mail avec votre signalement du contenu illicite car aucun compte e-mail n’a pas été configuré.";
 
 /* Displayed when user device is not capable of/configured to send emails, shown when trying to send feedback. */
-"UIAlertControllerExtension.CantSendFeedback" = "Vous n'avez pas de client de messagerie ? pas de soucis utilisez cette adresse pour nous envoyer des commentaires : inbbbox@netguru.co";
+"UIAlertControllerExtension.CantSendFeedback" = "Vous n'avez pas de client de messagerie? Pas de soucis utilisez cette adresse pour nous envoyer des commentaires : inbbbox@netguru.co";
 
 /* Informing user about problems with downloading items. */
 "UIAlertControllerExtension.UnableToDownloadShots" = "Télécharger des nouveaux projets Dribbble";
@@ -370,7 +370,7 @@
 "ProfileInfoView.Followers" = "Observateur";
 "ProfileInfoView.Shots" = "Coup";
 "ProfileInfoView.Following" = "Auteurs observés";
-"ProfileInfoView.RecentLikes" = "$Recent Likes";
+"ProfileInfoView.RecentLikes" = "Récent favoris";
 
 /********* TeamsCollectionHeaderView *********/
 "TeamsCollectionHeaderView.OnTeams" = "Groupes";
