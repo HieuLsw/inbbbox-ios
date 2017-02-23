@@ -154,7 +154,7 @@ extension ProfileInfoViewController: UICollectionViewDelegate {
         let profileViewController = ProfileViewController(user: team)
         profileViewController.hidesBottomBarWhenPushed = true
         profileViewController.userAlreadyFollowed = true
-        self.navigationController?.pushViewController(profileViewController, animated: true)
+        navigationController?.pushViewController(profileViewController, animated: true)
     }
 
 }
@@ -257,16 +257,27 @@ extension ProfileInfoViewController: CarouselCellDelegate {
     
     func carouselCell(_ carouselCell: CarouselCell, didTap item: Int, for shot: ShotType) {
         
-        let controller = ShotDetailsViewController(shot: shot)
-        controller.shotIndex = item
+        var user: UserType? = nil
+        var controller: ShotDetailsViewController
         
         if viewModel.user.accountType == .Team {
             guard let carouselCellIndex = profileInfoView.teamMembersTableView.indexPath(for: carouselCell), let shots = viewModel.shots(forIndex: carouselCellIndex.row) else { return }
             currentContainer = shots
+            user = viewModel.member(forIndex: carouselCellIndex.item)
         } else {
             currentContainer = viewModel.userLikedShots
+            user = viewModel.user
         }
         
+        if let user = user {
+            let shotWithUser = Shot(identifier: shot.identifier, title: shot.title, attributedDescription: shot.attributedDescription, user: user, shotImage: shot.shotImage, createdAt: shot.createdAt, animated: shot.animated, likesCount: shot.likesCount, viewsCount: shot.viewsCount, commentsCount: shot.commentsCount, bucketsCount: shot.bucketsCount, team: shot.team, attachmentsCount: shot.attachmentsCount, htmlUrl: shot.htmlUrl)
+            
+            controller = ShotDetailsViewController(shot: shotWithUser)
+        } else {
+            controller = ShotDetailsViewController(shot: shot)
+        }
+
+        controller.shotIndex = item
         presentShotDetails(with: controller)
     }
 }

@@ -11,11 +11,11 @@ import PureLayout
 final class UserStatisticView: UIView {
 
     private(set) lazy var valueLabel: UILabel = { [unowned self] in
-        self.label(fontSize: 24, textColor: ColorModeProvider.current().statisticValueTextColor)
+        self.label(fontSize: 24, textColor: ColorModeProvider.current().statisticValueTextColor, weight: UIFontWeightBold)
     }()
 
     private lazy var titleLabel: UILabel = { [unowned self] in
-        self.label(fontSize: 12, textColor: ColorModeProvider.current().statisticNameTextColor)
+        self.label(fontSize: 12, textColor: ColorModeProvider.current().statisticNameTextColor, weight: UIFontWeightMedium)
     }()
 
     private lazy var stackView: UIStackView = { [unowned self] in
@@ -46,11 +46,11 @@ final class UserStatisticView: UIView {
         stackView.autoPinEdgesToSuperviewEdges()
     }
 
-    private func label(fontSize: CGFloat, textColor: UIColor) -> UILabel {
+    private func label(fontSize: CGFloat, textColor: UIColor, weight: CGFloat) -> UILabel {
         let label = UILabel()
 
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: fontSize, weight: UIFontWeightMedium)
+        label.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
         label.textColor = textColor
 
         return label
