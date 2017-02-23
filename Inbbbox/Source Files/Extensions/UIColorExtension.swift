@@ -72,6 +72,11 @@ extension UIColor {
         return RGBA(41, 41, 41, 1)
     }
 
+    /// Returns brand background color used in ProfileView when in Night Mode.
+    class func backgroundGrayishBlackColor() -> UIColor {
+        return RGBA(31, 31, 31, 1)
+    }
+
     /// Returns brand background color used in collection view cells.
     class func cellBackgroundColor() -> UIColor {
         return RGBA(223, 224, 226, 1)

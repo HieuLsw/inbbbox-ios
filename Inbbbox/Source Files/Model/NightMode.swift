@@ -155,7 +155,7 @@ struct NightMode: ColorModeType {
     }
 
     var profileHeaderViewBackground: UIColor {
-        return .RGBA(31, 31, 31, 1)
+        return .backgroundGrayishBlackColor()
     }
 
     var profileHeaderViewBackgroundImageName: String {

@@ -324,7 +324,7 @@ private extension ProfileViewController {
     }
 
     func hideBottomBorderOfNavigationBar(_ value: Bool) {
-        let image = value ? UIImage(color: ColorModeProvider.current().navigationBarTint) : nil
+        let image = value ? UIImage(color: .backgroundGrayishBlackColor()) : nil // this color is temporary while new designs are being prepared.
         navigationController?.navigationBar.shadowImage = image
         navigationController?.navigationBar.setBackgroundImage(image, for: .default)
     }
