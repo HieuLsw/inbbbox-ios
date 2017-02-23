@@ -44,6 +44,15 @@ class ProfileMenuButton: UIButton {
             nameLabel.textColor = nameColor
         }
     }
+    
+    var nameFont: UIFont {
+        get {
+            return nameLabel.font
+        }
+        set {
+            nameLabel.font = newValue
+        }
+    }
 
     fileprivate let badgeLabel = UILabel()
     fileprivate let nameLabel = UILabel()
