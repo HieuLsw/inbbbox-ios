@@ -269,12 +269,12 @@ extension ProfileInfoViewController: CarouselCellDelegate {
         }
         
         if let user = user {
-            let shotWithUser = add(user: user, toShot: shot)
+            let shotWithUser = updated(shot: shot, withUser: user)
             
             controller = ShotDetailsViewController(shot: shotWithUser)
             
             currentContainer = currentContainer.map { [unowned self] in
-                self.add(user: user, toShot: $0)
+                self.updated(shot: $0, withUser: user)
             }
         } else {
             controller = ShotDetailsViewController(shot: shot)
@@ -304,7 +304,7 @@ extension ProfileInfoViewController {
 }
 
 extension ProfileInfoViewController {
-    func add(user: UserType, toShot shot: ShotType) -> ShotType {
+    func updated(shot: ShotType, withUser user: UserType) -> ShotType {
         return Shot(
             identifier: shot.identifier,
             title: shot.title,
