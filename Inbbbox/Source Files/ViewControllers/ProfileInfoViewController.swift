@@ -269,9 +269,13 @@ extension ProfileInfoViewController: CarouselCellDelegate {
         }
         
         if let user = user {
-            let shotWithUser = Shot(identifier: shot.identifier, title: shot.title, attributedDescription: shot.attributedDescription, user: user, shotImage: shot.shotImage, createdAt: shot.createdAt, animated: shot.animated, likesCount: shot.likesCount, viewsCount: shot.viewsCount, commentsCount: shot.commentsCount, bucketsCount: shot.bucketsCount, team: shot.team, attachmentsCount: shot.attachmentsCount, htmlUrl: shot.htmlUrl)
+            let shotWithUser = updated(shot: shot, withUser: user)
             
             controller = ShotDetailsViewController(shot: shotWithUser)
+            
+            currentContainer = currentContainer.map { [unowned self] in
+                self.updated(shot: $0, withUser: user)
+            }
         } else {
             controller = ShotDetailsViewController(shot: shot)
         }
@@ -296,5 +300,26 @@ extension ProfileInfoViewController {
         pageViewController.modalPresentationStyle = .custom
         
         present(pageViewController, animated: true, completion: nil)
+    }
+}
+
+extension ProfileInfoViewController {
+    func updated(shot: ShotType, withUser user: UserType) -> ShotType {
+        return Shot(
+            identifier: shot.identifier,
+            title: shot.title,
+            attributedDescription: shot.attributedDescription,
+            user: user,
+            shotImage: shot.shotImage,
+            createdAt: shot.createdAt,
+            animated: shot.animated,
+            likesCount: shot.likesCount,
+            viewsCount: shot.viewsCount,
+            commentsCount: shot.commentsCount,
+            bucketsCount: shot.bucketsCount,
+            team: shot.team,
+            attachmentsCount: shot.attachmentsCount,
+            htmlUrl: shot.htmlUrl
+        )
     }
 }
