@@ -348,11 +348,11 @@
 
 /********* ShotsOnboardingStateHandler *********/
 /* Below (steps 1 - 3) is localization of Onboarding images contained in Images.xcassets*/
-"ShotsOnboardingStateHandler.Onboarding-Step1" = "onboarding-step1-pt";
-"ShotsOnboardingStateHandler.Onboarding-Step2" = "onboarding-step2-pt";
-"ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-pt";
-"ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-pt";
-"ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-pt";
+"ShotsOnboardingStateHandler.Onboarding-Step1" = "onboarding-step1-en";
+"ShotsOnboardingStateHandler.Onboarding-Step2" = "onboarding-step2-en";
+"ShotsOnboardingStateHandler.Onboarding-Step3" = "onboarding-step3-en";
+"ShotsOnboardingStateHandler.Onboarding-Step4" = "onboarding-step4-en";
+"ShotsOnboardingStateHandler.Onboarding-Step5" = "onboarding-step5-en";
 "ShotsOnboardingStateHandler.Skip" = "Pular este passo";
 
 /********* ShotsCollectionBackgroundView *********/
