@@ -36,7 +36,7 @@ class ProfileMenuBarView: UIView {
         bucketsButton.name = Localized("ProfileMenuBarView.Buckets", comment: "Buckets card title.")
 
         [shotsButton, infoButton, projectsButton, bucketsButton].forEach {
-            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            $0.nameFont = UIFont.boldSystemFont(ofSize: 14)
             $0.addTarget(self, action: #selector(didSelect(button:)), for: .touchUpInside)
         }
 
