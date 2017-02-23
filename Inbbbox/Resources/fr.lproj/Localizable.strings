@@ -219,7 +219,7 @@
 "SettingsViewModel.SendDailyReminders" = "Envoyer un rappel à";
 
 /* User settings, enable following */
-"SettingsViewModel.Following" = "Observés";
+"SettingsViewModel.Following" = "Abonnés";
 
 /* Notifications alert, dismiss button. */
 "SettingsViewModel.Dismiss" = "Fermer";
