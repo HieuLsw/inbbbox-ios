@@ -266,7 +266,6 @@ extension ProfileInfoViewController: CarouselCellDelegate {
             user = viewModel.member(forIndex: carouselCellIndex.item)
         } else {
             currentContainer = viewModel.userLikedShots
-            user = viewModel.user
         }
         
         if let user = user {
