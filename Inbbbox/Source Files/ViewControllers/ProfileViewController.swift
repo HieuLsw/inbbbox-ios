@@ -271,8 +271,12 @@ private extension ProfileViewController {
     }
 
     dynamic func didTapLeftBarButtonItem() {
-        dismissClosure?()
-        dismiss(animated: true, completion: nil)
+        if navigationController?.viewControllers.first == self {
+            dismissClosure?()
+            dismiss(animated: true, completion: nil)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 
     func checkIfUserIsFollowed() {
