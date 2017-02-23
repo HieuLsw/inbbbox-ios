@@ -155,7 +155,15 @@ struct NightMode: ColorModeType {
     }
 
     var profileHeaderViewBackground: UIColor {
-        return .black
+        return .backgroundGrayishBlackColor()
+    }
+
+    var profileNavigationBarTint: UIColor {
+        return .backgroundGrayishBlackColor() // this color is temporary while new designs are being prepared.
+    }
+
+    var profileHeaderViewBackgroundImageName: String {
+        return "Profile BG-night"
     }
 
     // MARK: Profile Menu Bar
