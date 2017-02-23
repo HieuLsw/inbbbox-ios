@@ -162,6 +162,10 @@ struct DayMode: ColorModeType {
         return .pinkColor()
     }
 
+    var profileNavigationBarTint: UIColor {
+        return .pinkColor()
+    }
+
     var profileHeaderViewBackgroundImageName: String {
         return "Profile BG"
     }
