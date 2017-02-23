@@ -269,9 +269,43 @@ extension ProfileInfoViewController: CarouselCellDelegate {
         }
         
         if let user = user {
-            let shotWithUser = Shot(identifier: shot.identifier, title: shot.title, attributedDescription: shot.attributedDescription, user: user, shotImage: shot.shotImage, createdAt: shot.createdAt, animated: shot.animated, likesCount: shot.likesCount, viewsCount: shot.viewsCount, commentsCount: shot.commentsCount, bucketsCount: shot.bucketsCount, team: shot.team, attachmentsCount: shot.attachmentsCount, htmlUrl: shot.htmlUrl)
+            let shotWithUser = Shot(
+                identifier: shot.identifier,
+                title: shot.title,
+                attributedDescription: shot.attributedDescription,
+                user: user,
+                shotImage: shot.shotImage,
+                createdAt: shot.createdAt,
+                animated: shot.animated,
+                likesCount: shot.likesCount,
+                viewsCount: shot.viewsCount,
+                commentsCount: shot.commentsCount,
+                bucketsCount: shot.bucketsCount,
+                team: shot.team,
+                attachmentsCount: shot.attachmentsCount,
+                htmlUrl: shot.htmlUrl
+            )
             
             controller = ShotDetailsViewController(shot: shotWithUser)
+            
+            currentContainer = currentContainer.map {
+                Shot(
+                    identifier: $0.identifier,
+                    title: $0.title,
+                    attributedDescription: $0.attributedDescription,
+                    user: user,
+                    shotImage: $0.shotImage,
+                    createdAt: $0.createdAt,
+                    animated: $0.animated,
+                    likesCount: $0.likesCount,
+                    viewsCount: $0.viewsCount,
+                    commentsCount: $0.commentsCount,
+                    bucketsCount: $0.bucketsCount,
+                    team: $0.team,
+                    attachmentsCount: $0.attachmentsCount,
+                    htmlUrl: $0.htmlUrl
+                )
+            }
         } else {
             controller = ShotDetailsViewController(shot: shot)
         }
