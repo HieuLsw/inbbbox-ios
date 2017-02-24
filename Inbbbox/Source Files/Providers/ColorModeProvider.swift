@@ -32,7 +32,15 @@ final class ColorModeProvider {
     }
 
     class func current() -> ColorModeType {
-        let currentMode = Settings.Customization.CurrentColorMode
+
+        let currentMode: ColorMode = {
+            if Settings.Customization.AutoNightMode, let mode = NightModeHoursProvider.currentColorModeBasedOnTime() {
+                return mode
+            } else {
+                return Settings.Customization.CurrentColorMode
+            }
+        }()
+
         switch currentMode {
         case .dayMode: return DayMode()
         case .nightMode: return NightMode()
