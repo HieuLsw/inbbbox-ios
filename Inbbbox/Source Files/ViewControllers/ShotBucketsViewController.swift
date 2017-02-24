@@ -301,7 +301,7 @@ private extension ShotBucketsViewController {
 
         if let layout = shotBucketsView.collectionView.collectionViewLayout as?
             UICollectionViewFlowLayout, layout.estimatedItemSize.width != width {
-            layout.estimatedItemSize = CGSize(width: width, height: 40)
+            layout.estimatedItemSize = CGSize(width: width - 2, height: 40)
             layout.invalidateLayout()
         }
     }
