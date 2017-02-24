@@ -43,7 +43,7 @@ struct Dribbble {
     /// Tracking ID used for Google Analytics.
     static var GATrackingId: String? {
 #if ENV_PRODUCTION
-        if let trackingId = SecretKeysProvider.secretValueForKey("ProductionGATrackingId") {
+        if let trackingId = SecretKeysProvider.secretValue(forKey: "ProductionGATrackingId") {
             return trackingId
         }
 #else
@@ -56,7 +56,7 @@ struct Dribbble {
 
     static var HockeySDKIdentifier: String? {
 #if ENV_PRODUCTION
-        if let identifier = SecretKeysProvider.secretValueForKey("HockeySDKProduction") {
+        if let identifier = SecretKeysProvider.secretValue(forKey: "HockeySDKProduction") {
             return identifier
         }
 #else
