@@ -9,9 +9,16 @@ import UIKit
 
 class DetailsItem: GroupItem {
 
+    enum Destination {
+        case language
+        case blockedUsers
+    }
+
     var detailString: String
 
     var highlighted = false
+
+    var destination: Destination?
 
     /// Initializes item with title and detailed string.
     ///

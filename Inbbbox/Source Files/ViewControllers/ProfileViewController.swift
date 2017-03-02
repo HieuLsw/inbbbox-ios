@@ -90,7 +90,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupBackButton()
+        setupBarButtons()
         setupHeaderView()
         setupMenu()
 
@@ -180,7 +180,7 @@ extension ProfileViewController: UIPageViewControllerDelegate {
 
 private extension ProfileViewController {
 
-    func setupBackButton() {
+    func setupBarButtons() {
         if isModal {
             let attributedString = NSMutableAttributedString(
                 string: Localized("Profile.BackButton", comment: "Back button, user details"),
@@ -200,6 +200,9 @@ private extension ProfileViewController {
 
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         }
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic-flaguser"), style: .plain, target: self, action: #selector(didTapFlagUser(_:)))
+
     }
 
     func setupHeaderView() {
@@ -325,6 +328,10 @@ private extension ProfileViewController {
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
+    }
+
+    dynamic func didTapFlagUser(_: UIButton) {
+        UsersRequester().block(user: viewModel.user) // NGRTodo: fix before CR - move and use properly in ViewModel
     }
 
     func hideBottomBorderOfNavigationBar(_ value: Bool) {

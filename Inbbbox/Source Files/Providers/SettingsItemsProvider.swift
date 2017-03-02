@@ -98,6 +98,8 @@ struct SettingsItemsProvider {
     
     let autoNightModeItem = SwitchItem(title: Titles.autoNightModeTitle,
                                        enabled: Settings.Customization.AutoNightMode)
+
+    let blockedUsersItem = DetailsItem(title: "Blocked users", detailString: "") // NGRTodo: fix before CR
     
     let acknowledgementItem = LabelItem(title: Titles.acknowledgementsTitle)
     
