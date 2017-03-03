@@ -14,4 +14,8 @@ class UsersRequester {
     func block(user: UserType) -> Promise<Void> {
         return managedBlockedUsersRequester.block(user: user)
     }
+
+    func unblock(user: UserType) -> Promise<Void> {
+        return managedBlockedUsersRequester.unblock(user: user)
+    }
 }

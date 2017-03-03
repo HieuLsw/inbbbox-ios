@@ -37,9 +37,17 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
             UserStorage.isUserSignedIn ?
                     connectionsProvider.provideMyFollowees() : teamsProvider.provideMembers(forTeam: netguruTeam)
         }.then { followees -> Void in
-            if let followees = followees, followees != self.followees || followees.count == 0 {
-                self.followees = followees
-                self.delegate?.viewModelDidLoadInitialItems()
+            if let followees = followees {
+
+                firstly {
+                    self.removeBlockedUsers(followees)
+                }.then { filteredFollowees -> Void in
+                    if let filteredFollowees = filteredFollowees, filteredFollowees != self.followees || filteredFollowees.count == 0 {
+                        self.followees = filteredFollowees
+                    }
+                }.then {
+                    self.delegate?.viewModelDidLoadInitialItems()
+                }.catch { _ in }
             }
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
@@ -67,6 +75,25 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
             followees = []
             userMode = currentUserMode
             delegate?.viewModelDidLoadInitialItems()
+        }
+    }
+
+    func removeBlockedUsers(_ followees: [Followee]) -> Promise<[Followee]?> {
+        return Promise<[Followee]?> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredFollowees = followees.filter({ (followee) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == followee.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredFollowees)
+                } else {
+                    fulfill(followees)
+                }
+            }.catch(execute: reject)
         }
     }
 }
@@ -105,7 +132,7 @@ private extension FolloweesViewModel {
             self.notifyDelegateAboutFailure(error)
         }.always {
             self.removeFromFolloweesDuringDownload(followee)
-        }
+        }.catch { _ in }
     }
     
     func removeFromFolloweesDuringDownload(_ followee: Followee) {

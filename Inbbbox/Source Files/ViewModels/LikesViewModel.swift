@@ -30,9 +30,17 @@ class LikesViewModel: SimpleShotsViewModel {
         firstly {
             shotsProvider.provideMyLikedShots()
         }.then { shots -> Void in
-            if let shots = shots?.map({ $0.shot }), shots != self.shots || shots.count == 0 {
-                self.shots = shots
-                self.delegate?.viewModelDidLoadInitialItems()
+            if let shots = shots?.map({ $0.shot }) {
+
+                firstly {
+                    self.removeShotsFromBlockedUsers(shots)
+                }.then { filteredShots -> Void in
+                    if let filteredShots = filteredShots, filteredShots != self.shots || filteredShots.count == 0 {
+                        self.shots = filteredShots
+                    }
+                }.then {
+                    self.delegate?.viewModelDidLoadInitialItems()
+                }.catch { _ in }
             }
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
@@ -87,6 +95,23 @@ class LikesViewModel: SimpleShotsViewModel {
             shots = []
             userMode = currentUserMode
             delegate?.viewModelDidLoadInitialItems()
+        }
+    }
+
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredShots = shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredShots)
+                }
+            }.catch(execute: reject)
         }
     }
 }

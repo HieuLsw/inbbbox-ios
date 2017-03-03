@@ -17,10 +17,10 @@ class BlockedUsersViewController: UITableViewController {
 
     init() {
         super.init(style: UITableViewStyle.grouped)
-        title = Localized("Zablokowani", comment: "nvm") // NGRTodo: fix before CR
+        title = Localized("BlockedUsersViewController.Title", comment: "Title of BlockedUsersViewController")
     }
 
-    @available(*, unavailable, message: "Use init(languages:) instead")
+    @available(*, unavailable, message: "Use init() instead")
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -31,6 +31,10 @@ class BlockedUsersViewController: UITableViewController {
         tableView.register(BlockedUsersTableViewCell.self, forCellReuseIdentifier: BlockedUsersTableViewCell.identifier)
         tableView.allowsSelection = false
 
+        provideBlockedUsers()
+    }
+
+    func provideBlockedUsers() -> Void {
         firstly {
             usersProvider.provideBlockedUsers()
         }.then { users -> Void in
@@ -38,7 +42,7 @@ class BlockedUsersViewController: UITableViewController {
                 self.users = blockedUsers
                 self.tableView.reloadData()
             }
-        }.catch { error in print(error) } // NGRTodo: remove printing before CR
+        }.catch { _ in }
     }
 }
 
@@ -61,8 +65,11 @@ extension BlockedUsersViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == .delete {
-            users.remove(at: indexPath.row) // NGRTodo: fix before CR - remove from DB
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            firstly {
+                UsersRequester().unblock(user: users[indexPath.row])
+            }.then {
+                self.provideBlockedUsers()
+            }.catch { _ in }
         }
     }
 }

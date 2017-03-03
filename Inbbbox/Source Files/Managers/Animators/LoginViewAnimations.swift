@@ -38,7 +38,7 @@ class LoginViewAnimations {
             UIView.animate(withDuration: 0.5, animations: { 
                 view.layer.cornerRadius = endValue
             })
-        }
+        }.catch { _ in }
     }
 
     func animateSpringShrinkingToBall(_ button: UIView, logo: UIView, completion: @escaping () -> Void) {

@@ -183,6 +183,15 @@
 /* Informing user about problems with downloading teams. */
 "UIAlertControllerExtension.UnableToDownloadTeams" = "Teams herunterladen";
 
+/* Block selected user. */
+"UIAlertControllerExtension.BlockUser" = "Block user";
+
+/* Information about blocking user, displayed after tapping a block user button on the user's profile screen. */
+"UIAlertControllerExtension.BlockUser.Message" = "Comments and shots of this user will no longer appear in Inbbbox. You can unblock this user in settings.";
+
+/* Block action title. */
+"UIAlertControllerExtension.Block" = "Block";
+
 /********* LocalNotificationRegistrator *********/
 
 /* Text of notification encouraging user to use app */
@@ -247,6 +256,9 @@
 /* User Setting, auto night mode */
 "SettingsViewModel.AutoNightMode" = "Automatischer Nachtmodus";
 
+/* User Setting, blocked users. */
+"SettingsViewModel.BlockedUsers" = "Blocked Users";
+
 /* User Settings, feedback section title. */
 "SettingsViewModel.Feedback" = "FEEDBACK";
 
@@ -281,6 +293,11 @@
 
 /* User settings, my set */
 "SettingsViewModel.MySet" = "Mein Set";
+
+/********* BlockedUsersViewController *********/
+
+/* Title of BlockedUsersViewController */
+"BlockedUsersViewController.Title" = "Blocked Users";
 
 /********* ShotsCollectionViewController *********/
 

@@ -44,4 +44,18 @@ class ManagedBlockedUsersRequester {
             }
         }
     }
+
+    func unblock(user: UserType) -> Promise<Void> {
+        if let managedBlockedUser = managedObjectsProvider.managedBlockedUser(user) {
+            managedObjectContext.delete(managedBlockedUser)
+        }
+
+        return Promise<Void> { fulfill, reject in
+            do {
+                fulfill(try managedObjectContext.save())
+            } catch {
+                reject(error)
+            }
+        }
+    }
 }

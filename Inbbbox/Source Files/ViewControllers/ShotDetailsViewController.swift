@@ -28,6 +28,7 @@ final class ShotDetailsViewController: UIViewController {
 
     var shouldScrollToMostRecentMessage = false
     var shouldShowKeyboardAtStart = false
+    var shouldBeDismissed = false
     var shotIndex = 0
 
     var shotDetailsView: ShotDetailsView! {
@@ -115,8 +116,12 @@ final class ShotDetailsViewController: UIViewController {
         _ = self.__once
 
         AnalyticsManager.trackScreen(.shotDetailsView)
+
+        if shouldBeDismissed {
+            dismiss(animated: true, completion: nil)
+        }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         header?.cancelAllAnimatedImageSettings()
@@ -364,6 +369,7 @@ extension ShotDetailsViewController {
 
         animateHeader(start: false)
         profileViewController.dismissClosure = { [weak self] in
+            self?.shouldBeDismissed = profileViewController.userWasBlocked
             self?.animateHeader(start: true)
         }
         present(navigationController, animated: true, completion: nil)

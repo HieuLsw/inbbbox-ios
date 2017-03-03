@@ -55,6 +55,7 @@ class ProfileViewController: UIViewController {
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     var userAlreadyFollowed = false
+    var userWasBlocked = false
 
     func isDisplayingUser(_ user: UserType) -> Bool {
         return viewModel.user == user
@@ -274,11 +275,15 @@ private extension ProfileViewController {
     }
 
     dynamic func didTapLeftBarButtonItem() {
+        dismiss()
+    }
+
+    func dismiss() {
         if navigationController?.viewControllers.first == self {
             dismissClosure?()
             dismiss(animated: true, completion: nil)
         } else {
-            navigationController?.popViewController(animated: true)
+            let _ = navigationController?.popViewController(animated: true)
         }
     }
 
@@ -331,7 +336,17 @@ private extension ProfileViewController {
     }
 
     dynamic func didTapFlagUser(_: UIButton) {
-        UsersRequester().block(user: viewModel.user) // NGRTodo: fix before CR - move and use properly in ViewModel
+        let alert = UIAlertController.willBlockUser { _ in
+            firstly {
+                UsersRequester().block(user: self.viewModel.user)
+            }.then {
+                self.userWasBlocked = true
+            }.then {
+                self.dismiss()
+            }.catch { _ in }
+        }
+        self.present(alert, animated: true, completion: nil)
+        alert.view.tintColor = .pinkColor()
     }
 
     func hideBottomBorderOfNavigationBar(_ value: Bool) {

@@ -19,7 +19,7 @@ class BucketsViewModelSpec: QuickSpec {
         let fixtureImageURL = URL(string: "https://fixture.domain/fixture.image.teaser.png")
         let fixtureImagesURLs: [URL]? = [fixtureImageURL!, fixtureImageURL!, fixtureImageURL!, fixtureImageURL!]
         let fixtureBucketName = "fixture.name"
-        let fixtureNumberOfShots = "250 shots"
+        let fixtureNumberOfShots = "1 shot"
         
         beforeEach {
             sut = BucketsViewModelMock()

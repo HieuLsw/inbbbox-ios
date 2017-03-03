@@ -1646,6 +1646,7 @@
 			children = (
 				06995610DDA33B7FE12B42B6 /* AcknowledgementsViewController.swift */,
 				C6745B7C1DB74371004D3D8E /* AlertViewController.swift */,
+				F016241C1E6824830028FD38 /* BlockedUsersViewController.swift */,
 				998EDE49EC23AB5DE545D476 /* BucketsCollectionViewController.swift */,
 				5D7B7083F382B611F624C6F0 /* CenterButtonTabBarController.swift */,
 				7ACCA7C583E9356743812301 /* DatePickerViewController.swift */,
@@ -1666,7 +1667,6 @@
 				F0FD0A831CBE496400735933 /* SimpleShotsCollectionViewController.swift */,
 				D5D168001E13F22D00E91BDA /* StreamSourceViewController.swift */,
 				246A6D1DD9042D6BF3B7DAFC /* TwoLayoutsCollectionViewController.swift */,
-				F016241C1E6824830028FD38 /* BlockedUsersViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

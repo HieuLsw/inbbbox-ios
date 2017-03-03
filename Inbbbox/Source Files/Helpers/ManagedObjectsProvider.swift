@@ -157,20 +157,10 @@ struct ManagedObjectsProvider {
     }
 
     func managedBlockedUser(_ user: UserType) -> ManagedBlockedUser? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedUser.entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedBlockedUser.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", user.identifier)
 
         let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
         return firstFetchedObject as? ManagedBlockedUser
-
-        let managedUserEntity = NSEntityDescription.entity(forEntityName: ManagedUser.entityName,
-                                                           in: managedObjectContext)!
-        let managedBlockedUser = ManagedBlockedUser(entity: managedUserEntity,
-                                      insertInto: managedObjectContext)
-        managedBlockedUser.mngd_identifier = user.identifier
-        managedBlockedUser.mngd_name = user.name
-        managedBlockedUser.mngd_username = user.username
-        managedBlockedUser.mngd_avatarURL = user.avatarURL?.absoluteString
-        return managedBlockedUser
     }
 }
