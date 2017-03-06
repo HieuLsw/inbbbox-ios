@@ -55,7 +55,6 @@ class ProfileViewController: UIViewController {
     var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     var userAlreadyFollowed = false
-    var userWasBlocked = false
 
     func isDisplayingUser(_ user: UserType) -> Bool {
         return viewModel.user == user
@@ -339,8 +338,6 @@ private extension ProfileViewController {
         let alert = UIAlertController.willBlockUser { _ in
             firstly {
                 UsersRequester().block(user: self.viewModel.user)
-            }.then {
-                self.userWasBlocked = true
             }.then {
                 self.dismiss()
             }.catch { _ in }

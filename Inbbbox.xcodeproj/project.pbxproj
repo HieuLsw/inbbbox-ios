@@ -420,6 +420,8 @@
 		EA289B871E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */; };
 		EA289B891E41C6E100D180C2 /* CarouselCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */; };
 		EA289B8B1E41C6F000D180C2 /* ProfileBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */; };
+		EA4D63811E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */; };
+		EA4D63831E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */; };
 		EA7520441DBF80EF006270EB /* ShotDetailsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */; };
 		EA78076B1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */; };
 		EA93739F1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA93739E1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift */; };
@@ -944,6 +946,8 @@
 		EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewController.swift; sourceTree = "<group>"; };
 		EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionViewLayout.swift; sourceTree = "<group>"; };
 		EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModel.swift; sourceTree = "<group>"; };
+		EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersRequesterSpec.swift; sourceTree = "<group>"; };
+		EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersProviderSpec.swift; sourceTree = "<group>"; };
 		EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewController.swift; sourceTree = "<group>"; };
 		EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewControllerDataSource.swift; sourceTree = "<group>"; };
 		EA93739E1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikeQuerySpec.swift; sourceTree = "<group>"; };
@@ -1359,6 +1363,8 @@
 				789EF40106C3C29A91C1C948 /* LikesViewModelSpec.swift */,
 				341E39FEB97D964857A555BB /* LocalNotificationRegistratorSpec.swift */,
 				C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */,
+				EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */,
+				EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */,
 				C66EE3BD1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift */,
 				C66EE3BB1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift */,
 				C67E9CD51E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift */,
@@ -2602,6 +2608,7 @@
 				C86970D53B916ECBA4721DB9 /* APIConnectionsProviderSpec.swift in Sources */,
 				33783AFDC0365BD54B04B8F5 /* APIConnectionsRequesterSpec.swift in Sources */,
 				C60AA1B81DDBB2EA00E0A5AF /* APIAttachmentsProviderSpec.swift in Sources */,
+				EA4D63811E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift in Sources */,
 				32E1DA0DB8D745C554EC6169 /* APIProjectsProviderSpec.swift in Sources */,
 				D402ECB27C9F8A00D7A99966 /* APIRateLimitKeeperSpec.swift in Sources */,
 				30D57BA91CF59AB0004C7D54 /* BaseCollectionViewViewModelSpec.swift in Sources */,
@@ -2635,6 +2642,7 @@
 				DBE24991D644239A591CEC2E /* PageRequestSpec.swift in Sources */,
 				EA9373A31DA4EC7800BB3DB5 /* CommentLikedQuerySpec.swift in Sources */,
 				D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */,
+				EA4D63831E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift in Sources */,
 				ACE3BA66ECCB04566EBE5CCD /* QuerySpec.swift in Sources */,
 				EC9FD454158035FD9C9D29A7 /* RequestableSpec.swift in Sources */,
 				65613F00DEB42485096EAFC9 /* RequestSpec.swift in Sources */,
