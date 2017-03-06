@@ -58,6 +58,10 @@ fileprivate struct Titles {
         return Localized("SettingsViewModel.AutoNightMode", comment: "User Settings, auto night mode.")
     }
 
+    static var blockedUsersTitle: String {
+        return Localized("SettingsViewModel.BlockedUsers", comment: "User Settings, blocked users.")
+    }
+
     static var sendFeedbackTitle: String {
         return Localized("SettingsViewModel.SendFeedback", comment: "User Settings, send settings.")
     }
@@ -98,9 +102,11 @@ struct SettingsItemsProvider {
     
     let autoNightModeItem = SwitchItem(title: Titles.autoNightModeTitle,
                                        enabled: Settings.Customization.AutoNightMode)
-    
+
+    let blockedUsersItem = DetailsItem(title: Titles.blockedUsersTitle, detailString: "")
+
     let acknowledgementItem = LabelItem(title: Titles.acknowledgementsTitle)
-    
+
     let sendFeedbackItem = LabelItem(title: Titles.sendFeedbackTitle)
 
 }

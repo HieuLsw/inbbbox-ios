@@ -94,20 +94,26 @@ class BucketsViewModel: BaseCollectionViewViewModel {
                 guard let index = indexOfBucket else {
                     return
                 }
+                if let unwrappedShots = shots {
+                    firstly {
+                        self.removeShotsFromBlockedUsers(unwrappedShots)
+                    }.then { filteredShots -> Void in
+                        if let oldShots = self.bucketsIndexedShots[index],
+                            let newShots = filteredShots {
+                            bucketShotsShouldBeReloaded = oldShots != newShots
+                        }
 
-                if let oldShots = self.bucketsIndexedShots[index], let newShots = shots {
-                    bucketShotsShouldBeReloaded = oldShots != newShots
-                }
+                        if let shots = filteredShots {
+                            self.bucketsIndexedShots[index] = shots
+                        } else {
+                            self.bucketsIndexedShots[index] = [ShotType]()
+                        }
 
-                if let shots = shots {
-                    self.bucketsIndexedShots[index] = shots
-                } else {
-                    self.bucketsIndexedShots[index] = [ShotType]()
-                }
-
-                if bucketShotsShouldBeReloaded {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                        if bucketShotsShouldBeReloaded {
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                        }
+                    }.catch { _ in }
                 }
             }.catch { error in
                 self.notifyDelegateAboutFailure(error)
@@ -140,6 +146,23 @@ class BucketsViewModel: BaseCollectionViewViewModel {
             delegate?.viewModelDidLoadInitialItems()
         }
     }
+
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredShots = shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredShots)
+                }
+            }.catch(execute: reject)
+        }
+    }
 }
 
 extension BucketsViewModel {
@@ -150,22 +173,22 @@ extension BucketsViewModel {
         let shotsImagesURLs: [URL]?
 
         init(bucket: BucketType, shots: [ShotType]?) {
-            self.name = bucket.name
-            self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots",
-                    comment: "How many shots in collection?"), bucket.shotsCount)
+            name = bucket.name
             if let shots = shots, shots.count > 0 {
+                numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), shots.count)
                 let allShotsImagesURLs = shots.map {
                     $0.shotImage.teaserURL
                 }
 
                 if allShotsImagesURLs.count >= 4 {
-                    self.shotsImagesURLs = Array(allShotsImagesURLs.prefix(4))
+                    shotsImagesURLs = Array(allShotsImagesURLs.prefix(4))
                 } else {
                     let repeatedValues = Array(repeating: allShotsImagesURLs, count: 4).flatMap{$0}
-                    self.shotsImagesURLs = Array(repeatedValues.prefix(4))
+                    shotsImagesURLs = Array(repeatedValues.prefix(4))
                 }
             } else {
-                self.shotsImagesURLs = nil
+                shotsImagesURLs = nil
+                numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), 0)
             }
         }
     }

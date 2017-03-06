@@ -420,6 +420,8 @@
 		EA289B871E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */; };
 		EA289B891E41C6E100D180C2 /* CarouselCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */; };
 		EA289B8B1E41C6F000D180C2 /* ProfileBucketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */; };
+		EA4D63811E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */; };
+		EA4D63831E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */; };
 		EA7520441DBF80EF006270EB /* ShotDetailsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */; };
 		EA78076B1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */; };
 		EA93739F1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA93739E1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift */; };
@@ -434,6 +436,13 @@
 		EFD89D4338FFEEEE76392087 /* UIViewAnimationsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472FDA9EBA0DF86EFAF923FC /* UIViewAnimationsExtension.swift */; };
 		EFEB4F05F24BBFC4C907F611 /* SettingsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D5F10E1D439D514FDB604 /* SettingsSpec.swift */; };
 		F008DF3B1E38BC0F00B98A39 /* ProfileViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */; };
+		F016241D1E6824830028FD38 /* BlockedUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F016241C1E6824830028FD38 /* BlockedUsersViewController.swift */; };
+		F016241F1E68291E0028FD38 /* BlockedUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F016241E1E68291E0028FD38 /* BlockedUsersTableViewCell.swift */; };
+		F01624211E683EB70028FD38 /* ManagedBlockedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01624201E683EB70028FD38 /* ManagedBlockedUser.swift */; };
+		F01624261E684D500028FD38 /* ManagedBlockedUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01624251E684D500028FD38 /* ManagedBlockedUsersProvider.swift */; };
+		F01624281E6854010028FD38 /* ManagedBlockedUsersRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01624271E6854010028FD38 /* ManagedBlockedUsersRequester.swift */; };
+		F016242B1E6859E90028FD38 /* UsersRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = F016242A1E6859E90028FD38 /* UsersRequester.swift */; };
+		F016242D1E685AC60028FD38 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F016242C1E685AC60028FD38 /* UsersProvider.swift */; };
 		F023FD901CD0D22100CA650D /* APIUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F023FD8F1CD0D22100CA650D /* APIUsersProvider.swift */; };
 		F035ECEB1E3F5720003A8348 /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = F035ECEA1E3F5720003A8348 /* Localized.swift */; };
 		F035ECED1E3F57BC003A8348 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = F035ECEC1E3F57BC003A8348 /* Language.swift */; };
@@ -937,6 +946,8 @@
 		EA289B861E41C65600D180C2 /* ProfileProjectsOrBucketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileProjectsOrBucketsViewController.swift; sourceTree = "<group>"; };
 		EA289B881E41C6E100D180C2 /* CarouselCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionViewLayout.swift; sourceTree = "<group>"; };
 		EA289B8A1E41C6F000D180C2 /* ProfileBucketsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileBucketsViewModel.swift; sourceTree = "<group>"; };
+		EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersRequesterSpec.swift; sourceTree = "<group>"; };
+		EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersProviderSpec.swift; sourceTree = "<group>"; };
 		EA7520431DBF80EF006270EB /* ShotDetailsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewController.swift; sourceTree = "<group>"; };
 		EA78076A1DC0A5960077B243 /* ShotDetailsPageViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotDetailsPageViewControllerDataSource.swift; sourceTree = "<group>"; };
 		EA93739E1DA4D9EB00BB3DB5 /* CommentLikeQuerySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentLikeQuerySpec.swift; sourceTree = "<group>"; };
@@ -951,6 +962,13 @@
 		EF1B71814BD31275DACE75B1 /* RemoveFromBucketQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoveFromBucketQuery.swift; sourceTree = "<group>"; };
 		EFAD56AC35062CE4A617CB43 /* LargeUserCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LargeUserCollectionViewCell.swift; sourceTree = "<group>"; };
 		F008DF3A1E38BC0F00B98A39 /* ProfileViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewModelSpec.swift; sourceTree = "<group>"; };
+		F016241C1E6824830028FD38 /* BlockedUsersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUsersViewController.swift; sourceTree = "<group>"; };
+		F016241E1E68291E0028FD38 /* BlockedUsersTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUsersTableViewCell.swift; sourceTree = "<group>"; };
+		F01624201E683EB70028FD38 /* ManagedBlockedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUser.swift; sourceTree = "<group>"; };
+		F01624251E684D500028FD38 /* ManagedBlockedUsersProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersProvider.swift; sourceTree = "<group>"; };
+		F01624271E6854010028FD38 /* ManagedBlockedUsersRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedBlockedUsersRequester.swift; sourceTree = "<group>"; };
+		F016242A1E6859E90028FD38 /* UsersRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersRequester.swift; sourceTree = "<group>"; };
+		F016242C1E685AC60028FD38 /* UsersProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 		F023FD8F1CD0D22100CA650D /* APIUsersProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIUsersProvider.swift; sourceTree = "<group>"; };
 		F035ECEA1E3F5720003A8348 /* Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
 		F035ECEC1E3F57BC003A8348 /* Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
@@ -1150,6 +1168,7 @@
 		45F343C4CB943320AD5A120D /* Core Data Providers */ = {
 			isa = PBXGroup;
 			children = (
+				F01624241E684D320028FD38 /* BlockedUsers */,
 				4C89636E7CEBD1C8F9C08063 /* Buckets */,
 				21F6812FFDAF068ACC576813 /* Projects */,
 				D39E64A72DD4DA2843CAC8B0 /* Shots */,
@@ -1344,6 +1363,8 @@
 				789EF40106C3C29A91C1C948 /* LikesViewModelSpec.swift */,
 				341E39FEB97D964857A555BB /* LocalNotificationRegistratorSpec.swift */,
 				C6E9D8B01DCA4ACB005D9064 /* MainScreenStreamSourcesAnimatorSpec.swift */,
+				EA4D63821E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift */,
+				EA4D63801E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift */,
 				C66EE3BD1E1FDBEC005DCF0D /* ManagedBucketsProviderSpec.swift */,
 				C66EE3BB1E1FD092005DCF0D /* ManagedBucketsRequesterSpec.swift */,
 				C67E9CD51E1D7BE400FB555B /* ManagedProjectsProviderSpec.swift */,
@@ -1536,6 +1557,7 @@
 				634D36933A229709C03182B6 /* ManagedShotImage.swift */,
 				1AE2A6006E9185B4A6B7A4C4 /* ManagedTeam.swift */,
 				3D9386F9E0F9BEAE9558D86C /* ManagedUser.swift */,
+				F01624201E683EB70028FD38 /* ManagedBlockedUser.swift */,
 			);
 			path = ManagedObjects;
 			sourceTree = "<group>";
@@ -1543,6 +1565,7 @@
 		89E51B03FE0CF281B447017F /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				F01624291E6859910028FD38 /* Users */,
 				305A85051DDAFD90008EF410 /* ColorModeProvider.swift */,
 				C6A3367A1DF74A2E00357D2A /* EstimatedLocationProvider.swift */,
 				F03764FB1CBB9F81008183F3 /* LazyImageProvider.swift */,
@@ -1629,6 +1652,7 @@
 			children = (
 				06995610DDA33B7FE12B42B6 /* AcknowledgementsViewController.swift */,
 				C6745B7C1DB74371004D3D8E /* AlertViewController.swift */,
+				F016241C1E6824830028FD38 /* BlockedUsersViewController.swift */,
 				998EDE49EC23AB5DE545D476 /* BucketsCollectionViewController.swift */,
 				5D7B7083F382B611F624C6F0 /* CenterButtonTabBarController.swift */,
 				7ACCA7C583E9356743812301 /* DatePickerViewController.swift */,
@@ -1670,6 +1694,7 @@
 				3713135DA7E8E9773CC2969F /* DetailsCell.swift */,
 				CC3F4F62A88C473C1B22F9F0 /* LabelCell.swift */,
 				6C5A214961E0B433F2ECFB5E /* SwitchCell.swift */,
+				F016241E1E68291E0028FD38 /* BlockedUsersTableViewCell.swift */,
 			);
 			path = UITableViewCell;
 			sourceTree = "<group>";
@@ -1834,6 +1859,24 @@
 				753FD8133597AE27E1D245CD /* UserStatisticView.swift */,
 			);
 			path = Custom;
+			sourceTree = "<group>";
+		};
+		F01624241E684D320028FD38 /* BlockedUsers */ = {
+			isa = PBXGroup;
+			children = (
+				F01624251E684D500028FD38 /* ManagedBlockedUsersProvider.swift */,
+				F01624271E6854010028FD38 /* ManagedBlockedUsersRequester.swift */,
+			);
+			name = BlockedUsers;
+			sourceTree = "<group>";
+		};
+		F01624291E6859910028FD38 /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				F016242A1E6859E90028FD38 /* UsersRequester.swift */,
+				F016242C1E685AC60028FD38 /* UsersProvider.swift */,
+			);
+			path = Users;
 			sourceTree = "<group>";
 		};
 		F469AFC04CE4577BA2D9E893 /* Helper */ = {
@@ -2308,6 +2351,7 @@
 				1EDCAC8154145A11008202E1 /* ShotsStateHandlersProvider.swift in Sources */,
 				289979C64833AB48ECF925FD /* Bucket.swift in Sources */,
 				DF0D0A99755DF4D6EBB07FB8 /* Comment.swift in Sources */,
+				F01624261E684D500028FD38 /* ManagedBlockedUsersProvider.swift in Sources */,
 				E21C3240BB1DB54E019FA8A5 /* Mappable.swift in Sources */,
 				6A8245A7A04FE41A443C2C6C /* Project.swift in Sources */,
 				16B0D27F46D89D29973D04F8 /* Shot.swift in Sources */,
@@ -2316,6 +2360,7 @@
 				426C9C893103E0D0D9E92CEA /* User.swift in Sources */,
 				F9B5AA8896F72F2AA4AC8DFC /* ManagedBucket.swift in Sources */,
 				C61B8B931DDAEA4600D94867 /* Attachment.swift in Sources */,
+				F016241D1E6824830028FD38 /* BlockedUsersViewController.swift in Sources */,
 				F0B898D71CC0F189004A807C /* GalleryViewProvider.swift in Sources */,
 				DA618D628131746C346E13D8 /* ManagedProject.swift in Sources */,
 				8299D5B63CAEE6716B8E2E95 /* ManagedShot.swift in Sources */,
@@ -2348,9 +2393,11 @@
 				A40EA37DE9F55EED3447772D /* Query.swift in Sources */,
 				5F8114788E0EEC2488860951 /* Request.swift in Sources */,
 				2AF4DF2882A7E45E73B0253F /* Requestable.swift in Sources */,
+				F01624211E683EB70028FD38 /* ManagedBlockedUser.swift in Sources */,
 				209F0265E43CF3AE7D71B313 /* Responsable.swift in Sources */,
 				52030C54B4C18F8DF4A0FDE9 /* SecureNetworkService.swift in Sources */,
 				F0FD0A861CBE56D100735933 /* SimpleShotsViewModel.swift in Sources */,
+				F01624281E6854010028FD38 /* ManagedBlockedUsersRequester.swift in Sources */,
 				197E2327E60AE5A1B08702D6 /* AddToBucketQuery.swift in Sources */,
 				309EBC711CAD56860074FB8A /* CrashManager.swift in Sources */,
 				F0D3D7F21E361738008834E2 /* UnderlineBarView.swift in Sources */,
@@ -2437,6 +2484,7 @@
 				275D1AB77EB97A28A78A1747 /* DatePickerViewController.swift in Sources */,
 				46252C04D170CE5C5B7F1B1E /* FolloweesCollectionViewController.swift in Sources */,
 				33977E1F7D72CF54CE2EB0F9 /* LoginViewController.swift in Sources */,
+				F016242B1E6859E90028FD38 /* UsersRequester.swift in Sources */,
 				BEA70EFA1DD9C50C00868702 /* ActionRange.swift in Sources */,
 				10E1AF5BA41914646163794B /* SettingsViewController.swift in Sources */,
 				1A8703E28D4A5355D7758DC0 /* ShotBucketsViewController.swift in Sources */,
@@ -2527,6 +2575,7 @@
 				0E4FFAF451A49014744B1438 /* DetailsCell.swift in Sources */,
 				7ED0BADDD63E7276D8E7C96D /* LabelCell.swift in Sources */,
 				926816F4900ADC283DCCAFAA /* SwitchCell.swift in Sources */,
+				F016242D1E685AC60028FD38 /* UsersProvider.swift in Sources */,
 				D768B854B709B8275B1FC330 /* AcknowledgementsViewController.swift in Sources */,
 				65BA20E6F5AE0C128423A28B /* Numeric.swift in Sources */,
 				65BA26749BA1A3DCEF27F481 /* AppDelegateExtension.swift in Sources */,
@@ -2538,6 +2587,7 @@
 				753FDDDC65BF890104DA02D8 /* SeparatorView.swift in Sources */,
 				753FDC31BAC8D10311FC8972 /* LocationView.swift in Sources */,
 				753FD49E50FD6E7E9DFBDEC0 /* ProfileInfoViewModel.swift in Sources */,
+				F016241F1E68291E0028FD38 /* BlockedUsersTableViewCell.swift in Sources */,
 				753FD2C49FF80DF74066C0E2 /* TeamCollectionViewCell.swift in Sources */,
 				753FD12A2ACFC7665AA69981 /* TeamsCollectionHeaderView.swift in Sources */,
 				753FDE3ED9E2F34BF1FC2E68 /* TeamsQuery.swift in Sources */,
@@ -2558,6 +2608,7 @@
 				C86970D53B916ECBA4721DB9 /* APIConnectionsProviderSpec.swift in Sources */,
 				33783AFDC0365BD54B04B8F5 /* APIConnectionsRequesterSpec.swift in Sources */,
 				C60AA1B81DDBB2EA00E0A5AF /* APIAttachmentsProviderSpec.swift in Sources */,
+				EA4D63811E6D59E7000EAFBF /* ManagedBlockedUsersRequesterSpec.swift in Sources */,
 				32E1DA0DB8D745C554EC6169 /* APIProjectsProviderSpec.swift in Sources */,
 				D402ECB27C9F8A00D7A99966 /* APIRateLimitKeeperSpec.swift in Sources */,
 				30D57BA91CF59AB0004C7D54 /* BaseCollectionViewViewModelSpec.swift in Sources */,
@@ -2591,6 +2642,7 @@
 				DBE24991D644239A591CEC2E /* PageRequestSpec.swift in Sources */,
 				EA9373A31DA4EC7800BB3DB5 /* CommentLikedQuerySpec.swift in Sources */,
 				D4D7C1220A89441712F096AD /* ParametersSpec.swift in Sources */,
+				EA4D63831E6D6EF9000EAFBF /* ManagedBlockedUsersProviderSpec.swift in Sources */,
 				ACE3BA66ECCB04566EBE5CCD /* QuerySpec.swift in Sources */,
 				EC9FD454158035FD9C9D29A7 /* RequestableSpec.swift in Sources */,
 				65613F00DEB42485096EAFC9 /* RequestSpec.swift in Sources */,

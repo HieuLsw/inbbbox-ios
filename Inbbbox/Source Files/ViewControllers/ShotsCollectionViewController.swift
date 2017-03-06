@@ -271,6 +271,8 @@ fileprivate extension ShotsCollectionViewController {
                 self.shotsProvider.provideShots()
             }.then { shots -> Void in
                 self.shots = shots ?? []
+            }.then {
+                self.removeShotsFromBlockedUsers()
             }.then(execute: fulfill).catch(execute: reject)
         }
     }
@@ -287,6 +289,22 @@ fileprivate extension ShotsCollectionViewController {
             self.collectionView?.setContentOffset(CGPoint.zero, animated: true)
         }.catch { error in
             FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.downloadingShotsFailed, canBeDismissedByUser: true)
+        }
+    }
+
+    func removeShotsFromBlockedUsers() -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    self.shots = self.shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                }
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 }

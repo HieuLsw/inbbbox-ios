@@ -95,9 +95,32 @@ extension UIAlertController {
     
     class func cantSendFeedback() -> AOAlertController {
         let message = Localized("UIAlertControllerExtension.CantSendFeedback",
-                                        comment: "Displayed when user device is not capable of/configured to send emails, shown when trying to send feedback.")
+                                comment: "Displayed when user device is not capable of/configured to send emails, shown when trying to send feedback.")
         
         return UIAlertController.createAlert(message)
+    }
+
+    class func willBlockUser(_ createHandler: @escaping () -> Void)
+        -> AlertViewController {
+            let alertTitle = Localized("UIAlertControllerExtension.BlockUser",
+                                       comment: "Block selected user.")
+            let alertMessage = Localized("UIAlertControllerExtension.BlockUser.Message",
+                                         comment: "Information about blocking user, displayed after tapping a block user button on the user's profile screen.")
+            let alert = AlertViewController(title: alertTitle,
+                                            message: alertMessage,
+                                            preferredStyle: .alert)
+
+            let dismissActionTitle = Localized("ShotsCollectionViewController.Dismiss",
+                                               comment: "Dismiss error alert.")
+            alert.addAction(UIAlertAction(title: dismissActionTitle, style: .cancel, handler: nil))
+
+            let blockActionTitle = Localized("UIAlertControllerExtension.Block",
+                                             comment: "Block")
+            alert.addAction(UIAlertAction(title: blockActionTitle, style: .default) { _ in
+                createHandler()
+            })
+
+            return alert
     }
 
     // MARK: Private

@@ -363,7 +363,7 @@ extension ShotDetailsViewModel {
             }.then {
                 if !self.hasMoreCommentsToFetch {
                     fulfill()
-                    return Promise<Void>(value: Void())
+                    return self.removeCommentsFromBlockedUsers()
                 }
                 return self.loadAllComments()
             }.then(execute: fulfill).catch(execute: reject)
@@ -395,6 +395,26 @@ extension ShotDetailsViewModel {
 
                 fulfill()
             }.catch(execute: reject)
+        }
+    }
+
+    func removeCommentsFromBlockedUsers() -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let commentsOriginalCount = self.comments.count
+                    self.comments = self.comments.filter({ (comment) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == comment.user.identifier }
+                        return authors.count == 0
+                    })
+                    if commentsOriginalCount != self.comments.count {
+                        self.cachedFormattedComments.removeAll()
+                    }
+                }
+            }.then(execute: fulfill).catch(execute: reject)
         }
     }
 

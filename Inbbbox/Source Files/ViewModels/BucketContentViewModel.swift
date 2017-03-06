@@ -35,10 +35,17 @@ class BucketContentViewModel: SimpleShotsViewModel {
         firstly {
             shotsProvider.provideShotsForBucket(self.bucket)
         }.then { shots -> Void in
-            if let shots = shots, shots != self.shots {
-                self.shots = shots
+            if let shots = shots {
+                firstly {
+                    self.removeShotsFromBlockedUsers(shots)
+                }.then { filteredShots -> Void in
+                    if let filteredShots = filteredShots, filteredShots != self.shots || filteredShots.count == 0 {
+                        self.shots = filteredShots
+                    }
+                }.then {
+                    self.delegate?.viewModelDidLoadInitialItems()
+                }.catch { _ in }
             }
-            self.delegate?.viewModelDidLoadInitialItems()
         }.catch { error in
             self.delegate?.viewModelDidFailToLoadInitialItems(error)
         }
@@ -92,6 +99,23 @@ class BucketContentViewModel: SimpleShotsViewModel {
             shots = []
             userMode = currentUserMode
             delegate?.viewModelDidLoadInitialItems()
+        }
+    }
+
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredShots = shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredShots)
+                }
+            }.catch(execute: reject)
         }
     }
 }

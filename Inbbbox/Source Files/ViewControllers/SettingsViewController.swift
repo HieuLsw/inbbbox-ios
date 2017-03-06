@@ -172,8 +172,14 @@ extension SettingsViewController {
             labelItem.onSelect?()
         }
 
-        if item is DetailsItem {
-            navigationController?.pushViewController(LanguageViewController(), animated: true)
+        if let destination = (item as? DetailsItem)?.destination {
+            let destinationViewController: UIViewController = {
+                switch destination {
+                case .language: return LanguageViewController()
+                case .blockedUsers: return BlockedUsersViewController()
+                }
+            }()
+            navigationController?.pushViewController(destinationViewController, animated: true)
         }
         tableView.deselectRowIfSelectedAnimated(true)
     }

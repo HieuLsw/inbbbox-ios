@@ -59,14 +59,14 @@ class SettingsViewModel: GroupedListViewModel {
                      [allItems.reminderItem, allItems.reminderDateItem],
                      [allItems.followingStreamSourceItem, allItems.newTodayStreamSourceItem,
                       allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
-                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem, allItems.blockedUsersItem],
                      [allItems.sendFeedbackItem],
                      [allItems.acknowledgementItem]]
         } else {
             items = [[allItems.createAccountItem],
                      [allItems.reminderItem, allItems.reminderDateItem],
                      [allItems.newTodayStreamSourceItem, allItems.popularTodayStreamSourceItem, allItems.debutsStreamSourceItem],
-                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem],
+                     [allItems.showAuthorItem, allItems.changeLanguageItem, allItems.nightModeItem, allItems.autoNightModeItem, allItems.blockedUsersItem],
                      [allItems.sendFeedbackItem],
                      [allItems.acknowledgementItem]]
         }
@@ -228,7 +228,9 @@ private extension SettingsViewModel {
             self.checkStreamsSource()
             AnalyticsManager.trackSettingChanged(.authorOnHomeScreen, state: newValue)
         }
-        
+
+        allItems.changeLanguageItem.destination = .language
+
         allItems.nightModeItem.valueChanged = { newValue in
             Settings.Customization.NightMode = newValue
             ColorModeProvider.change(to: newValue ? .nightMode : .dayMode)
@@ -240,6 +242,8 @@ private extension SettingsViewModel {
             ColorModeProvider.setup()
             AnalyticsManager.trackSettingChanged(.autoNightMode, state: newValue)
         }
+
+        allItems.blockedUsersItem.destination = .blockedUsers
     }
     
     func checkStreamsSource() {

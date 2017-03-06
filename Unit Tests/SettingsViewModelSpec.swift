@@ -101,8 +101,8 @@ class SettingsViewModelSpec: QuickSpec {
 
             describe("fourth section") {
 
-                it("should have 4 items") {
-                    expect(sut.sections[3].count).to(equal(4))
+                it("should have 5 items") {
+                    expect(sut.sections[3].count).to(equal(5))
                 }
 
                 describe("first item") {
@@ -255,8 +255,8 @@ class SettingsViewModelSpec: QuickSpec {
 
             describe("fourth section") {
                 
-                it("should have 4 items") {
-                    expect(sut.sections[3].count).to(equal(4))
+                it("should have 5 items") {
+                    expect(sut.sections[3].count).to(equal(5))
                 }
 
                 describe("first item") {

@@ -90,7 +90,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupBackButton()
+        setupBarButtons()
         setupHeaderView()
         setupMenu()
 
@@ -180,7 +180,7 @@ extension ProfileViewController: UIPageViewControllerDelegate {
 
 private extension ProfileViewController {
 
-    func setupBackButton() {
+    func setupBarButtons() {
         if isModal {
             let attributedString = NSMutableAttributedString(
                 string: Localized("Profile.BackButton", comment: "Back button, user details"),
@@ -200,6 +200,9 @@ private extension ProfileViewController {
 
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         }
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic-flaguser"), style: .plain, target: self, action: #selector(didTapFlagUser(_:)))
+
     }
 
     func setupHeaderView() {
@@ -271,11 +274,15 @@ private extension ProfileViewController {
     }
 
     dynamic func didTapLeftBarButtonItem() {
+        dismiss()
+    }
+
+    func dismiss() {
         if navigationController?.viewControllers.first == self {
             dismissClosure?()
             dismiss(animated: true, completion: nil)
         } else {
-            navigationController?.popViewController(animated: true)
+            let _ = navigationController?.popViewController(animated: true)
         }
     }
 
@@ -325,6 +332,18 @@ private extension ProfileViewController {
                 FlashMessage.sharedInstance.showNotification(inViewController: self, title: FlashMessageTitles.tryAgain, canBeDismissedByUser: true)
             }
         }
+    }
+
+    dynamic func didTapFlagUser(_: UIButton) {
+        let alert = UIAlertController.willBlockUser { _ in
+            firstly {
+                UsersRequester().block(user: self.viewModel.user)
+            }.then {
+                self.dismiss()
+            }.catch { _ in }
+        }
+        self.present(alert, animated: true, completion: nil)
+        alert.view.tintColor = .pinkColor()
     }
 
     func hideBottomBorderOfNavigationBar(_ value: Bool) {

@@ -115,8 +115,22 @@ final class ShotDetailsViewController: UIViewController {
         _ = self.__once
 
         AnalyticsManager.trackScreen(.shotDetailsView)
+
+        firstly {
+            isAuthorBlocked()
+        }.then { blocked -> Void in
+            if blocked {
+                self.dismiss(animated: true, completion: nil)
+                return
+            }
+        }.then {
+            self.viewModel.removeCommentsFromBlockedUsers()
+        }.then {
+            self.shotDetailsView.collectionView.reloadData()
+        }.catch { _ in }
+
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         header?.cancelAllAnimatedImageSettings()
@@ -377,6 +391,19 @@ extension ShotDetailsViewController {
 // MARK: Private extension
 
 private extension ShotDetailsViewController {
+
+    func isAuthorBlocked() -> Promise<Bool> {
+        return Promise<Bool> { fulfill, reject in
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let authors = blockedUsers.filter { $0.identifier == self.viewModel.shot.user.identifier }
+                    fulfill(authors.count > 0)
+                }
+            }.catch(execute: reject)
+        }
+    }
 
     func refreshWithShot(_ shot: ShotType) {
     
