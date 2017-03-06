@@ -98,7 +98,8 @@ class BucketsViewModel: BaseCollectionViewViewModel {
                     firstly {
                         self.removeShotsFromBlockedUsers(unwrappedShots)
                     }.then { filteredShots -> Void in
-                        if let oldShots = self.bucketsIndexedShots[index], let newShots = filteredShots {
+                        if let oldShots = self.bucketsIndexedShots[index],
+                            let newShots = filteredShots {
                             bucketShotsShouldBeReloaded = oldShots != newShots
                         }
 
@@ -172,22 +173,22 @@ extension BucketsViewModel {
         let shotsImagesURLs: [URL]?
 
         init(bucket: BucketType, shots: [ShotType]?) {
-            self.name = bucket.name
+            name = bucket.name
             if let shots = shots, shots.count > 0 {
-                self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), shots.count)
+                numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), shots.count)
                 let allShotsImagesURLs = shots.map {
                     $0.shotImage.teaserURL
                 }
 
                 if allShotsImagesURLs.count >= 4 {
-                    self.shotsImagesURLs = Array(allShotsImagesURLs.prefix(4))
+                    shotsImagesURLs = Array(allShotsImagesURLs.prefix(4))
                 } else {
                     let repeatedValues = Array(repeating: allShotsImagesURLs, count: 4).flatMap{$0}
-                    self.shotsImagesURLs = Array(repeatedValues.prefix(4))
+                    shotsImagesURLs = Array(repeatedValues.prefix(4))
                 }
             } else {
-                self.shotsImagesURLs = nil
-                self.numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), 0)
+                shotsImagesURLs = nil
+                numberOfShots = String.localizedStringWithFormat(Localized("%d shots", comment: "How many shots in collection?"), 0)
             }
         }
     }

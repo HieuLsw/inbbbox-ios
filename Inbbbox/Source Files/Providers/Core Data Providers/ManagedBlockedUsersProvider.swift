@@ -12,7 +12,7 @@ class ManagedBlockedUsersProvider {
 
     let managedObjectContext: NSManagedObjectContext
 
-    init(managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext) {
+    init(managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext) {
         self.managedObjectContext = managedObjectContext
     }
 

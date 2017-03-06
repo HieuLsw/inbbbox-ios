@@ -42,7 +42,8 @@ class FolloweesViewModel: BaseCollectionViewViewModel {
                 firstly {
                     self.removeBlockedUsers(followees)
                 }.then { filteredFollowees -> Void in
-                    if let filteredFollowees = filteredFollowees, filteredFollowees != self.followees || filteredFollowees.count == 0 {
+                    if let filteredFollowees = filteredFollowees,
+                        filteredFollowees != self.followees || filteredFollowees.count == 0 {
                         self.followees = filteredFollowees
                     }
                 }.then {

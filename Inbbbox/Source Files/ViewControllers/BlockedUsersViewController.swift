@@ -55,7 +55,7 @@ extension BlockedUsersViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BlockedUsersTableViewCell.identifier, for: indexPath) as! BlockedUsersTableViewCell
+        let cell = tableView.dequeueReusableCell(BlockedUsersTableViewCell.self)
         cell.avatarView.imageView.loadImageFromURL(users[indexPath.row].avatarURL, placeholderImage: UIImage(named: "ic-comments-nopicture"))
         cell.titleLabel.text = users[indexPath.row].name ?? users[indexPath.row].username
         cell.titleLabel.textColor = colorModeProvider.tableViewCellTextColor

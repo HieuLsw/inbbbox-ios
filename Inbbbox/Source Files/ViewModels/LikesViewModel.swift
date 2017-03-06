@@ -35,7 +35,8 @@ class LikesViewModel: SimpleShotsViewModel {
                 firstly {
                     self.removeShotsFromBlockedUsers(shots)
                 }.then { filteredShots -> Void in
-                    if let filteredShots = filteredShots, filteredShots != self.shots || filteredShots.count == 0 {
+                    if let filteredShots = filteredShots,
+                        filteredShots != self.shots || filteredShots.count == 0 {
                         self.shots = filteredShots
                     }
                 }.then {

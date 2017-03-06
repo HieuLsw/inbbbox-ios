@@ -8,7 +8,7 @@
 import PromiseKit
 import CoreData
 
-enum BlockedUserRequesterError: Error {
+enum ManagedBlockedUserRequesterError: Error {
     case alreadyBlocked
     case doesNotExist
 }
@@ -18,7 +18,7 @@ class ManagedBlockedUsersRequester {
     let managedObjectContext: NSManagedObjectContext
     let managedObjectsProvider: ManagedObjectsProvider
 
-    init(managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)!.managedObjectContext) {
+    init(managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext) {
         self.managedObjectContext = managedObjectContext
         managedObjectsProvider = ManagedObjectsProvider(managedObjectContext: managedObjectContext)
     }
@@ -26,7 +26,7 @@ class ManagedBlockedUsersRequester {
     func block(user: UserType) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
             if let _ = managedObjectsProvider.managedBlockedUser(user) {
-                reject(BlockedUserRequesterError.alreadyBlocked)
+                reject(ManagedBlockedUserRequesterError.alreadyBlocked)
             }
 
             let managedUserEntity = NSEntityDescription.entity(forEntityName: ManagedBlockedUser.entityName, in: managedObjectContext)!

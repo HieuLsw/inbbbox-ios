@@ -172,8 +172,7 @@ extension SettingsViewController {
             labelItem.onSelect?()
         }
 
-        if let detailsItem = item as? DetailsItem {
-            guard let destination = detailsItem.destination else { return }
+        if let destination = (item as? DetailsItem)?.destination {
             let destinationViewController: UIViewController = {
                 switch destination {
                 case .language: return LanguageViewController()
