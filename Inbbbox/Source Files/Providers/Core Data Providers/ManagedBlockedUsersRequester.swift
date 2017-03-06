@@ -2,7 +2,6 @@
 //  ManagedBlockedUsersRequester.swift
 //  Inbbbox
 //
-//  Created by Peter Bruz on 02/03/2017.
 //  Copyright © 2017 Netguru Sp. z o.o. All rights reserved.
 //
 
