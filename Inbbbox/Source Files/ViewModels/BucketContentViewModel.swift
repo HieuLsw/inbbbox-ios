@@ -114,6 +114,8 @@ class BucketContentViewModel: SimpleShotsViewModel {
                         return authors.count == 0
                     })
                     fulfill(filteredShots)
+                } else {
+                    fulfill(shots)
                 }
             }.catch(execute: reject)
         }

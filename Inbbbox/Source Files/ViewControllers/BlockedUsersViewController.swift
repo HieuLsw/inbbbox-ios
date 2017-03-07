@@ -33,6 +33,10 @@ class BlockedUsersViewController: UITableViewController {
 
         provideBlockedUsers()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        _ = navigationController?.popViewController(animated: true)
+    }
 
     func provideBlockedUsers() -> Void {
         firstly {
