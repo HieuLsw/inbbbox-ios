@@ -272,7 +272,12 @@ fileprivate extension ShotsCollectionViewController {
             }.then { shots -> Void in
                 self.shots = shots ?? []
             }.then {
-                self.removeShotsFromBlockedUsers()
+                self.removeShotsFromBlockedUsers(self.shots)
+            }.then { filteredShots -> Void in
+                if let filteredShots = filteredShots, filteredShots != self.shots || filteredShots.count == 0 {
+                    self.shots = filteredShots
+                    self.collectionView?.reloadData()
+                }
             }.then(execute: fulfill).catch(execute: reject)
         }
     }
@@ -292,19 +297,20 @@ fileprivate extension ShotsCollectionViewController {
         }
     }
 
-    func removeShotsFromBlockedUsers() -> Promise<Void> {
-        return Promise<Void> { fulfill, reject in
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
 
             firstly {
                 UsersProvider().provideBlockedUsers()
             }.then { users -> Void in
                 if let blockedUsers = users {
-                    self.shots = self.shots.filter({ (shot) -> Bool in
+                    let filteredShots = shots.filter({ (shot) -> Bool in
                         let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
                         return authors.count == 0
                     })
+                    fulfill(filteredShots)
                 }
-            }.then(execute: fulfill).catch(execute: reject)
+            }.catch(execute: reject)
         }
     }
 }
