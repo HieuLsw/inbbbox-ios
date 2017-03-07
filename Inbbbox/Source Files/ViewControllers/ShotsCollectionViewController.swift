@@ -309,6 +309,8 @@ fileprivate extension ShotsCollectionViewController {
                         return authors.count == 0
                     })
                     fulfill(filteredShots)
+                } else {
+                    fulfill(shots)
                 }
             }.catch(execute: reject)
         }
