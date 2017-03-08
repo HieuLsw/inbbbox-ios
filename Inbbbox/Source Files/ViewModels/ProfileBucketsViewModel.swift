@@ -76,13 +76,19 @@ class ProfileBucketsViewModel: ProfileProjectsOrBucketsViewModel {
             }.then { shots -> Void in
                 var bucketShotsShouldBeReloaded = true
                 guard let index = self.buckets.index(where: { $0.identifier == bucket.identifier }) else { return }
-                if let oldShots = self.bucketsIndexedShots[index], let newShots = shots {
-                    bucketShotsShouldBeReloaded = oldShots != newShots
-                }
-                self.bucketsIndexedShots[index] = shots ?? [ShotType]()
-                if bucketShotsShouldBeReloaded {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                firstly {
+                    self.removeShotsFromBlockedUsers(shots)
+                }.then { filteredShots -> Void in
+                    if let oldShots = self.bucketsIndexedShots[index], let newShots = filteredShots {
+                        bucketShotsShouldBeReloaded = oldShots != newShots
+                    }
+                    self.bucketsIndexedShots[index] = filteredShots ?? [ShotType]()
+                    if bucketShotsShouldBeReloaded {
+                        let indexPath = IndexPath(row: index, section: 0)
+                        self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                    }
+                }.catch { error in
+                    self.notifyDelegateAboutFailure(error)
                 }
             }.catch { error in
                 self.notifyDelegateAboutFailure(error)
@@ -98,6 +104,30 @@ class ProfileBucketsViewModel: ProfileProjectsOrBucketsViewModel {
         buckets = []
         delegate?.viewModelDidLoadInitialItems()
     }
+
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]?) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
+
+            guard let shots = shots else {
+                fulfill(nil)
+                return
+            }
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredShots = shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredShots)
+                } else {
+                    fulfill(shots)
+                }
+            }.catch(execute: reject)
+        }
+    }
 }
 
 extension ProfileBucketsViewModel {
@@ -109,10 +139,11 @@ extension ProfileBucketsViewModel {
 
         init(bucket: BucketType, shots: [ShotType]?) {
             self.name = bucket.name
-            self.numberOfShots = String(format: "%d", bucket.shotsCount)
-            if let shots = shots, shots.count > 0 {
+            if let shots = shots {
+                self.numberOfShots = String(format: "%d", shots.count)
                 self.shots = shots
             } else {
+                self.numberOfShots = "0"
                 self.shots = nil
             }
         }

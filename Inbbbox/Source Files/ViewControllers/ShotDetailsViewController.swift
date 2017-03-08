@@ -400,6 +400,8 @@ private extension ShotDetailsViewController {
                 if let blockedUsers = users {
                     let authors = blockedUsers.filter { $0.identifier == self.viewModel.shot.user.identifier }
                     fulfill(authors.count > 0)
+                } else {
+                    fulfill(false)
                 }
             }.catch(execute: reject)
         }

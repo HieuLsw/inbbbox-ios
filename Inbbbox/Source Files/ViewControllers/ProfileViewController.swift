@@ -105,13 +105,22 @@ class ProfileViewController: UIViewController {
             profileView.menuBarView.select(item: viewModel.menu[0])
         }
 
+        firstly {
+            checkIfUserIsBlocked()
+        }.then { blocked -> Void in
+            if blocked {
+                _ = self.navigationController?.popViewController(animated: true)
+                return
+            }
+        }.catch { _ in }
+
         guard viewModel.shouldShowFollowButton else { return }
 
         guard !userAlreadyFollowed else {
             userIsAlreadyFollowed()
             return
         }
-        
+
         checkIfUserIsFollowed()
     }
 
@@ -179,6 +188,21 @@ extension ProfileViewController: UIPageViewControllerDelegate {
 // MARK: Private extension
 
 private extension ProfileViewController {
+
+    func checkIfUserIsBlocked() -> Promise<Bool> {
+        return Promise<Bool> { fulfill, reject in
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let authors = blockedUsers.filter { $0.identifier == self.viewModel.user.identifier }
+                    fulfill(authors.count > 0)
+                } else {
+                    fulfill(false)
+                }
+            }.catch(execute: reject)
+        }
+    }
 
     func setupBarButtons() {
         if isModal {

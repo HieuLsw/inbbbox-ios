@@ -78,13 +78,19 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
             }.then { shots -> Void in
                 var projectsShotsShouldBeReloaded = true
                 guard let index = self.projects.index(where: { $0.identifier == project.identifier }) else { return }
-                if let oldShots = self.projectsIndexedShots[index], let newShots = shots {
-                    projectsShotsShouldBeReloaded = oldShots != newShots
-                }
-                self.projectsIndexedShots[index] = shots ?? [ShotType]()
-                if projectsShotsShouldBeReloaded {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                firstly {
+                    self.removeShotsFromBlockedUsers(shots)
+                }.then { filteredShots -> Void in
+                    if let oldShots = self.projectsIndexedShots[index], let newShots = filteredShots {
+                        projectsShotsShouldBeReloaded = oldShots != newShots
+                    }
+                    self.projectsIndexedShots[index] = filteredShots ?? [ShotType]()
+                    if projectsShotsShouldBeReloaded {
+                        let indexPath = IndexPath(row: index, section: 0)
+                        self.delegate?.viewModel(self, didLoadShotsForItemAtIndexPath: indexPath)
+                    }
+                }.catch { error in
+                    self.notifyDelegateAboutFailure(error)
                 }
             }.catch { error in
                 self.notifyDelegateAboutFailure(error)
@@ -100,6 +106,30 @@ class ProfileProjectsViewModel: ProfileProjectsOrBucketsViewModel {
         projects = []
         delegate?.viewModelDidLoadInitialItems()
     }
+
+    func removeShotsFromBlockedUsers(_ shots: [ShotType]?) -> Promise<[ShotType]?> {
+        return Promise<[ShotType]?> { fulfill, reject in
+
+            guard let shots = shots else {
+                fulfill(nil)
+                return
+            }
+
+            firstly {
+                UsersProvider().provideBlockedUsers()
+            }.then { users -> Void in
+                if let blockedUsers = users {
+                    let filteredShots = shots.filter({ (shot) -> Bool in
+                        let authors = blockedUsers.filter { $0.identifier == shot.user.identifier }
+                        return authors.count == 0
+                    })
+                    fulfill(filteredShots)
+                } else {
+                    fulfill(shots)
+                }
+            }.catch(execute: reject)
+        }
+    }
 }
 
 extension ProfileProjectsViewModel {
@@ -111,11 +141,12 @@ extension ProfileProjectsViewModel {
 
         init(project: ProjectType, shots: [ShotType]?) {
             self.name = project.name ?? ""
-            self.numberOfShots = String(format: "%d", project.shotsCount)
             if let shots = shots, shots.count > 0 {
                 self.shots = shots
+                self.numberOfShots = String(format: "%d", shots.count)
             } else {
                 self.shots = nil
+                self.numberOfShots = "0"
             }
         }
     }
