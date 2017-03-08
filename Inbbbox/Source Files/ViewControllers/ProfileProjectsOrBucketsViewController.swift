@@ -84,6 +84,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        viewModel.downloadInitialItems()
         addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: tableView!)
     }
 }
