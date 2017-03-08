@@ -16,7 +16,7 @@ class ProfileProjectsViewModelSpec: QuickSpec {
 
         var sut: ProfileProjectsViewModelMock!
         let fixtureProjectName = "fixture.name"
-        let fixtureNumberOfShots = "4"
+        let fixtureNumberOfShots = "1"
 
         beforeEach {
             sut = ProfileProjectsViewModelMock(user: User.fixtureUser())
