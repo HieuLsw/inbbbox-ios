@@ -29,24 +29,13 @@ class APIBucketsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: Error?
-                
                 beforeEach {
                     TokenStorage.clear()
                 }
                 
-                afterEach {
-                    error = nil
-                }
-                
                 it("error should appear") {
-                    sut.provideMyBuckets().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.provideMyBuckets()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             

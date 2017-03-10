@@ -48,13 +48,8 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.postBucket("fixture.name", description: nil).then { _ in
-                        fail("This should not be invoked")
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.postBucket("fixture.name", description: nil)
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -76,15 +71,6 @@ class APIBucketsRequesterSpec: QuickSpec {
         }
         
         describe("when adding shot to bucket") {
-            
-            var error: Error?
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                error = nil
-                didInvokePromise = nil
-            }
-            
             context("and token does not exist") {
                 
                 beforeEach {
@@ -92,13 +78,8 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket()).then {
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -110,25 +91,13 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("should add shot to bucket") {
-                    sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket()).then {
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when removing shot from bucket") {
-            
-            var error: Error?
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                error = nil
-                didInvokePromise = nil
-            }
-            
             context("and token does not exist") {
                 
                 beforeEach {
@@ -136,13 +105,8 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket()).then {
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -154,11 +118,8 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("should remove shot from bucket") {
-                    sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket()).then {
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }

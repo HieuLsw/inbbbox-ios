@@ -16,8 +16,6 @@ class VerifiableSpec: QuickSpec {
         
         var sut: VerifiableMock!
         var savedTokenBeforeTestLaunch: String!
-        var didInvokePromise: Bool!
-        var error: Error?
         
         beforeSuite {
             savedTokenBeforeTestLaunch = TokenStorage.currentToken
@@ -33,12 +31,6 @@ class VerifiableSpec: QuickSpec {
             sut = VerifiableMock()
         }
         
-        afterEach {
-            sut = nil
-            didInvokePromise = false
-            error = nil
-        }
-        
         describe("when token isn't stored") {
             
             beforeEach {
@@ -48,35 +40,16 @@ class VerifiableSpec: QuickSpec {
             context("and authorization isn't needed") {
                 
                 it("authorization check should pass") {
-                    
-                    waitUntil { done in
-                        sut.verifyAuthenticationStatus(false).then { _ -> Void in
-                            didInvokePromise = true
-                            done()
-                        }.catch { _ in fail() }
-                    }
-                    
-                    expect(didInvokePromise).to(beTruthy())
-                    expect(error).to(beNil())
+                    let promise = sut.verifyAuthenticationStatus(false)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
             
             context("and authorization is needed") {
 
                 it("authorization check should throw error") {
-                    
-                    waitUntil { done in
-                        sut.verifyAuthenticationStatus(true).then { _ -> Void in
-                            fail()
-                        }.catch { _error in
-                            didInvokePromise = true
-                            error = _error
-                            done()
-                        }
-                    }
-                    
-                    expect(didInvokePromise).to(beTruthy())
-                    expect(error is VerifiableError).to(beTruthy())
+                    let promise = sut.verifyAuthenticationStatus(true)
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
         }
@@ -90,32 +63,16 @@ class VerifiableSpec: QuickSpec {
             context("and authorization isn't needed") {
                 
                 it("authorization check should pass") {
-                    
-                    waitUntil { done in
-                        sut.verifyAuthenticationStatus(false).then { _ -> Void in
-                            didInvokePromise = true
-                            done()
-                        }.catch { _ in fail() }
-                    }
-                    
-                    expect(didInvokePromise).to(beTruthy())
-                    expect(error).to(beNil())
+                    let promise = sut.verifyAuthenticationStatus(false)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
             
             context("and authorization is needed") {
                 
-                it("authorization check should throw error") {
-                    
-                    waitUntil { done in
-                        sut.verifyAuthenticationStatus(true).then { _ -> Void in
-                            didInvokePromise = true
-                            done()
-                        }.catch { _ in fail() }
-                    }
-                    
-                    expect(didInvokePromise).to(beTruthy())
-                    expect(error).to(beNil())
+                it("authorization check should pass") {
+                    let promise = sut.verifyAuthenticationStatus(true)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
@@ -129,13 +86,8 @@ class VerifiableSpec: QuickSpec {
             context("and user does not exist") {
                 
                 it("error should occur") {
-                    sut.verifyAccountType().then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.verifyAccountType()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -147,14 +99,8 @@ class VerifiableSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    
-                    sut.verifyAccountType().then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.verifyAccountType()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -166,12 +112,8 @@ class VerifiableSpec: QuickSpec {
                 }
                 
                 it("validation should pass") {
-                    
-                    sut.verifyAccountType().then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy())
+                    let promise = sut.verifyAccountType()
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
@@ -181,61 +123,40 @@ class VerifiableSpec: QuickSpec {
             context("and text is longer than allowed") {
                 
                 it("should not pass validation") {
-                    sut.verifyTextLength("foo", min: 0, max: 2).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.verifyTextLength("foo", min: 0, max: 2)
+                    expect(promise).to(resolveWithError(type: VerifiableError.self ))
                 }
             }
             
             context("and text is shorter than allowed") {
                 
                 it("should not pass validation") {
-                    sut.verifyTextLength("foobar", min: 0, max: 2).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.verifyTextLength("foobar", min: 8, max: 10)
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
             context("when min and max value are swapped") {
                 
                 it("should not pass validation") {
-                    sut.verifyTextLength("foobar", min: 2, max: 0).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.verifyTextLength("foobar", min: 2, max: 0)
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
             context("when text contains whitespaces") {
                 
                 it("should pass validation") {
-                    sut.verifyTextLength("   foo    ", min: 1, max: 3).catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error).toEventually(beNil())
+                    let promise = sut.verifyTextLength("   foo    ", min: 1, max: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
             
             context("when text is correct") {
                 
                 it("should pass validation") {
-                    sut.verifyTextLength("foo", min: 0, max: 10).catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error).toEventually(beNil())
+                    let promise = sut.verifyTextLength("foo", min: 1, max: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
