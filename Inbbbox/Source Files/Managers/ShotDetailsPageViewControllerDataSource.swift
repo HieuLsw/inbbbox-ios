@@ -47,7 +47,8 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         shotDetailsViewController.shotIndex = indexPath.row
         shotDetailsViewControllersDictionary[indexPath.row] = shotDetailsViewController
         shotDetailsViewController.customizeFor3DTouch(false)
-        shotDetailsViewController.willDismissDetailsCompletionHandler = { [weak self] index in self?.willDismissWithIndex(index)
+        shotDetailsViewController.willDismissDetailsCompletionHandler = { [weak self] index in
+            self?.willDismissWithIndex(index)
         }
         
         return shotDetailsViewController
