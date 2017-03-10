@@ -18,7 +18,7 @@ struct ShotsCollectionBackgroundViewSpacing {
     
     static let containerDefaultVerticalSpacing = CGFloat(70)
     
-    static let skipButtonBottomInset = CGFloat(119)
+    static let skipButtonBottomInset = CGFloat(32)
 }
 
 class ShotsCollectionSourceItem {
