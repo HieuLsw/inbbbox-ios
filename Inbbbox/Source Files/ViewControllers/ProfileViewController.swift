@@ -286,7 +286,9 @@ private extension ProfileViewController {
         }
 
         indexesForRegisteredObservers.append(index)
-        viewControllerContainingScrollableView(atPageWithIndex: index)?.scrollContentOffset = { CGPoint(x: 0, y: -self.headerHeight) }
+        
+        let headerHeight = self.headerHeight
+        viewControllerContainingScrollableView(atPageWithIndex: index)?.scrollContentOffset = { CGPoint(x: 0, y: -headerHeight) }
     }
 
     func removeAllContentOffsetObservers() {

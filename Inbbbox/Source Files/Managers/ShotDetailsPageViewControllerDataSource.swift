@@ -30,7 +30,9 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         super.init()
         
         self.shots = shots
-        initialViewController.willDismissDetailsCompletionHandler = willDismissWithIndex
+        initialViewController.willDismissDetailsCompletionHandler = { [weak self] index in
+            self?.willDismissWithIndex(index)
+        }
         shotDetailsViewControllersDictionary[initialViewController.shotIndex] = initialViewController
     }
     
@@ -45,7 +47,9 @@ class ShotDetailsPageViewControllerDataSource: NSObject, UIPageViewControllerDat
         shotDetailsViewController.shotIndex = indexPath.row
         shotDetailsViewControllersDictionary[indexPath.row] = shotDetailsViewController
         shotDetailsViewController.customizeFor3DTouch(false)
-        shotDetailsViewController.willDismissDetailsCompletionHandler = willDismissWithIndex
+        shotDetailsViewController.willDismissDetailsCompletionHandler = { [weak self] index in
+            self?.willDismissWithIndex(index)
+        }
         
         return shotDetailsViewController
     }
