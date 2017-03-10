@@ -142,7 +142,7 @@ final class ProfileInfoView: UIView {
         var scrollViewContentSize = headerStackView.frame.size.height + informationsStackView.frame.size.height
         
         if !teamsCollectionView.isHidden {
-            scrollViewContentSize += teamsCollectionView.contentSize.height + 60 + 16
+            scrollViewContentSize += teamsCollectionView.contentSize.height + 160 + 16
         }
         
         if !teamMembersTableView.isHidden {
