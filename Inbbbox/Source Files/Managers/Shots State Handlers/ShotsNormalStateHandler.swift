@@ -6,7 +6,7 @@ import Foundation
 import PromiseKit
 import ZFDragableModalTransition
 
-class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
+class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable, PresentingDraggableModal {
 
     let shotsRequester =  ShotsRequester()
     let likesProvider = ShotsProvider()
@@ -267,10 +267,7 @@ extension ShotsNormalStateHandler {
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
         pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-            guard let certainSelf = self else { return }
-            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
         }
         
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
@@ -316,10 +313,7 @@ private extension ShotsNormalStateHandler {
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
         pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-            guard let certainSelf = self else { return }
-            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 0.9)
         }
 
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)

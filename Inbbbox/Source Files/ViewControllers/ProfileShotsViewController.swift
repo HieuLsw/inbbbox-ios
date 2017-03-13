@@ -30,7 +30,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, ContainingScrollableView {
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, ContainingScrollableView, PresentingDraggableModal {
 
     var dismissClosure: (() -> Void)?
 
@@ -138,10 +138,7 @@ extension ProfileShotsViewController {
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
         pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-            guard let certainSelf = self else { return }
-            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 0.9)
         }
 
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
@@ -271,10 +268,7 @@ extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
             pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-                guard let certainSelf = self else { return }
-                certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-                pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+                self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
             }
 
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)

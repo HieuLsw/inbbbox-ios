@@ -12,7 +12,7 @@ import ZFDragableModalTransition
 import DZNEmptyDataSet
 import PeekPop
 
-class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch {
+class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, Support3DTouch, PresentingDraggableModal {
 
     var viewModel: SimpleShotsViewModel?
     var modalTransitionAnimator: ZFModalTransitionAnimator?
@@ -82,10 +82,7 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
             pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-                guard let certainSelf = self else { return }
-                certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-                pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+                self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
             }
 
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
@@ -198,10 +195,7 @@ extension SimpleShotsCollectionViewController {
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
         pageViewController.didUpdateInternalViewController = { [weak self] viewController in
-
-            guard let certainSelf = self else { return }
-            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
-            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 0.9)
         }
 
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)

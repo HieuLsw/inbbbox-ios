@@ -28,3 +28,18 @@ class CustomTransitions {
         return modalTransitionAnimator!
     }
 }
+
+protocol PresentingDraggableModal {
+
+    var modalTransitionAnimator: ZFModalTransitionAnimator? { get set }
+    mutating func assignTransitioningDelegate(for modal: ShotDetailsViewController, in viewController: UIViewController, behindViewScale: CGFloat)
+}
+
+extension PresentingDraggableModal {
+
+    mutating func assignTransitioningDelegate(for modal: ShotDetailsViewController, in viewController: UIViewController, behindViewScale: CGFloat) {
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(modal)
+        modalTransitionAnimator?.behindViewScale = behindViewScale
+        viewController.transitioningDelegate = modalTransitionAnimator
+    }
+}
