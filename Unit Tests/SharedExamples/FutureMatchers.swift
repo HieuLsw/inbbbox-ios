@@ -10,7 +10,7 @@ import Quick
 import Nimble
 import PromiseKit
 
-public func resolveWithError<T, E: Error>(type: E.Type, timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
+public func resolveWithError<T>(type: Error.Type? = nil, timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
     return MatcherFunc { actualExpression, failureMessage in
         failureMessage.postfixMessage = "resolve with error of type <\(type)>"
         
@@ -29,7 +29,10 @@ public func resolveWithError<T, E: Error>(type: E.Type, timeout: TimeInterval = 
                 }
         }
         
-        return resolvedError.map { type(of: $0) == type } ?? false
+        guard let resolved = resolvedError else { return false }
+        guard let type = type else { return true }
+        
+        return type(of: resolved) == type
     }
 }
 
