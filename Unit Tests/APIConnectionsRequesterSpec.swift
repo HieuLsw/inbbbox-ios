@@ -29,14 +29,6 @@ class APIConnectionsRequesterSpec: QuickSpec {
         
         describe("when following user") {
             
-            var error: Error?
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                error = nil
-                didInvokePromise = nil
-            }
-            
             context("and token does not exist") {
                 
                 beforeEach {
@@ -44,13 +36,8 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.followUser(User.fixtureUser()).then {
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.followUser(User.fixtureUser())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -62,25 +49,14 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("should follow user") {
-                    sut.followUser(User.fixtureUser()).then {
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.followUser(User.fixtureUser())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when unfollowing user") {
             
-            var error: Error?
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                error = nil
-                didInvokePromise = nil
-            }
-            
             context("and token does not exist") {
                 
                 beforeEach {
@@ -88,13 +64,8 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.unfollowUser(User.fixtureUser()).then {
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.unfollowUser(User.fixtureUser())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -106,25 +77,14 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("should unfollow user") {
-                    sut.followUser(User.fixtureUser()).then {
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.followUser(User.fixtureUser())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when checking if current user follows an user") {
             
-            var error: Error?
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                error = nil
-                didInvokePromise = nil
-            }
-            
             context("and token does not exist") {
                 
                 beforeEach {
@@ -132,13 +92,8 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.isUserFollowedByMe(User.fixtureUser()).then { _ in
-                        fail("This should not be invoked")
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.isUserFollowedByMe(User.fixtureUser())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -150,11 +105,8 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 }
                 
                 it("should unfollow user") {
-                    sut.isUserFollowedByMe(User.fixtureUser()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail("This should not be invoked") }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.isUserFollowedByMe(User.fixtureUser())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }

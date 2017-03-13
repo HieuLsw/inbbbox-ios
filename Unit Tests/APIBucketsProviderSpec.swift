@@ -47,6 +47,7 @@ class APIBucketsProviderSpec: QuickSpec {
                 
                 it("buckets should be properly returned") {
                     let promise = sut.provideMyBuckets()
+                    
                     expect(promise).to(resolveWithValueMatching { buckets in
                         expect(buckets).toNot(beNil())
                         expect(buckets).to(haveCount(3))

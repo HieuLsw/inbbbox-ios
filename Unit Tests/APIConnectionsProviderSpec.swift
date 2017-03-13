@@ -14,9 +14,7 @@ import PromiseKit
 
 class APIConnectionsProviderSpec: QuickSpec {
     override func spec() {
-
-        var followees: [Followee]?
-        var followers: [Follower]?
+        
         var sut: APIConnectionsProviderMock!
         
         beforeEach {
@@ -25,8 +23,6 @@ class APIConnectionsProviderSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            followees = nil
-            followers = nil
         }
         
         describe("when providing my folowees") {
@@ -54,12 +50,12 @@ class APIConnectionsProviderSpec: QuickSpec {
                 }
                 
                 it("buckets should be properly returned") {
-                    sut.provideMyFollowees().then { _followees -> Void in
-                        followees = _followees
-                    }.catch { _ in fail() }
+                    let promise = sut.provideMyFollowees()
                     
-                    expect(followees).toNotEventually(beNil())
-                    expect(followees).toEventually(haveCount(3))
+                    expect(promise).to(resolveWithValueMatching { followees in
+                        expect(followees).toNot(beNil())
+                        expect(followees).to(haveCount(3))
+                    })
                 }
             }
         }
@@ -71,21 +67,21 @@ class APIConnectionsProviderSpec: QuickSpec {
             }
             
             it("from next page, followers should be properly returned") {
-                sut.nextPage().then { _followers -> Void in
-                    followers = _followers
-                }.catch { _ in fail() }
+                let promise = sut.nextPage()
                 
-                expect(followers).toNotEventually(beNil())
-                expect(followers).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { followers in
+                    expect(followers).toNot(beNil())
+                    expect(followers).to(haveCount(3))
+                })
             }
             
             it("from previous page, followers be properly returned") {
-                sut.previousPage().then { _followers -> Void in
-                    followers = _followers
-                }.catch { _ in fail() }
+                let promise = sut.previousPage()
                 
-                expect(followers).toNotEventually(beNil())
-                expect(followers).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { followers in
+                    expect(followers).toNot(beNil())
+                    expect(followers).to(haveCount(3))
+                })
             }
         }
         
@@ -97,25 +93,13 @@ class APIConnectionsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: Error?
-                
                 beforeEach {
                     TokenStorage.clear()
                 }
                 
-                afterEach {
-                    error = nil
-                }
-                
                 it("error should appear") {
-                    sut.provideMyFollowers().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.provideMyFollowers()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -125,13 +109,13 @@ class APIConnectionsProviderSpec: QuickSpec {
                     TokenStorage.storeToken("fixture.token")
                 }
                 
-                it("buckets should be properly returned") {
-                    sut.provideMyFollowers().then { _followeers -> Void in
-                        followers = _followeers
-                    }.catch { _ in fail() }
+                it("followers should be properly returned") {
+                    let promise = sut.provideMyFollowers()
                     
-                    expect(followers).toNotEventually(beNil())
-                    expect(followers).toEventually(haveCount(3))
+                    expect(promise).to(resolveWithValueMatching { followers in
+                        expect(followers).toNot(beNil())
+                        expect(followers).to(haveCount(3))
+                    })
                 }
             }
         }
@@ -143,21 +127,21 @@ class APIConnectionsProviderSpec: QuickSpec {
             }
             
             it("for user, followees should be properly returned") {
-                sut.provideFolloweesForUser(User.fixtureUser()).then { _followees -> Void in
-                    followees = _followees
-                }.catch { _ in fail() }
+                let promise = sut.provideFolloweesForUser(User.fixtureUser())
                 
-                expect(followees).toNotEventually(beNil())
-                expect(followees).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { followees in
+                    expect(followees).toNot(beNil())
+                    expect(followees).to(haveCount(3))
+                })
             }
             
             it("for users, followees should be properly returned") {
-                sut.provideFolloweesForUsers([User.fixtureUser(), User.fixtureUser()]).then { _followees -> Void in
-                    followees = _followees
-                    }.catch { _ in fail() }
+                let promise = sut.provideFolloweesForUsers([User.fixtureUser(), User.fixtureUser()])
                 
-                expect(followees).toNotEventually(beNil())
-                expect(followees).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { followees in
+                    expect(followees).toNot(beNil())
+                    expect(followees).to(haveCount(3))
+                })
             }
         }
         
@@ -168,22 +152,21 @@ class APIConnectionsProviderSpec: QuickSpec {
             }
             
             it("for user, followers should be properly returned") {
-                sut.provideFollowersForUser(User.fixtureUser()).then { _followers -> Void in
-                    followers = _followers
-                    }.catch { _ in fail() }
+                let promise = sut.provideFollowersForUser(User.fixtureUser())
                 
-                expect(followers).toNotEventually(beNil())
-                expect(followers).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { followers in
+                    expect(followers).notTo(beNil())
+                    expect(followers).to(haveCount(3))
+                })
             }
             
             it("for users, followers should be properly returned") {
                 let promise = sut.provideFollowersForUsers([User.fixtureUser(), User.fixtureUser()])
                 
-                expect(promise)
-                    .to(resolveWithValueMatching { followers in
-                        expect(followers).notTo(beNil())
-                        expect(followers).to(haveCount(3))
-                    })
+                expect(promise).to(resolveWithValueMatching { followers in
+                    expect(followers).notTo(beNil())
+                    expect(followers).to(haveCount(3))
+                })
             }
         }
     }
