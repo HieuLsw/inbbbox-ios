@@ -28,12 +28,9 @@ class APIBucketsRequesterSpec: QuickSpec {
         }
         
         describe("when posting new bucket") {
-            
-            var error: Error?
             var bucket: BucketType?
             
             beforeEach {
-                error = nil
                 bucket = nil
             }
             
