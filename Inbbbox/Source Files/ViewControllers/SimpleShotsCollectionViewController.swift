@@ -80,6 +80,14 @@ extension SimpleShotsCollectionViewController: UIViewControllerPreviewingDelegat
             detailsViewController.customizeFor3DTouch(false)
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+            pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+
+                guard let certainSelf = self else { return }
+                certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
+                pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            }
+
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
             modalTransitionAnimator?.behindViewScale = 1
 
@@ -188,7 +196,14 @@ extension SimpleShotsCollectionViewController {
         detailsViewController.shotIndex = indexPath.item
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.shots, initialViewController: detailsViewController, likesData: initializedFromLikesView)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-        
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+
+            guard let certainSelf = self else { return }
+            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
+            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+        }
+
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         
         pageViewController.transitioningDelegate = modalTransitionAnimator

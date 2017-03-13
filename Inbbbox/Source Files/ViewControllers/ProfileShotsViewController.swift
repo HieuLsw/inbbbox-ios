@@ -137,6 +137,13 @@ extension ProfileShotsViewController {
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
 
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+
+            guard let certainSelf = self else { return }
+            certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
+            pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+        }
+
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
 
         pageViewController.transitioningDelegate = modalTransitionAnimator
@@ -262,6 +269,14 @@ extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
             detailsViewController.customizeFor3DTouch(false)
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+            pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+
+                guard let certainSelf = self else { return }
+                certainSelf.modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(viewController)
+                pageViewController.transitioningDelegate = certainSelf.modalTransitionAnimator
+            }
+
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
             modalTransitionAnimator?.behindViewScale = 1
 

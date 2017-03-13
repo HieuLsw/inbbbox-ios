@@ -587,8 +587,7 @@ private extension ShotDetailsViewController {
             completion?()
         }
 
-        modalTransitionAnimator =
-                CustomTransitions.pullDownToCloseTransitionForModalViewController(shotBucketsViewController)
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(shotBucketsViewController)
         shotBucketsViewController.transitioningDelegate = modalTransitionAnimator
         shotBucketsViewController.modalPresentationStyle = .custom
         present(shotBucketsViewController, animated: true, completion: nil)
