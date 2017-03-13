@@ -23,7 +23,6 @@ class ManagedBucketsRequesterSpec: QuickSpec {
         beforeEach {
             inMemoryManagedObjectContext = setUpInMemoryManagedObjectContext()
             sut = ManagedBucketsRequester(managedObjectContext: inMemoryManagedObjectContext)
-
         }
         
         afterEach {
@@ -36,35 +35,32 @@ class ManagedBucketsRequesterSpec: QuickSpec {
         }
         
         describe("create buckets") {
-            var createdBucket: ManagedBucket?
             
             context("bucket should be created properly") {
                 
-                afterEach {
-                    createdBucket = nil
-                }
-                
                 it("with description") {
                     let description = NSAttributedString(string: "fixture")
-                    _ = firstly {
-                        sut.addBucket("fixture", description: description)
-                    }.then { bucket in
-                        createdBucket = bucket as? ManagedBucket
-                    }
-                    expect(createdBucket).toEventuallyNot(beNil())
-                    expect(createdBucket!.name).toEventually(equal("fixture"))
-                    expect(createdBucket!.attributedDescription!).toEventually(equal(description))
+                    let promise = sut.addBucket("fixture", description: description)
+                    
+                    expect(promise).to(resolveWithValueMatching { bucket in
+                        let createdBucket = bucket as? ManagedBucket
+                        
+                        expect(createdBucket).toNot(beNil())
+                        expect(createdBucket?.name).to(equal("fixture"))
+                        expect(createdBucket?.attributedDescription).to(equal(description))
+                    })
                 }
                 
                 it("without description") {
-                    _ = firstly {
-                        sut.addBucket("fixture", description: nil)
-                    }.then { bucket in
-                        createdBucket = bucket as? ManagedBucket
-                    }
-                    expect(createdBucket).toEventuallyNot(beNil())
-                    expect(createdBucket!.name).toEventually(equal("fixture"))
-                    expect(createdBucket!.attributedDescription).toEventually(beNil())
+                    let promise = sut.addBucket("fixture", description: nil)
+                
+                    expect(promise).to(resolveWithValueMatching { bucket in
+                        let createdBucket = bucket as? ManagedBucket
+                        
+                        expect(createdBucket).toNot(beNil())
+                        expect(createdBucket?.name).to(equal("fixture"))
+                        expect(createdBucket?.attributedDescription).to(beNil())
+                    })
                 }
             }
         }
