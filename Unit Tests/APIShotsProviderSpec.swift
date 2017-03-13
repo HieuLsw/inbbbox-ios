@@ -15,7 +15,6 @@ class APIShotsProviderSpec: QuickSpec {
     override func spec() {
         
         var sut: APIShotsProviderPrivateMock!
-        var shots: [ShotType]?
         
         beforeEach {
             sut = APIShotsProviderPrivateMock()
@@ -23,18 +22,17 @@ class APIShotsProviderSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            shots = nil
         }
         
         describe("when providing shots") {
             
             it("shots should be properly returned") {
-                sut.provideShots().then { _shots -> Void in
-                    shots = _shots
-                }.catch { _ in fail() }
+                let promise = sut.provideShots()
                 
-                expect(shots).toNotEventually(beNil())
-                expect(shots).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { shots in
+                    expect(shots).toNot(beNil())
+                    expect(shots).to(haveCount(3))
+                })
             }
         }
         
@@ -42,24 +40,13 @@ class APIShotsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: Error?
-                
                 beforeEach {
                     TokenStorage.clear()
                 }
                 
-                afterEach {
-                    error = nil
-                }
-                
                 it("error should appear") {
-                    sut.provideMyLikedShots().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.provideMyLikedShots()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
 
@@ -69,17 +56,13 @@ class APIShotsProviderSpec: QuickSpec {
                     TokenStorage.storeToken("fixture.token")
                 }
                 
-                afterEach {
-                    shots = nil
-                }
-                
                 it("shots should be properly returned") {
-                    sut.provideMyLikedShots().then { _shots -> Void in
-                        shots = _shots
-                    }.catch { _ in fail() }
+                    let promise = sut.provideMyLikedShots()
                     
-                    expect(shots).toNotEventually(beNil())
-                    expect(shots).toEventually(haveCount(3))
+                    expect(promise).to(resolveWithValueMatching { shots in
+                        expect(shots).toNot(beNil())
+                        expect(shots).to(haveCount(3))
+                    })
                 }
             }
         }
@@ -87,79 +70,62 @@ class APIShotsProviderSpec: QuickSpec {
         describe("when providing shots for user") {
             
             it("shots should be properly returned") {
-                sut.provideShotsForUser(User.fixtureUser()).then { _shots -> Void in
-                    shots = _shots
-                }.catch { _ in fail() }
+                let promise = sut.provideShotsForUser(User.fixtureUser())
                 
-                expect(shots).toNotEventually(beNil())
-                expect(shots).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { shots in
+                    expect(shots).toNot(beNil())
+                    expect(shots).to(haveCount(3))
+                })
             }
         }
         
         describe("when providing liked shots for user") {
             
             it("shots should be properly returned") {
-                sut.provideLikedShotsForUser(User.fixtureUser()).then { _shots -> Void in
-                    shots = _shots
-                }.catch { _ in fail() }
+                let promise = sut.provideLikedShotsForUser(User.fixtureUser())
                 
-                expect(shots).toNotEventually(beNil())
-                expect(shots).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { shots in
+                    expect(shots).toNot(beNil())
+                    expect(shots).to(haveCount(3))
+                })
             }
         }
         
         describe("when providing shots for bucket") {
             
             it("shots should be properly returned") {
-                sut.provideShotsForBucket(Bucket.fixtureBucket()).then { _shots -> Void in
-                    shots = _shots
-                }.catch { _ in fail() }
+                let promise = sut.provideShotsForBucket(Bucket.fixtureBucket())
                 
-                expect(shots).toNotEventually(beNil())
-                expect(shots).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { shots in
+                    expect(shots).toNot(beNil())
+                    expect(shots).to(haveCount(3))
+                })
             }
         }
         
         describe("when providing shots for project") {
 
             it("shots should be properly returned") {
-                sut.provideShotsForProject(Project.fixtureProject()).then { _shots -> Void in
-                    shots = _shots
-                }.catch { _ in fail() }
-
-                expect(shots).toNotEventually(beNil())
-                expect(shots).toEventually(haveCount(3))
+                let promise = sut.provideShotsForProject(Project.fixtureProject())
+                
+                expect(promise).to(resolveWithValueMatching { shots in                    expect(shots).toNot(beNil())
+                    expect(shots).to(haveCount(3))
+                })
             }
         }
 
         describe("when providing shots from next/previous page") {
             
-            var error: Error!
-            
-            afterEach {
-                error = nil
-            }
-            
             context("without using any of provide method first") {
                 
                 it("should raise an error") {
-                    sut.nextPage().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is PageableProviderError).toEventually(beTruthy())
+                    let promise = sut.nextPage()
+                    expect(promise).to(resolveWithError(type: PageableProviderError.self))
                 }
                 
                 it("should raise an error") {
-                    sut.previousPage().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is PageableProviderError).toEventually(beTruthy())
+                    let promise = sut.previousPage()
+                    expect(promise).to(resolveWithError(type: PageableProviderError.self))
                 }
             }
             
@@ -170,22 +136,22 @@ class APIShotsProviderSpec: QuickSpec {
                 }
                 
                 it("shots should be properly returned") {
-                    sut.nextPage().then { _shots -> Void in
-                        shots = _shots
-                    }.catch { _ in fail() }
+                    let promise = sut.nextPage()
                     
-                    expect(shots).toNotEventually(beNil())
-                    expect(shots).toEventually(haveCount(3))
+                    expect(promise).to(resolveWithValueMatching { shots in
+                        expect(shots).toNot(beNil())
+                        expect(shots).to(haveCount(3))
+                    })
                 }
                 
                 
                 it("shots should be properly returned") {
-                    sut.previousPage().then { _shots -> Void in
-                        shots = _shots
-                    }.catch { _ in fail() }
+                    let promise = sut.previousPage()
                     
-                    expect(shots).toNotEventually(beNil())
-                    expect(shots).toEventually(haveCount(3))
+                    expect(promise).to(resolveWithValueMatching { shots in
+                        expect(shots).toNot(beNil())
+                        expect(shots).to(haveCount(3))
+                    })
                 }
                 
             }
