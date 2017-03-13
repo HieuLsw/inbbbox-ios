@@ -31,15 +31,16 @@ class ManagedBucketsProviderSpec: QuickSpec {
         }
         
         describe("My buckets") {
+            var bucketRequester: ManagedBucketsRequester!
+            
+            beforeEach {
+                bucketRequester = ManagedBucketsRequester(managedObjectContext: inMemoryManagedObjectContext)
+            }
             
             context("providing my buckets") {
                 
-                var myBuckets: [ManagedBucket]?
-                
                 it("all my buckets should be returned") {
-                     let bucketRequester = ManagedBucketsRequester(managedObjectContext: inMemoryManagedObjectContext)
-                    
-                    _ = firstly {
+                    let promise = firstly {
                         bucketRequester.addBucket("fuxture.name.1", description: nil)
                     }.then { _ in
                         bucketRequester.addBucket("fuxture.name.2", description: nil)
@@ -47,10 +48,11 @@ class ManagedBucketsProviderSpec: QuickSpec {
                         bucketRequester.addBucket("fuxture.name.3", description: nil)
                     }.then { _ in
                         sut.provideMyBuckets()
-                    }.then { buckets in
-                        myBuckets = buckets as? [ManagedBucket]
                     }
-                    expect(myBuckets?.count).toEventually(equal(3))
+                    
+                    expect(promise).to(resolveWithValueMatching { myBuckets in
+                        expect(myBuckets).to(haveCount(3))
+                    })
                 }
             }
         }
