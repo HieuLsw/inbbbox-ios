@@ -6,7 +6,7 @@ import Foundation
 import PromiseKit
 import ZFDragableModalTransition
 
-class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable {
+class ShotsNormalStateHandler: NSObject, ShotsStateHandler, Vibratable, PresentingDraggableModal {
 
     let shotsRequester =  ShotsRequester()
     let likesProvider = ShotsProvider()
@@ -265,6 +265,11 @@ extension ShotsNormalStateHandler {
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: shotsCollectionViewController.shots, initialViewController: detailsViewController)
         shotDetailsPageDataSource.delegate = self
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
+        }
+        
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         modalTransitionAnimator?.behindViewScale = 1
         
@@ -306,9 +311,12 @@ private extension ShotsNormalStateHandler {
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: shotsCollectionViewController.shots, initialViewController: detailsViewController)
         shotDetailsPageDataSource.delegate = self
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-        
-        modalTransitionAnimator =
-            CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 0.9)
+        }
+
+        modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         
         pageViewController.transitioningDelegate = modalTransitionAnimator
         pageViewController.modalPresentationStyle = .custom

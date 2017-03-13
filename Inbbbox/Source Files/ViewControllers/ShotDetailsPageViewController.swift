@@ -13,6 +13,8 @@ class ShotDetailsPageViewController: UIPageViewController {
     fileprivate let blurView = UIVisualEffectView(effect: UIBlurEffect(style: ColorModeProvider.current().visualEffectBlurType))
     fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
     var pageDataSource: ShotDetailsPageViewControllerDataSource
+
+    var didUpdateInternalViewController: ((ShotDetailsViewController) -> Void)?
     fileprivate var didSetConstraints = false
     
     // MARK: Life cycle
@@ -26,6 +28,8 @@ class ShotDetailsPageViewController: UIPageViewController {
         pageDataSource = shotDetailsPageDataSource
         
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+
+        delegate = self
     }
 }
 
@@ -73,15 +77,23 @@ extension ShotDetailsPageViewController {
     }
 }
 
+// MARK: UIPageViewControllerDelegate
+
+extension ShotDetailsPageViewController: UIPageViewControllerDelegate {
+
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard completed, let viewController = viewControllers?.last as? ShotDetailsViewController else { return }
+
+        didUpdateInternalViewController?(viewController)
+    }
+}
+
 // MARK: ModalByDraggingClosable
 
 extension ShotDetailsPageViewController: ModalByDraggingClosable {
     var scrollViewToObserve: UIScrollView {
-        for v in view.subviews{
-            if v.isKind(of: UIScrollView.self){
-                return v as! UIScrollView
-            }
-        }
-        return UIScrollView()
+        guard let viewController = viewControllers?.last as? ShotDetailsViewController else { return UIScrollView() }
+
+        return viewController.scrollViewToObserve
     }
 }

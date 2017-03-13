@@ -30,7 +30,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, ContainingScrollableView {
+class ProfileShotsViewController: TwoLayoutsCollectionViewController, Support3DTouch, ContainingScrollableView, PresentingDraggableModal {
 
     var dismissClosure: (() -> Void)?
 
@@ -136,6 +136,10 @@ extension ProfileShotsViewController {
         detailsViewController.shotIndex = indexPath.item
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 0.9)
+        }
 
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
 
@@ -262,6 +266,11 @@ extension ProfileShotsViewController: UIViewControllerPreviewingDelegate {
             detailsViewController.customizeFor3DTouch(false)
             let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: viewModel.userShots, initialViewController: detailsViewController)
             let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+            pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+                self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
+            }
+
             modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
             modalTransitionAnimator?.behindViewScale = 1
 
