@@ -17,8 +17,6 @@ class APIShotsRequesterSpec: QuickSpec {
     override func spec() {
         
         var sut: APIShotsRequester!
-        var error: Error?
-        var didInvokePromise: Bool?
         
         beforeEach {
             sut = APIShotsRequester()
@@ -26,8 +24,6 @@ class APIShotsRequesterSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            error = nil
-            didInvokePromise = nil
             self.removeAllStubs()
         }
         
@@ -40,15 +36,8 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    firstly { _ -> Promise<Void> in
-                        sut.likeShot(Shot.fixtureShot())
-                    }.then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise: Promise<Void> = sut.likeShot(Shot.fixtureShot())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -60,13 +49,8 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("should like shot") {
-                    firstly { _ -> Promise<Void> in
-                        sut.likeShot(Shot.fixtureShot())
-                    }.then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise: Promise<Void> = sut.likeShot(Shot.fixtureShot())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
@@ -80,13 +64,8 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.unlikeShot(Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.unlikeShot(Shot.fixtureShot())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -98,11 +77,8 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("should like shot") {
-                    sut.unlikeShot(Shot.fixtureShot()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
-                    
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    let promise = sut.unlikeShot(Shot.fixtureShot())
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
@@ -117,42 +93,29 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should appear") {
-                    sut.isShotLikedByMe(Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.isShotLikedByMe(Shot.fixtureShot())
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
             context("and server respond with 200") {
-                
-                var isLikedByMe: Bool?
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
                     self.stub(everything, json([], status: 200))
                 }
                 
-                afterEach {
-                    isLikedByMe = nil
-                }
-                
                 it("shot should be liked by authenticated user") {
-                    sut.isShotLikedByMe(Shot.fixtureShot()).then { _isLikedByMe in
-                        isLikedByMe = _isLikedByMe
-                    }.catch { _ in fail() }
+                    let promise = sut.isShotLikedByMe(Shot.fixtureShot())
                     
-                    expect(isLikedByMe).toNotEventually(beNil())
-                    expect(isLikedByMe).toEventually(beTruthy())
+                    expect(promise).to(resolveWithValueMatching { (isLikedByMe: Bool) in
+                        expect(isLikedByMe).toNot(beNil())
+                        expect(isLikedByMe).to(beTruthy())
+                    })
                 }
             }
             
             context("and server respond with 404") {
-                
-                var isLikedByMe: Bool?
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
@@ -160,17 +123,13 @@ class APIShotsRequesterSpec: QuickSpec {
                     self.stub(everything, failure(error))
                 }
                 
-                afterEach {
-                    isLikedByMe = nil
-                }
-                
                 it("shot should not be liked by authenticated user") {
-                    sut.isShotLikedByMe(Shot.fixtureShot()).then { _isLikedByMe in
-                        isLikedByMe = _isLikedByMe
-                    }.catch { _ in fail() }
+                    let promise = sut.isShotLikedByMe(Shot.fixtureShot())
                     
-                    expect(isLikedByMe).toNotEventually(beNil())
-                    expect(isLikedByMe).toEventually(beFalsy())
+                    expect(promise).to(resolveWithValueMatching { (isLikedByMe: Bool) in
+                        expect(isLikedByMe).toNot(beNil())
+                        expect(isLikedByMe).to(beFalsy())
+                    })
                 }
             }
         }
@@ -178,7 +137,6 @@ class APIShotsRequesterSpec: QuickSpec {
         describe("when checking shot in user buckets") {
             
             context("should corectly return buckets") {
-                var buckets: [BucketType]!
                 
                 beforeEach {
                     TokenStorage.storeToken("fixture.token")
@@ -187,10 +145,11 @@ class APIShotsRequesterSpec: QuickSpec {
                 }
                 
                 it("should return 1 user bucket") {
-                    sut.userBucketsForShot(Shot.fixtureShot()).then{ _buckets in
-                        buckets = _buckets
-                    }.catch { _ in fail() }
-                    expect(buckets).toEventually(haveCount(1), timeout: 3)
+                    let promise = sut.userBucketsForShot(Shot.fixtureShot())
+                    
+                    expect(promise).to(resolveWithValueMatching { buckets in
+                        expect(buckets).to(haveCount(1))
+                    })
                 }
             }
         }
