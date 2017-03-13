@@ -17,7 +17,6 @@ class APICommentsRequesterSpec: QuickSpec {
     override func spec() {
         
         var sut: APICommentsRequester!
-        var comment: CommentType?
         
         beforeEach {
             sut = APICommentsRequester()
@@ -25,8 +24,6 @@ class APICommentsRequesterSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            error = nil
-            comment = nil
         }
         
         describe("when posting comment") {
@@ -74,11 +71,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be posted") {
-                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                        comment = _comment
-                    }.catch { _ in fail() }
+                    let promise = sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(comment).toNotEventually(beNil())
+                    expect(promise).to(resolveWithValueMatching { (comment: CommentType) in
+                        expect(comment).toNot(beNil())
+                    })
                 }
             }
         }
@@ -128,11 +125,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be posted") {
-                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                        comment = _comment
-                    }.catch { _ in fail() }
+                    let promise = sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(comment).toNotEventually(beNil())
+                    expect(promise).to(resolveWithValueMatching { (comment: CommentType) in
+                        expect(comment).toNot(beNil())
+                    })
                 }
             }
         }

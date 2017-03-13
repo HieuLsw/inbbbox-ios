@@ -37,24 +37,13 @@ class APIConnectionsProviderSpec: QuickSpec {
             
             context("and token doesn't exist") {
                 
-                var error: Error?
-                
                 beforeEach {
                     TokenStorage.clear()
                 }
                 
-                afterEach {
-                    error = nil
-                }
-                
                 it("error should appear") {
-                    sut.provideMyFollowees().then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    let promise = sut.provideMyFollowees()
+                    expect(promise).to(resolveWithError(type: VerifiableError.self))
                 }
             }
             
@@ -188,12 +177,13 @@ class APIConnectionsProviderSpec: QuickSpec {
             }
             
             it("for users, followers should be properly returned") {
-                sut.provideFollowersForUsers([User.fixtureUser(), User.fixtureUser()]).then { _followers -> Void in
-                    followers = _followers
-                }.catch { _ in fail() }
+                let promise = sut.provideFollowersForUsers([User.fixtureUser(), User.fixtureUser()])
                 
-                expect(followers).toNotEventually(beNil())
-                expect(followers).toEventually(haveCount(3))
+                expect(promise)
+                    .to(resolveWithValueMatching { followers in
+                        expect(followers).notTo(beNil())
+                        expect(followers).to(haveCount(3))
+                    })
             }
         }
     }

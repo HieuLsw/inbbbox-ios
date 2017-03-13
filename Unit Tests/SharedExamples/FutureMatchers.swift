@@ -34,6 +34,10 @@ public func resolveWithError<T, E: Error>(type: E.Type, timeout: TimeInterval = 
 }
 
 public func resolveWithSuccess<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
+    return resolveWithValueMatching(timeout: timeout) { _ in }
+}
+
+public func resolveWithValueMatching<T>(timeout: TimeInterval = 1.0, _ expectations: @escaping (T) -> Void) -> MatcherFunc<Promise<T>> {
     return MatcherFunc { actualExpression, failureMessage in
         failureMessage.postfixMessage = "resolve with success"
         
@@ -42,7 +46,8 @@ public func resolveWithSuccess<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Pr
         var success: Bool = false
         waitUntil(timeout: timeout) { done in
             promise
-                .then { _ -> Void in
+                .then { value -> Void in
+                    expectations(value)
                     success = true
                     done()
                 }

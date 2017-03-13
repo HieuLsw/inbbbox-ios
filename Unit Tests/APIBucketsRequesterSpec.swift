@@ -28,15 +28,6 @@ class APIBucketsRequesterSpec: QuickSpec {
         }
         
         describe("when posting new bucket") {
-            var bucket: BucketType?
-            
-            beforeEach {
-                bucket = nil
-            }
-            
-            afterEach {
-                bucket = nil
-            }
             
             context("and token does not exist") {
                 
@@ -58,11 +49,12 @@ class APIBucketsRequesterSpec: QuickSpec {
                 }
                 
                 it("bucket should be created") {
-                    sut.postBucket("fixture.name", description: nil).then { _bucket in
-                    bucket = _bucket
-                    }.catch { _ in fail("This should not be invoked") }
+                    let promise = sut.postBucket("fixture.name", description: nil)
                     
-                    expect(bucket).toNotEventually(beNil())
+                    expect(promise).to(resolveWithValueMatching { (bucket: BucketType) in
+                        expect(bucket).toNot(beNil())
+                    })
+
                 }
             }
         }
