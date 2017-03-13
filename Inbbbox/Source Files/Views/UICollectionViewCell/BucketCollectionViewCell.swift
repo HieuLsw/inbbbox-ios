@@ -71,6 +71,11 @@ class BucketCollectionViewCell: BaseInfoShotsCollectionViewCell, Reusable, Width
         }, completion: nil)
     }
     // MARK: - Lifecycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        clearImages()
+    }
 
     override func commonInit() {
         super.commonInit()
