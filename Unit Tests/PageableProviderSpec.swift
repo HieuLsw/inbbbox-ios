@@ -58,65 +58,37 @@ class PageableProviderSpec: QuickSpec {
         }
         
         describe("when providing first page with success") {
-            
-            var result: [ModelMock]?
-            
+
             beforeEach {
                 self.stub(everything, json([self.fixtureJSON]))
             }
             
             afterEach {
-                result = nil
                 self.removeAllStubs()
             }
             
             it("result should be properly returned") {
                 let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
-                promise.then { _result in
-                    result = _result
-                }.catch { _ in fail() }
                 
-                expect(result).toEventuallyNot(beNil())
-                expect(result).toEventually(haveCount(1))
+                expect(promise).to(resolveWithValueMatching { result in
+                    expect(result).to(haveCount(1))
+                })
             }
-            
             
             context("then next/previous page with unavailable pageable") {
                 
-                var error: Error!
-                
-                afterEach {
-                    error = nil
+                it("error should appear") {
+                    let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
+                    let nextPagePromise = promise.then { _ in sut.nextPageFor(ModelMock.self) }
+                    
+                    expect(nextPagePromise).to(resolveWithError(type: PageableProviderError.self))
                 }
                 
                 it("error should appear") {
-                    
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
+                    let previousPagePromise = promise.then { _ in sut.previousPageFor(ModelMock.self) }
                     
-                    promise.then { _ in
-                        sut.nextPageFor(ModelMock.self)
-                    }.then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is PageableProviderError).toEventually(beTruthy())
-                }
-                
-                it("error should appear") {
-                    
-                    let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
-                    
-                    promise.then { _ in
-                        sut.previousPageFor(ModelMock.self)
-                    }.then { _ -> Void in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
-                    
-                    expect(error is PageableProviderError).toEventually(beTruthy())
+                    expect(previousPagePromise).to(resolveWithError(type: PageableProviderError.self))
                 }
             }
             
@@ -128,38 +100,26 @@ class PageableProviderSpec: QuickSpec {
                 }
                 
                 it("results from next page should be properly returned") {
-                    
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
+                    let nextPagePromise = promise.then { _ in sut.nextPageFor(ModelMock.self) }
                     
-                    promise.then { _ in
-                        sut.nextPageFor(ModelMock.self)
-                    }.then { _result -> Void in
-                        result = _result
-                    }.catch { _ in fail() }
-                    
-                    expect(result).toEventuallyNot(beNil())
-                    expect(result).toEventually(haveCount(1))
+                    expect(nextPagePromise).to(resolveWithValueMatching { result in
+                        expect(result).to(haveCount(1))
+                    })
                 }
                 
-                it("results from next page should be properly returned") {
-                    
+                it("results from previous page should be properly returned") {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
+                    let nextPagePromise = promise.then { _ in sut.previousPageFor(ModelMock.self) }
                     
-                    promise.then { _ in
-                        sut.previousPageFor(ModelMock.self)
-                    }.then { _result -> Void in
-                        result = _result
-                    }.catch { _ in fail() }
-                    
-                    expect(result).toEventuallyNot(beNil())
-                    expect(result).toEventually(haveCount(1))
+                    expect(nextPagePromise).to(resolveWithValueMatching { result in
+                        expect(result).to(haveCount(1))
+                    })
                 }
             }
         }
         
         describe("when providing first page with network error") {
-            
-            var error: Error!
             
             beforeEach {
                 let error = NSError(domain: "", code: 0, userInfo: nil)
@@ -167,48 +127,28 @@ class PageableProviderSpec: QuickSpec {
             }
             
             afterEach {
-                error = nil
                 self.removeAllStubs()
             }
             
             it("error should appear") {
                 let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
-                promise.then { _ in
-                    fail()
-                }.catch { _error in
-                    error = _error
-                }
                 
-                expect(error).toEventuallyNot(beNil())
+                expect(promise).to(resolveWithError())
             }
         }
         
         describe("when providing next/previous page without using firstPage method first") {
             
-            var error: Error?
-            
-            afterEach {
-                error = nil
+            it("error should appear") {
+                let promise = sut.nextPageFor(ModelMock.self)
+                
+                expect(promise).to(resolveWithError(type: PageableProviderError.self))
             }
             
             it("error should appear") {
-                sut.nextPageFor(ModelMock.self).then { _ in
-                    fail()
-                }.catch { _error in
-                    error = _error
-                }
+                let promise = sut.previousPageFor(ModelMock.self)
                 
-                expect(error is PageableProviderError).toEventually(beTruthy())
-            }
-            
-            it("error should appear") {
-                sut.previousPageFor(ModelMock.self).then { _ in
-                    fail()
-                }.catch { _error in
-                    error = _error
-                }
-                
-                expect(error is PageableProviderError).toEventually(beTruthy())
+                expect(promise).to(resolveWithError(type: PageableProviderError.self))
             }
         }
     }
