@@ -37,7 +37,10 @@ class APIBucketsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.postBucket("fixture.name", description: nil)
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -54,7 +57,6 @@ class APIBucketsRequesterSpec: QuickSpec {
                     expect(promise).to(resolveWithValueMatching { (bucket: BucketType) in
                         expect(bucket).toNot(beNil())
                     })
-
                 }
             }
         }
@@ -68,7 +70,10 @@ class APIBucketsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -81,6 +86,7 @@ class APIBucketsRequesterSpec: QuickSpec {
                 
                 it("should add shot to bucket") {
                     let promise = sut.addShot(Shot.fixtureShot(), toBucket: Bucket.fixtureBucket())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -95,7 +101,10 @@ class APIBucketsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -108,6 +117,7 @@ class APIBucketsRequesterSpec: QuickSpec {
                 
                 it("should remove shot from bucket") {
                     let promise = sut.removeShot(Shot.fixtureShot(), fromBucket: Bucket.fixtureBucket())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }

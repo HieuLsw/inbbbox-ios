@@ -35,7 +35,9 @@ class APIBucketsProviderSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.provideMyBuckets()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             

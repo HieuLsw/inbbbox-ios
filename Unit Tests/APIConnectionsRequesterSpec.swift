@@ -37,7 +37,10 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.followUser(User.fixtureUser())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -50,6 +53,7 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("should follow user") {
                     let promise = sut.followUser(User.fixtureUser())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -65,7 +69,10 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.unfollowUser(User.fixtureUser())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -78,6 +85,7 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("should unfollow user") {
                     let promise = sut.followUser(User.fixtureUser())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -93,7 +101,10 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.isUserFollowedByMe(User.fixtureUser())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -106,6 +117,7 @@ class APIConnectionsRequesterSpec: QuickSpec {
                 
                 it("should unfollow user") {
                     let promise = sut.isUserFollowedByMe(User.fixtureUser())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }

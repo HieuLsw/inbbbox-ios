@@ -37,7 +37,10 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise: Promise<Void> = sut.likeShot(Shot.fixtureShot())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -50,6 +53,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 it("should like shot") {
                     let promise: Promise<Void> = sut.likeShot(Shot.fixtureShot())
+                   
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -65,7 +69,10 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.unlikeShot(Shot.fixtureShot())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -78,6 +85,7 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 it("should like shot") {
                     let promise = sut.unlikeShot(Shot.fixtureShot())
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -94,7 +102,10 @@ class APIShotsRequesterSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.isShotLikedByMe(Shot.fixtureShot())
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             

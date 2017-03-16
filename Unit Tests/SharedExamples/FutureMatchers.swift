@@ -10,34 +10,12 @@ import Quick
 import Nimble
 import PromiseKit
 
-public func resolveWithError<T>(type: Error.Type? = nil, timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
-    return MatcherFunc { actualExpression, failureMessage in
-        failureMessage.postfixMessage = "resolve with error of type <\(type)>"
-        
-        guard let promise = try actualExpression.evaluate() else { return false }
-        
-        var resolvedError: Error?
-        waitUntil(timeout: timeout) { done in
-            promise
-                .then { _ -> Void in
-                    failureMessage.extendedMessage = "Instead it resolved with success"
-                    done()
-                }
-                .catch { error in
-                    resolvedError = error
-                    done()
-                }
-        }
-        
-        guard let resolved = resolvedError else { return false }
-        guard let type = type else { return true }
-        
-        return type(of: resolved) == type
-    }
-}
-
 public func resolveWithSuccess<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
     return resolveWithValueMatching(timeout: timeout) { _ in }
+}
+
+public func resolveWithError<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
+    return resolveWithErrorMatching(timeout: timeout) { _ in }
 }
 
 public func resolveWithValueMatching<T>(timeout: TimeInterval = 1.0, _ expectations: @escaping (T) -> Void) -> MatcherFunc<Promise<T>> {
@@ -61,5 +39,29 @@ public func resolveWithValueMatching<T>(timeout: TimeInterval = 1.0, _ expectati
         }
         
         return success
+    }
+}
+
+public func resolveWithErrorMatching<T>(timeout: TimeInterval = 1.0, _ expectations: @escaping (Error) -> Void) -> MatcherFunc<Promise<T>> {
+    return MatcherFunc { actualExpression, failureMessage in
+        failureMessage.postfixMessage = "resolve with error"
+        
+        guard let promise = try actualExpression.evaluate() else { return false }
+        
+        var failure: Bool = false
+        waitUntil(timeout: timeout) { done in
+            promise
+                .then { value -> Void in
+                    failureMessage.extendedMessage = "Instead it resolved with success <\(value)>"
+                    done()
+                }
+                .catch { error in
+                    expectations(error)
+                    failure = true
+                    done()
+                }
+        }
+
+        return failure
     }
 }

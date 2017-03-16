@@ -39,7 +39,10 @@ class APIConnectionsProviderSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.provideMyFollowees()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -99,7 +102,10 @@ class APIConnectionsProviderSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.provideMyFollowers()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             

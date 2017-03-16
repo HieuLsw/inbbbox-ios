@@ -46,7 +46,10 @@ class APIShotsProviderSpec: QuickSpec {
                 
                 it("error should appear") {
                     let promise = sut.provideMyLikedShots()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
 
@@ -108,7 +111,8 @@ class APIShotsProviderSpec: QuickSpec {
             it("shots should be properly returned") {
                 let promise = sut.provideShotsForProject(Project.fixtureProject())
                 
-                expect(promise).to(resolveWithValueMatching { shots in                    expect(shots).toNot(beNil())
+                expect(promise).to(resolveWithValueMatching { shots in
+                    expect(shots).toNot(beNil())
                     expect(shots).to(haveCount(3))
                 })
             }
@@ -120,12 +124,18 @@ class APIShotsProviderSpec: QuickSpec {
                 
                 it("should raise an error") {
                     let promise = sut.nextPage()
-                    expect(promise).to(resolveWithError(type: PageableProviderError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(PageableProviderError.behaviourUndefined))
+                    })
                 }
                 
                 it("should raise an error") {
                     let promise = sut.previousPage()
-                    expect(promise).to(resolveWithError(type: PageableProviderError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(PageableProviderError.behaviourUndefined))
+                    })
                 }
             }
             

@@ -34,6 +34,7 @@ class PageRequestSpec: QuickSpec {
             
             it("should respond") {
                 let promise = sut.resume()
+                
                 expect(promise).to(resolveWithSuccess())
             }
         }
@@ -47,7 +48,11 @@ class PageRequestSpec: QuickSpec {
     
             it("should respond with proper json") {
                 let promise = sut.resume()
-                expect(promise).to(resolveWithError())
+                
+                expect(promise).to(resolveWithErrorMatching { error in
+                    let nsError = error as NSError
+                    expect(nsError.domain).to(equal("fixture.domain"))
+                })
             }
         }
     }

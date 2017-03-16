@@ -41,6 +41,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("authorization check should pass") {
                     let promise = sut.verifyAuthenticationStatus(false)
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -49,7 +50,10 @@ class VerifiableSpec: QuickSpec {
 
                 it("authorization check should throw error") {
                     let promise = sut.verifyAuthenticationStatus(true)
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
         }
@@ -64,6 +68,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("authorization check should pass") {
                     let promise = sut.verifyAuthenticationStatus(false)
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -72,6 +77,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("authorization check should pass") {
                     let promise = sut.verifyAuthenticationStatus(true)
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -87,7 +93,10 @@ class VerifiableSpec: QuickSpec {
                 
                 it("error should occur") {
                     let promise = sut.verifyAccountType()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.wrongAccountType))
+                    })
                 }
             }
             
@@ -100,7 +109,10 @@ class VerifiableSpec: QuickSpec {
                 
                 it("error should occur") {
                     let promise = sut.verifyAccountType()
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.wrongAccountType))
+                    })
                 }
             }
             
@@ -113,6 +125,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("validation should pass") {
                     let promise = sut.verifyAccountType()
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -124,7 +137,10 @@ class VerifiableSpec: QuickSpec {
                 
                 it("should not pass validation") {
                     let promise = sut.verifyTextLength("foo", min: 0, max: 2)
-                    expect(promise).to(resolveWithError(type: VerifiableError.self ))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.incorrectTextLength(2)))
+                    })
                 }
             }
             
@@ -132,7 +148,10 @@ class VerifiableSpec: QuickSpec {
                 
                 it("should not pass validation") {
                     let promise = sut.verifyTextLength("foobar", min: 8, max: 10)
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.incorrectTextLength(8)))
+                    })
                 }
             }
             
@@ -140,7 +159,10 @@ class VerifiableSpec: QuickSpec {
                 
                 it("should not pass validation") {
                     let promise = sut.verifyTextLength("foobar", min: 2, max: 0)
-                    expect(promise).to(resolveWithError(type: VerifiableError.self))
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.incorrectTextLength(2)))
+                    })
                 }
             }
             
@@ -148,6 +170,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("should pass validation") {
                     let promise = sut.verifyTextLength("   foo    ", min: 1, max: 3)
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }
@@ -156,6 +179,7 @@ class VerifiableSpec: QuickSpec {
                 
                 it("should pass validation") {
                     let promise = sut.verifyTextLength("foo", min: 1, max: 3)
+                    
                     expect(promise).to(resolveWithSuccess())
                 }
             }

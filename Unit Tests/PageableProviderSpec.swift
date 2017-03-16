@@ -81,14 +81,18 @@ class PageableProviderSpec: QuickSpec {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     let nextPagePromise = promise.then { _ in sut.nextPageFor(ModelMock.self) }
                     
-                    expect(nextPagePromise).to(resolveWithError(type: PageableProviderError.self))
+                    expect(nextPagePromise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(PageableProviderError.didReachLastPage))
+                    })
                 }
                 
                 it("error should appear") {
                     let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                     let previousPagePromise = promise.then { _ in sut.previousPageFor(ModelMock.self) }
                     
-                    expect(previousPagePromise).to(resolveWithError(type: PageableProviderError.self))
+                    expect(previousPagePromise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(PageableProviderError.didReachFirstPage))
+                    })
                 }
             }
             
@@ -122,7 +126,7 @@ class PageableProviderSpec: QuickSpec {
         describe("when providing first page with network error") {
             
             beforeEach {
-                let error = NSError(domain: "", code: 0, userInfo: nil)
+                let error = NSError(domain: "fixture.domain", code: 0, userInfo: nil)
                 self.stub(everything, failure(error))
             }
             
@@ -133,7 +137,10 @@ class PageableProviderSpec: QuickSpec {
             it("error should appear") {
                 let promise: Promise<[ModelMock]?> = sut.firstPageForQueries([QueryMock()], withSerializationKey: nil)
                 
-                expect(promise).to(resolveWithError())
+                expect(promise).to(resolveWithErrorMatching { error in
+                    let nsError = error as NSError
+                    expect(nsError.domain).to(equal("fixture.domain"))
+                })
             }
         }
         
@@ -142,13 +149,17 @@ class PageableProviderSpec: QuickSpec {
             it("error should appear") {
                 let promise = sut.nextPageFor(ModelMock.self)
                 
-                expect(promise).to(resolveWithError(type: PageableProviderError.self))
+                expect(promise).to(resolveWithErrorMatching { error in
+                    expect(error).to(matchError(PageableProviderError.behaviourUndefined))
+                })
             }
             
             it("error should appear") {
                 let promise = sut.previousPageFor(ModelMock.self)
                 
-                expect(promise).to(resolveWithError(type: PageableProviderError.self))
+                expect(promise).to(resolveWithErrorMatching { error in
+                    expect(error).to(matchError(PageableProviderError.behaviourUndefined))
+                })
             }
         }
     }

@@ -27,74 +27,29 @@ class ResponsableSpec: QuickSpec {
         
         describe("when respond with data") {
             
-            var response: Response?
-            var error: Error?
-            
-            beforeEach {
+            it("should have correct response") {
                 let data = try! JSONSerialization.data(withJSONObject: ["fixture.key" : "fixture.value"], options: .prettyPrinted)
-                sut.responseWithData(data, response: self.mockResponse(200)).then { _response in
-                    response = _response
-                }.catch { _ in fail() }
-            }
-            
-            afterEach {
-                response = nil
-                error = nil
-            }
-            
-            it("response should not be nil") {
-                expect(response).toNotEventually(beNil())
-            }
-            
-            it("response should have json") {
-                expect(response?.json).toNotEventually(beNil())
-            }
-            
-            it("response should have header") {
-                expect(response?.header).toNotEventually(beNil())
-            }
-            
-            it("response should have proper json") {
-                expect(response?.json?.dictionaryObject as? [String: String]).toEventually(equal(["fixture.key" : "fixture.value"]))
-            }
-            
-            it("response should have proper header") {
-                expect(response?.header as? [String: String]).toEventually(equal(["fixture.header" : "fixture.http.header.field"]))
-            }
-            
-            it("error should be nil") {
-                expect(error).toEventually(beNil())
+                let promise = sut.responseWithData(data, response: self.mockResponse(200))
+                
+                expect(promise).to(resolveWithValueMatching { response in
+                    let body = response.json?.dictionaryObject as? [String: String]
+                    let header = response.header as? [String: String]
+                    
+                    expect(body).to(equal(["fixture.key" : "fixture.value"]))
+                    expect(header).to(equal(["fixture.header" : "fixture.http.header.field"]))
+                })
             }
         }
         
         describe("when respond with server error") {
             
-            var response: Response?
-            var error: Error?
-            
-            beforeEach {
-                sut.responseWithData(nil, response: self.mockResponse(422)).then { _ -> Void in
-                    fail()
-                }.catch { _error in
-                    error = _error
-                }
-            }
-            
-            afterEach {
-                response = nil
-                error = nil
-            }
-            
-            it("response should be nil") {
-                expect(response).toEventually(beNil())
-            }
-            
-            it("error should not be nil") {
-                expect(error).toNotEventually(beNil())
-            }
-            
-            it("error should have corect localized message") {
-                expect((error as! NSError).domain).toEventually(equal(networkErrorDomain))
+            it("should raise proper error") {
+                let promise = sut.responseWithData(nil, response: self.mockResponse(422))
+                
+                expect(promise).to(resolveWithErrorMatching { error in
+                    let nsError = error as NSError
+                    expect(nsError.domain).to(equal(networkErrorDomain))
+                })
             }
         }
         

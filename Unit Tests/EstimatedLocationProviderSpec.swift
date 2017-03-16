@@ -55,7 +55,10 @@ class EstimatedLocationProviderSpec: QuickSpec {
             
             it("proper error should be returned") {
                 let promise = sut.obtainLocationBasedOnIp()
-                expect(promise).to(resolveWithError(type: EstimatedLocationProviderError.self))
+                
+                expect(promise).to(resolveWithErrorMatching { error in
+                    expect(error).to(matchError(EstimatedLocationProviderError.couldNotParseData))
+                })
             }
         }
         
@@ -68,7 +71,11 @@ class EstimatedLocationProviderSpec: QuickSpec {
             
             it("error should be returned") {
                 let promise = sut.obtainLocationBasedOnIp()
-                expect(promise).to(resolveWithError())
+                
+                expect(promise).to(resolveWithErrorMatching { error in
+                    let nsError = error as NSError
+                    expect(nsError.domain).to(equal("fixture.domain"))
+                })
             }
         }
     

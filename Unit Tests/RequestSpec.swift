@@ -72,7 +72,11 @@ class RequestSpec: QuickSpec {
                 
                 it("should respond with proper json") {
                     let promise = sut.resume()
-                    expect(promise).to(resolveWithError())
+                    
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        let nsError = error as NSError
+                        expect(nsError.domain).to(equal("fixture.domain"))
+                    })
                 }
             }
         }
