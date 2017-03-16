@@ -55,38 +55,16 @@ class ResponsableSpec: QuickSpec {
         
         describe("when respond with dictionary of errors") {
             
-            var response: Response?
-            var error: Error?
-            
-            beforeEach {
+            it("should raise error with proper description") {
                 let json = ["errors" : [["message" : "fixture.message"]]]
                 let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                sut.responseWithData(data, response: self.mockResponse(422)).then { _ -> Void in
-                    fail()
-                }.catch { _error in
-                    error = _error
-                }
-            }
-            
-            afterEach {
-                response = nil
-                error = nil
-            }
-            
-            it("response should be nil") {
-                expect(response).toEventually(beNil())
-            }
-            
-            it("response should not have json") {
-                expect(response?.json).toEventually(beNil())
-            }
-            
-            it("error should not be nil") {
-                expect(error).toNotEventually(beNil())
-            }
-            
-            it("error should have corect localized message") {
-                expect((error as! NSError).localizedDescription).toEventually(equal("fixture.message"))
+                
+                let promise = sut.responseWithData(data, response: self.mockResponse(422))
+                
+                expect(promise).to(resolveWithErrorMatching { error in
+                    let nsError = error as NSError
+                    expect(nsError.localizedDescription).to(equal("fixture.message"))
+                })
             }
         }
     }
