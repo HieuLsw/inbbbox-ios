@@ -49,6 +49,7 @@ You're more than welcome to contribute. Just try to follow our [coding style gui
     * [Michał Parulski](https://dribbble.com/Shuma87)
     * [Magdalena Sitarek](https://www.linkedin.com/in/magdalenasitarek)
     * [Dawid Woźniak](https://dribbble.com/dawidw)
+    * [Paweł Kontek](https://dribbble.com/pawelkontek)
 
 * [Developers Team](https://github.com/netguru/inbbbox-ios/graphs/contributors)
 
@@ -64,6 +65,10 @@ You're more than welcome to contribute. Just try to follow our [coding style gui
     * [Robert Abramczyk](https://github.com/Malibris)
     * [Tomasz Walenciak](https://github.com/twalenciak)
     * [Błażej Wdowikowski](https://github.com/bwdowikowski)
+    * [Dawid Markowski](://github.com/dwdmarkowski)
+    * [Miłosz Filimowski](https://github.com/MiloszFilimowski)
+    * [Piotr Torczyński](https://github.com/Myrenkar)
+    * [Krzysztof Kapitan](https://github.com/kkapitan)
 
 Copyright © 2016 [Netguru](http://netguru.co).
 
