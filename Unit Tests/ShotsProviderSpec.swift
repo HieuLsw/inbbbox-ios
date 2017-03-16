@@ -42,8 +42,6 @@ class ShotsProviderSpec: QuickSpec {
 
         describe("provide my liked shots") {
 
-            var likedShots: [ShotType]!
-
             context("when user is not signed in") {
 
                 var inMemoryManagedObjectContext: NSManagedObjectContext!
@@ -57,19 +55,17 @@ class ShotsProviderSpec: QuickSpec {
                     managedShotsProviderMock.provideLikedShotsStub.on(any(), return: Promise<[LikedShot]?> { fulfill, _ in fulfill([likedManagedShot]) })
                     sut.managedShotsProvider = managedShotsProviderMock
 
-                    firstly {
-                        sut.provideMyLikedShots()
-                    }.then { shots in
-                        likedShots = shots?.map({ $0.shot })
-                    }.catch { error in
-                        print(error)
-                    }
                 }
 
                 it("should return proper shots") {
-                    expect(likedShots.count).toEventually(equal(1))
-                    let firstShot = likedShots[0]
-                    expect(firstShot.identifier).toEventually(equal("fixture managed shot identifier"))
+                    let promise = sut.provideMyLikedShots()
+                    
+                    expect(promise).to(resolveWithValueMatching { shots in
+                        let likedShots = shots?.map { $0.shot }
+                        
+                        expect(likedShots).to(haveCount(1))
+                        expect(likedShots?.first?.identifier).to(equal("fixture managed shot identifier"))
+                    })
                 }
             }
 
@@ -88,19 +84,14 @@ class ShotsProviderSpec: QuickSpec {
                 }
 
                 it("should return proper shots") {
-
-                    waitUntil { done in
-                        firstly {
-                            sut.provideMyLikedShots()
-                        }.then { shots -> Void in
-                            likedShots = shots?.map({ $0.shot })
-                            done()
-                        }.catch { _ in }
-                    }
-
-                    expect(likedShots.count).toEventually(equal(1))
-                    let firstShot = likedShots[0]
-                    expect(firstShot.identifier).toEventually(equal("fixture api shot identifier"))
+                    let promise = sut.provideMyLikedShots()
+                    
+                    expect(promise).to(resolveWithValueMatching { shots in
+                        let likedShots = shots?.map { $0.shot }
+                        
+                        expect(likedShots).to(haveCount(1))
+                        expect(likedShots?.first?.identifier).to(equal("fixture api shot identifier"))
+                    })
                 }
             }
         }

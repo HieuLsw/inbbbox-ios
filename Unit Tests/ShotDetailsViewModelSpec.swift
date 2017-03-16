@@ -18,17 +18,11 @@ class ShotDetailsViewModelSpec: QuickSpec {
     override func spec() {
         
         var sut: ShotDetailsViewModel!
-        var shot: ShotType!
-        var commentsProviderMock: APICommentsProviderMock!
-        var commentsRequesterMock: APICommentsRequesterMock!
         
         beforeEach {
-            shot = Shot.fixtureShot()
-            sut = ShotDetailsViewModel(shot: shot, isLiked: nil)
-            commentsProviderMock = APICommentsProviderMock()
-            commentsRequesterMock = APICommentsRequesterMock()
-            sut.commentsProvider = commentsProviderMock
-            sut.commentsRequester = commentsRequesterMock
+            let shot = Shot.fixtureShot()
+            let commentsProviderMock = APICommentsProviderMock()
+            let commentsRequesterMock = APICommentsRequesterMock()
             
             commentsProviderMock.provideCommentsForShotStub.on(any()) { _ in
                 return Promise{ fulfill, _ in
@@ -68,11 +62,13 @@ class ShotDetailsViewModelSpec: QuickSpec {
             commentsRequesterMock.deleteCommentStub.on(any()) { _, _ in
                 return Promise<Void>(value: Void())
             }
+            
+            sut = ShotDetailsViewModel(shot: shot, isLiked: nil)
+            sut.commentsProvider = commentsProviderMock
+            sut.commentsRequester = commentsRequesterMock
         }
         
         afterEach {
-            shot = nil
-            commentsProviderMock = nil
             sut = nil
         }
         
@@ -89,76 +85,34 @@ class ShotDetailsViewModelSpec: QuickSpec {
         
         describe("when comments are loaded for the first time") {
             
-            var didReceiveResponse: Bool?
-            
-            beforeEach {
-                didReceiveResponse = false
-                waitUntil { done in
-                    sut.loadComments().then { result -> Void in
-                        didReceiveResponse = true
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-            
-            afterEach {
-                didReceiveResponse = nil
-            }
-            
-            it("commments should be properly downloaded") {
-                expect(didReceiveResponse).to(beTruthy())
-                expect(didReceiveResponse).toNot(beNil())
-            }
-            
             it("view model should have correct number of items") {
+                let promise = sut.loadComments()
+                
                 // 10 comments + operationCell + descriptionCell + loadMoreCell
-                expect(sut.itemsCount).to(equal(13))
+                expect(promise).to(resolveWithValueMatching { _ in
+                    expect(sut.itemsCount).to(equal(13))
+                })
             }
         }
         
         describe("when comments are loaded with pagination") {
             
-            beforeEach {
-                waitUntil { done in
-                    sut.loadComments().then { result in
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-                
-                waitUntil { done in
-                    sut.loadComments().then { result in
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-        
             it("view model should have correct number of items") {
+                let promise = sut.loadComments().then { sut.loadComments() }
+                
                 // 10 comments + 5 comments (nextPage) + operationCell + descriptionCell + loadMoreCell
-                expect(sut.itemsCount).to(equal(18))
+                expect(promise).to(resolveWithValueMatching { _ in
+                    expect(sut.itemsCount).to(equal(18))
+                })
             }
         }
         
         describe("when posting comment") {
             
-            var didReceiveResponse: Bool?
-            
-            beforeEach {
-                didReceiveResponse = false
-                waitUntil { done in
-                    sut.postComment("fixture.message").then { result -> Void in
-                        didReceiveResponse = true
-                        done()
-                    }.catch { _ in fail("This should not be invoked") }
-                }
-            }
-            
-            afterEach {
-                didReceiveResponse = nil
-            }
-            
             it("should be correctly added") {
-                expect(didReceiveResponse).to(beTruthy())
-                expect(didReceiveResponse).toNot(beNil())
+                let promise = sut.postComment("fixture.message")
+                
+                expect(promise).to(resolveWithSuccess())
             }
         }
     }
