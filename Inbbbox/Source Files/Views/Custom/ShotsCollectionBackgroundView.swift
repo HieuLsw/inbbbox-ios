@@ -5,6 +5,11 @@
 import PureLayout
 import UIKit
 
+struct ScreenSize {
+    static let iPhone4OrLess = UIScreen.main.bounds.height < 568
+    static let iPhoneSE = UIScreen.main.bounds.height == 568
+}
+
 struct ShotsCollectionBackgroundViewSpacing {
     
     static let logoDefaultVerticalInset = CGFloat(60)
@@ -18,7 +23,7 @@ struct ShotsCollectionBackgroundViewSpacing {
     
     static let containerDefaultVerticalSpacing = CGFloat(70)
     
-    static let skipButtonBottomInset = CGFloat(119)
+    static let skipButtonBottomInset = CGFloat(ScreenSize.iPhone4OrLess ? 40 : (ScreenSize.iPhoneSE ? 90 : 119))
 }
 
 class ShotsCollectionSourceItem {
@@ -48,7 +53,8 @@ class ShotsCollectionBackgroundView: UIView {
     let arrowImageView = UIImageView(image: UIImage(named: "ic-arrow"))
     
     let showingYouLabel = UILabel()
-    
+
+    let mySetItem = ShotsCollectionSourceItem()
     let followingItem = ShotsCollectionSourceItem()
     let newTodayItem = ShotsCollectionSourceItem()
     let popularTodayItem = ShotsCollectionSourceItem()
@@ -98,7 +104,7 @@ class ShotsCollectionBackgroundView: UIView {
             containerView.autoPinEdge(toSuperviewEdge: .top, withInset: ShotsCollectionBackgroundViewSpacing.containerDefaultVerticalSpacing)
             containerView.autoAlignAxis(toSuperviewAxis: .vertical)
             containerView.autoSetDimensions(to: CGSize(width: 150, height: 4 * ShotsCollectionBackgroundViewSpacing.labelDefaultHeight))
-            let items = [followingItem, newTodayItem, popularTodayItem, debutsItem]
+            let items = [mySetItem, followingItem, newTodayItem, popularTodayItem, debutsItem]
         
             for (index, item) in items.enumerated() {
                 item.heightConstraint = item.label.autoSetDimension(.height, toSize: 0)
@@ -126,16 +132,23 @@ class ShotsCollectionBackgroundView: UIView {
 extension ShotsCollectionBackgroundView {
     
     func prepareAnimatableContent() {
+        mySetItem.visible = false
         followingItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.Following : Settings.StreamSource.SelectedStreamSource == .following
         newTodayItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.NewToday : Settings.StreamSource.SelectedStreamSource == .newToday
         popularTodayItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.PopularToday : Settings.StreamSource.SelectedStreamSource == .popularToday
         debutsItem.visible = Settings.StreamSource.SelectedStreamSource == .mySet ? Settings.StreamSource.Debuts : Settings.StreamSource.SelectedStreamSource == .debuts
-        for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
+        for item in [mySetItem, followingItem, newTodayItem, popularTodayItem, debutsItem] {
             item.verticalSpacingConstraint?.constant = 0
         }
     }
     
     func availableItems() -> [ShotsCollectionSourceItem] {
+        if (ScreenSize.iPhone4OrLess || ScreenSize.iPhoneSE) && Settings.StreamSource.SelectedStreamSource == .mySet {
+            let items = [mySetItem]
+            mySetItem.visible = true
+            return items
+        }
+        
         var items = [ShotsCollectionSourceItem]()
         for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
             if (item.visible) {
@@ -149,11 +162,12 @@ extension ShotsCollectionBackgroundView {
 fileprivate extension ShotsCollectionBackgroundView {
 
     func setupItems() {
+        mySetItem.label.text = Localized("SettingsViewModel.MySet", comment: "User settings, enable user's set")
         followingItem.label.text = Localized("SettingsViewModel.Following", comment: "User settings, enable following")
         newTodayItem.label.text = Localized("SettingsViewModel.NewToday", comment: "User settings, enable new today")
         popularTodayItem.label.text = Localized("SettingsViewModel.Popular", comment: "User settings, enable popular")
         debutsItem.label.text = Localized("SettingsViewModel.Debuts", comment: "User settings, enable debuts")
-        for item in [followingItem, newTodayItem, popularTodayItem, debutsItem] {
+        for item in [mySetItem, followingItem, newTodayItem, popularTodayItem, debutsItem] {
             item.label.textAlignment = .center
             item.label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
             item.label.textColor = UIColor.RGBA(143, 142, 148, 1)

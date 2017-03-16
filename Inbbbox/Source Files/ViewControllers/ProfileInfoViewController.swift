@@ -10,14 +10,14 @@ import PromiseKit
 import UIKit
 import ZFDragableModalTransition
 
-final class ProfileInfoViewController: UIViewController, ContainingScrollableView {
+final class ProfileInfoViewController: UIViewController, ContainingScrollableView, PresentingDraggableModal {
 
     fileprivate let viewModel: ProfileInfoViewModel
 
     fileprivate var currentColorMode = ColorModeProvider.current()
 
     fileprivate var currentContainer = [ShotType]()
-    fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
+    internal var modalTransitionAnimator: ZFModalTransitionAnimator?
     
     fileprivate var profileInfoView: ProfileInfoView! {
         return view as? ProfileInfoView
@@ -292,7 +292,11 @@ extension ProfileInfoViewController {
         
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: controller)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
-        
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
+        }
+
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         modalTransitionAnimator?.behindViewScale = 1
         

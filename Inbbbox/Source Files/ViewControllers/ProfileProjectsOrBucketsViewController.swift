@@ -9,7 +9,7 @@ import UIKit
 import ZFDragableModalTransition
 import PeekPop
 
-class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTouch, ContainingScrollableView {
+class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTouch, ContainingScrollableView, PresentingDraggableModal {
 
     /// Defines which view model should be loaded
     enum ProfileProjectsOrBucketsType: String {
@@ -28,7 +28,7 @@ class ProfileProjectsOrBucketsViewController: UITableViewController, Support3DTo
     fileprivate var rowsOffset = [Int: CGFloat]()
     fileprivate var currentContainer = [ShotType]()
 
-    fileprivate var modalTransitionAnimator: ZFModalTransitionAnimator?
+    internal var modalTransitionAnimator: ZFModalTransitionAnimator?
 
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
@@ -203,6 +203,10 @@ private extension ProfileProjectsOrBucketsViewController {
 
         let shotDetailsPageDataSource = ShotDetailsPageViewControllerDataSource(shots: currentContainer, initialViewController: controller)
         let pageViewController = ShotDetailsPageViewController(shotDetailsPageDataSource: shotDetailsPageDataSource)
+
+        pageViewController.didUpdateInternalViewController = { [weak self] viewController in
+            self?.assignTransitioningDelegate(for: viewController, in: pageViewController, behindViewScale: 1)
+        }
 
         modalTransitionAnimator = CustomTransitions.pullDownToCloseTransitionForModalViewController(pageViewController)
         modalTransitionAnimator?.behindViewScale = 1
