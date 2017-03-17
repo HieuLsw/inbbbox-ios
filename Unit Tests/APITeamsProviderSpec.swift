@@ -16,7 +16,6 @@ import Dobby
 class APITeamsProviderSpec: QuickSpec {
     override func spec() {
         
-        var users: [UserType]?
         var sut: APITeamsProviderPrivateMock!
         
         beforeEach {
@@ -25,18 +24,17 @@ class APITeamsProviderSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            users = nil
         }
         
         describe("when providing members for team") {
             
             it("members should be properly returned") {
-                sut.provideMembers(forTeam: Team.fixtureTeam()).then { _users -> Void in
-                    users = _users
-                }.catch { _ in fail("This should not be invoked") }
+                let promise = sut.provideMembers(forTeam: Team.fixtureTeam())
                 
-                expect(users).toNotEventually(beNil())
-                expect(users).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { users in
+                    expect(users).toNot(beNil())
+                    expect(users).to(haveCount(3))
+                })
             }
             
         }
@@ -44,24 +42,24 @@ class APITeamsProviderSpec: QuickSpec {
         describe("when providing members from next page") {
             
             it("members should be properly returned") {
-                sut.nextPage().then { _users -> Void in
-                    users = _users
-                }.catch { _ in fail("This should not be invoked") }
+                let promise = sut.nextPage()
                 
-                expect(users).toNotEventually(beNil())
-                expect(users).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { users in
+                    expect(users).toNot(beNil())
+                    expect(users).to(haveCount(3))
+                })
             }
         }
         
         describe("when providing members from previous page") {
             
             it("members should be properly returned") {
-                sut.previousPage().then { _users -> Void in
-                    users = _users
-                }.catch { _ in fail("This should not be invoked") }
+                let promise = sut.previousPage()
                 
-                expect(users).toNotEventually(beNil())
-                expect(users).toEventually(haveCount(3))
+                expect(promise).to(resolveWithValueMatching { users in
+                    expect(users).toNot(beNil())
+                    expect(users).to(haveCount(3))
+                })
             }
         }
     }

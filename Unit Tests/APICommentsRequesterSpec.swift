@@ -17,8 +17,6 @@ class APICommentsRequesterSpec: QuickSpec {
     override func spec() {
         
         var sut: APICommentsRequester!
-        var error: Error?
-        var comment: CommentType?
         
         beforeEach {
             sut = APICommentsRequester()
@@ -26,8 +24,6 @@ class APICommentsRequesterSpec: QuickSpec {
         
         afterEach {
             sut = nil
-            error = nil
-            comment = nil
         }
         
         describe("when posting comment") {
@@ -44,13 +40,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -62,13 +56,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.wrongAccountType))
+                    })
                 }
             }
             
@@ -85,11 +77,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be posted") {
-                    sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                        comment = _comment
-                    }.catch { _ in fail() }
+                    let promise = sut.postCommentForShot(Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(comment).toNotEventually(beNil())
+                    expect(promise).to(resolveWithValueMatching { (comment: CommentType) in
+                        expect(comment).toNot(beNil())
+                    })
                 }
             }
         }
@@ -108,13 +100,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -126,13 +116,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.wrongAccountType))
+                    })
                 }
             }
             
@@ -149,23 +137,17 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be posted") {
-                    sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text").then { _comment in
-                        comment = _comment
-                    }.catch { _ in fail() }
+                    let promise = sut.updateComment(Comment.fixtureComment(), forShot: Shot.fixtureShot(), withText: "fixture.text")
                     
-                    expect(comment).toNotEventually(beNil())
+                    expect(promise).to(resolveWithValueMatching { (comment: CommentType) in
+                        expect(comment).toNot(beNil())
+                    })
                 }
             }
         }
         
         describe("when deleting comment") {
             
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                didInvokePromise = nil
-            }
-            
             afterEach {
                 TokenStorage.clear()
                 UserStorage.clearUser()
@@ -178,13 +160,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -196,13 +176,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.wrongAccountType))
+                    })
                 }
             }
             
@@ -219,22 +197,14 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be posted") {
-                    sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
+                    let promise = sut.deleteComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when liking comment") {
-            
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                didInvokePromise = nil
-            }
             
             afterEach {
                 TokenStorage.clear()
@@ -248,13 +218,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -271,22 +239,14 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be marked as liked") {
-                    sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
+                    let promise = sut.likeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when unliking comment") {
-            
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                didInvokePromise = nil
-            }
             
             afterEach {
                 TokenStorage.clear()
@@ -300,13 +260,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -323,23 +281,15 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be marked as unliked") {
-                    sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
+                    let promise = sut.unlikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }
         
         describe("when checking if user did like a comment") {
-            
-            var didInvokePromise: Bool?
-            
-            beforeEach {
-                didInvokePromise = nil
-            }
-            
+
             afterEach {
                 TokenStorage.clear()
                 UserStorage.clearUser()
@@ -352,13 +302,11 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("error should occur") {
-                    sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        fail()
-                    }.catch { _error in
-                        error = _error
-                    }
+                    let promise = sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(error is VerifiableError).toEventually(beTruthy())
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        expect(error).to(matchError(VerifiableError.authenticationRequired))
+                    })
                 }
             }
             
@@ -375,11 +323,9 @@ class APICommentsRequesterSpec: QuickSpec {
                 }
                 
                 it("comment should be checked for like") {
-                    sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot()).then { _ in
-                        didInvokePromise = true
-                    }.catch { _ in fail() }
+                    let promise = sut.checkIfLikeComment(Comment.fixtureComment(), forShot: Shot.fixtureShot())
                     
-                    expect(didInvokePromise).toEventually(beTruthy(), timeout: 3)
+                    expect(promise).to(resolveWithSuccess())
                 }
             }
         }

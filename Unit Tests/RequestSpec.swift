@@ -38,8 +38,6 @@ class RequestSpec: QuickSpec {
 
             context("when sending data with success") {
                 
-                var response: JSON?
-                
                 beforeEach {
                     let body = ["fixture.key": "fixture.value"]
                     self.stub(everything, json(body))
@@ -47,27 +45,21 @@ class RequestSpec: QuickSpec {
                 
                 afterEach {
                     self.removeAllStubs()
-                    response = nil
                 }
                 
                 it("should respond with proper json") {
+                    let promise = sut.resume()
                     
-                    waitUntil { done in
+                    expect(promise).to(resolveWithValueMatching { (response: JSON?) in
+                        let dictionary = response?.dictionaryObject as? [String: String]
                         
-                        sut.resume().then { _response -> Void in
-                            response = _response
-                            done()
-                        }.catch { _ in fail() }
-                    }
-                    
-                    expect(response).toNot(beNil())
-                    expect(response?.dictionaryObject as? [String: String]).to(equal(["fixture.key": "fixture.value"]))
+                        expect(dictionary).toNot(beNil())
+                        expect(dictionary).to(equal(["fixture.key": "fixture.value"]))
+                    })
                 }
             }
             
             context("when sending data with failure") {
-                
-                var error: Error?
                 
                 beforeEach {
                     let error = NSError(domain: "fixture.domain", code: 0, userInfo: nil)
@@ -75,24 +67,16 @@ class RequestSpec: QuickSpec {
                 }
                 
                 afterEach {
-                    error = nil
                     self.removeAllStubs()
                 }
                 
                 it("should respond with proper json") {
+                    let promise = sut.resume()
                     
-                    waitUntil { done in
-                        
-                        sut.resume().then { _ -> Void in
-                            fail()
-                        }.catch { _error in
-                            error = _error
-                            done()
-                        }
-                    }
-                    
-                    expect(error).toNot(beNil())
-                    expect((error as! NSError).domain).to(equal("fixture.domain"))
+                    expect(promise).to(resolveWithErrorMatching { error in
+                        let nsError = error as NSError
+                        expect(nsError.domain).to(equal("fixture.domain"))
+                    })
                 }
             }
         }

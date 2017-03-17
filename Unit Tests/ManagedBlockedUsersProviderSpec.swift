@@ -32,28 +32,27 @@ class ManagedBlockedUsersProviderSpec: QuickSpec {
         }
 
         describe("Blocked users") {
+            var blockedUsersRequester: ManagedBlockedUsersRequester!
+            
+            context("providing blocked users") {
 
-            context("providing plocked users") {
-
-                var blockedUsers: [UserType]?
-                
                 beforeEach {
                     user = User.fixtureUser()
+                    blockedUsersRequester = ManagedBlockedUsersRequester(managedObjectContext: inMemoryManagedObjectContext)
+
                 }
 
                 it("all blocked users should be returned") {
-                    let blockedUsersRequester = ManagedBlockedUsersRequester(managedObjectContext: inMemoryManagedObjectContext)
-
-                    _ = firstly {
+                    let promise = firstly {
                         blockedUsersRequester.block(user: user)
                     }.then {
                         sut.provideBlockedUsers()
-                    }.then { users -> Void in
-                        blockedUsers = users
                     }
-                    expect(blockedUsers?.count).toEventually(equal(1))
+                    
+                    expect(promise).to(resolveWithValueMatching { blockedUsers in
+                        expect(blockedUsers).to(haveCount(1))
+                    })
                 }
-
             }
         }
     }

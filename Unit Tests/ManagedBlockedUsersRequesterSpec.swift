@@ -40,30 +40,24 @@ class ManagedBlockedUsersRequesterSpec: QuickSpec {
 
         describe("performing user block operations") {
 
-            var blockedUsers: [UserType]?
-
             beforeEach {
                 user = User.fixtureUser()
-            }
-
-            afterEach {
-                blockedUsers = nil
             }
 
             context("blocking user") {
 
                 it("user should be remembered as blocked") {
-                    _ = firstly {
+                    let promise = firstly {
                         sut.block(user: user)
                     }.then {
                         inMemoryManagedUserProvider.provideBlockedUsers()
-                    }.then { users -> Void in
-                        blockedUsers = users
                     }
-                    expect(blockedUsers?.count).toEventually(equal(1))
-                    expect(blockedUsers?.first?.identifier).toEventually(equal(user.identifier))
+                    
+                    expect(promise).to(resolveWithValueMatching { blockedUsers in
+                        expect(blockedUsers).to(haveCount(1))
+                        expect(blockedUsers?.first?.identifier).to(equal(user.identifier))
+                    })
                 }
-
             }
 
             context("unblocking already blocked user") {
@@ -78,14 +72,15 @@ class ManagedBlockedUsersRequesterSpec: QuickSpec {
                 }
 
                 it("user should be removed from blocked") {
-                    _ = firstly {
+                    let promise = firstly {
                         sut.unblock(user: user)
                     }.then {
                         inMemoryManagedUserProvider.provideBlockedUsers()
-                    }.then { users -> Void in
-                        blockedUsers = users
                     }
-                    expect(blockedUsers?.count).toEventually(equal(0))
+                    
+                    expect(promise).to(resolveWithValueMatching { blockedUsers in
+                        expect(blockedUsers).to(haveCount(0))
+                    })
                 }
 
             }

@@ -37,7 +37,6 @@ class ManagedProjectsProviderSpec: QuickSpec {
         
         describe("provide projects for shot") {
             
-            
             var project: ProjectType!
             var shot: ManagedShot!
             
@@ -50,13 +49,12 @@ class ManagedProjectsProviderSpec: QuickSpec {
             }
             
             it("should return 1 project") {
+                let promise = sut.provideProjectsForShot(shot)
                 
-                expect(project).toNotEventually(beNil())
-                _ = firstly {
-                    sut.provideProjectsForShot(shot)
-                }.then { projects in
-                    project = projects!.first!
-                }
+                expect(promise).to(resolveWithValueMatching { projects in
+                    expect(projects).to(haveCount(1))
+                    expect(projects?.first?.identifier).to(equal(project.identifier))
+                })
             }
         }
     }

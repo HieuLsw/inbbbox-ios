@@ -30,25 +30,28 @@ class NightModeHoursProviderSpec: QuickSpec {
             
             it("should return proper dates") {
                 let date = Date(timeIntervalSince1970: 0)
-                var sunriseComponents: DateComponents?
-                var sunsetComponents: DateComponents?
-                _ = sut.sunStateHours(for: date).then { hours -> Void in
+                let promise = sut.sunStateHours(for: date)
+                    
+                expect(promise).to(resolveWithValueMatching { hours in
+                    
                     let timeZone = TimeZone(abbreviation: "GMT")!
+                    
                     var calendar = Calendar(identifier: Calendar.Identifier.gregorian)
                     calendar.timeZone = timeZone
-                    sunriseComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunrise)
-                    sunsetComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunset)
-                }
-                //correct sunrise time at 01.01.1970 is 07:02:45
-                expect(sunriseComponents).toNotEventually(beNil())
-                expect(sunriseComponents!.hour).toEventually(equal(7))
-                expect(sunriseComponents!.minute).toEventually(equal(2))
-                expect(sunriseComponents!.second).toEventually(equal(45))
-                
-                //correct sunset time at 01.01.1970 is 14:49:11
-                expect(sunsetComponents!.hour).toEventually(equal(14))
-                expect(sunsetComponents!.minute).toEventually(equal(49))
-                expect(sunsetComponents!.second).toEventually(equal(11))
+                    
+                    let sunriseComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunrise)
+                    let sunsetComponents = calendar.dateComponents([.hour, .minute, .second], from: hours.nextSunset)
+                    
+                    //correct sunrise time at 01.01.1970 is 07:02:45
+                    expect(sunriseComponents.hour).to(equal(7))
+                    expect(sunriseComponents.minute).to(equal(2))
+                    expect(sunriseComponents.second).to(equal(45))
+                    
+                    //correct sunset time at 01.01.1970 is 14:49:11
+                    expect(sunsetComponents.hour).to(equal(14))
+                    expect(sunsetComponents.minute).to(equal(49))
+                    expect(sunsetComponents.second).to(equal(11))
+                })
             }
         }
     }

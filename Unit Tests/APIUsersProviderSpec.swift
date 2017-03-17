@@ -19,7 +19,6 @@ class APIUsersProviderSpec: QuickSpec {
     override func spec() {
         
         var sut: APIUsersProvider!
-        var fetchedUser: UserType?
         
         beforeEach {
             sut = APIUsersProvider()
@@ -39,13 +38,9 @@ class APIUsersProviderSpec: QuickSpec {
                 self.removeAllStubs()
             }
             
-            it("for id") {
-                
-                _ = sut.provideUser("fixture").then { user in
-                    fetchedUser = user
-                }
-                
-                expect(fetchedUser).toNotEventually(beNil())
+            it("returns user") {
+                let promise = sut.provideUser("fixture")
+                expect(promise).to(resolveWithSuccess())
             }
         }
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02B50F091E72DAC30072C616 /* FutureMatchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B50F081E72DAC30072C616 /* FutureMatchers.swift */; };
 		04A9CC59D8EA3EF3B3A67256 /* TeamMembersQuerySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EDA653A3DA2CD09CAE27C7 /* TeamMembersQuerySpec.swift */; };
 		05F74145EC28C27EA669E3DD /* BucketType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FF1834DBC26C763A50E414 /* BucketType.swift */; };
 		07284AFD9E7770553074663D /* GroupedListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69D89C1111F6B0FDC34081F /* GroupedListViewModel.swift */; };
@@ -496,6 +497,7 @@
 		0000A3B99783B1ED3BBC1D53 /* ManagedBucketsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagedBucketsProvider.swift; sourceTree = "<group>"; };
 		0004DA0CCE48EFA4895EF729 /* CommentQuerySpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CommentQuerySpec.swift; sourceTree = "<group>"; };
 		00D0A97D0A0BA8125148E7BA /* ShotsCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotsCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		02B50F081E72DAC30072C616 /* FutureMatchers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureMatchers.swift; sourceTree = "<group>"; };
 		02E6D2F38B35A7293F1227DF /* Settings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		039F794472634909548F9C0E /* APIShotsProviderSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIShotsProviderSpec.swift; sourceTree = "<group>"; };
 		042944E7496B50A9D5E53F51 /* ShotsCollectionViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShotsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -1024,6 +1026,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02B50F071E72DAB10072C616 /* Matchers */ = {
+			isa = PBXGroup;
+			children = (
+				02B50F081E72DAC30072C616 /* FutureMatchers.swift */,
+			);
+			name = Matchers;
+			path = SharedExamples;
+			sourceTree = "<group>";
+		};
 		0507D0A35CBA257DFCCCB941 /* SharedExamples */ = {
 			isa = PBXGroup;
 			children = (
@@ -1407,6 +1418,7 @@
 				BFB9DCEB18CAEB87EF7F444B /* Mock Objects */,
 				C793B4220E7BB68E6C3B711B /* Queries */,
 				475CB1F3D3817C84FF89A59D /* Resources */,
+				02B50F071E72DAB10072C616 /* Matchers */,
 				0507D0A35CBA257DFCCCB941 /* SharedExamples */,
 			);
 			path = "Unit Tests";
@@ -2653,6 +2665,7 @@
 				DEB8B690F5001B1103B222C6 /* ShotBucketsViewModelSpec.swift in Sources */,
 				4655A59186C10C2A828F9650 /* ShotCollectionViewCellSpec.swift in Sources */,
 				ECFBA598DE6524F332283B52 /* ShotDetailsViewModelSpec.swift in Sources */,
+				02B50F091E72DAC30072C616 /* FutureMatchers.swift in Sources */,
 				79EEE65D03E24057EDB2430A /* ShotsAnimatorSpec.swift in Sources */,
 				E22083BEA72A26FFA5515AC6 /* ShotsCollectionBackgroundViewSpec.swift in Sources */,
 				F6369DCDE86A468FEFCE8A02 /* ShotsCollectionViewFlowLayoutSpec.swift in Sources */,

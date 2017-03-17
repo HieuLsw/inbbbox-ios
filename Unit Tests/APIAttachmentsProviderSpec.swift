@@ -29,25 +29,15 @@ class APIAttachmentsProviderSpec: QuickSpec {
             
             context("and they exist") {
                 
-                var attachments: [Attachment]?
-                
-                afterEach {
-                    attachments = nil
-                }
-                
-                it("attachments should be properly returned") {
-                    waitUntil(timeout: 5) { done in
-                        sut.provideAttachmentsForShot(Shot.fixtureShot()).then { _attachments -> Void in
-                            attachments = _attachments
+                it("should be properly returned") {
+                    let promise = sut.provideAttachmentsForShot(Shot.fixtureShot())
+                    
+                    expect(promise).to(resolveWithValueMatching { attachments in
+                        expect(attachments).toNot(beNil())
+                        expect(attachments).to(haveCount(3))
+                        expect(attachments?.first?.identifier).to(equal("1"))
 
-                            expect(attachments).toNot(beNil())
-                            expect(attachments).to(haveCount(3))
-                            expect(attachments?.first?.identifier).to(equal("1"))
-
-                            done()
-
-                            }.catch { _ in fail() }
-                    }
+                    })
                 }
             }
         }
