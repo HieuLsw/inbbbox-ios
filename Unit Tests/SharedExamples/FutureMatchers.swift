@@ -10,15 +10,15 @@ import Quick
 import Nimble
 import PromiseKit
 
-public func resolveWithSuccess<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
+public func resolveWithSuccess<T>(timeout: TimeInterval = 2.0) -> MatcherFunc<Promise<T>> {
     return resolveWithValueMatching(timeout: timeout) { _ in }
 }
 
-public func resolveWithError<T>(timeout: TimeInterval = 1.0) -> MatcherFunc<Promise<T>> {
+public func resolveWithError<T>(timeout: TimeInterval = 2.0) -> MatcherFunc<Promise<T>> {
     return resolveWithErrorMatching(timeout: timeout) { _ in }
 }
 
-public func resolveWithValueMatching<T>(timeout: TimeInterval = 1.0, _ expectations: @escaping (T) -> Void) -> MatcherFunc<Promise<T>> {
+public func resolveWithValueMatching<T>(timeout: TimeInterval = 2.0, _ expectations: @escaping (T) -> Void) -> MatcherFunc<Promise<T>> {
     return MatcherFunc { actualExpression, failureMessage in
         failureMessage.postfixMessage = "resolve with success"
         
@@ -42,7 +42,7 @@ public func resolveWithValueMatching<T>(timeout: TimeInterval = 1.0, _ expectati
     }
 }
 
-public func resolveWithErrorMatching<T>(timeout: TimeInterval = 1.0, _ expectations: @escaping (Error) -> Void) -> MatcherFunc<Promise<T>> {
+public func resolveWithErrorMatching<T>(timeout: TimeInterval = 2.0, _ expectations: @escaping (Error) -> Void) -> MatcherFunc<Promise<T>> {
     return MatcherFunc { actualExpression, failureMessage in
         failureMessage.postfixMessage = "resolve with error"
         
