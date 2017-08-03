@@ -21,8 +21,8 @@ extension Attachment: Mappable {
         return { json in
             
             return Attachment(identifier: json[Key.Identifier.rawValue].stringValue,
-                               thumbnailURL: json[Key.ThumbnailURL.rawValue].URL,
-                               imageURL: json[Key.ImageURL.rawValue].URL)
+                               thumbnailURL: json[Key.ThumbnailURL.rawValue].url,
+                               imageURL: json[Key.ImageURL.rawValue].url)
         }
     }
     
