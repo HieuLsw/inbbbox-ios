@@ -72,7 +72,7 @@ extension Parameters {
                 URLQueryItem(name: key, value: {
                     if JSONSerialization.isValidJSONObject(value) {
                         if let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted),
-                            let stringValue = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String {
+                            let stringValue = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String? {
                                 return stringValue
                         }
                     }

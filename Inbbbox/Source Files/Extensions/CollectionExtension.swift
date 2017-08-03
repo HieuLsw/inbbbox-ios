@@ -24,7 +24,7 @@ private extension MutableCollection where Index == Int {
     mutating func shuffleInPlace() {
         if count < 2 { return }
 
-        for i in 0..<UInt32(count.toIntMax() - 1) {
+        for i in 0 ..< UInt32(count.toIntMax()) - 1 {
             let d = UInt32(count.toIntMax()) - i
             let random = arc4random_uniform(UInt32(d))
             let j = UInt32(random + i)

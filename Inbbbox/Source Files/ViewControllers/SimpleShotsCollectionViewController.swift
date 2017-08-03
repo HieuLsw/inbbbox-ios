@@ -21,6 +21,28 @@ class SimpleShotsCollectionViewController: TwoLayoutsCollectionViewController, S
     fileprivate var indexesToUpdateCellImage = [Int]()
     internal var peekPop: PeekPop?
     internal var didCheckedSupport3DForOlderDevices = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        viewModel?.delegate = self
+        navigationItem.title = viewModel?.title
+        guard let collectionView = collectionView else {
+            return
+        }
+        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
+        collectionView.emptyDataSetSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.clearViewModelIfNeeded()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel?.downloadInitialItems()
+        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
+    }
 }
 
 // MARK: Lifecycle
@@ -41,33 +63,6 @@ extension SimpleShotsCollectionViewController {
         self.init(oneColumnLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio,
             twoColumnsLayoutCellHeightToWidthRatio: SimpleShotCollectionViewCell.heightToWidthRatio)
         self.viewModel = LikesViewModel()
-    }
-}
-
-// MARK: UIViewController
-
-extension SimpleShotsCollectionViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        viewModel?.delegate = self
-        navigationItem.title = viewModel?.title
-        guard let collectionView = collectionView else {
-            return
-        }
-        collectionView.registerClass(SimpleShotCollectionViewCell.self, type: .cell)
-        collectionView.emptyDataSetSource = self
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel?.clearViewModelIfNeeded()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel?.downloadInitialItems()
-        addSupport3DForOlderDevicesIfNeeded(with: self, viewController: self, sourceView: collectionView!)
     }
 }
 
