@@ -33,7 +33,7 @@ extension Team: Mappable {
                 identifier: json[Key.identifier.rawValue].stringValue,
                 name: json[Key.name.rawValue].stringValue,
                 username: json[Key.username.rawValue].stringValue,
-                avatarURL: json[Key.avatar.rawValue].URL,
+                avatarURL: json[Key.avatar.rawValue].url,
                 createdAt: Formatter.Date.Timestamp.date(from: stringDate)!,
                 followersCount: json[Key.followersCount.rawValue].uIntValue,
                 followingsCount: json[Key.followingsCount.rawValue].uIntValue,

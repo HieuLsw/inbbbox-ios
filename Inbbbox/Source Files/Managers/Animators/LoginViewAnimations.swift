@@ -32,7 +32,7 @@ class LoginViewAnimations {
 
         let endValue = view.frame.height * 0.5
 
-        UIView.promise(animateWithDuration: 0.2) { 
+        _ = UIView.promise(animateWithDuration: 0.2) {
             view.layer.cornerRadius = 4
         }.then { _ in
             UIView.animate(withDuration: 0.5, animations: { 
@@ -80,7 +80,7 @@ class LoginViewAnimations {
     func rotationAnimation(_ views: [UIView], duration: TimeInterval, cycles: Double) {
 
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotationAnimation.toValue = CGFloat(M_PI * 2.0 * cycles * duration)
+        rotationAnimation.toValue = .pi * 2.0 * cycles * duration
         rotationAnimation.duration = duration
         rotationAnimation.isCumulative = true
         rotationAnimation.repeatCount = 1.0

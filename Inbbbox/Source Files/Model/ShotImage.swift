@@ -28,9 +28,9 @@ extension ShotImage: Mappable {
     static var map: (JSON) -> ShotImage {
         return { json in
             ShotImage(
-                hidpiURL: json[Key.Hidpi.rawValue].URL,
-                normalURL: json[Key.Normal.rawValue].URL!,
-                teaserURL: json[Key.Teaser.rawValue].URL!
+                hidpiURL: json[Key.Hidpi.rawValue].url,
+                normalURL: json[Key.Normal.rawValue].url!,
+                teaserURL: json[Key.Teaser.rawValue].url!
             )
         }
     }

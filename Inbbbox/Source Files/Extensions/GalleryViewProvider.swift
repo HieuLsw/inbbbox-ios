@@ -33,7 +33,7 @@ class GalleryViewProvider {
     
     lazy var galleryViewController: GalleryViewController = {
         
-        var gallery = GalleryViewController(startIndex: 0, itemsDatasource: self, displacedViewsDatasource: self, configuration: self.galleryConfiguration)
+        var gallery = GalleryViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration)
         return gallery
     }()
     
@@ -88,7 +88,7 @@ class GalleryViewProvider {
     
 }
 
-extension GalleryViewProvider: GalleryItemsDatasource {
+extension GalleryViewProvider: GalleryItemsDataSource {
     
     public func itemCount() -> Int {
         if let imageUrls = imageUrls {
@@ -104,7 +104,7 @@ extension GalleryViewProvider: GalleryItemsDatasource {
     }
 }
 
-extension GalleryViewProvider: GalleryDisplacedViewsDatasource {
+extension GalleryViewProvider: GalleryDisplacedViewsDataSource {
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
         return displacedView
     }

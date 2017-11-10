@@ -29,7 +29,7 @@ final class User: NSObject, UserType {
         identifier = json[Key.identifier.rawValue].stringValue
         name = json[Key.name.rawValue].string
         username = json[Key.username.rawValue].stringValue
-        avatarURL = json[Key.avatar.rawValue].URL
+        avatarURL = json[Key.avatar.rawValue].url
         shotsCount = json[Key.shotsCount.rawValue].uIntValue
         accountType = UserAccountType(rawValue: json[Key.accountType.rawValue].stringValue)
         followersCount = json[Key.followersCount.rawValue].uIntValue

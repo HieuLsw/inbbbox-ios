@@ -21,8 +21,8 @@ struct ManagedObjectsProvider {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedShot.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", shot.identifier)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedShot = firstFetchedObject as? ManagedShot {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedShot = fetchedArray?.first as? ManagedShot {
             return managedShot
         }
 
@@ -52,8 +52,8 @@ struct ManagedObjectsProvider {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedUser.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", user.identifier)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedUser = firstFetchedObject as? ManagedUser {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedUser = fetchedArray?.first as? ManagedUser {
             return managedUser
         }
 
@@ -80,8 +80,8 @@ struct ManagedObjectsProvider {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedTeam.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", team.identifier)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedTeam = firstFetchedObject as? ManagedTeam {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedTeam = fetchedArray?.first as? ManagedTeam {
             return managedTeam
         }
 
@@ -102,8 +102,8 @@ struct ManagedObjectsProvider {
         fetchRequest.predicate = NSPredicate(format: "mngd_normalURL == %@",
                 shotImage.normalURL.absoluteString)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedShotImage = firstFetchedObject as? ManagedShotImage {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedShotImage = fetchedArray?.first as? ManagedShotImage {
             return managedShotImage
         }
         let managedShotImageEntity = NSEntityDescription.entity(forEntityName: ManagedShotImage.entityName,
@@ -120,8 +120,8 @@ struct ManagedObjectsProvider {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedBucket.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", bucket.identifier)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedBucket = firstFetchedObject as? ManagedBucket {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedBucket = fetchedArray?.first as? ManagedBucket {
             return managedBucket
         }
         let managedBucketEntity = NSEntityDescription.entity(forEntityName: ManagedBucket.entityName,
@@ -140,8 +140,8 @@ struct ManagedObjectsProvider {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedProject.entityName)
         fetchRequest.predicate = NSPredicate(format: "mngd_identifier == %@", project.identifier)
 
-        let firstFetchedObject = try? managedObjectContext.fetch(fetchRequest).first
-        if let managedProject = firstFetchedObject as? ManagedProject {
+        let fetchedArray = try? managedObjectContext.fetch(fetchRequest)
+        if let managedProject = fetchedArray?.first as? ManagedProject {
             return managedProject
         }
         let managedProjectEntity = NSEntityDescription.entity(forEntityName: ManagedProject.entityName,

@@ -35,7 +35,7 @@ extension PageableComponent: CustomDebugStringConvertible {
     var debugDescription: String {
 
         let items = queryItems?
-            .map { "\($0.name)=\($0.value)" }
+            .map { "\($0.name)=\(String(describing: $0.value))" }
             .reduce("", { $0 == "" ? $1 : $0 + "&" + $1 })
 
         return path + "?" + (items ?? "")
