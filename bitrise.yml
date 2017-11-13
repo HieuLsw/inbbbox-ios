@@ -60,7 +60,7 @@ workflows:
   master:
     before_run: 
         - prepare_to_run
-    after_run: 
+    after_run:
         - test
         - archive_and_deploy
         - save_cache
@@ -105,6 +105,10 @@ workflows:
     - script:
         inputs:
         - content: bundle install
+    - carthage:
+          inputs:
+            - carthage_command: bootstrap
+            - carthage_options: --platform iOS --cache-builds
     - cocoapods-install:
         inputs:
         - is_update_cocoapods: 'true'
