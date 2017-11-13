@@ -223,6 +223,9 @@
 		792283975118782CE293C39F /* Listable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7811D25A5E18FB1AEB240A3 /* Listable.swift */; };
 		792F6175B792842F448E45A5 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA4806509DECD6423B57B93 /* NetworkService.swift */; };
 		79EEE65D03E24057EDB2430A /* ShotsAnimatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C93561E4C58105633DFDA /* ShotsAnimatorSpec.swift */; };
+		7CFB46851FB9AC19009EBAE8 /* Overlog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46841FB9AC19009EBAE8 /* Overlog.framework */; };
+		7CFB46891FB9ADF8009EBAE8 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46871FB9ADF8009EBAE8 /* Result.framework */; };
+		7CFB468A1FB9AE59009EBAE8 /* ResponseDetective.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46861FB9ADF8009EBAE8 /* ResponseDetective.framework */; };
 		7D9A80E3D139236DFE200B24 /* SecretKeysProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BBB799A856B5917F6398E /* SecretKeysProvider.m */; };
 		7E4C2EA011391887E1F660E0 /* PageableComponentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7C4DA11B1EA7DD2433F93 /* PageableComponentSpec.swift */; };
 		7E51C4B7CCD27909BE493A86 /* FollowUserQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AAB226917CCBB4255EFA83 /* FollowUserQuery.swift */; };
@@ -739,6 +742,9 @@
 		7C9F6418F07EE8A10BBC746B /* LabelItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LabelItem.swift; sourceTree = "<group>"; };
 		7CA78ED3E8C74C6041B3C6B7 /* SwitchItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwitchItem.swift; sourceTree = "<group>"; };
 		7CAB35CC635AABCA5071EE38 /* Project.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Project.json; sourceTree = "<group>"; };
+		7CFB46841FB9AC19009EBAE8 /* Overlog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Overlog.framework; path = Carthage/Build/iOS/Overlog.framework; sourceTree = "<group>"; };
+		7CFB46861FB9ADF8009EBAE8 /* ResponseDetective.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResponseDetective.framework; path = Carthage/Build/iOS/ResponseDetective.framework; sourceTree = "<group>"; };
+		7CFB46871FB9ADF8009EBAE8 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		7D8A0B57417D9F4D12B6A44B /* SettingsViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7F4757A24E3B0B2C1B4F1905 /* RequestSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RequestSpec.swift; sourceTree = "<group>"; };
 		7F875C7F9CC35B4B414AA5B5 /* RemoveFromBucketQuerySpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemoveFromBucketQuerySpec.swift; sourceTree = "<group>"; };
@@ -992,6 +998,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AC52CAE0D885025C186F3F2 /* Pods_Inbbbox.framework in Frameworks */,
+				7CFB46851FB9AC19009EBAE8 /* Overlog.framework in Frameworks */,
+				7CFB46891FB9ADF8009EBAE8 /* Result.framework in Frameworks */,
+				7CFB468A1FB9AE59009EBAE8 /* ResponseDetective.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1071,6 +1080,9 @@
 		303C9EE60D55FE95B1E4648B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7CFB46861FB9ADF8009EBAE8 /* ResponseDetective.framework */,
+				7CFB46871FB9ADF8009EBAE8 /* Result.framework */,
+				7CFB46841FB9AC19009EBAE8 /* Overlog.framework */,
 				5E0759062D32339F0F1B138E /* Pods.framework */,
 				DD8A03E1986E72122B87A47A /* Pods_Unit_Tests.framework */,
 				90DEB8F844F7FD12799C9501 /* Pods_Inbbbox.framework */,
@@ -1904,6 +1916,7 @@
 				2E76AC9DB7A0ED5E56608A26 /* [CP] Copy Pods Resources */,
 				15EF03E0EA89343AD6F261E6 /* 📦 Embed Pods Frameworks */,
 				14A04A37DEAC52A7A53B6FCB /* 📦 Copy Pods Resources */,
+				7CEC16FC1FB994BA0054B3FD /* Carthage Copy Files */,
 			);
 			buildRules = (
 			);
@@ -2124,6 +2137,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" = \"Development\" ]; then\nTAGS=\"NGRTodo:|NGRFixme:|NGRHack:|NGRTemp:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"\nfi";
+		};
+		7CEC16FC1FB994BA0054B3FD /* Carthage Copy Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Overlog.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ResponseDetective.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+			);
+			name = "Carthage Copy Files";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
 		};
 		7F8B20BF686E95D549F0E274 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2778,7 +2808,10 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
@@ -2908,7 +2941,10 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
@@ -2930,7 +2966,10 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9HJ69C5G9K;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
@@ -3044,7 +3083,10 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9HJ69C5G9K;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;
@@ -3131,7 +3173,10 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Inbbbox-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = $PRODUCT_BUNDLE_IDENTIFIER;

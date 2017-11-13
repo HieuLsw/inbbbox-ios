@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import Haneke
+import Overlog
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var centerButtonTabBarController: CenterButtonTabBarController?
     var loginViewController: LoginViewController?
     var launchedShortcut: UIApplicationShortcutItem?
+    var overlog: Overlog?
 
     enum Shortcut: String {
         case Likes = "co.netguru.inbbbox.likes"
@@ -42,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.makeKeyAndVisible()
         
         ColorModeProvider.setup()
+        configureOverlog()
 
         var shouldPerformAdditionalDelegateHandling = true
         if let shortcut = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
@@ -136,6 +139,12 @@ private extension AppDelegate {
         } else {
             Settings.StreamSource.SelectedStreamSource = .mySet
         }
+    }
+    
+    func configureOverlog() {
+        overlog = Overlog.shared
+        overlog?.configuration.features = FeatureType.all
+        overlog?.show(in: window!, rootViewController: window!.rootViewController!)
     }
 }
 

@@ -1,1 +1,4 @@
+github "antitypical/Result" "3.2.4"
 github "jspahrsummers/xcconfigs" "0.3"
+github "netguru/Overlog" "1.0.0-beta.1"
+github "netguru/ResponseDetective" "1.2.2"
