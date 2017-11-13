@@ -31,7 +31,7 @@ target 'Inbbbox' do
   pod 'HockeySDK', '~> 4.1'
   pod 'PureLayout', '~> 3.0'
   pod 'SwiftyUserDefaults', '~> 3.0'
-  #for older swift version 
+  #for older swift version
   pod 'DeviceKit', '~> 1.0'
   pod 'GPUImage', '~> 0.1'
   pod 'FLAnimatedImage', '~> 1.0'
@@ -50,7 +50,7 @@ target 'Inbbbox' do
   target 'Unit Tests' do
     inherit! :search_paths
     pod 'Quick', '~> 0.10', :configurations => ['Test']
-    pod 'Nimble', '~> 5.0', :configurations => ['Test']
+    pod 'Nimble', '~> 7.0', :configurations => ['Test']
     pod 'Dobby', :git => 'https://github.com/trivago/Dobby.git', :tag => '0.7.0', :configurations => ['Test']
     pod 'Mockingjay', '~> 2.0', :configurations => ['Test']
   end

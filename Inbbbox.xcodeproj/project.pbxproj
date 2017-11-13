@@ -223,9 +223,6 @@
 		792283975118782CE293C39F /* Listable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7811D25A5E18FB1AEB240A3 /* Listable.swift */; };
 		792F6175B792842F448E45A5 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA4806509DECD6423B57B93 /* NetworkService.swift */; };
 		79EEE65D03E24057EDB2430A /* ShotsAnimatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C93561E4C58105633DFDA /* ShotsAnimatorSpec.swift */; };
-		7CFB46851FB9AC19009EBAE8 /* Overlog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46841FB9AC19009EBAE8 /* Overlog.framework */; };
-		7CFB46891FB9ADF8009EBAE8 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46871FB9ADF8009EBAE8 /* Result.framework */; };
-		7CFB468A1FB9AE59009EBAE8 /* ResponseDetective.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB46861FB9ADF8009EBAE8 /* ResponseDetective.framework */; };
 		7D9A80E3D139236DFE200B24 /* SecretKeysProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4BBB799A856B5917F6398E /* SecretKeysProvider.m */; };
 		7E4C2EA011391887E1F660E0 /* PageableComponentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7C4DA11B1EA7DD2433F93 /* PageableComponentSpec.swift */; };
 		7E51C4B7CCD27909BE493A86 /* FollowUserQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AAB226917CCBB4255EFA83 /* FollowUserQuery.swift */; };
@@ -998,9 +995,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AC52CAE0D885025C186F3F2 /* Pods_Inbbbox.framework in Frameworks */,
-				7CFB46851FB9AC19009EBAE8 /* Overlog.framework in Frameworks */,
-				7CFB46891FB9ADF8009EBAE8 /* Result.framework in Frameworks */,
-				7CFB468A1FB9AE59009EBAE8 /* ResponseDetective.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1940,6 +1934,7 @@
 				7F8B20BF686E95D549F0E274 /* [CP] Copy Pods Resources */,
 				F87DCDB9D40410FDFB2D2B7B /* 📦 Embed Pods Frameworks */,
 				999D0A7EE85661A110D711C5 /* 📦 Copy Pods Resources */,
+				7C7850BB1FB9C62B004C514F /* Carthage Copy Files */,
 			);
 			buildRules = (
 			);
@@ -2137,6 +2132,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" = \"Development\" ]; then\nTAGS=\"NGRTodo:|NGRFixme:|NGRHack:|NGRTemp:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"\nfi";
+		};
+		7C7850BB1FB9C62B004C514F /* Carthage Copy Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Overlog.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ResponseDetective.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+			);
+			name = "Carthage Copy Files";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
 		};
 		7CEC16FC1FB994BA0054B3FD /* Carthage Copy Files */ = {
 			isa = PBXShellScriptBuildPhase;
