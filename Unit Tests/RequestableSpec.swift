@@ -84,7 +84,7 @@ class RequestableSpec: QuickSpec {
 
 private struct RequestableMock: Requestable {
     
-    let query: Query = QueryMock()
+    var query: Query = QueryMock()
     
     init(encoding: Parameters.Encoding) {
         query.parameters = Parameters(encoding: encoding)
