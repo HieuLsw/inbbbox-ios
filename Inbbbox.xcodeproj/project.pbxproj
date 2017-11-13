@@ -2845,7 +2845,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Unit-Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.netguru.inbbbox.tests.unit;
@@ -3003,7 +3006,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3027,7 +3033,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Unit-Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.netguru.inbbbox.tests.unit;
@@ -3120,7 +3129,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3208,7 +3220,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Supporting Files/Unit-Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.netguru.inbbbox.tests.unit;
