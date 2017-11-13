@@ -108,7 +108,7 @@ workflows:
     - carthage:
           inputs:
             - carthage_command: bootstrap
-            - carthage_options: --platform iOS --cache-builds
+            - carthage_options: --platform iOS --cache-builds --use-ssh
     - cocoapods-install:
         inputs:
         - is_update_cocoapods: 'true'
