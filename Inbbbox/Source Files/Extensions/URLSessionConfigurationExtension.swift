@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import Overlog
 
 extension URLSessionConfiguration {
 
     class func inbbboxDefaultSessionConfiguration() -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
         configuration.requestCachePolicy = URLRequest.CachePolicy.reloadIgnoringLocalCacheData
+        Overlog.shared.enableNetworkDebugging(inConfiguration: configuration)
         return configuration
     }
 }
