@@ -6,4 +6,4 @@
 
 # The latest version of configuration files
 github "jspahrsummers/xcconfigs"
-git "git@github.com/netguru/Overlog.git"
+git "git@github.com/netguru/Overlog.git" "1.0.0-beta.1"
